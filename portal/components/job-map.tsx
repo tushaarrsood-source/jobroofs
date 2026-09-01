@@ -1,0 +1,262 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import { ArrowRight, BriefcaseBusiness, Euro, MapPin, Navigation, RotateCcw, X } from 'lucide-react';
+import { BERLIN_CENTER, getGoogleMapsUrl, resolveJobCoordinates } from '@/lib/domain/berlin-geo';
+import { getIndustry } from '@/lib/domain/taxonomy';
+
+interface JobMapProps {
+  jobs: any[];
+  selectedJobId?: string | null;
+  hoveredJobId?: string | null;
+  onSelectJob?: (jobId: string | null) => void;
+  className?: string;
+  showCardOverlay?: boolean;
+  miniMode?: boolean;
+  centerSingleJob?: boolean;
+}
+
+export function JobMap({
+  jobs,
+  selectedJobId,
+  hoveredJobId,
+  onSelectJob,
+  className = '',
+  showCardOverlay = true,
+  miniMode = false,
+  centerSingleJob = true,
+}: JobMapProps) {
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<any>(null);
+  const markersRef = useRef<Map<string, any>>(new Map());
+  const [activeJob, setActiveJob] = useState<any | null>(null);
+  const [isMapReady, setIsMapReady] = useState(false);
+
+  // Initialize Leaflet Map
+  useEffect(() => {
+    let isMounted = true;
+
+    async function initMap() {
+      if (!mapContainerRef.current || mapInstanceRef.current) return;
+
+      // Dynamic import leaflet on client only
+      const L = (await import('leaflet')).default;
+
+      if (!isMounted || !mapContainerRef.current) return;
+
+      // Create map centered on Berlin
+      const map = L.map(mapContainerRef.current, {
+        center: [BERLIN_CENTER.lat, BERLIN_CENTER.lng],
+        zoom: miniMode ? 13 : 12,
+        minZoom: 9,
+        maxZoom: 18,
+        zoomControl: !miniMode,
+      });
+
+      // CartoDB Positron/Voyager Tiles for clean, high-contrast look
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19,
+      }).addTo(map);
+
+      if (!miniMode) {
+        L.control.zoom({ position: 'topright' }).addTo(map);
+      }
+
+      mapInstanceRef.current = map;
+      setIsMapReady(true);
+    }
+
+    initMap();
+
+    return () => {
+      isMounted = false;
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, [miniMode]);
+
+  // Update Markers whenever jobs or coordinates change
+  useEffect(() => {
+    if (!isMapReady || !mapInstanceRef.current) return;
+
+    let isMounted = true;
+
+    async function updateMarkers() {
+      const L = (await import('leaflet')).default;
+      if (!isMounted || !mapInstanceRef.current) return;
+
+      const map = mapInstanceRef.current;
+      const currentMarkers = markersRef.current;
+
+      // Remove existing markers
+      currentMarkers.forEach((marker) => marker.remove());
+      currentMarkers.clear();
+
+      if (!jobs || jobs.length === 0) return;
+
+      const bounds = L.latLngBounds([]);
+
+      jobs.forEach((job) => {
+        const coords = resolveJobCoordinates(job);
+        const isSelected = selectedJobId === job.id || selectedJobId === job.slug;
+        const isHovered = hoveredJobId === job.id || hoveredJobId === job.slug;
+        const isActive = isSelected || isHovered;
+
+        // Custom HTML Badge Pin Icon
+        const iconHtml = `
+          <div class="kiez-map-pin ${isActive ? 'active' : ''}">
+            <div class="pin-badge">
+              <span class="pin-rate">${coords.badgeLabel}</span>
+            </div>
+            <div class="pin-stem"></div>
+          </div>
+        `;
+
+        const customIcon = L.divIcon({
+          className: 'kiez-pin-container',
+          html: iconHtml,
+          iconSize: [60, 36],
+          iconAnchor: [30, 34],
+          popupAnchor: [0, -32],
+        });
+
+        const marker = L.marker([coords.lat, coords.lng], {
+          icon: customIcon,
+          zIndexOffset: isActive ? 1000 : 100,
+        }).addTo(map);
+
+        // Click Handler
+        marker.on('click', () => {
+          setActiveJob(job);
+          if (onSelectJob) onSelectJob(job.id);
+          map.panTo([coords.lat, coords.lng], { animate: true, duration: 0.5 });
+        });
+
+        currentMarkers.set(job.id, marker);
+        bounds.extend([coords.lat, coords.lng]);
+      });
+
+      // If exactly 1 job (live preview or detail page), pan and zoom smoothly to its exact coordinates
+      if (jobs.length === 1 && centerSingleJob) {
+        const singleCoords = resolveJobCoordinates(jobs[0]);
+        map.setView([singleCoords.lat, singleCoords.lng], miniMode ? 14 : 14, { animate: true });
+        return;
+      }
+
+      // If a job is explicitly selected from the list, center on it
+      if (selectedJobId) {
+        const target = jobs.find((j) => j.id === selectedJobId || j.slug === selectedJobId);
+        if (target) {
+          const coords = resolveJobCoordinates(target);
+          map.panTo([coords.lat, coords.lng], { animate: true, duration: 0.5 });
+          setActiveJob(target);
+        }
+      }
+    }
+
+    updateMarkers();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [jobs, selectedJobId, hoveredJobId, isMapReady, onSelectJob, centerSingleJob, miniMode]);
+
+  // Reset to Berlin Overview
+  const handleResetView = () => {
+    if (!mapInstanceRef.current) return;
+    mapInstanceRef.current.setView([BERLIN_CENTER.lat, BERLIN_CENTER.lng], 12, { animate: true });
+    setActiveJob(null);
+    if (onSelectJob) onSelectJob(null);
+  };
+
+  return (
+    <div className={`relative h-full w-full overflow-hidden rounded-2xl border border-foreground/15 bg-[#f4f0e7] shadow-inner ${className}`}>
+      {/* Leaflet Map Target */}
+      <div ref={mapContainerRef} className="h-full w-full z-0" />
+
+      {/* Floating Controls */}
+      {!miniMode && (
+        <div className="absolute top-4 left-4 z-[500] flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleResetView}
+            className="flex items-center gap-1.5 rounded-lg border border-foreground/15 bg-white/95 px-3 py-1.5 text-xs font-semibold text-[#18221e] shadow-md backdrop-blur transition hover:bg-white"
+            title="Reset map to Berlin overview"
+          >
+            <RotateCcw className="size-3.5 text-[#385cdd]" />
+            <span>Berlin Overview</span>
+          </button>
+
+          <div className="hidden sm:flex items-center gap-1.5 rounded-lg border border-foreground/15 bg-white/95 px-3 py-1.5 text-xs text-muted-foreground shadow-md backdrop-blur">
+            <MapPin className="size-3.5 text-[#245e3c]" />
+            <span>{jobs.length} {jobs.length === 1 ? 'job' : 'jobs'} on map</span>
+          </div>
+        </div>
+      )}
+
+      {miniMode && (
+        <div className="absolute bottom-2 left-2 z-[500] rounded-md bg-white/90 px-2 py-0.5 text-[10px] font-semibold text-muted-foreground shadow backdrop-blur">
+          🗺️ Live OSM Pin
+        </div>
+      )}
+
+      {/* Interactive Job Preview Card Overlay */}
+      {showCardOverlay && activeJob && !miniMode && (
+        <div className="absolute bottom-4 left-4 right-4 z-[500] sm:left-auto sm:right-4 sm:w-80">
+          <div className="relative rounded-xl border border-foreground/15 bg-white p-4 shadow-[0_12px_32px_rgba(24,34,30,0.18)] transition-all">
+            <button
+              type="button"
+              onClick={() => setActiveJob(null)}
+              className="absolute top-3 right-3 grid size-6 place-items-center rounded-full bg-foreground/5 text-muted-foreground transition hover:bg-foreground/10 hover:text-foreground"
+              aria-label="Close preview"
+            >
+              <X className="size-3.5" />
+            </button>
+
+            <div className="flex items-center gap-2">
+              <span className="rounded-md bg-[#e8f6ed] px-2 py-0.5 text-xs font-bold text-[#245e3c]">
+                {resolveJobCoordinates(activeJob).badgeLabel}
+              </span>
+              <span className="text-xs text-muted-foreground truncate">
+                {activeJob.district ? `${activeJob.district}` : 'Berlin'}
+              </span>
+            </div>
+
+            <h3 className="mt-2 text-sm font-semibold leading-tight line-clamp-2">
+              {activeJob.title}
+            </h3>
+
+            <p className="mt-1 text-xs text-muted-foreground line-clamp-1">
+              {activeJob.company}
+            </p>
+
+            <div className="mt-3 flex items-center justify-between border-t border-foreground/10 pt-2.5">
+              <a
+                href={getGoogleMapsUrl(activeJob)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-muted-foreground transition hover:text-[#385cdd]"
+                title="Open location in Google Maps"
+              >
+                <Navigation className="size-3 text-[#ed6a43]" />
+                <span>Google Maps ↗</span>
+              </a>
+              <Link
+                href={`/jobs/${activeJob.slug || activeJob.id}`}
+                className="inline-flex items-center gap-1 text-xs font-semibold text-[#385cdd] hover:underline"
+              >
+                <span>View listing</span>
+                <ArrowRight className="size-3" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

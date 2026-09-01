@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wann.example/schemas/job-record-v1.json",
+  "title": "WANN evidence-preserving job record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_version",
+    "record_id",
+    "source",
+    "job",
+    "evidence",
+    "eligibility",
+    "publication"
+  ],
+  "properties": {
+    "record_version": { "const": "1.1" },
+    "record_id": { "type": "string", "minLength": 1 },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "source_tier",
+        "publication_mode",
+        "source_url",
+        "canonical_url",
+        "fetched_at",
+        "first_seen_at",
+        "content_hash",
+        "parser_id",
+        "parser_version"
+      ],
+      "properties": {
+        "source_id": { "type": "string", "minLength": 1 },
+        "source_tier": {
+          "enum": [
+            "employer_submitted",
+            "employer_direct",
+            "official_institution",
+            "authorized_feed",
+            "approved_source_link",
+            "secondary_research"
+          ]
+        },
+        "publication_mode": { "enum": ["full_authorized", "source_link", "research_only"] },
+        "source_url": { "type": "string", "format": "uri" },
+        "canonical_url": { "type": "string", "format": "uri" },
+        "apply_url": { "type": ["string", "null"], "format": "uri" },
+        "source_job_id": { "type": ["string", "null"] },
+        "fetched_at": { "type": "string", "format": "date-time" },
+        "first_seen_at": { "type": "string", "format": "date-time" },
+        "source_posted_at": { "type": ["string", "null"], "format": "date-time" },
+        "source_updated_at": { "type": ["string", "null"], "format": "date-time" },
+        "source_valid_through": { "type": ["string", "null"], "format": "date-time" },
+        "content_hash": { "type": "string", "minLength": 16 },
+        "snapshot_ref": { "type": ["string", "null"] },
+        "parser_id": { "type": "string", "minLength": 1 },
+        "parser_version": { "type": "string", "minLength": 1 },
+        "http_status": { "type": ["integer", "null"], "minimum": 100, "maximum": 599 }
+      }
+    },
+    "job": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "listing_origin",
+        "title",
+        "employer_name",
+        "employment_types",
+        "location",
+        "languages",
+        "compensation",
+        "schedule",
+        "responsibilities",
+        "requirements",
+        "application"
+      ],
+      "properties": {
+        "listing_origin": { "enum": ["employer_posted", "sourced"] },
+        "title": { "type": "string", "minLength": 1 },
+        "employer_name": { "type": "string", "minLength": 1 },
+        "employer_domain": { "type": ["string", "null"] },
+        "intermediary_name": { "type": ["string", "null"] },
+        "reference_number": { "type": ["string", "null"] },
+        "employment_types": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "MINIJOB",
+              "PART_TIME",
+              "WORKING_STUDENT",
+              "SHORT_TERM",
+              "SEASONAL_EVENT",
+              "CASUAL_UNSPECIFIED",
+              "FULL_TIME"
+            ]
+          }
+        },
+        "location": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["raw_text", "berlin_status"],
+          "properties": {
+            "raw_text": { "type": ["string", "null"] },
+            "address": { "type": ["string", "null"] },
+            "postal_code": { "type": ["string", "null"] },
+            "district": { "type": ["string", "null"] },
+            "latitude": { "type": ["number", "null"], "minimum": -90, "maximum": 90 },
+            "longitude": { "type": ["number", "null"], "minimum": -180, "maximum": 180 },
+            "berlin_status": { "enum": ["inside", "outside", "remote_germany", "ambiguous", "unknown"] },
+            "workplace_type": { "enum": ["onsite", "hybrid", "remote", "unknown"] }
+          }
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["language", "requirement"],
+            "properties": {
+              "language": { "type": "string", "minLength": 2 },
+              "level": { "type": ["string", "null"] },
+              "requirement": { "enum": ["required", "preferred", "accepted", "any_of"] },
+              "group_id": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "compensation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["stated", "raw_text", "rate_interval", "payout_cadence", "gross_net"],
+          "properties": {
+            "stated": { "type": "boolean" },
+            "raw_text": { "type": ["string", "null"] },
+            "currency": { "type": ["string", "null"], "pattern": "^[A-Z]{3}$" },
+            "min_amount": { "type": ["number", "null"], "minimum": 0 },
+            "max_amount": { "type": ["number", "null"], "minimum": 0 },
+            "rate_interval": { "enum": ["hour", "shift", "day", "week", "month", "year", "project", "unknown"] },
+            "payout_cadence": { "enum": ["after_shift", "weekly", "fortnightly", "monthly", "unknown"] },
+            "extras": { "type": ["string", "null"] },
+            "gross_net": { "enum": ["gross", "net", "unknown"] }
+          }
+        },
+        "schedule": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["raw_text", "hours_period", "work_days", "time_windows"],
+          "properties": {
+            "raw_text": { "type": ["string", "null"] },
+            "weekly_hours_min": { "type": ["number", "null"], "minimum": 0, "maximum": 168 },
+            "weekly_hours_max": { "type": ["number", "null"], "minimum": 0, "maximum": 168 },
+            "monthly_hours_min": { "type": ["number", "null"], "minimum": 0, "maximum": 744 },
+            "monthly_hours_max": { "type": ["number", "null"], "minimum": 0, "maximum": 744 },
+            "shift_hours_min": { "type": ["number", "null"], "minimum": 0, "maximum": 24 },
+            "shift_hours_max": { "type": ["number", "null"], "minimum": 0, "maximum": 24 },
+            "hours_period": { "enum": ["week", "month", "shift", "unknown"] },
+            "work_days": { "type": "array", "items": { "type": "string" } },
+            "time_windows": { "type": "array", "items": { "type": "string" } },
+            "start_date_text": { "type": ["string", "null"] },
+            "end_date_text": { "type": ["string", "null"] }
+          }
+        },
+        "responsibilities": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "requirements": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "application": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["method", "instructions"],
+          "properties": {
+            "method": { "enum": ["email", "external_link"] },
+            "email": { "type": ["string", "null"], "format": "email" },
+            "url": { "type": ["string", "null"], "format": "uri" },
+            "contact_name": { "type": ["string", "null"] },
+            "deadline": { "type": ["string", "null"] },
+            "instructions": { "type": "string" }
+          }
+        },
+        "description_excerpt": { "type": ["string", "null"], "maxLength": 600 },
+        "application_deadline": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field_path", "source_url", "source_text", "method"],
+        "properties": {
+          "field_path": { "type": "string", "pattern": "^job\\." },
+          "source_url": { "type": "string", "format": "uri" },
+          "source_text": { "type": "string", "minLength": 1, "maxLength": 1000 },
+          "selector_or_pointer": { "type": ["string", "null"] },
+          "method": { "enum": ["employer_input", "api", "xml", "json_ld", "dom", "rule", "llm", "human"] },
+          "review_confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "eligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "rule_version", "reason_codes"],
+      "properties": {
+        "decision": { "enum": ["include", "exclude", "review"] },
+        "rule_version": { "type": "string", "minLength": 1 },
+        "reason_codes": { "type": "array", "items": { "type": "string" } },
+        "evaluated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "authorized_structured_data", "last_liveness_check_at"],
+      "properties": {
+        "status": { "enum": ["candidate", "review", "publishable", "published", "suppressed", "expired"] },
+        "authorized_structured_data": { "type": "boolean" },
+        "published_at": { "type": ["string", "null"], "format": "date-time" },
+        "expires_at": { "type": ["string", "null"], "format": "date-time" },
+        "last_liveness_check_at": { "type": "string", "format": "date-time" },
+        "suppression_key": { "type": ["string", "null"] },
+        "suppression_reason": { "type": ["string", "null"] }
+      }
+    },
+    "deduplication": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "canonical_record_id": { "type": ["string", "null"] },
+        "classification": {
+          "enum": [
+            "same_vacancy",
+            "possible_duplicate_review",
+            "same_title_distinct_location",
+            "same_title_distinct_shift",
+            "distinct",
+            "unchecked"
+          ]
+        },
+        "signals": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

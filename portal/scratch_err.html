@@ -1,0 +1,28 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <title>Error</title>
+            <script type="module">
+              const error = {"message":"Network connection lost.","stack":"    at runInRunnerObject (workers/runner-worker/index.js:107:3)\n    at [object Object]\n    at handleAppRscRequest (C:/Users/tusha/OneDrive/Desktop/JOB/portal/node_modules/vinext/dist/server/app-rsc-handler.js:648:33)\n    at route (C:/Users/tusha/OneDrive/Desktop/JOB/portal/node_modules/vinext/dist/server/app-rsc-handler.js:796:16)\n    at appRscHandler (C:/Users/tusha/OneDrive/Desktop/JOB/portal/node_modules/vinext/dist/server/app-rsc-handler.js:810:15)\n    at handleRequest (C:/Users/tusha/OneDrive/Desktop/JOB/portal/node_modules/vinext/dist/server/app-router-entry.js?v=30cc55bd:46:17)\n    at maybeCaptureError (workers/runner-worker/index.js:51:10)","frame":""}
+              try {
+                const { ErrorOverlay } = await import("/@vite/client")
+                document.body.appendChild(new ErrorOverlay(error))
+              } catch {
+                const h = (tag, text) => {
+                  const el = document.createElement(tag)
+                  el.textContent = text
+                  return el
+                }
+                document.body.appendChild(h('h1', 'Internal Server Error'))
+                document.body.appendChild(h('h2', error.message))
+                document.body.appendChild(h('pre', error.stack))
+                document.body.appendChild(h('p', '(Error overlay failed to load)'))
+              }
+            </script>
+          </head>
+          <body>
+          </body>
+        </html>
+      
