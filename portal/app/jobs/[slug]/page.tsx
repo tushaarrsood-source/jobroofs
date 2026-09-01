@@ -27,7 +27,7 @@ const JobMap = dynamic(() => import('@/components/job-map').then((mod) => mod.Jo
   ssr: false,
   loading: () => (
     <div className="flex h-48 w-full items-center justify-center rounded-xl border border-foreground/15 bg-[#eceae2] text-xs font-semibold text-muted-foreground">
-      🗺️ Loading Berlin map...
+      Loading Berlin map...
     </div>
   ),
 });
@@ -191,22 +191,25 @@ export default async function JobDetailPage({
             <header className="border-b border-foreground/10 p-6 md:p-9">
               <div className="flex flex-wrap items-center gap-2">
                 <span
-                  className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${employerPosted ? 'bg-[#e5eaff] text-[#304ea9]' : 'bg-[#e8eee9] text-[#3e5146]'}`}
+                  className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium ${
+                    employerPosted
+                      ? 'bg-[#edf2ff] text-[#385cdd]'
+                      : 'bg-[#f0f2ef] text-[#3e5146]'
+                  }`}
                 >
-                  {employerPosted
-                    ? 'Posted directly by employer'
-                    : 'Found at employer source'}
+                  {employerPosted ? 'Direct from employer' : 'Verified venue source'}
                 </span>
+                {job.employmentForms?.map((form: string) => (
+                  <span
+                    key={form}
+                    className="rounded-full bg-foreground/5 px-2.5 py-0.5 text-[11px] text-muted-foreground"
+                  >
+                    {form}
+                  </span>
+                ))}
                 {job.isDemo ? (
-                  <span className="rounded-full bg-[#fff1c7] px-2.5 py-1 text-[10px] text-[#6a5117]">Sample listing</span>
-                ) : (
-                  job.niches?.map((n: any) => (
-                    <span key={n.nicheId} className="rounded-full bg-foreground/5 px-2 py-1 text-[10px] text-muted-foreground">{n.label}</span>
-                  ))
-                )}
-                {job.sourceName ? (
-                  <span className="rounded-full bg-[#e8eee9] px-2.5 py-1 text-[10px] text-[#3e5146]">
-                    {job.sourceUrl ? <a href={job.sourceUrl} target="_blank" rel="noopener noreferrer">Sourced from {job.sourceName}</a> : `Sourced from ${job.sourceName}`}
+                  <span className="rounded-full bg-[#fff8e7] px-2.5 py-0.5 text-[11px] text-[#7a5d1b]">
+                    Sample listing
                   </span>
                 ) : null}
               </div>
@@ -228,7 +231,11 @@ export default async function JobDetailPage({
                 value={job.compensation.label}
                 emphasis
               />
-              <Fact icon={Clock3} label="Hours" value={job.hours.label} />
+              <Fact
+                icon={Clock3}
+                label="Hours"
+                value={job.hours.label}
+              />
               <Fact
                 icon={CalendarDays}
                 label="Schedule"
@@ -244,7 +251,11 @@ export default async function JobDetailPage({
                 label="Job type"
                 value={job.employmentForms.join(', ')}
               />
-              <Fact icon={Languages} label="Language" value={language} />
+              <Fact
+                icon={Languages}
+                label="Language"
+                value={language}
+              />
             </section>
 
             <div className="space-y-9 p-6 md:p-9">
@@ -476,18 +487,25 @@ function Fact({
   value,
   emphasis = false,
 }: {
-  icon: typeof MapPin;
+  icon: any;
   label: string;
   value: string;
   emphasis?: boolean;
 }) {
   return (
     <div className="min-h-28 bg-white p-5">
-      <p className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-        <Icon className="size-3.5" /> {label}
-      </p>
+      <div className="flex items-center gap-1.5 text-muted-foreground">
+        <Icon className="size-3.5" />
+        <span className="text-[10px] font-semibold uppercase tracking-wider">
+          {label}
+        </span>
+      </div>
       <p
-        className={`mt-3 text-sm leading-5 ${emphasis ? 'text-lg font-semibold text-[#245e3c]' : 'font-medium'}`}
+        className={`mt-3 leading-snug ${
+          emphasis
+            ? 'text-lg font-bold text-[#18221e]'
+            : 'text-sm font-medium text-[#18221e]'
+        }`}
       >
         {value}
       </p>

@@ -30,7 +30,7 @@ const JobMap = dynamic(() => import('@/components/job-map').then((mod) => mod.Jo
   ssr: false,
   loading: () => (
     <div className="flex h-full w-full items-center justify-center rounded-2xl border border-foreground/15 bg-[#eceae2] text-xs font-semibold text-muted-foreground">
-      🗺️ Loading Berlin OpenStreetMap...
+      Loading Berlin map...
     </div>
   ),
 });
@@ -256,7 +256,7 @@ export function JobBrowser({
                 </Link>
               )}
               <span className="hidden sm:inline-block rounded-md bg-[#e8f6ed] px-2.5 py-1 text-xs font-semibold text-[#245e3c]">
-                🗺️ OpenStreetMap Active
+                OpenStreetMap active
               </span>
             </div>
           </div>
@@ -384,18 +384,24 @@ function JobCard({
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <span
-                className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
-                  employerPosted ? 'bg-[#e5eaff] text-[#304ea9]' : 'bg-[#e8eee9] text-[#3e5146]'
+                className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium ${
+                  employerPosted
+                    ? 'bg-[#edf2ff] text-[#385cdd]'
+                    : 'bg-[#f0f2ef] text-[#3e5146]'
                 }`}
               >
-                {employerPosted ? 'Posted by employer' : 'Found at employer source'}
+                {employerPosted ? 'Direct from employer' : 'Verified venue source'}
               </span>
 
-              {wageBadge && (
-                <span className="rounded-full bg-[#e8f6ed] px-2.5 py-0.5 text-[11px] font-bold text-[#245e3c]">
-                  📍 {wageBadge}
-                </span>
-              )}
+              {job.employmentForms &&
+                job.employmentForms.slice(0, 2).map((form: string) => (
+                  <span
+                    key={form}
+                    className="rounded-full bg-foreground/5 px-2.5 py-0.5 text-[11px] text-muted-foreground"
+                  >
+                    {form}
+                  </span>
+                ))}
 
               {job.niches && job.niches.length > 1 && (
                 <span className="rounded-full bg-foreground/5 px-2 py-0.5 text-[10px] text-muted-foreground">
@@ -414,7 +420,7 @@ function JobCard({
           </div>
 
           <div className="flex shrink-0 items-center justify-between border-t border-foreground/10 pt-3 lg:border-t-0 lg:pt-0">
-            <span className="text-base font-bold text-[#245e3c] lg:text-lg">
+            <span className="text-base font-bold text-[#18221e] lg:text-lg">
               {payLabel}
             </span>
           </div>

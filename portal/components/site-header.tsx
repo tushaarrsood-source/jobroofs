@@ -9,10 +9,13 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
           href="/"
           className="flex items-center gap-3 font-semibold tracking-[-0.03em]"
         >
-          <span className="grid size-8 place-items-center rounded-full bg-[#18221e] text-[#f4f0e7]">
-            <MapPin className="size-4" strokeWidth={2.4} />
+          <span className="grid size-8 place-items-center rounded-full bg-[#18221e] text-[#f4f0e7] shadow-xs">
+            <MapPin className="size-4 text-[#ed6a43]" strokeWidth={2.4} />
           </span>
-          <span>KIEZJOB</span>
+          <span className="font-extrabold tracking-[-0.04em]">KIEZJOB</span>
+          <span className="hidden rounded-md border border-[#385cdd]/25 bg-[#edf2ff] px-2 py-0.5 text-[10px] font-bold text-[#385cdd] sm:inline">
+            BERLIN
+          </span>
           {control ? (
             <span className="hidden rounded-full bg-[#d9ddd7] px-2 py-1 font-mono text-[10px] uppercase tracking-widest sm:inline">
               Control room

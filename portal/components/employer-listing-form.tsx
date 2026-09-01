@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CheckCircle2, ExternalLink, Mail, Sparkles, Clock, Coins, Calendar } from 'lucide-react';
+import { CheckCircle2, ExternalLink, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -284,14 +284,14 @@ export function EmployerListingForm() {
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <Field label="Employment type">
               <NativeSelect name="employmentType" className="w-full [&_select]:h-11" defaultValue="minijob">
-                <NativeSelectOption value="temp-day-shift">⚡ 1-Day Shift / Tagesjob (Single shift)</NativeSelectOption>
-                <NativeSelectOption value="short-term">⏱️ Short-term / Temp work (Kurzfristig / Aushilfe)</NativeSelectOption>
-                <NativeSelectOption value="minijob">☕ Minijob (up to 538€)</NativeSelectOption>
-                <NativeSelectOption value="part-time">💼 Part-time / Teilzeit</NativeSelectOption>
-                <NativeSelectOption value="working-student">🎓 Working student / Werkstudent:in</NativeSelectOption>
-                <NativeSelectOption value="home-help">🏡 Home help & household assistance</NativeSelectOption>
-                <NativeSelectOption value="seasonal">🍁 Seasonal work / Saisonarbeit</NativeSelectOption>
-                <NativeSelectOption value="on-call">📞 On-call / Abrufarbeit</NativeSelectOption>
+                <NativeSelectOption value="temp-day-shift">1-Day Shift / Tagesjob (Single shift)</NativeSelectOption>
+                <NativeSelectOption value="short-term">Short-term / Temp work (Kurzfristig / Aushilfe)</NativeSelectOption>
+                <NativeSelectOption value="minijob">Minijob (up to 538€)</NativeSelectOption>
+                <NativeSelectOption value="part-time">Part-time / Teilzeit</NativeSelectOption>
+                <NativeSelectOption value="working-student">Working student / Werkstudent:in</NativeSelectOption>
+                <NativeSelectOption value="home-help">Home help & household assistance</NativeSelectOption>
+                <NativeSelectOption value="seasonal">Seasonal work / Saisonarbeit</NativeSelectOption>
+                <NativeSelectOption value="on-call">On-call / Abrufarbeit</NativeSelectOption>
               </NativeSelect>
             </Field>
             <Field label="Language preference">
@@ -314,10 +314,9 @@ export function EmployerListingForm() {
                 className="min-h-[180px] p-4 font-sans text-sm leading-relaxed"
                 placeholder="List the main tasks and responsibilities. You can write in continuous paragraphs or bullet points — they are automatically formatted into clean pointers for candidates:&#10;&#10;• Welcome guests and assist with setup&#10;• Help with food/drink prep or household tasks&#10;• Wrap up shift and ensure everything is tidy"
               />
-              <div className="mt-1.5 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                <Sparkles className="size-3 text-[#385cdd]" />
-                <span>Auto-formatted into clean pointers for candidates without changing any of your words.</span>
-              </div>
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                Auto-formatted into clean bullet points for candidates without changing any of your words.
+              </p>
             </Field>
 
             <Field label="What do you require? (Experience / Availability)">
@@ -328,10 +327,9 @@ export function EmployerListingForm() {
                 className="min-h-[160px] p-4 font-sans text-sm leading-relaxed"
                 placeholder="Experience, languages, certificates, or availability:&#10;&#10;• Reliable availability for the scheduled time&#10;• Friendly, proactive attitude&#10;• Previous experience welcome but not mandatory"
               />
-              <div className="mt-1.5 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                <Sparkles className="size-3 text-[#245e3c]" />
-                <span>Automatically formatted cleanly for candidates.</span>
-              </div>
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                Automatically formatted cleanly for candidates.
+              </p>
             </Field>
           </div>
         </FormSection>
@@ -361,8 +359,7 @@ export function EmployerListingForm() {
                   onClick={() => setScheduleType('shift_1day')}
                   className={`rounded-xl border p-3.5 text-left transition ${scheduleType === 'shift_1day' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
                 >
-                  <Clock className="size-4 text-[#385cdd]" />
-                  <p className="mt-1.5 text-sm font-semibold">1-Day Single Shift</p>
+                  <p className="text-sm font-semibold">1-Day Single Shift</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">One-time event, relief shift, or single-day gig.</p>
                 </button>
                 <button
@@ -370,8 +367,7 @@ export function EmployerListingForm() {
                   onClick={() => setScheduleType('flexible')}
                   className={`rounded-xl border p-3.5 text-left transition ${scheduleType === 'flexible' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
                 >
-                  <Calendar className="size-4 text-[#245e3c]" />
-                  <p className="mt-1.5 text-sm font-semibold">Flexible / By Agreement</p>
+                  <p className="text-sm font-semibold">Flexible / By Agreement</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">Hours & days arranged flexibly with candidate.</p>
                 </button>
                 <button
@@ -379,8 +375,7 @@ export function EmployerListingForm() {
                   onClick={() => setScheduleType('regular')}
                   className={`rounded-xl border p-3.5 text-left transition ${scheduleType === 'regular' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
                 >
-                  <Clock className="size-4 text-[#e06c28]" />
-                  <p className="mt-1.5 text-sm font-semibold">Fixed / Regular Hours</p>
+                  <p className="text-sm font-semibold">Fixed / Regular Hours</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">Set weekly or monthly shifts.</p>
                 </button>
               </div>
@@ -435,10 +430,9 @@ export function EmployerListingForm() {
               onClick={() => setPayMode('fixed')}
               className={`rounded-xl border p-4 text-left transition ${payMode === 'fixed' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
             >
-              <Coins className="size-5 text-[#385cdd]" />
-              <p className="mt-2 text-sm font-semibold">💶 State pay rate upfront</p>
+              <p className="text-sm font-semibold">State pay rate upfront</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                Enter an hourly rate, shift fee, or monthly wage to display directly on the map.
+                Enter an hourly rate, shift fee, or monthly wage to display directly on the listing.
               </p>
             </button>
             <button
@@ -446,8 +440,7 @@ export function EmployerListingForm() {
               onClick={() => setPayMode('discuss')}
               className={`rounded-xl border p-4 text-left transition ${payMode === 'discuss' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
             >
-              <Coins className="size-5 text-[#245e3c]" />
-              <p className="mt-2 text-sm font-semibold">💬 Decide after talks / Negotiable</p>
+              <p className="text-sm font-semibold">Decide after talks / Negotiable</p>
               <p className="mt-1 text-xs text-muted-foreground">
                 No fee stated upfront. Listing will show &quot;To be discussed / Nach Vereinbarung&quot;.
               </p>
@@ -483,7 +476,7 @@ export function EmployerListingForm() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field label="When is the person paid?">
                   <NativeSelect name="payoutCadence" className="w-full [&_select]:h-11" defaultValue="monthly">
-                    <NativeSelectOption value="after_shift">⚡ Immediately after shift</NativeSelectOption>
+                    <NativeSelectOption value="after_shift">Immediately after shift</NativeSelectOption>
                     <NativeSelectOption value="weekly">Weekly</NativeSelectOption>
                     <NativeSelectOption value="fortnightly">Every two weeks</NativeSelectOption>
                     <NativeSelectOption value="monthly">Monthly</NativeSelectOption>

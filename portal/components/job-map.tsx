@@ -201,7 +201,7 @@ export function JobMap({
 
       {miniMode && (
         <div className="absolute bottom-2 left-2 z-[500] rounded-md bg-white/90 px-2 py-0.5 text-[10px] font-semibold text-muted-foreground shadow backdrop-blur">
-          🗺️ Live OSM Pin
+          OpenStreetMap
         </div>
       )}
 
