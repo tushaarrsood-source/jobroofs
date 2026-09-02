@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Clock } from 'lucide-react';
 import { JobBrowser } from '@/components/job-browser';
 import { SiteHeader } from '@/components/site-header';
 import { CategoryCarousel } from '@/components/category-carousel';
@@ -51,7 +51,7 @@ export default async function LatestJobsPage() {
 
       <div className="border-b border-foreground/15 bg-[#e8f6ed] py-2.5 text-center text-xs font-semibold text-[#245e3c]">
         <span className="inline-flex items-center gap-1.5">
-          <Sparkles className="size-4" /> Real-time verified postings &middot; Transparent hours, wages & location
+          <Clock className="size-4" /> Real-time verified postings &middot; Transparent hours, wages & location
         </span>
       </div>
 

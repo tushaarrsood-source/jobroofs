@@ -1,7 +1,13 @@
+'use client';
+
 import Link from 'next/link';
 import { ArrowUpRight, MapPin } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n/language-context';
+import { LanguageToggle } from '@/components/language-toggle';
 
 export function SiteHeader({ control = false }: { control?: boolean }) {
+  const { t } = useTranslation();
+
   return (
     <header className="border-b border-foreground/15 bg-[#f4f0e7]">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-5 md:px-10">
@@ -18,47 +24,54 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
           </span>
           {control ? (
             <span className="hidden rounded-full bg-[#d9ddd7] px-2 py-1 font-mono text-[10px] uppercase tracking-widest sm:inline">
-              Control room
+              {t('controlRoom')}
             </span>
           ) : null}
         </Link>
-        <nav className="flex items-center gap-5 text-sm">
-          {control ? (
-            <Link
-              href="/"
-              className="inline-flex items-center gap-1.5 font-medium hover:underline"
-            >
-              Public portal <ArrowUpRight className="size-3.5" />
-            </Link>
-          ) : (
-            <>
+
+        <div className="flex items-center gap-3 sm:gap-5">
+          <nav className="flex items-center gap-4 text-sm sm:gap-5">
+            {control ? (
               <Link
-                href="/direct-employers"
-                className="hidden text-muted-foreground hover:text-foreground sm:inline"
+                href="/"
+                className="inline-flex items-center gap-1.5 font-medium hover:underline"
               >
-                Direct employers
+                {t('publicPortal')} <ArrowUpRight className="size-3.5" />
               </Link>
-              <Link
-                href="/latest-jobs"
-                className="hidden text-muted-foreground hover:text-foreground md:inline"
-              >
-                Latest jobs
-              </Link>
-              <Link
-                href="/#niches"
-                className="hidden text-muted-foreground hover:text-foreground lg:inline"
-              >
-                Categories
-              </Link>
-              <Link
-                href="/post-a-job"
-                className="inline-flex h-9 items-center rounded-lg bg-[#18221e] px-4 font-semibold text-white transition hover:bg-[#2a3832]"
-              >
-                Post a job <ArrowUpRight className="ml-1.5 size-3.5" />
-              </Link>
-            </>
-          )}
-        </nav>
+            ) : (
+              <>
+                <Link
+                  href="/direct-employers"
+                  className="hidden text-muted-foreground hover:text-foreground sm:inline"
+                >
+                  {t('directEmployers')}
+                </Link>
+                <Link
+                  href="/latest-jobs"
+                  className="hidden text-muted-foreground hover:text-foreground md:inline"
+                >
+                  {t('latestJobs')}
+                </Link>
+                <Link
+                  href="/#niches"
+                  className="hidden text-muted-foreground hover:text-foreground lg:inline"
+                >
+                  {t('categories')}
+                </Link>
+                <Link
+                  href="/post-a-job"
+                  className="inline-flex h-9 items-center rounded-lg bg-[#18221e] px-4 font-semibold text-white transition hover:bg-[#2a3832]"
+                >
+                  {t('postAJob')} <ArrowUpRight className="ml-1.5 size-3.5" />
+                </Link>
+              </>
+            )}
+          </nav>
+
+          <div className="border-l border-foreground/15 pl-3 sm:pl-4">
+            <LanguageToggle />
+          </div>
+        </div>
       </div>
     </header>
   );

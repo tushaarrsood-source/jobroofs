@@ -4,19 +4,24 @@ import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { industryNiches, type IndustryNiche } from '@/lib/domain/taxonomy';
+import { useTranslation } from '@/lib/i18n/language-context';
 
 export function CategoryCarousel({
   niches = industryNiches,
-  title = 'Work across Berlin',
-  eyebrow = 'Browse by category',
+  title,
+  eyebrow,
 }: {
   niches?: IndustryNiche[];
   title?: string;
   eyebrow?: string;
 }) {
+  const { t, isDe } = useTranslation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const effectiveTitle = title || t('categoryTitle');
+  const effectiveEyebrow = eyebrow || t('categoryEyebrow');
 
   const checkScroll = () => {
     if (!scrollRef.current) return;
@@ -50,13 +55,13 @@ export function CategoryCarousel({
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-[#385cdd]">
-              {eyebrow}
+              {effectiveEyebrow}
             </p>
             <h2 className="mt-1.5 text-2xl font-semibold tracking-[-0.04em] sm:text-4xl">
-              {title}
+              {effectiveTitle}
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              {niches.length} curated categories across all 12 Berlin districts
+              {t('curatedCategories', { count: niches.length })}
             </p>
           </div>
 
@@ -91,6 +96,9 @@ export function CategoryCarousel({
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {niches.map((niche) => {
+            const primaryLabel = isDe ? niche.labelDe : niche.label;
+            const secondaryLabel = isDe ? niche.label : niche.labelDe;
+
             return (
               <Link
                 key={niche.id}
@@ -100,17 +108,17 @@ export function CategoryCarousel({
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-[#385cdd]">
-                      {niche.labelDe}
+                      {secondaryLabel}
                     </span>
                     {niche.priority === 'launch' && (
                       <span className="rounded-full bg-[#e8f6ed] px-2 py-0.5 text-[10px] font-medium text-[#245e3c]">
-                        Active
+                        {t('activeBadge')}
                       </span>
                     )}
                   </div>
 
                   <h3 className="mt-3 text-base font-semibold tracking-tight text-[#18221e] group-hover:text-[#385cdd]">
-                    {niche.label}
+                    {primaryLabel}
                   </h3>
                   <p className="mt-2 text-xs leading-relaxed text-muted-foreground line-clamp-2">
                     {niche.description}
@@ -118,7 +126,7 @@ export function CategoryCarousel({
                 </div>
 
                 <div className="mt-5 flex items-center justify-between border-t border-foreground/10 pt-3 text-xs font-medium text-[#385cdd]">
-                  <span>Browse jobs</span>
+                  <span>{t('browseCategory')}</span>
                   <ArrowRight className="size-3.5 transition group-hover:translate-x-1" />
                 </div>
               </Link>

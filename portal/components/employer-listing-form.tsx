@@ -11,6 +11,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { industryNiches } from '@/lib/domain/taxonomy';
 import { formatVerbatimPointers } from '@/lib/domain/text-format';
+import { useTranslation } from '@/lib/i18n/language-context';
 import Link from 'next/link';
 
 interface SubmitResponse {
@@ -29,6 +30,7 @@ interface VerifyResponse {
 }
 
 export function EmployerListingForm() {
+  const { t, isDe } = useTranslation();
   const [applicationMethod, setApplicationMethod] = useState<'email' | 'external_link'>('email');
   const [pricingPlan, setPricingPlan] = useState<'single' | 'annual'>('single');
   const [selectedNiches, setSelectedNiches] = useState<string[]>([]);
@@ -50,7 +52,7 @@ export function EmployerListingForm() {
         return prev.filter((n) => n !== id);
       }
       if (prev.length >= 3) {
-        setNicheError('You can select a maximum of 3 categories.');
+        setNicheError(isDe ? 'Maximal 3 Kategorien möglich.' : 'You can select a maximum of 3 categories.');
         return prev;
       }
       setNicheError('');
@@ -61,7 +63,7 @@ export function EmployerListingForm() {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (selectedNiches.length === 0) {
-      setNicheError('Please select at least 1 category.');
+      setNicheError(isDe ? 'Bitte wähle mindestens 1 Kategorie.' : 'Please select at least 1 category.');
       return;
     }
     
@@ -91,7 +93,7 @@ export function EmployerListingForm() {
     // Schedule type handling
     data.scheduleType = scheduleType;
     if (scheduleType === 'shift_1day' && !data.workingDays) {
-      data.workingDays = '1-Day Shift';
+      data.workingDays = '1-Day Shift / 1-Tages-Schicht';
     } else if (scheduleType === 'flexible' && !data.workingDays) {
       data.workingDays = 'Flexible / By arrangement';
     }
@@ -161,9 +163,9 @@ export function EmployerListingForm() {
     return (
       <div className="mt-9 rounded-xl border border-foreground/15 bg-white p-7 text-center max-w-md mx-auto">
         <Mail className="mx-auto size-12 text-[#385cdd]" />
-        <h2 className="mt-4 text-2xl font-semibold">Check your work email</h2>
+        <h2 className="mt-4 text-2xl font-semibold">{t('checkEmailTitle')}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          We sent a 6-digit verification code to your email. Enter it below to proceed.
+          {t('checkEmailDesc')}
         </p>
 
         <form onSubmit={onVerify} className="mt-6 space-y-4">
@@ -176,7 +178,7 @@ export function EmployerListingForm() {
             required
           />
           <Button type="submit" disabled={submitStatus === 'verifying'} className="w-full h-11 bg-[#18221e] text-white">
-            {submitStatus === 'verifying' ? 'Verifying...' : 'Verify & Continue →'}
+            {submitStatus === 'verifying' ? t('verifying') : t('verifyAndContinue')}
           </Button>
         </form>
       </div>
@@ -187,9 +189,9 @@ export function EmployerListingForm() {
     return (
       <div className="mt-9 rounded-xl border border-foreground/15 bg-white p-8 text-center max-w-lg mx-auto">
         <CheckCircle2 className="mx-auto size-14 text-green-600" />
-        <h2 className="mt-4 text-2xl font-semibold">Listing is Live!</h2>
+        <h2 className="mt-4 text-2xl font-semibold">{t('listingPublishedTitle')}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Your flexible job listing is published and immediately visible to job seekers across Berlin.
+          {t('listingPublishedDesc')}
         </p>
         <div className="mt-6 flex justify-center gap-3">
           {publishedSlug && (
@@ -197,14 +199,14 @@ export function EmployerListingForm() {
               href={`/jobs/${publishedSlug}`}
               className="inline-flex h-11 items-center rounded-lg bg-[#385cdd] px-6 text-sm font-semibold text-white"
             >
-              View Listing Live →
+              {t('viewListingLive')}
             </Link>
           )}
           <Link
             href="/"
             className="inline-flex h-11 items-center rounded-lg border border-foreground/15 bg-white px-6 text-sm font-semibold hover:bg-foreground/5"
           >
-            Back to Portal
+            {t('backToPortal')}
           </Link>
         </div>
       </div>
@@ -214,16 +216,16 @@ export function EmployerListingForm() {
   return (
     <>
       <form onSubmit={onSubmit} className="mt-8 space-y-8">
-        <FormSection number="00" title="Account & Pricing Plan">
+        <FormSection number="00" title={t('sectionAccountTitle')}>
           <p className="text-sm text-muted-foreground">
-            Enter your contact email to verify and manage your listing.
+            {t('sectionAccountDesc')}
           </p>
-          <Field label="Your work / contact email">
+          <Field label={t('workEmailLabel')}>
             <Input name="contactEmail" required type="email" placeholder="owner@company.de" className="h-11" />
           </Field>
           
           <div className="mt-4">
-            <Field label="Choose listing option">
+            <Field label={t('sectionAccountTitle')}>
               <div className="grid gap-3 sm:grid-cols-2">
                 <button
                   type="button"
@@ -231,10 +233,10 @@ export function EmployerListingForm() {
                   className={`rounded-xl border p-4 text-left transition ${pricingPlan === 'single' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
                 >
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold">Single Job Listing</p>
-                    <span className="rounded-md bg-[#385cdd]/10 px-2 py-0.5 text-xs font-bold text-[#385cdd]">&euro;29</span>
+                    <p className="text-sm font-semibold">{t('singleListingTitle')}</p>
+                    <span className="rounded-md bg-[#385cdd]/10 px-2 py-0.5 text-xs font-bold text-[#385cdd]">{t('singleListingPrice')}</span>
                   </div>
-                  <p className="mt-1 text-xs text-muted-foreground">One-time payment for 30 days active listing. Full candidate reach across Berlin.</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{t('singleListingDesc')}</p>
                 </button>
                 <button
                   type="button"
@@ -242,148 +244,146 @@ export function EmployerListingForm() {
                   className={`rounded-xl border p-4 text-left transition ${pricingPlan === 'annual' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
                 >
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold">Annual Unlimited & Top Listing</p>
-                    <span className="rounded-md bg-[#245e3c]/10 px-2 py-0.5 text-xs font-bold text-[#245e3c]">&euro;499 / yr</span>
+                    <p className="text-sm font-semibold">{t('annualListingTitle')}</p>
+                    <span className="rounded-md bg-[#245e3c]/10 px-2 py-0.5 text-xs font-bold text-[#245e3c]">{t('annualListingPrice')}</span>
                   </div>
-                  <p className="mt-1 text-xs text-muted-foreground">Post unlimited job openings with top priority placement for an entire year.</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{t('annualListingDesc')}</p>
                 </button>
               </div>
             </Field>
           </div>
         </FormSection>
 
-        <FormSection number="01" title="Job & Employer">
+        <FormSection number="01" title={t('sectionJobTitle')}>
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Job title">
-              <Input name="title" required placeholder="e.g. Service Aushilfe / 1-Day Event Assistant / Home Help" className="h-11" />
+            <Field label={t('jobTitleLabel')}>
+              <Input name="title" required placeholder={t('jobTitlePlaceholder')} className="h-11" />
             </Field>
-            <Field label="Employer / Host name">
-              <Input name="company" required placeholder="Company, venue, or individual host" className="h-11" />
+            <Field label={t('employerNameLabel')}>
+              <Input name="company" required placeholder={t('employerNamePlaceholder')} className="h-11" />
             </Field>
           </div>
           
           <div className="mt-4">
-            <Field label="Job categories (select up to 3)">
+            <Field label={t('categoriesLabel')}>
               <div className="mt-2 grid gap-2 sm:grid-cols-2 md:grid-cols-3 h-56 overflow-y-auto p-4 border rounded-xl bg-foreground/5">
-                {industryNiches.map((niche) => (
-                  <label key={niche.id} className="flex items-center gap-2 cursor-pointer text-sm">
-                    <input 
-                      type="checkbox" 
-                      className="rounded text-[#385cdd]"
-                      checked={selectedNiches.includes(niche.id)}
-                      onChange={() => handleNicheToggle(niche.id)}
-                    />
-                    <span>{niche.label}</span>
-                  </label>
-                ))}
+                {industryNiches.map((niche) => {
+                  const nicheText = isDe ? niche.labelDe : niche.label;
+                  return (
+                    <label key={niche.id} className="flex items-center gap-2 cursor-pointer text-sm">
+                      <input 
+                        type="checkbox" 
+                        className="rounded text-[#385cdd]"
+                        checked={selectedNiches.includes(niche.id)}
+                        onChange={() => handleNicheToggle(niche.id)}
+                      />
+                      <span>{nicheText}</span>
+                    </label>
+                  );
+                })}
               </div>
               {nicheError && <p className="mt-2 text-xs font-semibold text-red-600">{nicheError}</p>}
             </Field>
           </div>
 
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            <Field label="Employment type">
+            <Field label={t('employmentTypeLabel')}>
               <NativeSelect name="employmentType" className="w-full [&_select]:h-11" defaultValue="minijob">
-                <NativeSelectOption value="temp-day-shift">1-Day Shift / Tagesjob (Single shift)</NativeSelectOption>
-                <NativeSelectOption value="short-term">Short-term / Temp work (Kurzfristig / Aushilfe)</NativeSelectOption>
-                <NativeSelectOption value="minijob">Minijob (up to 538€)</NativeSelectOption>
-                <NativeSelectOption value="part-time">Part-time / Teilzeit</NativeSelectOption>
-                <NativeSelectOption value="working-student">Working student / Werkstudent:in</NativeSelectOption>
-                <NativeSelectOption value="home-help">Home help & household assistance</NativeSelectOption>
-                <NativeSelectOption value="seasonal">Seasonal work / Saisonarbeit</NativeSelectOption>
-                <NativeSelectOption value="on-call">On-call / Abrufarbeit</NativeSelectOption>
+                <NativeSelectOption value="temp-day-shift">{t('oneDayShift')}</NativeSelectOption>
+                <NativeSelectOption value="short-term">{t('tempShortTerm')}</NativeSelectOption>
+                <NativeSelectOption value="minijob">{t('minijob')}</NativeSelectOption>
+                <NativeSelectOption value="part-time">{t('partTime')}</NativeSelectOption>
+                <NativeSelectOption value="working-student">{t('workingStudent')}</NativeSelectOption>
+                <NativeSelectOption value="home-help">{t('homeHelp')}</NativeSelectOption>
               </NativeSelect>
             </Field>
-            <Field label="Language preference">
+            <Field label={t('languagePrefLabel')}>
               <NativeSelect name="language" className="w-full [&_select]:h-11" defaultValue="german_and_english">
-                <NativeSelectOption value="german_and_english">German and English</NativeSelectOption>
-                <NativeSelectOption value="english_explicit">English only (No German needed)</NativeSelectOption>
-                <NativeSelectOption value="german_explicit">German required</NativeSelectOption>
-                <NativeSelectOption value="not_stated">Not specified / Open</NativeSelectOption>
+                <NativeSelectOption value="german_and_english">{t('germanAndEnglish')}</NativeSelectOption>
+                <NativeSelectOption value="english_explicit">{t('englishOnly')}</NativeSelectOption>
+                <NativeSelectOption value="german_explicit">{t('germanRequired')}</NativeSelectOption>
+                <NativeSelectOption value="not_stated">{t('langOpen')}</NativeSelectOption>
               </NativeSelect>
             </Field>
           </div>
 
           {/* Large, comfortable textareas */}
           <div className="mt-4 space-y-4">
-            <Field label="What will the person do? (Tasks & details)">
+            <Field label={t('tasksLabel')}>
               <Textarea
                 name="responsibilities"
                 required
                 rows={8}
                 className="min-h-[180px] p-4 font-sans text-sm leading-relaxed"
-                placeholder="List the main tasks and responsibilities. You can write in continuous paragraphs or bullet points — they are automatically formatted into clean pointers for candidates:&#10;&#10;• Welcome guests and assist with setup&#10;• Help with food/drink prep or household tasks&#10;• Wrap up shift and ensure everything is tidy"
+                placeholder={t('tasksPlaceholder')}
               />
               <p className="mt-1 text-[11px] text-muted-foreground">
-                Auto-formatted into clean bullet points for candidates without changing any of your words.
+                {t('tasksAutoFormatNote')}
               </p>
             </Field>
 
-            <Field label="What do you require? (Experience / Availability)">
+            <Field label={t('requirementsLabel')}>
               <Textarea
                 name="requirements"
                 required
                 rows={7}
                 className="min-h-[160px] p-4 font-sans text-sm leading-relaxed"
-                placeholder="Experience, languages, certificates, or availability:&#10;&#10;• Reliable availability for the scheduled time&#10;• Friendly, proactive attitude&#10;• Previous experience welcome but not mandatory"
+                placeholder={t('requirementsPlaceholder')}
               />
-              <p className="mt-1 text-[11px] text-muted-foreground">
-                Automatically formatted cleanly for candidates.
-              </p>
             </Field>
           </div>
         </FormSection>
 
-        <FormSection number="02" title="Location & Working Time">
+        <FormSection number="02" title={t('sectionLocationTitle')}>
           <div className="grid gap-4 sm:grid-cols-3">
-            <Field label="Berlin district">
+            <Field label={t('districtLabel')}>
               <Input name="district" required placeholder="e.g. Kreuzberg, Mitte, Neukölln" className="h-11" />
             </Field>
-            <Field label="Postcode">
+            <Field label={t('postcodeLabel')}>
               <Input name="postcode" required inputMode="numeric" placeholder="10997" className="h-11" />
             </Field>
-            <Field label="Workplace">
+            <Field label={t('workplaceLabel')}>
               <NativeSelect name="workplaceType" className="w-full [&_select]:h-11" defaultValue="on_site">
-                <NativeSelectOption value="on_site">On site</NativeSelectOption>
-                <NativeSelectOption value="hybrid">Hybrid</NativeSelectOption>
-                <NativeSelectOption value="remote">Remote</NativeSelectOption>
+                <NativeSelectOption value="on_site">{t('onSite')}</NativeSelectOption>
+                <NativeSelectOption value="hybrid">{t('hybrid')}</NativeSelectOption>
+                <NativeSelectOption value="remote">{t('remote')}</NativeSelectOption>
               </NativeSelect>
             </Field>
           </div>
 
           <div className="mt-4">
-            <Field label="Shift / Schedule flexibility">
+            <Field label={t('scheduleTypeLabel')}>
               <div className="grid gap-3 sm:grid-cols-3">
                 <button
                   type="button"
                   onClick={() => setScheduleType('shift_1day')}
                   className={`rounded-xl border p-3.5 text-left transition ${scheduleType === 'shift_1day' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
                 >
-                  <p className="text-sm font-semibold">1-Day Single Shift</p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">One-time event, relief shift, or single-day gig.</p>
+                  <p className="text-sm font-semibold">{t('schedule1DayTitle')}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{t('schedule1DayDesc')}</p>
                 </button>
                 <button
                   type="button"
                   onClick={() => setScheduleType('flexible')}
                   className={`rounded-xl border p-3.5 text-left transition ${scheduleType === 'flexible' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
                 >
-                  <p className="text-sm font-semibold">Flexible / By Agreement</p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">Hours & days arranged flexibly with candidate.</p>
+                  <p className="text-sm font-semibold">{t('scheduleFlexTitle')}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{t('scheduleFlexDesc')}</p>
                 </button>
                 <button
                   type="button"
                   onClick={() => setScheduleType('regular')}
                   className={`rounded-xl border p-3.5 text-left transition ${scheduleType === 'regular' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
                 >
-                  <p className="text-sm font-semibold">Fixed / Regular Hours</p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">Set weekly or monthly shifts.</p>
+                  <p className="text-sm font-semibold">{t('scheduleRegularTitle')}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{t('scheduleRegularDesc')}</p>
                 </button>
               </div>
             </Field>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 mt-4">
-            <Field label="Working days (optional)">
+            <Field label={t('workingDaysLabel')}>
               <Input
                 name="workingDays"
                 placeholder={
@@ -396,7 +396,7 @@ export function EmployerListingForm() {
                 className="h-11"
               />
             </Field>
-            <Field label="Working times (optional)">
+            <Field label={t('workingTimesLabel')}>
               <Input
                 name="workingTimes"
                 placeholder={
@@ -410,18 +410,18 @@ export function EmployerListingForm() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Start date (optional)">
+            <Field label={t('startDateLabel')}>
               <Input name="startDate" placeholder="e.g. Immediately or 15 Oct 2026" className="h-11" />
             </Field>
-            <Field label="End date, if temporary (optional)">
+            <Field label={t('endDateLabel')}>
               <Input name="endDate" placeholder="Leave empty if ongoing" className="h-11" />
             </Field>
           </div>
         </FormSection>
 
-        <FormSection number="03" title="Compensation & Pay">
+        <FormSection number="03" title={t('sectionPayTitle')}>
           <p className="text-sm text-muted-foreground">
-            You can state exact pay upfront or leave it open to discuss with the candidate.
+            {t('sectionPayDesc')}
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -430,9 +430,9 @@ export function EmployerListingForm() {
               onClick={() => setPayMode('fixed')}
               className={`rounded-xl border p-4 text-left transition ${payMode === 'fixed' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
             >
-              <p className="text-sm font-semibold">State pay rate upfront</p>
+              <p className="text-sm font-semibold">{t('payModeFixedTitle')}</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                Enter an hourly rate, shift fee, or monthly wage to display directly on the listing.
+                {t('payModeFixedDesc')}
               </p>
             </button>
             <button
@@ -440,9 +440,9 @@ export function EmployerListingForm() {
               onClick={() => setPayMode('discuss')}
               className={`rounded-xl border p-4 text-left transition ${payMode === 'discuss' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
             >
-              <p className="text-sm font-semibold">Decide after talks / Negotiable</p>
+              <p className="text-sm font-semibold">{t('payModeDiscussTitle')}</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                No fee stated upfront. Listing will show &quot;To be discussed / Nach Vereinbarung&quot;.
+                {t('payModeDiscussDesc')}
               </p>
             </button>
           </div>
@@ -450,49 +450,49 @@ export function EmployerListingForm() {
           {payMode === 'fixed' ? (
             <div className="space-y-4 pt-2">
               <div className="grid gap-4 sm:grid-cols-4">
-                <Field label="Amount (€)">
+                <Field label={t('amountMinLabel')}>
                   <Input name="amountMinimum" type="number" min="0" step="0.01" placeholder="15.00" className="h-11" />
                 </Field>
-                <Field label="Max amount (€, optional)">
+                <Field label={t('amountMaxLabel')}>
                   <Input name="amountMaximum" type="number" min="0" step="0.01" placeholder="18.00" className="h-11" />
                 </Field>
-                <Field label="Rate interval">
+                <Field label={t('rateIntervalLabel')}>
                   <NativeSelect name="rateInterval" className="w-full [&_select]:h-11" defaultValue="hour">
-                    <NativeSelectOption value="hour">Per hour</NativeSelectOption>
-                    <NativeSelectOption value="shift">Per shift (flat)</NativeSelectOption>
-                    <NativeSelectOption value="day">Per day</NativeSelectOption>
-                    <NativeSelectOption value="month">Per month (Minijob max 538€)</NativeSelectOption>
-                    <NativeSelectOption value="project">Per gig / project</NativeSelectOption>
+                    <NativeSelectOption value="hour">{t('perHour')}</NativeSelectOption>
+                    <NativeSelectOption value="shift">{t('perShift')}</NativeSelectOption>
+                    <NativeSelectOption value="day">{t('perDay')}</NativeSelectOption>
+                    <NativeSelectOption value="month">{t('perMonth')}</NativeSelectOption>
+                    <NativeSelectOption value="project">{t('perProject')}</NativeSelectOption>
                   </NativeSelect>
                 </Field>
-                <Field label="Gross / Net">
+                <Field label={t('grossNetLabel')}>
                   <NativeSelect name="grossNet" className="w-full [&_select]:h-11" defaultValue="gross">
-                    <NativeSelectOption value="gross">Gross</NativeSelectOption>
-                    <NativeSelectOption value="net">Net (Cash/Direct)</NativeSelectOption>
+                    <NativeSelectOption value="gross">{t('gross')}</NativeSelectOption>
+                    <NativeSelectOption value="net">{t('net')}</NativeSelectOption>
                   </NativeSelect>
                 </Field>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="When is the person paid?">
+                <Field label={t('payoutWhenLabel')}>
                   <NativeSelect name="payoutCadence" className="w-full [&_select]:h-11" defaultValue="monthly">
-                    <NativeSelectOption value="after_shift">Immediately after shift</NativeSelectOption>
-                    <NativeSelectOption value="weekly">Weekly</NativeSelectOption>
-                    <NativeSelectOption value="fortnightly">Every two weeks</NativeSelectOption>
-                    <NativeSelectOption value="monthly">Monthly</NativeSelectOption>
+                    <NativeSelectOption value="after_shift">{t('payoutAfterShift')}</NativeSelectOption>
+                    <NativeSelectOption value="weekly">{t('payoutWeekly')}</NativeSelectOption>
+                    <NativeSelectOption value="fortnightly">{t('payoutFortnightly')}</NativeSelectOption>
+                    <NativeSelectOption value="monthly">{t('payoutMonthly')}</NativeSelectOption>
                   </NativeSelect>
                 </Field>
-                <Field label="Tips, bonuses or extras (optional)">
+                <Field label={t('extrasLabel')}>
                   <Input name="extras" placeholder="e.g. Tips shared daily + free meals" className="h-11" />
                 </Field>
               </div>
             </div>
           ) : (
             <div className="pt-2">
-              <Field label="Note on compensation (optional)">
+              <Field label={t('payNoteLabel')}>
                 <Input
                   name="payDiscussNote"
-                  placeholder="e.g. Competitive pay based on experience / Discussed during brief intro call"
+                  placeholder={t('payNotePlaceholder')}
                   className="h-11"
                 />
               </Field>
@@ -500,9 +500,9 @@ export function EmployerListingForm() {
           )}
         </FormSection>
 
-        <FormSection number="04" title="Application & Contact">
+        <FormSection number="04" title={t('sectionApplicationTitle')}>
           <p className="text-sm text-muted-foreground">
-            Choose where candidates should apply.
+            {t('sectionApplicationDesc')}
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             <button
@@ -511,9 +511,9 @@ export function EmployerListingForm() {
               className={`rounded-xl border p-4 text-left transition ${applicationMethod === 'email' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
             >
               <Mail className="size-5 text-[#385cdd]" />
-              <p className="mt-3 text-sm font-semibold">Apply by email</p>
+              <p className="mt-3 text-sm font-semibold">{t('applyByEmail')}</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                Candidates send a brief email directly to you.
+                {t('applyByEmailDesc')}
               </p>
             </button>
             <button
@@ -522,50 +522,50 @@ export function EmployerListingForm() {
               className={`rounded-xl border p-4 text-left transition ${applicationMethod === 'external_link' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
             >
               <ExternalLink className="size-5 text-[#245e3c]" />
-              <p className="mt-3 text-sm font-semibold">Apply on website / form</p>
+              <p className="mt-3 text-sm font-semibold">{t('applyByWebsite')}</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                Redirect candidates to your own link or form.
+                {t('applyByWebsiteDesc')}
               </p>
             </button>
           </div>
 
           {applicationMethod === 'email' ? (
-            <Field label="Application email address">
+            <Field label={t('appEmailLabel')}>
               <Input name="applicationEmail" required type="email" placeholder="jobs@company.de" className="h-11" />
             </Field>
           ) : (
-            <Field label="Application URL">
+            <Field label={t('appUrlLabel')}>
               <Input name="applicationUrl" required type="url" placeholder="https://company.de/careers/apply" className="h-11" />
             </Field>
           )}
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Contact person name (optional)">
+            <Field label={t('appContactNameLabel')}>
               <Input name="applicationContactName" placeholder="e.g. Lisa Schmidt" className="h-11" />
             </Field>
-            <Field label="Application deadline (optional)">
+            <Field label={t('appDeadlineLabel')}>
               <Input name="applicationDeadline" placeholder="e.g. 15 Oct 2026" className="h-11" />
             </Field>
           </div>
 
-          <Field label="Application instructions (optional)">
+          <Field label={t('appInstructionsLabel')}>
             <Textarea
               name="applicationInstructions"
               rows={3}
-              placeholder="e.g. Send a short note with your availability. No formal CV required."
+              placeholder={t('appInstructionsPlaceholder')}
             />
           </Field>
         </FormSection>
 
         <div className="flex flex-col gap-4 rounded-xl bg-[#18221e] p-6 text-white sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="font-semibold text-lg">Post your job opening</p>
+            <p className="font-semibold text-lg">{t('postSubmitBoxTitle')}</p>
             <p className="mt-1 text-sm text-white/70">
-              Listing goes live immediately across Berlin upon verification & payment.
+              {t('postSubmitBoxDesc')}
             </p>
           </div>
           <Button type="submit" size="lg" disabled={submitStatus === 'submitting'} className="h-12 bg-white px-8 font-semibold text-[#18221e] hover:bg-white/90">
-            {submitStatus === 'submitting' ? 'Submitting...' : 'Continue to verification →'}
+            {submitStatus === 'submitting' ? t('submitting') : t('continueToVerification')}
           </Button>
         </div>
       </form>

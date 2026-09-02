@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { LanguageProvider } from '@/lib/i18n/language-context';
 import './globals.css';
 
 const geistSans = Geist({
@@ -70,6 +71,11 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: '/',
+    languages: {
+      'de-DE': 'https://kiezjob.de',
+      'en-US': 'https://kiezjob.de',
+      'x-default': 'https://kiezjob.de',
+    },
   },
   icons: {
     icon: '/favicon.svg',
@@ -86,8 +92,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );
 }
+

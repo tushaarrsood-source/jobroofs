@@ -25,6 +25,7 @@ import { previewJobs } from '@/lib/domain/preview-data';
 import { getIndustry } from '@/lib/domain/taxonomy';
 import dynamic from 'next/dynamic';
 import { formatPinBadge, getGoogleMapsUrl } from '@/lib/domain/berlin-geo';
+import { useTranslation } from '@/lib/i18n/language-context';
 
 const JobMap = dynamic(() => import('@/components/job-map').then((mod) => mod.JobMap), {
   ssr: false,
@@ -62,13 +63,14 @@ interface JobBrowserProps {
 export function JobBrowser({
   initialJobs = previewJobs,
   filterOrigin = 'employer_posted',
-  pageTitle = 'The Berlin portal for Part-Time, Minijobs & Temporary Work.',
-  pageSubtitle = 'Direct from local employers & verified venues across Berlin — Minijobs, part-time work, temporary gigs, working student roles, and individual shifts.',
-  sectionTitle = 'Direct from employers',
+  pageTitle,
+  pageSubtitle,
+  sectionTitle,
   viewAllHref = '/direct-employers',
-  viewAllLabel = 'View all direct listings',
+  viewAllLabel,
   showHero = true,
 }: JobBrowserProps) {
+  const { t, locale, isDe } = useTranslation();
   const [query, setQuery] = useState('');
   const [industry, setIndustry] = useState('all');
   const [employment, setEmployment] = useState('all');
@@ -77,6 +79,11 @@ export function JobBrowser({
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
   const [hoveredJobId, setHoveredJobId] = useState<string | null>(null);
   const jobCardsRef = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const effectivePageTitle = pageTitle || t('heroTitle');
+  const effectivePageSubtitle = pageSubtitle || t('heroSubtitle');
+  const effectiveSectionTitle = sectionTitle || t('directListings');
+  const effectiveViewAllLabel = viewAllLabel || t('viewAllDirect');
 
   const visibleJobs = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -131,13 +138,13 @@ export function JobBrowser({
       <section className="border-b border-foreground/15 bg-[#f4f0e7]">
         <div className="mx-auto max-w-[1440px] px-5 py-10 md:px-10 md:py-14">
           <p className="text-sm font-medium text-[#385cdd]">
-            Berlin&apos;s Flexible Work &amp; Minijob Portal
+            {t('heroEyebrow')}
           </p>
           <h1 className="mt-2 max-w-4xl text-4xl font-semibold leading-[1.02] tracking-[-0.05em] sm:text-6xl">
-            {pageTitle}
+            {effectivePageTitle}
           </h1>
           <p className="mt-4 max-w-3xl text-base text-muted-foreground">
-            {pageSubtitle}
+            {effectivePageSubtitle}
           </p>
 
           <div className="mt-8 grid gap-3 rounded-xl border border-foreground/15 bg-white p-3 shadow-[0_10px_30px_rgb(24_34_30/6%)] md:grid-cols-[minmax(250px,1fr)_190px_170px]">
@@ -147,7 +154,7 @@ export function JobBrowser({
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 className="h-11 border-0 bg-[#f4f5f2] pl-10 shadow-none"
-                placeholder="Job, company, district or postcode"
+                placeholder={t('searchPlaceholder')}
                 aria-label="Search jobs"
               />
             </div>
@@ -157,12 +164,12 @@ export function JobBrowser({
               className="w-full"
               aria-label="Employment type"
             >
-              <NativeSelectOption value="all">All job types</NativeSelectOption>
-              <NativeSelectOption value="1-day">1-Day Single Shifts</NativeSelectOption>
-              <NativeSelectOption value="short-term">Temp / Short-term</NativeSelectOption>
-              <NativeSelectOption value="minijob">Minijob (538€)</NativeSelectOption>
-              <NativeSelectOption value="part-time">Part-time / Teilzeit</NativeSelectOption>
-              <NativeSelectOption value="working student">Working student</NativeSelectOption>
+              <NativeSelectOption value="all">{t('allJobTypes')}</NativeSelectOption>
+              <NativeSelectOption value="1-day">{t('oneDayShift')}</NativeSelectOption>
+              <NativeSelectOption value="short-term">{t('tempShortTerm')}</NativeSelectOption>
+              <NativeSelectOption value="minijob">{t('minijob')}</NativeSelectOption>
+              <NativeSelectOption value="part-time">{t('partTime')}</NativeSelectOption>
+              <NativeSelectOption value="working student">{t('workingStudent')}</NativeSelectOption>
             </NativeSelect>
             <NativeSelect
               value={payInterval}
@@ -170,15 +177,11 @@ export function JobBrowser({
               className="w-full"
               aria-label="Pay interval"
             >
-              <NativeSelectOption value="all">Any pay type</NativeSelectOption>
-              <NativeSelectOption value="hour">Pay per hour</NativeSelectOption>
-              <NativeSelectOption value="shift">
-                Pay per shift
-              </NativeSelectOption>
-              <NativeSelectOption value="week">Pay per week</NativeSelectOption>
-              <NativeSelectOption value="month">
-                Pay per month
-              </NativeSelectOption>
+              <NativeSelectOption value="all">{t('anyPayType')}</NativeSelectOption>
+              <NativeSelectOption value="hour">{t('payPerHour')}</NativeSelectOption>
+              <NativeSelectOption value="shift">{t('payPerShift')}</NativeSelectOption>
+              <NativeSelectOption value="day">{t('payPerDay')}</NativeSelectOption>
+              <NativeSelectOption value="month">{t('payPerMonth')}</NativeSelectOption>
             </NativeSelect>
           </div>
 
@@ -186,8 +189,13 @@ export function JobBrowser({
             <div className="flex gap-2 overflow-x-auto pb-1">
               {featuredNiches.map((id) => {
                 const selected = industry === id;
+                const nicheObj = getIndustry(id);
                 const label =
-                  id === 'all' ? 'All categories' : getIndustry(id)?.label;
+                  id === 'all'
+                    ? t('allCategories')
+                    : isDe
+                    ? nicheObj?.labelDe || nicheObj?.label
+                    : nicheObj?.label;
                 return (
                   <button
                     key={id}
@@ -210,7 +218,7 @@ export function JobBrowser({
                 title="Side-by-side list and interactive map"
               >
                 <Layers className="size-3.5" />
-                <span className="hidden sm:inline">Split</span>
+                <span className="hidden sm:inline">{t('splitView')}</span>
               </button>
               <button
                 type="button"
@@ -219,7 +227,7 @@ export function JobBrowser({
                 title="Full-width list view"
               >
                 <List className="size-3.5" />
-                <span>List</span>
+                <span>{t('listView')}</span>
               </button>
               <button
                 type="button"
@@ -228,7 +236,7 @@ export function JobBrowser({
                 title="Full interactive OpenStreetMap view"
               >
                 <MapIcon className="size-3.5" />
-                <span>Map</span>
+                <span>{t('mapView')}</span>
               </button>
             </div>
           </div>
@@ -239,9 +247,9 @@ export function JobBrowser({
         <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-10">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl font-semibold">{sectionTitle}</h2>
+              <h2 className="text-xl font-semibold">{effectiveSectionTitle}</h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                {visibleJobs.length} active listings across Berlin
+                {visibleJobs.length} {t('jobsFound')}
               </p>
             </div>
 
@@ -251,12 +259,12 @@ export function JobBrowser({
                   href={viewAllHref}
                   className="inline-flex items-center gap-1.5 rounded-lg border border-foreground/15 bg-white px-3.5 py-1.5 text-xs font-semibold text-[#18221e] shadow-sm transition hover:bg-[#18221e] hover:text-white"
                 >
-                  <span>{viewAllLabel}</span>
+                  <span>{effectiveViewAllLabel}</span>
                   <ArrowRight className="size-3.5" />
                 </Link>
               )}
               <span className="hidden sm:inline-block rounded-md bg-[#e8f6ed] px-2.5 py-1 text-xs font-semibold text-[#245e3c]">
-                OpenStreetMap active
+                {t('openStreetMapActive')}
               </span>
             </div>
           </div>
@@ -358,12 +366,20 @@ function JobCard({
   isHovered?: boolean;
   wageBadge?: string;
 }) {
+  const { t, isDe } = useTranslation();
   const employerPosted = job.listingOrigin === 'employer_posted';
   const isDemo = job.isDemo !== false;
 
-  const payLabel = job.payText || job.compensation?.label || 'Pay stated';
-  const hoursLabel = job.hoursLabel || job.hours?.label || 'Flexible hours';
-  const scheduleSummary = job.scheduleSummary || job.schedule?.summary || 'Flexible shifts';
+  let payLabel = job.payText || job.compensation?.label || 'Pay stated';
+  if (
+    payLabel.toLowerCase().includes('discussed') ||
+    payLabel.toLowerCase().includes('vereinbarung')
+  ) {
+    payLabel = t('toBeDiscussed');
+  }
+
+  const hoursLabel = job.hoursLabel || job.hours?.label || t('flexibleHours');
+  const scheduleSummary = job.scheduleSummary || job.schedule?.summary || t('flexibleShifts');
   const districtText = job.district ? `${job.district}${job.postcode ? `, ${job.postcode}` : ''}` : 'Berlin';
 
   return (
@@ -390,7 +406,7 @@ function JobCard({
                     : 'bg-[#f0f2ef] text-[#3e5146]'
                 }`}
               >
-                {employerPosted ? 'Direct from employer' : 'Verified venue source'}
+                {employerPosted ? t('postedByEmployer') : t('verifiedSource')}
               </span>
 
               {job.employmentForms &&
@@ -405,7 +421,7 @@ function JobCard({
 
               {job.niches && job.niches.length > 1 && (
                 <span className="rounded-full bg-foreground/5 px-2 py-0.5 text-[10px] text-muted-foreground">
-                  +{job.niches.length - 1} categories
+                  {t('moreCategories', { count: job.niches.length - 1 })}
                 </span>
               )}
             </div>
@@ -455,6 +471,7 @@ function JobCard({
 }
 
 export function LatestJobs({ jobs }: { jobs: any[] }) {
+  const { t } = useTranslation();
   if (!jobs || jobs.length === 0) return null;
 
   return (
@@ -462,9 +479,9 @@ export function LatestJobs({ jobs }: { jobs: any[] }) {
       <div className="mx-auto max-w-[1440px] px-5 py-12 md:px-10 md:py-16">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="eyebrow">Fresh Opportunities</p>
+            <p className="eyebrow">{t('heroEyebrow')}</p>
             <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] md:text-3xl">
-              Latest Verified Postings
+              {t('latestJobs')}
             </h2>
           </div>
           <div className="flex items-center gap-3">
@@ -472,7 +489,7 @@ export function LatestJobs({ jobs }: { jobs: any[] }) {
               href="/latest-jobs"
               className="inline-flex items-center gap-1.5 rounded-lg border border-foreground/15 bg-[#18221e] px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#2a3832]"
             >
-              <span>View all verified listings</span>
+              <span>{t('viewAllLatest')}</span>
               <ArrowRight className="size-3.5" />
             </Link>
           </div>
@@ -503,7 +520,7 @@ export function LatestJobs({ jobs }: { jobs: any[] }) {
               </div>
 
               <div className="mt-4 flex items-center justify-between border-t border-foreground/10 pt-3 text-xs font-medium text-[#385cdd]">
-                <span>View Details</span>
+                <span>{t('browseCategory')}</span>
                 <ArrowRight className="size-3.5 transition group-hover:translate-x-1" />
               </div>
             </Link>
