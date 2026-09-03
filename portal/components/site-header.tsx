@@ -77,12 +77,12 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
                 {/* 3. Housing direct post button */}
                 <Link
                   href="/wohnen/list"
-                  className="inline-flex h-9 items-center rounded-lg border border-slate-300 bg-white px-3 text-xs font-bold text-slate-800 shadow-xs transition hover:bg-slate-50 hover:border-slate-400"
+                  className="inline-flex h-9 items-center rounded-lg bg-blue-600 px-3.5 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
                 >
                   + {isDe ? 'Wohnung inserieren' : 'List a Room'}
                 </Link>
 
-                {/* 4. Primary Action: Post a Job button */}
+                {/* 4. Post a Job button */}
                 <Link
                   href="/post-a-job"
                   className="inline-flex h-9 items-center rounded-lg bg-blue-600 px-3.5 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
