@@ -59,6 +59,15 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
                   {t('categories')}
                 </Link>
                 <Link
+                  href="/wohnen"
+                  className="font-medium text-[#18221e] hover:text-[#385cdd] inline-flex items-center gap-1.5"
+                >
+                  <span>{t('navHousing')}</span>
+                  <span className="rounded bg-[#e2f3e6] px-1.5 py-0.5 text-[10px] font-semibold text-[#285a39]">
+                    Neu
+                  </span>
+                </Link>
+                <Link
                   href="/post-a-job"
                   className="inline-flex h-9 items-center rounded-lg bg-[#18221e] px-4 font-semibold text-white transition hover:bg-[#2a3832]"
                 >

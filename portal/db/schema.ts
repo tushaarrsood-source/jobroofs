@@ -496,3 +496,136 @@ export const verificationCodes = sqliteTable(
     index("verification_codes_submission_idx").on(table.submissionId),
   ],
 );
+
+export const housingSubmissions = sqliteTable(
+  "housing_submissions",
+  {
+    id: text("id").primaryKey(),
+    status: text("status", {
+      enum: ["draft", "submitted", "needs_review", "approved", "rejected"],
+    })
+      .notNull()
+      .default("draft"),
+    submitterEmail: text("submitter_email").notNull(),
+    payloadJson: text("payload_json").notNull(),
+    submittedAt: text("submitted_at"),
+    reviewedAt: text("reviewed_at"),
+    reviewReason: text("review_reason"),
+    stripeSessionId: text("stripe_session_id"),
+    paymentStatus: text("payment_status", {
+      enum: ["not_required", "pending", "paid", "failed"],
+    })
+      .notNull()
+      .default("pending"),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [index("housing_submissions_status_idx").on(table.status)],
+);
+
+export const housingListings = sqliteTable(
+  "housing_listings",
+  {
+    id: text("id").primaryKey(),
+    submissionId: text("submission_id").references(
+      () => housingSubmissions.id,
+      { onDelete: "set null" },
+    ),
+    title: text("title").notNull(),
+    listingType: text("listing_type", {
+      enum: [
+        "wg_room",
+        "entire_apartment",
+        "sublet",
+        "nachmieter",
+        "exchange",
+      ],
+    }).notNull(),
+    district: text("district").notNull(),
+    postcode: text("postcode").notNull(),
+    neighborhood: text("neighborhood"),
+    streetAddress: text("street_address"),
+    kaltmieteEur: real("kaltmiete_eur").notNull(),
+    nebenkostenEur: real("nebenkosten_eur").notNull().default(0),
+    warmmieteEur: real("warmmiete_eur").notNull(),
+    kautionEur: real("kaution_eur").notNull().default(0),
+    roomSqm: real("room_sqm").notNull(),
+    totalRooms: real("total_rooms").notNull().default(1),
+    floorLevel: integer("floor_level"),
+    furnished: text("furnished", {
+      enum: ["unfurnished", "partially", "fully"],
+    })
+      .notNull()
+      .default("fully"),
+    anmeldungPossible: integer("anmeldung_possible", { mode: "boolean" })
+      .notNull()
+      .default(true),
+    subletAuthorized: integer("sublet_authorized", { mode: "boolean" })
+      .notNull()
+      .default(true),
+    contractType: text("contract_type", {
+      enum: ["fixed_term", "open_ended"],
+    })
+      .notNull()
+      .default("fixed_term"),
+    moveInDate: text("move_in_date").notNull(),
+    moveOutDate: text("move_out_date"),
+    minStayMonths: integer("min_stay_months").default(1),
+    energyClass: text("energy_class"),
+    heatingSource: text("heating_source"),
+    buildingYear: integer("building_year"),
+    imagesJson: text("images_json").notNull().default("[]"),
+    description: text("description").notNull(),
+    contactMethod: text("contact_method", {
+      enum: ["email", "in_platform"],
+    })
+      .notNull()
+      .default("email"),
+    contactEmail: text("contact_email").notNull(),
+    contactName: text("contact_name"),
+    contactPhone: text("contact_phone"),
+    publicationState: text("publication_state", {
+      enum: ["draft", "published", "expired", "suppressed"],
+    })
+      .notNull()
+      .default("published"),
+    firstSeenAt: text("first_seen_at").notNull(),
+    expiresAt: text("expires_at").notNull(),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [
+    index("housing_district_idx").on(table.district),
+    index("housing_type_idx").on(table.listingType),
+    index("housing_publication_idx").on(table.publicationState),
+    index("housing_anmeldung_idx").on(table.anmeldungPossible),
+  ],
+);
+
+export const housingVerificationCodes = sqliteTable(
+  "housing_verification_codes",
+  {
+    id: text("id").primaryKey(),
+    submissionId: text("submission_id")
+      .notNull()
+      .references(() => housingSubmissions.id, { onDelete: "cascade" }),
+    codeHash: text("code_hash").notNull(),
+    attempts: integer("attempts").notNull().default(0),
+    expiresAt: text("expires_at").notNull(),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [
+    index("housing_verification_codes_sub_idx").on(table.submissionId),
+  ],
+);
+
