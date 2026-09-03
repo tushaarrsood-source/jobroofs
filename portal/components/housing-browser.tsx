@@ -150,8 +150,8 @@ export function HousingBrowser({
             </h1>
             <p className="mt-3 text-sm leading-relaxed text-slate-600 max-w-xl sm:text-base">
               {isDe
-                ? 'Direkt von Mieter zu Mieter mit verbindlicher Anmeldung und transparenter Warmmiete.'
-                : 'Direct from tenant to tenant with guaranteed Anmeldung and transparent warm rents.'}
+                ? 'Direkter Marktplatz von Nutzer zu Nutzer mit Angaben zur Anmeldung und Warmmiete.'
+                : 'Direct marketplace from user to user with Anmeldung details and warm rent breakdowns.'}
             </p>
           </div>
 

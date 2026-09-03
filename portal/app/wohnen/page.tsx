@@ -7,16 +7,16 @@ import type { HousingListing } from '@/lib/domain/housing-types';
 import { getD1 } from '@/db';
 
 export const metadata: Metadata = {
-  title: 'Wohnen in Berlin — WG-Zimmer, Wohnungen & Zwischenmiete ohne Scams',
+  title: 'Wohnen in Berlin — WG-Zimmer, Wohnungen & Zwischenmiete',
   description:
-    'Echte Wohnungen, WG-Zimmer und Zwischenmieten in Berlin mit garantierter Anmeldung und transparenten Warmmieten. Geschützt vor Fake-Profilen und Vorauszahlungs-Betrug.',
+    'Wohnungen, WG-Zimmer und Zwischenmieten in Berlin mit Angaben zur Anmeldung und Warmmiete direkt von Nutzer zu Nutzer.',
   alternates: {
     canonical: '/wohnen',
   },
   openGraph: {
     title: 'Wohnen in Berlin · KIEZJOB',
     description:
-      'Verifizierte WG-Zimmer, Zwischenmieten & Wohnungen in Berlin. 100% echt mit Anmeldung.',
+      'WG-Zimmer, Zwischenmieten & Wohnungen in Berlin direkt von Nutzer zu Nutzer.',
     url: '/wohnen',
   },
 };

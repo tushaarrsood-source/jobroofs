@@ -8,7 +8,7 @@ import { HousingListingForm } from '@/components/housing-listing-form';
 export const metadata = {
   title: 'Wohnung oder WG-Zimmer in Berlin inserieren (29 € / 30 Tage)',
   description:
-    'Inseriere dein Zimmer, deine Zwischenmiete oder Wohnung in Berlin. 29 € für 30 Tage schützt vor Spam & Betrügern und garantiert echte Interessenten.',
+    'Inseriere dein Zimmer, deine Zwischenmiete oder Wohnung in Berlin. 29 € für 30 Tage — direkter Marktplatz für Wohnungssuchende.',
   alternates: {
     canonical: '/wohnen/list',
   },

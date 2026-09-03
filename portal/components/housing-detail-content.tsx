@@ -72,7 +72,7 @@ export function HousingDetailContent({ listing }: { listing: HousingListing }) {
               {listing.anmeldungPossible ? (
                 <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-800 border border-emerald-300">
                   <CheckCircle2 className="size-3.5 text-emerald-600" />
-                  {isDe ? 'Anmeldung garantiert (Wohnungsgeberbestätigung)' : 'Anmeldung Guaranteed'}
+                  {isDe ? 'Anmeldung möglich (laut Inserent)' : 'Anmeldung Possible (per lister)'}
                 </span>
               ) : (
                 <span className="rounded-md bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-800 border border-amber-300">
@@ -327,12 +327,12 @@ export function HousingDetailContent({ listing }: { listing: HousingListing }) {
               <ShieldCheck className="size-4 shrink-0 text-blue-600 mt-0.5" />
               <div>
                 <strong className="font-bold">
-                  {isDe ? 'KIEZJOB Mieterschutz-Garantie' : 'KIEZJOB Tenant Protection Note'}
+                  {isDe ? 'Wichtiger Sicherheitshinweis' : 'Important Safety Notice'}
                 </strong>
                 <p className="mt-1 leading-relaxed text-blue-900 text-[11px]">
                   {isDe
                     ? 'Überweise niemals Kaution oder Schlüssel-Gebühren vor einer persönlichen oder virtuellen Besichtigung und einem gegengezeichneten Mietvertrag.'
-                    : 'Never transfer deposits or rent before a viewing and signed contract. Protected against wire transfer scams.'}
+                    : 'Never transfer deposits or rent before a viewing and signed contract. Beware of advance payment requests.'}
                 </p>
               </div>
             </div>
