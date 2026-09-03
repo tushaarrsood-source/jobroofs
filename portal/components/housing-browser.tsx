@@ -131,24 +131,34 @@ export function HousingBrowser({
 
   return (
     <div className="mx-auto max-w-[1440px] px-5 py-6 md:px-10 md:py-10">
-      {/* Editorial Header - No glow orbs, no dark gradient clichés */}
+      {/* Editorial Header */}
       <section className="border-b border-slate-200 pb-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-              Wohnungen & WG-Zimmer in Berlin
+            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[0.95]">
+              {isDe ? (
+                <>
+                  WOHNUNGEN & WG-ZIMMER.
+                  <span className="text-blue-600 block mt-1">OHNE MAKLER-BULLSHIT.</span>
+                </>
+              ) : (
+                <>
+                  FLATS & WG ROOMS IN BERLIN.
+                  <span className="text-blue-600 block mt-1">ZERO BROKER BS.</span>
+                </>
+              )}
             </h1>
-            <p className="mt-2 text-sm leading-relaxed text-slate-600 max-w-2xl">
+            <p className="mt-3 text-sm leading-relaxed text-slate-600 max-w-2xl sm:text-base">
               {isDe
-                ? 'Direkt von Mieter zu Mieter ohne Maklerprovision. Alle Inserate mit verbindlicher Wohnungsgeberbestätigung (Anmeldung) und transparenter Warmmiete.'
-                : 'Direct from tenant to tenant with zero broker fees. All listings feature guaranteed Anmeldung and transparent warm rents.'}
+                ? 'Direkt von Mieter zu Mieter. Alle Inserate mit verbindlicher Wohnungsgeberbestätigung (Anmeldung nach § 19 BMG) und transparenter Warmmiete — ohne 80-Personen-Massen-Castings.'
+                : 'Direct from tenant to tenant. All listings include guaranteed Wohnungsgeberbestätigung (Anmeldung) and transparent warm rents with zero broker commissions.'}
             </p>
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
             <Link
               href="/wohnen/list"
-              className="inline-flex h-10 items-center rounded-lg bg-blue-600 px-4 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
+              className="inline-flex h-11 items-center rounded-xl bg-blue-600 px-5 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
             >
               + {isDe ? 'Wohnung inserieren (29 €)' : 'Post a room (€29)'}
             </Link>
@@ -156,7 +166,7 @@ export function HousingBrowser({
         </div>
 
         {/* High-Utility Search & Filter Bar */}
-        <div className="mt-6 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_130px]">
+        <div className="mt-7 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_130px]">
           {/* Search input */}
           <div className="relative">
             <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
@@ -165,7 +175,7 @@ export function HousingBrowser({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={isDe ? 'Bezirk, Kiez, PLZ oder Stichwort...' : 'Search district, kiez or postcode...'}
-              className="h-10 w-full rounded-lg border border-slate-300 bg-white pr-3 pl-9 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              className="h-11 w-full rounded-lg border border-slate-300 bg-white pr-3 pl-9 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
             />
           </div>
 
@@ -174,7 +184,7 @@ export function HousingBrowser({
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="h-10 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              className="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
             >
               <option value="all">{t('housingAllTypes')}</option>
               {Object.entries(housingTypeLabels).map(([key, val]) => (
@@ -190,7 +200,7 @@ export function HousingBrowser({
             <select
               value={selectedDistrict}
               onChange={(e) => setSelectedDistrict(e.target.value)}
-              className="h-10 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              className="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
             >
               <option value="all">{t('housingAllDistricts')}</option>
               {BERLIN_DISTRICTS.map((dist) => (
@@ -208,50 +218,50 @@ export function HousingBrowser({
               value={maxRent}
               onChange={(e) => setMaxRent(e.target.value === '' ? '' : Number(e.target.value))}
               placeholder="Max. € warm"
-              className="h-10 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 font-mono"
+              className="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 font-mono"
             />
           </div>
         </div>
 
         {/* Filter chips & Presets */}
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="mt-3.5 flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={() => setOnlyAnmeldung(!onlyAnmeldung)}
-              className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
+              className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
                 onlyAnmeldung
-                  ? 'border border-emerald-600 bg-emerald-50 text-emerald-800'
+                  ? 'border border-emerald-600 bg-emerald-600 text-white shadow-xs'
                   : 'border border-slate-300 bg-white text-slate-700 hover:border-slate-400'
               }`}
             >
-              <CheckCircle2 className={`size-3.5 ${onlyAnmeldung ? 'text-emerald-600' : 'text-slate-400'}`} />
+              <CheckCircle2 className={`size-3.5 ${onlyAnmeldung ? 'text-white' : 'text-emerald-600'}`} />
               <span>{t('housingOnlyAnmeldung')}</span>
             </button>
 
             <button
               type="button"
               onClick={() => setOnlyFurnished(!onlyFurnished)}
-              className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
+              className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
                 onlyFurnished
-                  ? 'border border-blue-600 bg-blue-50 text-blue-800'
+                  ? 'border border-blue-600 bg-blue-600 text-white shadow-xs'
                   : 'border border-slate-300 bg-white text-slate-700 hover:border-slate-400'
               }`}
             >
-              <Home className="size-3.5 text-slate-400" />
+              <Home className={`size-3.5 ${onlyFurnished ? 'text-white' : 'text-slate-400'}`} />
               <span>Möbliert</span>
             </button>
 
             <div className="hidden sm:flex items-center gap-1 border-l border-slate-200 pl-2">
-              <span className="text-[11px] text-slate-400 font-medium mr-1">Bis:</span>
-              {[600, 800, 1000].map((price) => (
+              <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider mr-1">Bis:</span>
+              {[600, 750, 900, 1100].map((price) => (
                 <button
                   key={price}
                   type="button"
                   onClick={() => setMaxRent(maxRent === price ? '' : price)}
-                  className={`rounded px-2 py-1 text-xs font-mono transition cursor-pointer ${
+                  className={`rounded-md px-2.5 py-1 text-xs font-mono transition cursor-pointer ${
                     maxRent === price
-                      ? 'bg-blue-600 text-white font-bold'
+                      ? 'bg-slate-900 text-white font-bold'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >

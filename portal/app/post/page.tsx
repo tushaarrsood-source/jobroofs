@@ -21,8 +21,8 @@ export default function PostChooserPage() {
 
         <main className="mx-auto max-w-4xl px-5 py-10 md:py-16">
           <div className="text-center max-w-2xl mx-auto">
-            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-              Was möchtest du inserieren?
+            <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-slate-900 leading-[0.98]">
+              WAS MÖCHTEST DU INSERIEREN?
             </h1>
             <p className="mt-2 text-sm text-slate-600 leading-relaxed sm:text-base">
               Erreiche tausende Berliner Minijobber, Aushilfen und Wohnungssuchende.

@@ -156,25 +156,35 @@ export function JobBrowser({
     <>
       {showHero && (
         <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-12">
-            <h1 className="max-w-3xl text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl leading-tight">
-              {isDe ? 'Minijobs & flexible Arbeit in Berlin' : 'Minijobs & Flexible Work in Berlin'}
+          <div className="mx-auto max-w-[1440px] px-5 py-10 md:px-10 md:py-16">
+            <h1 className="font-display max-w-4xl text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[0.95]">
+              {isDe ? (
+                <>
+                  ECHTE KIEZ-JOBS IN BERLIN.
+                  <span className="text-blue-600 block mt-1">DIREKT BEI NACHBARN & CAFÉS.</span>
+                </>
+              ) : (
+                <>
+                  REAL BERLIN KIEZ JOBS.
+                  <span className="text-blue-600 block mt-1">DIRECT FROM LOCAL CAFÉS & SHOPS.</span>
+                </>
+              )}
             </h1>
-            <p className="mt-2.5 max-w-2xl text-sm text-slate-600 leading-relaxed sm:text-base">
+            <p className="mt-3.5 max-w-2xl text-sm text-slate-600 leading-relaxed sm:text-base">
               {isDe
-                ? 'Finde faire Nebenjobs, Teilzeitstellen und Schichten direkt bei Berliner Betrieben, Cafés, Bars und Kiez-Läden. 100% Direktkontakt ohne Zeitarbeit.'
-                : 'Find fair part-time work, minijobs, and shifts directly at Berlin venues, cafés, bars, and local businesses. 100% direct contact.'}
+                ? 'Keine 3-Seiten-Anschreiben für eine Barista-Schicht. Keine anonymen Zeitarbeitsfirmen. Finde faire Minijobs (538 €), Teilzeitstellen und Spontan-Einsätze direkt vor deiner Haustür.'
+                : 'No 3-page cover letters just to pull espresso shots. Zero temp agencies. Find fair minijobs (€538), part-time work, and spontaneous shifts right in your neighborhood.'}
             </p>
 
             {/* High-Utility Search Console */}
-            <div className="mt-6 rounded-xl border border-slate-300/90 bg-white p-2 shadow-xs">
+            <div className="mt-8 rounded-xl border border-slate-300/90 bg-white p-2.5 shadow-xs">
               <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-[1.4fr_220px_200px_180px]">
                 <div className="relative flex items-center">
                   <Search className="pointer-events-none absolute left-3 size-4 text-slate-400" />
                   <Input
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
-                    className="h-10 border-slate-200 bg-slate-50/70 pl-9 text-xs placeholder:text-slate-400 focus-visible:ring-1 focus-visible:ring-blue-600 rounded-lg"
+                    className="h-11 border-slate-200 bg-slate-50/70 pl-9 text-xs placeholder:text-slate-400 focus-visible:ring-1 focus-visible:ring-blue-600 rounded-lg"
                     placeholder={t('searchPlaceholder')}
                     aria-label="Jobtitel oder Kiez suchen"
                   />
@@ -184,7 +194,7 @@ export function JobBrowser({
                 <NativeSelect
                   value={district}
                   onChange={(event) => setDistrict(event.target.value)}
-                  className="h-10 border-slate-200 bg-slate-50/70 text-xs rounded-lg"
+                  className="h-11 border-slate-200 bg-slate-50/70 text-xs rounded-lg"
                   aria-label="Bezirk filtern"
                 >
                   {berlinDistricts.map((d) => (
@@ -198,7 +208,7 @@ export function JobBrowser({
                 <NativeSelect
                   value={employment}
                   onChange={(event) => setEmployment(event.target.value)}
-                  className="h-10 border-slate-200 bg-slate-50/70 text-xs rounded-lg"
+                  className="h-11 border-slate-200 bg-slate-50/70 text-xs rounded-lg"
                   aria-label="Beschäftigungsart"
                 >
                   <NativeSelectOption value="all">{t('allJobTypes')}</NativeSelectOption>
@@ -213,7 +223,7 @@ export function JobBrowser({
                 <NativeSelect
                   value={payInterval}
                   onChange={(event) => setPayInterval(event.target.value)}
-                  className="h-10 border-slate-200 bg-slate-50/70 text-xs rounded-lg"
+                  className="h-11 border-slate-200 bg-slate-50/70 text-xs rounded-lg"
                   aria-label="Vergütungsintervall"
                 >
                   <NativeSelectOption value="all">{t('anyPayType')}</NativeSelectOption>
@@ -224,8 +234,33 @@ export function JobBrowser({
               </div>
             </div>
 
+            {/* Human Intent Quick Pills (Inspired by Atly / Real Berlin Needs) */}
+            <div className="mt-3.5 flex flex-wrap items-center gap-2">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Beliebt:</span>
+              {[
+                { label: isDe ? '☕ Trinkgeld bar' : '☕ Cash Tips', q: 'Trinkgeld' },
+                { label: isDe ? '⚡ Sofort anfangen' : '⚡ Start Immediately', q: 'Sofort' },
+                { label: isDe ? '🇬🇧 Englisch reicht' : '🇬🇧 English OK', q: 'English' },
+                { label: isDe ? '🌙 Nacht & Weekend' : '🌙 Night & Weekend', q: 'Wochenende' },
+                { label: isDe ? '🚲 Kurier & Gastro' : '🚲 Courier & Gastro', q: 'Kurier' },
+              ].map((pill) => (
+                <button
+                  key={pill.q}
+                  type="button"
+                  onClick={() => setQuery(query === pill.q ? '' : pill.q)}
+                  className={`inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                    query === pill.q
+                      ? 'bg-blue-600 text-white shadow-xs'
+                      : 'border border-slate-200 bg-slate-50/80 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
+                  }`}
+                >
+                  {pill.label}
+                </button>
+              ))}
+            </div>
+
             {/* Quick Filter Pills & View Switcher */}
-            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
                 {featuredNiches.map((id) => {
                   const selected = industry === id;
@@ -445,12 +480,12 @@ function JobCard({
   return (
     <Link
       href={`/jobs/${job.slug || job.id}`}
-      className={`group block overflow-hidden rounded-2xl border bg-white p-5 transition-all duration-150 cursor-pointer ${
+      className={`group block overflow-hidden rounded-xl border bg-white p-5 transition duration-150 cursor-pointer ${
         isSelected
           ? 'border-blue-600 ring-2 ring-blue-600/30 bg-blue-50/20 shadow-sm'
           : isHovered
           ? 'border-blue-400 shadow-sm'
-          : 'border-slate-200/90 hover:border-blue-500 hover:shadow-md hover:shadow-blue-500/8'
+          : 'border-slate-200/90 hover:border-slate-900 hover:shadow-sm'
       }`}
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -496,7 +531,7 @@ function JobCard({
 
         {/* Wage / Compensation Badge */}
         <div className="flex shrink-0 items-baseline sm:flex-col sm:items-end sm:justify-start">
-          <span className="text-base font-black text-slate-900 font-mono tracking-tight sm:text-lg">
+          <span className="rounded-md bg-slate-900 px-2.5 py-1 text-xs font-black text-white font-mono tracking-tight sm:text-sm">
             {payLabel}
           </span>
         </div>
@@ -530,7 +565,7 @@ export function LatestJobs({ jobs }: { jobs: any[] }) {
       <div className="mx-auto max-w-[1440px] px-5 py-12 md:px-10 md:py-16">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
               {t('latestJobs')} in Berlin
             </h2>
           </div>
