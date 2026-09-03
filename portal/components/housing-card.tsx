@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { CheckCircle2, ShieldCheck, MapPin, Calendar, Home, ArrowUpRight } from 'lucide-react';
 import type { HousingListing } from '@/lib/domain/housing-types';
 import { housingTypeLabels } from '@/lib/domain/housing-types';

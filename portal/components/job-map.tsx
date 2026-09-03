@@ -38,35 +38,54 @@ export function JobMap({
     let isMounted = true;
 
     async function initMap() {
-      if (!mapContainerRef.current || mapInstanceRef.current) return;
+      try {
+        if (!mapContainerRef.current || mapInstanceRef.current) return;
 
-      // Dynamic import leaflet on client only
-      const L = (await import('leaflet')).default;
+        // Prevent Leaflet error "Map container is already initialized"
+        if ((mapContainerRef.current as any)._leaflet_id) {
+          delete (mapContainerRef.current as any)._leaflet_id;
+        }
 
-      if (!isMounted || !mapContainerRef.current) return;
+        // Dynamic import leaflet on client only
+        const L = (await import('leaflet')).default;
 
-      // Create map centered on Berlin
-      const map = L.map(mapContainerRef.current, {
-        center: [BERLIN_CENTER.lat, BERLIN_CENTER.lng],
-        zoom: miniMode ? 13 : 12,
-        minZoom: 9,
-        maxZoom: 18,
-        zoomControl: !miniMode,
-      });
+        if (!isMounted || !mapContainerRef.current) return;
 
-      // CartoDB Positron/Voyager Tiles for clean, high-contrast look
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 19,
-      }).addTo(map);
+        // Fix leaflet default icon asset paths
+        try {
+          delete (L.Icon.Default.prototype as any)._getIconUrl;
+          L.Icon.Default.mergeOptions({
+            iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+            iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+            shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+          });
+        } catch {}
 
-      if (!miniMode) {
-        L.control.zoom({ position: 'topright' }).addTo(map);
+        // Create map centered on Berlin
+        const map = L.map(mapContainerRef.current, {
+          center: [BERLIN_CENTER.lat, BERLIN_CENTER.lng],
+          zoom: miniMode ? 13 : 12,
+          minZoom: 9,
+          maxZoom: 18,
+          zoomControl: !miniMode,
+        });
+
+        // CartoDB Positron/Voyager Tiles for clean, high-contrast look
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          subdomains: 'abcd',
+          maxZoom: 19,
+        }).addTo(map);
+
+        if (!miniMode) {
+          L.control.zoom({ position: 'topright' }).addTo(map);
+        }
+
+        mapInstanceRef.current = map;
+        setIsMapReady(true);
+      } catch (err) {
+        console.warn('Leaflet map init notice:', err);
       }
-
-      mapInstanceRef.current = map;
-      setIsMapReady(true);
     }
 
     initMap();
@@ -74,7 +93,9 @@ export function JobMap({
     return () => {
       isMounted = false;
       if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
+        try {
+          mapInstanceRef.current.remove();
+        } catch {}
         mapInstanceRef.current = null;
       }
     };
@@ -87,67 +108,6 @@ export function JobMap({
     let isMounted = true;
 
     async function updateMarkers() {
-      const L = (await import('leaflet')).default;
-      if (!isMounted || !mapInstanceRef.current) return;
-
-      const map = mapInstanceRef.current;
-      const currentMarkers = markersRef.current;
-
-      // Remove existing markers
-      currentMarkers.forEach((marker) => marker.remove());
-      currentMarkers.clear();
-
-      if (!jobs || jobs.length === 0) return;
-
-      const bounds = L.latLngBounds([]);
-
-      jobs.forEach((job) => {
-        const coords = resolveJobCoordinates(job);
-        const isSelected = selectedJobId === job.id || selectedJobId === job.slug;
-        const isHovered = hoveredJobId === job.id || hoveredJobId === job.slug;
-        const isActive = isSelected || isHovered;
-
-        // Custom HTML Badge Pin Icon
-        const iconHtml = `
-          <div class="kiez-map-pin ${isActive ? 'active' : ''}">
-            <div class="pin-badge">
-              <span class="pin-rate">${coords.badgeLabel}</span>
-            </div>
-            <div class="pin-stem"></div>
-          </div>
-        `;
-
-        const customIcon = L.divIcon({
-          className: 'kiez-pin-container',
-          html: iconHtml,
-          iconSize: [60, 36],
-          iconAnchor: [30, 34],
-          popupAnchor: [0, -32],
-        });
-
-        const marker = L.marker([coords.lat, coords.lng], {
-          icon: customIcon,
-          zIndexOffset: isActive ? 1000 : 100,
-        }).addTo(map);
-
-        // Click Handler
-        marker.on('click', () => {
-          setActiveJob(job);
-          if (onSelectJob) onSelectJob(job.id);
-          map.panTo([coords.lat, coords.lng], { animate: true, duration: 0.5 });
-        });
-
-        currentMarkers.set(job.id, marker);
-        bounds.extend([coords.lat, coords.lng]);
-      });
-
-      // If exactly 1 job (live preview or detail page), pan and zoom smoothly to its exact coordinates
-      if (jobs.length === 1 && centerSingleJob) {
-        const singleCoords = resolveJobCoordinates(jobs[0]);
-        map.setView([singleCoords.lat, singleCoords.lng], miniMode ? 14 : 14, { animate: true });
-        return;
-      }
-
       // If a job is explicitly selected from the list, center on it
       if (selectedJobId) {
         const target = jobs.find((j) => j.id === selectedJobId || j.slug === selectedJobId);
