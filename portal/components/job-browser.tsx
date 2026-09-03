@@ -7,11 +7,8 @@ import {
   BriefcaseBusiness,
   CalendarDays,
   Clock3,
-  Euro,
   Layers,
-  LayoutGrid,
   List,
-  Mail,
   Map as MapIcon,
   MapPin,
   Search,
@@ -30,8 +27,8 @@ import { useTranslation } from '@/lib/i18n/language-context';
 const JobMap = dynamic(() => import('@/components/job-map').then((mod) => mod.JobMap), {
   ssr: false,
   loading: () => (
-    <div className="flex h-full w-full items-center justify-center rounded-2xl border border-foreground/15 bg-[#eceae2] text-xs font-semibold text-muted-foreground">
-      Loading Berlin map...
+    <div className="flex h-full w-full items-center justify-center rounded-2xl border border-zinc-200 bg-zinc-100/60 text-xs font-semibold text-zinc-500">
+      Berlin Karte lädt...
     </div>
   ),
 });
@@ -41,12 +38,24 @@ const featuredNiches = [
   'temp-shifts',
   'gastronomy',
   'events',
-  'home-help',
-  'hotels',
   'retail',
   'warehousing',
   'cleaning',
   'logistics',
+];
+
+const berlinDistricts = [
+  { value: 'all', labelDe: 'Ganz Berlin (Alle Bezirke)', labelEn: 'All Berlin Districts' },
+  { value: 'mitte', labelDe: 'Mitte', labelEn: 'Mitte' },
+  { value: 'kreuzberg', labelDe: 'Kreuzberg', labelEn: 'Kreuzberg' },
+  { value: 'friedrichshain', labelDe: 'Friedrichshain', labelEn: 'Friedrichshain' },
+  { value: 'neukölln', labelDe: 'Neukölln', labelEn: 'Neukölln' },
+  { value: 'prenzlauer berg', labelDe: 'Prenzlauer Berg', labelEn: 'Prenzlauer Berg' },
+  { value: 'schöneberg', labelDe: 'Schöneberg', labelEn: 'Schöneberg' },
+  { value: 'charlottenburg', labelDe: 'Charlottenburg', labelEn: 'Charlottenburg' },
+  { value: 'wedding', labelDe: 'Wedding', labelEn: 'Wedding' },
+  { value: 'lichtenberg', labelDe: 'Lichtenberg', labelEn: 'Lichtenberg' },
+  { value: 'treptow', labelDe: 'Treptow', labelEn: 'Treptow' },
 ];
 
 interface JobBrowserProps {
@@ -73,6 +82,7 @@ export function JobBrowser({
   const { t, locale, isDe } = useTranslation();
   const [query, setQuery] = useState('');
   const [industry, setIndustry] = useState('all');
+  const [district, setDistrict] = useState('all');
   const [employment, setEmployment] = useState('all');
   const [payInterval, setPayInterval] = useState('all');
   const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split');
@@ -94,37 +104,46 @@ export function JobBrowser({
       const isDemo = job.isDemo !== false;
       const jobNiches = isDemo ? [job.industryId] : job.niches?.map((n: any) => n.nicheId) || [];
       const matchesIndustry = industry === 'all' || jobNiches.includes(industry);
-      
-      const jobEmployment = isDemo ? job.employmentForms : (job.employmentFormsJson ? JSON.parse(job.employmentFormsJson) : []);
+
+      // District filter
+      const matchesDistrict =
+        district === 'all' ||
+        (job.district && job.district.toLowerCase().includes(district.toLowerCase()));
+
+      const jobEmployment = isDemo
+        ? job.employmentForms
+        : job.employmentFormsJson
+        ? JSON.parse(job.employmentFormsJson)
+        : [];
       const matchesEmployment =
         employment === 'all' ||
-        jobEmployment.some((form: string) =>
-          form.toLowerCase().includes(employment),
-        );
-        
-      const jobPayInterval = isDemo ? job.compensation?.rateInterval : (job.compensationRateInterval || 'not_stated');
-      const matchesPay =
-        payInterval === 'all' || jobPayInterval === payInterval;
-        
+        jobEmployment.some((form: string) => form.toLowerCase().includes(employment));
+
+      const jobPayInterval = isDemo
+        ? job.compensation?.rateInterval
+        : job.compensationRateInterval || 'not_stated';
+      const matchesPay = payInterval === 'all' || jobPayInterval === payInterval;
+
       const haystack = [
         job.title,
         job.company,
         job.district,
         job.postcode,
         isDemo ? getIndustry(job.industryId)?.label : job.niches?.map((n: any) => n.label).join(' '),
-        ...(isDemo ? (job.tags || []) : []),
+        ...(isDemo ? job.tags || [] : []),
       ]
         .join(' ')
         .toLowerCase();
-        
+
       return (
         matchesIndustry &&
+        matchesDistrict &&
         matchesEmployment &&
         matchesPay &&
         (!normalizedQuery || haystack.includes(normalizedQuery))
       );
     });
-  }, [employment, filterOrigin, industry, payInterval, query, initialJobs]);
+  }, [district, employment, filterOrigin, industry, payInterval, query, initialJobs]);
 
   const handleSelectJobFromMap = (jobId: string | null) => {
     setSelectedJobId(jobId);
@@ -135,120 +154,165 @@ export function JobBrowser({
 
   return (
     <>
-      <section className="border-b border-foreground/15 bg-[#f4f0e7]">
-        <div className="mx-auto max-w-[1440px] px-5 py-10 md:px-10 md:py-14">
-          <p className="text-sm font-medium text-[#385cdd]">
-            {t('heroEyebrow')}
-          </p>
-          <h1 className="mt-2 max-w-4xl text-4xl font-semibold leading-[1.02] tracking-[-0.05em] sm:text-6xl">
-            {effectivePageTitle}
-          </h1>
-          <p className="mt-4 max-w-3xl text-base text-muted-foreground">
-            {effectivePageSubtitle}
-          </p>
-
-          <div className="mt-8 grid gap-3 rounded-xl border border-foreground/15 bg-white p-3 shadow-[0_10px_30px_rgb(24_34_30/6%)] md:grid-cols-[minmax(250px,1fr)_190px_170px]">
-            <div className="relative flex items-center">
-              <Search className="pointer-events-none absolute left-3 size-4 text-muted-foreground" />
-              <Input
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                className="h-11 border-0 bg-[#f4f5f2] pl-10 shadow-none"
-                placeholder={t('searchPlaceholder')}
-                aria-label="Search jobs"
-              />
+      {showHero && (
+        <section className="border-b border-zinc-200/80 bg-[#fafafa]">
+          <div className="mx-auto max-w-[1440px] px-5 py-12 md:px-10 md:py-16">
+            <div className="flex flex-wrap items-center gap-2 mb-4">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-0.5 text-xs font-medium text-zinc-700 shadow-2xs">
+                <span className="size-1.5 rounded-full bg-emerald-600" />
+                {t('heroEyebrow')}
+              </span>
+              <span className="text-xs text-zinc-400 hidden sm:inline">· 100% Direktkontakt · Ohne Vermittler</span>
             </div>
-            <NativeSelect
-              value={employment}
-              onChange={(event) => setEmployment(event.target.value)}
-              className="w-full"
-              aria-label="Employment type"
-            >
-              <NativeSelectOption value="all">{t('allJobTypes')}</NativeSelectOption>
-              <NativeSelectOption value="1-day">{t('oneDayShift')}</NativeSelectOption>
-              <NativeSelectOption value="short-term">{t('tempShortTerm')}</NativeSelectOption>
-              <NativeSelectOption value="minijob">{t('minijob')}</NativeSelectOption>
-              <NativeSelectOption value="part-time">{t('partTime')}</NativeSelectOption>
-              <NativeSelectOption value="working student">{t('workingStudent')}</NativeSelectOption>
-            </NativeSelect>
-            <NativeSelect
-              value={payInterval}
-              onChange={(event) => setPayInterval(event.target.value)}
-              className="w-full"
-              aria-label="Pay interval"
-            >
-              <NativeSelectOption value="all">{t('anyPayType')}</NativeSelectOption>
-              <NativeSelectOption value="hour">{t('payPerHour')}</NativeSelectOption>
-              <NativeSelectOption value="shift">{t('payPerShift')}</NativeSelectOption>
-              <NativeSelectOption value="day">{t('payPerDay')}</NativeSelectOption>
-              <NativeSelectOption value="month">{t('payPerMonth')}</NativeSelectOption>
-            </NativeSelect>
+
+            <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-zinc-950 sm:text-5xl leading-[1.1]">
+              {effectivePageTitle}
+            </h1>
+            <p className="mt-4 max-w-2xl text-base text-zinc-600 leading-relaxed">
+              {effectivePageSubtitle}
+            </p>
+
+            {/* Unified Search Console */}
+            <div className="mt-8 rounded-2xl border border-zinc-200/90 bg-white p-2.5 shadow-sm md:p-3">
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-[1fr_220px_200px_180px]">
+                <div className="relative flex items-center">
+                  <Search className="pointer-events-none absolute left-3.5 size-4 text-zinc-400" />
+                  <Input
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                    className="h-11 border-0 bg-zinc-50 pl-10 text-sm placeholder:text-zinc-400 focus-visible:ring-1 focus-visible:ring-zinc-900 shadow-none rounded-lg"
+                    placeholder={t('searchPlaceholder')}
+                    aria-label="Jobtitel oder Kiez suchen"
+                  />
+                </div>
+
+                {/* District Filter Dropdown */}
+                <NativeSelect
+                  value={district}
+                  onChange={(event) => setDistrict(event.target.value)}
+                  className="h-11 border-zinc-200 bg-zinc-50 text-sm rounded-lg"
+                  aria-label="Bezirk filtern"
+                >
+                  {berlinDistricts.map((d) => (
+                    <NativeSelectOption key={d.value} value={d.value}>
+                      {isDe ? d.labelDe : d.labelEn}
+                    </NativeSelectOption>
+                  ))}
+                </NativeSelect>
+
+                {/* Employment Filter */}
+                <NativeSelect
+                  value={employment}
+                  onChange={(event) => setEmployment(event.target.value)}
+                  className="h-11 border-zinc-200 bg-zinc-50 text-sm rounded-lg"
+                  aria-label="Beschäftigungsart"
+                >
+                  <NativeSelectOption value="all">{t('allJobTypes')}</NativeSelectOption>
+                  <NativeSelectOption value="minijob">{t('minijob')} (538 €)</NativeSelectOption>
+                  <NativeSelectOption value="part-time">{t('partTime')}</NativeSelectOption>
+                  <NativeSelectOption value="working student">{t('workingStudent')}</NativeSelectOption>
+                  <NativeSelectOption value="short-term">{t('tempShortTerm')}</NativeSelectOption>
+                  <NativeSelectOption value="1-day">{t('oneDayShift')}</NativeSelectOption>
+                </NativeSelect>
+
+                {/* Pay Interval */}
+                <NativeSelect
+                  value={payInterval}
+                  onChange={(event) => setPayInterval(event.target.value)}
+                  className="h-11 border-zinc-200 bg-zinc-50 text-sm rounded-lg"
+                  aria-label="Vergütungsintervall"
+                >
+                  <NativeSelectOption value="all">{t('anyPayType')}</NativeSelectOption>
+                  <NativeSelectOption value="hour">{t('payPerHour')}</NativeSelectOption>
+                  <NativeSelectOption value="shift">{t('payPerShift')}</NativeSelectOption>
+                  <NativeSelectOption value="month">{t('payPerMonth')}</NativeSelectOption>
+                </NativeSelect>
+              </div>
+            </div>
+
+            {/* Quick Filter Pills & View Switcher */}
+            <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+                {featuredNiches.map((id) => {
+                  const selected = industry === id;
+                  const nicheObj = getIndustry(id);
+                  const label =
+                    id === 'all'
+                      ? t('allCategories')
+                      : isDe
+                      ? nicheObj?.labelDe || nicheObj?.label
+                      : nicheObj?.label;
+                  return (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => setIndustry(id)}
+                      className={`shrink-0 rounded-full px-3.5 py-1 text-xs font-medium transition cursor-pointer ${
+                        selected
+                          ? 'bg-zinc-950 text-white'
+                          : 'border border-zinc-200 bg-white text-zinc-600 hover:border-zinc-400 hover:text-zinc-950'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* View Switcher */}
+              <div className="flex items-center gap-1 self-end rounded-lg border border-zinc-200 bg-white p-1 shadow-2xs">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('split')}
+                  className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition cursor-pointer ${
+                    viewMode === 'split'
+                      ? 'bg-zinc-950 text-white'
+                      : 'text-zinc-500 hover:text-zinc-950'
+                  }`}
+                  title="Liste & Karte geteilt"
+                >
+                  <Layers className="size-3.5" />
+                  <span className="hidden sm:inline">{t('splitView')}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('list')}
+                  className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition cursor-pointer ${
+                    viewMode === 'list'
+                      ? 'bg-zinc-950 text-white'
+                      : 'text-zinc-500 hover:text-zinc-950'
+                  }`}
+                  title="Nur Liste"
+                >
+                  <List className="size-3.5" />
+                  <span>{t('listView')}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('map')}
+                  className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition cursor-pointer ${
+                    viewMode === 'map'
+                      ? 'bg-zinc-950 text-white'
+                      : 'text-zinc-500 hover:text-zinc-950'
+                  }`}
+                  title="Nur Karte"
+                >
+                  <MapIcon className="size-3.5" />
+                  <span>{t('mapView')}</span>
+                </button>
+              </div>
+            </div>
           </div>
+        </section>
+      )}
 
-          <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              {featuredNiches.map((id) => {
-                const selected = industry === id;
-                const nicheObj = getIndustry(id);
-                const label =
-                  id === 'all'
-                    ? t('allCategories')
-                    : isDe
-                    ? nicheObj?.labelDe || nicheObj?.label
-                    : nicheObj?.label;
-                return (
-                  <button
-                    key={id}
-                    type="button"
-                    onClick={() => setIndustry(id)}
-                    className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-medium transition ${selected ? 'border-[#18221e] bg-[#18221e] text-white' : 'border-foreground/15 bg-white hover:border-foreground/40'}`}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* View Mode Toggle Controls */}
-            <div className="flex items-center gap-1 self-end rounded-lg border border-foreground/15 bg-white p-1 shadow-sm">
-              <button
-                type="button"
-                onClick={() => setViewMode('split')}
-                className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition ${viewMode === 'split' ? 'bg-[#18221e] text-white' : 'text-muted-foreground hover:text-foreground'}`}
-                title="Side-by-side list and interactive map"
-              >
-                <Layers className="size-3.5" />
-                <span className="hidden sm:inline">{t('splitView')}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode('list')}
-                className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition ${viewMode === 'list' ? 'bg-[#18221e] text-white' : 'text-muted-foreground hover:text-foreground'}`}
-                title="Full-width list view"
-              >
-                <List className="size-3.5" />
-                <span>{t('listView')}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode('map')}
-                className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition ${viewMode === 'map' ? 'bg-[#18221e] text-white' : 'text-muted-foreground hover:text-foreground'}`}
-                title="Full interactive OpenStreetMap view"
-              >
-                <MapIcon className="size-3.5" />
-                <span>{t('mapView')}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="jobs" className="bg-[#fbfaf6]">
+      {/* Listings Section */}
+      <section id="jobs" className="bg-[#fafafa]">
         <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-10">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl font-semibold">{effectiveSectionTitle}</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <h2 className="text-xl font-bold tracking-tight text-zinc-950">{effectiveSectionTitle}</h2>
+              <p className="mt-1 text-xs text-zinc-500">
                 {visibleJobs.length} {t('jobsFound')}
               </p>
             </div>
@@ -257,13 +321,14 @@ export function JobBrowser({
               {viewAllHref && (
                 <Link
                   href={viewAllHref}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-foreground/15 bg-white px-3.5 py-1.5 text-xs font-semibold text-[#18221e] shadow-sm transition hover:bg-[#18221e] hover:text-white"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-800 shadow-2xs transition hover:border-zinc-400 hover:text-zinc-950"
                 >
                   <span>{effectiveViewAllLabel}</span>
-                  <ArrowRight className="size-3.5" />
+                  <ArrowRight className="size-3" />
                 </Link>
               )}
-              <span className="hidden sm:inline-block rounded-md bg-[#e8f6ed] px-2.5 py-1 text-xs font-semibold text-[#245e3c]">
+              <span className="hidden sm:inline-flex items-center gap-1.5 rounded-md bg-zinc-100 border border-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-700">
+                <span className="size-1.5 rounded-full bg-emerald-600" />
                 {t('openStreetMapActive')}
               </span>
             </div>
@@ -272,7 +337,7 @@ export function JobBrowser({
           {/* Render based on view mode */}
           {viewMode === 'map' ? (
             /* Full Map View */
-            <div className="h-[750px] w-full">
+            <div className="h-[750px] w-full rounded-2xl overflow-hidden border border-zinc-200 shadow-sm">
               <JobMap
                 jobs={visibleJobs}
                 selectedJobId={selectedJobId}
@@ -287,9 +352,9 @@ export function JobBrowser({
               {/* Job Cards Column */}
               <div className="space-y-3">
                 {visibleJobs.length === 0 ? (
-                  <div className="rounded-xl border border-foreground/15 bg-white p-12 text-center">
-                    <p className="font-semibold text-lg">No jobs match your filter</p>
-                    <p className="mt-1 text-sm text-muted-foreground">Try clearing your search or switching categories.</p>
+                  <div className="rounded-xl border border-zinc-200 bg-white p-12 text-center">
+                    <p className="font-semibold text-base text-zinc-900">Keine Jobs für diese Filter gefunden</p>
+                    <p className="mt-1 text-xs text-zinc-500">Passe deine Suchbegriffe oder Bezirksauswahl an.</p>
                   </div>
                 ) : (
                   visibleJobs.map((job) => {
@@ -300,7 +365,9 @@ export function JobBrowser({
                     return (
                       <div
                         key={job.id}
-                        ref={(el) => { jobCardsRef.current[job.id] = el; }}
+                        ref={(el) => {
+                          jobCardsRef.current[job.id] = el;
+                        }}
                         onMouseEnter={() => setHoveredJobId(job.id)}
                         onMouseLeave={() => setHoveredJobId(null)}
                         onClick={() => setSelectedJobId(job.id)}
@@ -325,7 +392,7 @@ export function JobBrowser({
                     selectedJobId={selectedJobId}
                     hoveredJobId={hoveredJobId}
                     onSelectJob={handleSelectJobFromMap}
-                    className="h-full w-full"
+                    className="h-full w-full rounded-2xl border border-zinc-200 shadow-sm"
                   />
                 </div>
               </div>
@@ -334,9 +401,9 @@ export function JobBrowser({
             /* List Only View */
             <div className="mx-auto max-w-[1080px] space-y-3">
               {visibleJobs.length === 0 ? (
-                <div className="rounded-xl border border-foreground/15 bg-white p-12 text-center">
-                  <p className="font-semibold text-lg">No jobs match your filter</p>
-                  <p className="mt-1 text-sm text-muted-foreground">Try clearing your search or switching categories.</p>
+                <div className="rounded-xl border border-zinc-200 bg-white p-12 text-center">
+                  <p className="font-semibold text-base text-zinc-900">Keine Jobs für diese Filter gefunden</p>
+                  <p className="mt-1 text-xs text-zinc-500">Passe deine Suchbegriffe oder Bezirksauswahl an.</p>
                 </div>
               ) : (
                 visibleJobs.map((job) => (
@@ -368,9 +435,8 @@ function JobCard({
 }) {
   const { t, isDe } = useTranslation();
   const employerPosted = job.listingOrigin === 'employer_posted';
-  const isDemo = job.isDemo !== false;
 
-  let payLabel = job.payText || job.compensation?.label || 'Pay stated';
+  let payLabel = job.payText || job.compensation?.label || 'Nach Vereinbarung';
   if (
     payLabel.toLowerCase().includes('discussed') ||
     payLabel.toLowerCase().includes('vereinbarung')
@@ -385,85 +451,76 @@ function JobCard({
   return (
     <Link
       href={`/jobs/${job.slug || job.id}`}
-      className={`group block overflow-hidden rounded-xl border bg-white transition hover:border-[#385cdd] hover:shadow-[0_10px_28px_rgb(24_34_30/9%)] ${
+      className={`group block overflow-hidden rounded-xl border bg-white p-5 transition cursor-pointer ${
         isSelected
-          ? 'border-[#385cdd] ring-2 ring-[#385cdd]/30 bg-[#f9faff]'
+          ? 'border-zinc-950 ring-1 ring-zinc-950 bg-zinc-50/40 shadow-xs'
           : isHovered
-            ? 'border-[#18221e] shadow-md'
-            : employerPosted
-              ? 'border-[#bfcaff] ring-1 ring-[#e1e6ff]'
-              : 'border-foreground/15'
+          ? 'border-zinc-400 shadow-xs'
+          : 'border-zinc-200 hover:border-zinc-400 hover:shadow-xs'
       }`}
     >
-      <div className="p-5 md:p-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-          <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <span
-                className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium ${
-                  employerPosted
-                    ? 'bg-[#edf2ff] text-[#385cdd]'
-                    : 'bg-[#f0f2ef] text-[#3e5146]'
-                }`}
-              >
-                {employerPosted ? t('postedByEmployer') : t('verifiedSource')}
-              </span>
-
-              {job.employmentForms &&
-                job.employmentForms.slice(0, 2).map((form: string) => (
-                  <span
-                    key={form}
-                    className="rounded-full bg-foreground/5 px-2.5 py-0.5 text-[11px] text-muted-foreground"
-                  >
-                    {form}
-                  </span>
-                ))}
-
-              {job.niches && job.niches.length > 1 && (
-                <span className="rounded-full bg-foreground/5 px-2 py-0.5 text-[10px] text-muted-foreground">
-                  {t('moreCategories', { count: job.niches.length - 1 })}
-                </span>
-              )}
-            </div>
-
-            <h3 className="mt-2.5 text-xl font-semibold tracking-[-0.025em] group-hover:text-[#385cdd]">
-              {job.title}
-            </h3>
-
-            <p className="mt-1 text-sm text-muted-foreground">
-              {job.company} &middot; <span className="font-medium text-foreground">{districtText}</span>
-            </p>
-          </div>
-
-          <div className="flex shrink-0 items-center justify-between border-t border-foreground/10 pt-3 lg:border-t-0 lg:pt-0">
-            <span className="text-base font-bold text-[#18221e] lg:text-lg">
-              {payLabel}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0 flex-1">
+          {/* Badge line */}
+          <div className="flex flex-wrap items-center gap-1.5 mb-2">
+            <span
+              className={`rounded px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase ${
+                employerPosted
+                  ? 'bg-zinc-900 text-white'
+                  : 'bg-zinc-100 text-zinc-600 border border-zinc-200'
+              }`}
+            >
+              {employerPosted ? t('postedByEmployer') : t('verifiedSource')}
             </span>
+
+            {job.employmentForms &&
+              job.employmentForms.slice(0, 2).map((form: string) => (
+                <span
+                  key={form}
+                  className="rounded bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-zinc-600 border border-zinc-200/60"
+                >
+                  {form}
+                </span>
+              ))}
           </div>
+
+          {/* Job Title */}
+          <h3 className="text-base font-bold text-zinc-900 group-hover:text-black tracking-tight leading-snug">
+            {job.title}
+          </h3>
+
+          {/* Company & District */}
+          <p className="mt-1 text-xs text-zinc-600">
+            <span className="font-semibold text-zinc-800">{job.company}</span>
+            <span className="mx-1.5 text-zinc-300">·</span>
+            <span className="inline-flex items-center gap-1 text-zinc-600">
+              <MapPin className="size-3 text-zinc-400" />
+              {districtText}
+            </span>
+          </p>
         </div>
 
-        <div className="mt-4 grid gap-2 border-t border-foreground/10 pt-4 text-xs sm:grid-cols-2 lg:grid-cols-3">
-          <div className="flex items-center gap-1.5 text-muted-foreground">
-            <Clock3 className="size-3.5 shrink-0 text-[#385cdd]" />
-            <span className="truncate">{hoursLabel}</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-muted-foreground">
-            <CalendarDays className="size-3.5 shrink-0 text-[#245e3c]" />
-            <span className="truncate">{scheduleSummary}</span>
-          </div>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              window.open(getGoogleMapsUrl(job), '_blank', 'noopener,noreferrer');
-            }}
-            className="flex items-center gap-1.5 text-left text-muted-foreground transition hover:text-[#385cdd] sm:col-span-2 lg:col-span-1"
-            title="Open real location in Google Maps"
-          >
-            <MapPin className="size-3.5 shrink-0 text-[#ed6a43]" />
-            <span className="truncate hover:underline">{districtText} ↗</span>
-          </button>
+        {/* Wage / Compensation Badge */}
+        <div className="flex shrink-0 items-baseline sm:flex-col sm:items-end sm:justify-start">
+          <span className="text-sm font-bold text-zinc-950 font-mono tracking-tight sm:text-base">
+            {payLabel}
+          </span>
+        </div>
+      </div>
+
+      {/* Metadata footer */}
+      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-zinc-100 pt-3 text-[11px] text-zinc-500">
+        <div className="flex items-center gap-1">
+          <Clock3 className="size-3 text-zinc-400" />
+          <span>{hoursLabel}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <CalendarDays className="size-3 text-zinc-400" />
+          <span>{scheduleSummary}</span>
+        </div>
+        <div className="ml-auto inline-flex items-center gap-1 font-semibold text-zinc-900 group-hover:underline">
+          <span>Details</span>
+          <ArrowRight className="size-3 transition group-hover:translate-x-0.5" />
         </div>
       </div>
     </Link>
@@ -475,53 +532,51 @@ export function LatestJobs({ jobs }: { jobs: any[] }) {
   if (!jobs || jobs.length === 0) return null;
 
   return (
-    <section className="border-t border-foreground/15 bg-white">
+    <section className="border-t border-zinc-200/80 bg-white">
       <div className="mx-auto max-w-[1440px] px-5 py-12 md:px-10 md:py-16">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div>
-            <p className="eyebrow">{t('heroEyebrow')}</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] md:text-3xl">
+            <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">{t('heroEyebrow')}</p>
+            <h2 className="mt-1 text-2xl font-bold tracking-tight text-zinc-950 md:text-3xl">
               {t('latestJobs')}
             </h2>
           </div>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/latest-jobs"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-foreground/15 bg-[#18221e] px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#2a3832]"
-            >
-              <span>{t('viewAllLatest')}</span>
-              <ArrowRight className="size-3.5" />
-            </Link>
-          </div>
+          <Link
+            href="/latest-jobs"
+            className="inline-flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-800 shadow-2xs transition hover:border-zinc-400 hover:text-zinc-950"
+          >
+            <span>{t('viewAllLatest')}</span>
+            <ArrowRight className="size-3" />
+          </Link>
         </div>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {jobs.slice(0, 6).map((job) => (
             <Link
               key={job.id}
               href={`/jobs/${job.slug || job.id}`}
-              className="group flex flex-col justify-between rounded-xl border border-foreground/15 bg-[#fbfaf6] p-5 transition hover:border-[#385cdd] hover:bg-[#f4f7ff]"
+              className="group flex flex-col justify-between rounded-xl border border-zinc-200 bg-zinc-50/50 p-4.5 transition hover:border-zinc-950 hover:bg-white hover:shadow-2xs"
             >
               <div>
-                <div className="flex items-center justify-between">
-                  <span className="rounded-md bg-[#245e3c]/10 px-2 py-0.5 text-xs font-bold text-[#245e3c]">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-xs font-bold text-zinc-900">
                     {formatPinBadge(job)}
                   </span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-[11px] text-zinc-500 truncate">
                     {job.district || 'Berlin'}
                   </span>
                 </div>
-                <h3 className="mt-3 font-semibold text-base group-hover:text-[#385cdd] line-clamp-2">
+                <h3 className="mt-2.5 font-bold text-sm text-zinc-900 group-hover:text-black line-clamp-2">
                   {job.title}
                 </h3>
-                <p className="mt-1 text-xs text-muted-foreground line-clamp-1">
+                <p className="mt-1 text-xs text-zinc-500 line-clamp-1">
                   {job.company}
                 </p>
               </div>
 
-              <div className="mt-4 flex items-center justify-between border-t border-foreground/10 pt-3 text-xs font-medium text-[#385cdd]">
+              <div className="mt-3.5 flex items-center justify-between border-t border-zinc-200/60 pt-2.5 text-xs font-semibold text-zinc-900">
                 <span>{t('browseCategory')}</span>
-                <ArrowRight className="size-3.5 transition group-hover:translate-x-1" />
+                <ArrowRight className="size-3 transition group-hover:translate-x-0.5" />
               </div>
             </Link>
           ))}

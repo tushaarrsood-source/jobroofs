@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
+import { SiteFooter } from '@/components/site-footer';
 import { HousingDetailContent } from '@/components/housing-detail-content';
 import { previewHousingListings } from '@/lib/domain/preview-housing';
 import type { HousingListing } from '@/lib/domain/housing-types';
@@ -96,9 +97,12 @@ export default async function HousingDetailPage({
   }
 
   return (
-    <main className="min-h-screen bg-[#f4f0e7] text-[#18221e]">
-      <SiteHeader />
-      <HousingDetailContent listing={listing} />
+    <main className="min-h-screen bg-[#fafafa] text-zinc-900 flex flex-col justify-between">
+      <div>
+        <SiteHeader />
+        <HousingDetailContent listing={listing} />
+      </div>
+      <SiteFooter />
     </main>
   );
 }

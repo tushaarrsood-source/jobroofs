@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowUpRight, MapPin } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { LanguageToggle } from '@/components/language-toggle';
 
@@ -9,32 +9,31 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
   const { t } = useTranslation();
 
   return (
-    <header className="border-b border-foreground/15 bg-[#f4f0e7]">
-      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-5 md:px-10">
+    <header className="sticky top-0 z-50 border-b border-zinc-200/80 bg-white/95 backdrop-blur-md">
+      <div className="mx-auto flex h-15 max-w-[1440px] items-center justify-between px-5 md:px-10">
         <Link
           href="/"
-          className="flex items-center gap-3 font-semibold tracking-[-0.03em]"
+          className="group flex items-center gap-2 transition-opacity hover:opacity-90"
         >
-          <span className="grid size-8 place-items-center rounded-full bg-[#18221e] text-[#f4f0e7] shadow-xs">
-            <MapPin className="size-4 text-[#ed6a43]" strokeWidth={2.4} />
+          <span className="font-black text-xl tracking-tight text-zinc-950 font-sans">
+            KIEZJOB
           </span>
-          <span className="font-extrabold tracking-[-0.04em]">KIEZJOB</span>
-          <span className="hidden rounded-md border border-[#385cdd]/25 bg-[#edf2ff] px-2 py-0.5 text-[10px] font-bold text-[#385cdd] sm:inline">
-            BERLIN
+          <span className="text-[11px] font-medium tracking-wider text-zinc-400 uppercase">
+            · BERLIN
           </span>
           {control ? (
-            <span className="hidden rounded-full bg-[#d9ddd7] px-2 py-1 font-mono text-[10px] uppercase tracking-widest sm:inline">
+            <span className="ml-2 rounded-full bg-zinc-100 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-zinc-600 border border-zinc-200">
               {t('controlRoom')}
             </span>
           ) : null}
         </Link>
 
-        <div className="flex items-center gap-3 sm:gap-5">
-          <nav className="flex items-center gap-4 text-sm sm:gap-5">
+        <div className="flex items-center gap-3 sm:gap-6">
+          <nav className="flex items-center gap-4 text-xs font-medium sm:gap-6 sm:text-sm">
             {control ? (
               <Link
                 href="/"
-                className="inline-flex items-center gap-1.5 font-medium hover:underline"
+                className="inline-flex items-center gap-1.5 font-medium text-zinc-700 hover:text-zinc-950 hover:underline"
               >
                 {t('publicPortal')} <ArrowUpRight className="size-3.5" />
               </Link>
@@ -42,42 +41,42 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
               <>
                 <Link
                   href="/direct-employers"
-                  className="hidden text-muted-foreground hover:text-foreground sm:inline"
+                  className="hidden text-zinc-600 hover:text-zinc-950 transition-colors sm:inline"
                 >
                   {t('directEmployers')}
                 </Link>
                 <Link
                   href="/latest-jobs"
-                  className="hidden text-muted-foreground hover:text-foreground md:inline"
+                  className="hidden text-zinc-600 hover:text-zinc-950 transition-colors md:inline"
                 >
                   {t('latestJobs')}
                 </Link>
                 <Link
                   href="/#niches"
-                  className="hidden text-muted-foreground hover:text-foreground lg:inline"
+                  className="hidden text-zinc-600 hover:text-zinc-950 transition-colors lg:inline"
                 >
                   {t('categories')}
                 </Link>
                 <Link
                   href="/wohnen"
-                  className="font-medium text-[#18221e] hover:text-[#385cdd] inline-flex items-center gap-1.5"
+                  className="inline-flex items-center gap-1.5 font-semibold text-zinc-900 transition hover:text-black"
                 >
                   <span>{t('navHousing')}</span>
-                  <span className="rounded bg-[#e2f3e6] px-1.5 py-0.5 text-[10px] font-semibold text-[#285a39]">
+                  <span className="rounded bg-zinc-100 border border-zinc-200 px-1.5 py-0.2 text-[10px] font-bold text-zinc-800">
                     Neu
                   </span>
                 </Link>
                 <Link
                   href="/post-a-job"
-                  className="inline-flex h-9 items-center rounded-lg bg-[#18221e] px-4 font-semibold text-white transition hover:bg-[#2a3832]"
+                  className="inline-flex h-8.5 items-center rounded-md bg-zinc-950 px-3.5 text-xs font-semibold text-white transition hover:bg-zinc-800 shadow-xs"
                 >
-                  {t('postAJob')} <ArrowUpRight className="ml-1.5 size-3.5" />
+                  {t('postAJob')} <ArrowUpRight className="ml-1 size-3" />
                 </Link>
               </>
             )}
           </nav>
 
-          <div className="border-l border-foreground/15 pl-3 sm:pl-4">
+          <div className="border-l border-zinc-200 pl-3 sm:pl-5">
             <LanguageToggle />
           </div>
         </div>

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { SiteHeader } from '@/components/site-header';
+import { SiteFooter } from '@/components/site-footer';
 import { HousingBrowser } from '@/components/housing-browser';
 import { previewHousingListings } from '@/lib/domain/preview-housing';
 import type { HousingListing } from '@/lib/domain/housing-types';
@@ -77,9 +78,12 @@ export default async function HousingPage() {
   const allListings = [...dbListings, ...previewHousingListings];
 
   return (
-    <main className="min-h-screen bg-[#f4f0e7] text-[#18221e]">
-      <SiteHeader />
-      <HousingBrowser initialListings={allListings} />
+    <main className="min-h-screen bg-[#fafafa] text-zinc-900 flex flex-col justify-between">
+      <div>
+        <SiteHeader />
+        <HousingBrowser initialListings={allListings} />
+      </div>
+      <SiteFooter />
     </main>
   );
 }

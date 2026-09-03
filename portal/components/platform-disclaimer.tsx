@@ -11,16 +11,16 @@ export function PlatformDisclaimer({
   const { isDe } = useTranslation();
 
   return (
-    <div className="rounded-xl border border-foreground/15 bg-[#f0ede6] p-5 text-xs text-[#526058]">
+    <div className="rounded-xl border border-zinc-200 bg-zinc-100/70 p-4.5 text-xs text-zinc-600 shadow-2xs">
       <div className="flex items-start gap-3">
-        <ShieldAlert className="size-4 shrink-0 text-[#857154] mt-0.5" />
+        <ShieldAlert className="size-4 shrink-0 text-zinc-500 mt-0.5" />
         <div className="space-y-1.5 leading-relaxed">
-          <p className="font-semibold text-[#18221e]">
+          <p className="font-bold text-zinc-950">
             {isDe
               ? 'Rechtlicher Hinweis & Haftungsausschluss (Reines Schwarzes Brett / Anzeigenportal)'
               : 'Legal Notice & Liability Disclaimer (Strictly an Advertising Directory)'}
           </p>
-          <p>
+          <p className="text-[11px] text-zinc-500">
             {isDe ? (
               <>
                 KIEZJOB ist eine reine Informations- und Anzeigenplattform. KIEZJOB ist weder Immobilienmakler, Hausverwaltung, Vermieter, Arbeitgeber noch Partei von Miet-, Untermiet- oder Arbeitsverträgen. Alle Angaben in den Inseraten stammen ausschließlich von der jeweiligen inserierenden Person und werden von uns nicht auf inhaltliche Richtigkeit, rechtliche Zulässigkeit oder Bonität geprüft.
@@ -31,7 +31,7 @@ export function PlatformDisclaimer({
               </>
             )}
           </p>
-          <p>
+          <p className="text-[11px] text-zinc-500">
             {isDe ? (
               <>
                 Jeglicher Vertragsschluss und die gesamte Kommunikation erfolgen ausschließlich direkt zwischen Suchenden und Inserierenden. KIEZJOB übernimmt keinerlei Gewähr, Garantie oder Haftung für das Zustandekommen von Verträgen, Mietzahlungen, Kautionsrückzahlungen, Sach- oder Vermögensschäden.

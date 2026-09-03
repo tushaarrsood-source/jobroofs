@@ -207,26 +207,26 @@ export function JobMap({
   };
 
   return (
-    <div className={`relative h-full w-full overflow-hidden rounded-2xl border border-foreground/15 bg-[#f4f0e7] shadow-inner ${className}`}>
+    <div className={`relative h-full w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100 shadow-inner ${className}`}>
       {/* Leaflet Map Target */}
       <div ref={mapContainerRef} className="h-full w-full z-0" />
 
       {/* Floating Controls */}
       {!miniMode && (
-        <div className="absolute top-4 left-4 z-[500] flex items-center gap-2">
+        <div className="absolute top-3 left-3 z-[500] flex items-center gap-2">
           <button
             type="button"
             onClick={handleResetView}
-            className="flex items-center gap-1.5 rounded-lg border border-foreground/15 bg-white/95 px-3 py-1.5 text-xs font-semibold text-[#18221e] shadow-md backdrop-blur transition hover:bg-white"
+            className="flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white/95 px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs backdrop-blur transition hover:bg-white cursor-pointer"
             title="Reset map to Berlin overview"
           >
-            <RotateCcw className="size-3.5 text-[#385cdd]" />
-            <span>Berlin Overview</span>
+            <RotateCcw className="size-3 text-zinc-500" />
+            <span>Berlin Übersicht</span>
           </button>
 
-          <div className="hidden sm:flex items-center gap-1.5 rounded-lg border border-foreground/15 bg-white/95 px-3 py-1.5 text-xs text-muted-foreground shadow-md backdrop-blur">
-            <MapPin className="size-3.5 text-[#245e3c]" />
-            <span>{jobs.length} {jobs.length === 1 ? 'job' : 'jobs'} on map</span>
+          <div className="hidden sm:flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white/95 px-2.5 py-1.5 text-xs text-zinc-600 shadow-xs backdrop-blur">
+            <MapPin className="size-3 text-emerald-700" />
+            <span>{jobs.length} {jobs.length === 1 ? 'Job' : 'Jobs'} auf Karte</span>
           </div>
         </div>
       )}

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { ArrowRight, Clock } from 'lucide-react';
 import { JobBrowser } from '@/components/job-browser';
 import { SiteHeader } from '@/components/site-header';
+import { SiteFooter } from '@/components/site-footer';
 import { CategoryCarousel } from '@/components/category-carousel';
 import { getAllLatestJobs, getJobNiches, getJobSourceInfo } from '@/lib/jobs/feeds';
 import { previewJobs } from '@/lib/domain/preview-data';
@@ -66,33 +67,26 @@ export default async function LatestJobsPage() {
 
       <CategoryCarousel title="Browse jobs by category across Berlin" eyebrow="Explore Industries" />
 
-      <section className="border-t border-foreground/15 bg-[#18221e] text-white">
+      <section className="border-t border-zinc-200 bg-zinc-950 text-white">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 py-12 md:flex-row md:items-center md:justify-between md:px-10">
           <div>
-            <p className="text-2xl font-semibold tracking-[-0.03em]">
+            <p className="text-xl font-bold tracking-tight md:text-2xl">
               Are you an employer hiring in Berlin?
             </p>
-            <p className="mt-2 text-sm text-[#aeb9b2]">
-              Post your job for €29 single listing or €499/year for unlimited and top priority listings.
+            <p className="mt-1.5 text-xs text-zinc-400">
+              Post your job for €29 single listing (30 days active). Direct applicant contact.
             </p>
           </div>
           <Link
             href="/post-a-job"
-            className="inline-flex h-11 w-fit items-center rounded-lg bg-white px-5 text-sm font-semibold text-[#18221e]"
+            className="inline-flex h-10 items-center rounded-md bg-white px-4 text-xs font-bold text-zinc-950 transition hover:bg-zinc-100 shadow-xs"
           >
-            Post a job <ArrowRight className="ml-2 size-4" />
+            Post a job <ArrowRight className="ml-1.5 size-3.5" />
           </Link>
         </div>
       </section>
 
-      <footer className="border-t border-foreground/15 bg-[#f4f0e7] px-5 py-8 text-sm md:px-10">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-semibold">KIEZJOB · Berlin flexible work</span>
-          <span className="text-muted-foreground">
-            Minijobs · Part-time · Temporary work · Shifts
-          </span>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }

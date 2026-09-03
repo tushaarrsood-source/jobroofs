@@ -1,16 +1,17 @@
 import type { Metadata } from 'next';
 import { SiteHeader } from '@/components/site-header';
+import { SiteFooter } from '@/components/site-footer';
 import { EmployerListingForm } from '@/components/employer-listing-form';
 import { PostAJobHeader } from '@/components/post-a-job-header';
 
 export const metadata: Metadata = {
-  title: 'Post a Job — Hire Berlin Minijob & Flexible Talent',
+  title: 'Job inserieren — Berliner Minijob & Aushilfskräfte finden (ab 29 €)',
   description:
-    'Post your job opening directly to thousands of active Berlin job seekers. Reach applicants for Minijobs, part-time work, temp gigs, and flexible shifts.',
+    'Inseriere dein Stellenangebot direkt an tausende Berliner Minijobber, Aushilfen und Werkstudierende. 29 € Einstellgebühr.',
   openGraph: {
-    title: 'Post a Job — Hire Berlin Minijob & Flexible Talent · KIEZJOB',
+    title: 'Job inserieren · KIEZJOB Berlin',
     description:
-      'Reach active local applicants for Minijobs, part-time work, and flexible shifts in Berlin.',
+      'Erreiche aktive Berliner Bewerber für Minijobs, Teilzeitstellen und flexible Schichten.',
     url: '/post-a-job',
   },
   alternates: {
@@ -20,12 +21,15 @@ export const metadata: Metadata = {
 
 export default function PostAJobPage() {
   return (
-    <main className="min-h-screen bg-[#f4f0e7] text-[#18221e]">
-      <SiteHeader />
-      <div className="mx-auto max-w-[980px] px-5 py-10 md:px-10 md:py-14">
-        <PostAJobHeader />
-        <EmployerListingForm />
+    <main className="min-h-screen bg-[#fafafa] text-zinc-900 flex flex-col justify-between">
+      <div>
+        <SiteHeader />
+        <div className="mx-auto max-w-[980px] px-5 py-10 md:px-10 md:py-14">
+          <PostAJobHeader />
+          <EmployerListingForm />
+        </div>
       </div>
+      <SiteFooter />
     </main>
   );
 }

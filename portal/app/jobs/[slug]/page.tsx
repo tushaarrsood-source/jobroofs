@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { SiteHeader } from '@/components/site-header';
+import { SiteFooter } from '@/components/site-footer';
 import { JobPostingJsonLd, BreadcrumbJsonLd } from '@/components/json-ld';
 import { previewJobs } from '@/lib/domain/preview-data';
 import { getJobById, getJobNiches, getJobSourceInfo } from '@/lib/jobs/feeds';
@@ -133,17 +134,20 @@ export default async function JobDetailPage({
     );
 
   return (
-    <main className="min-h-screen bg-[#f4f0e7] text-[#18221e]">
-      <JobPostingJsonLd job={job} />
-      <BreadcrumbJsonLd
-        items={[
-          { name: 'KIEZJOB', href: '/' },
-          { name: getIndustry(job.industryId)?.label || 'Jobs', href: `/categories/${job.industryId}` },
-          { name: job.title, href: `/jobs/${job.slug || job.id}` },
-        ]}
-      />
-      <SiteHeader />
-      <JobDetailContent job={job} />
+    <main className="min-h-screen bg-[#fafafa] text-zinc-900 flex flex-col justify-between">
+      <div>
+        <JobPostingJsonLd job={job} />
+        <BreadcrumbJsonLd
+          items={[
+            { name: 'KIEZJOB', href: '/' },
+            { name: getIndustry(job.industryId)?.label || 'Jobs', href: `/categories/${job.industryId}` },
+            { name: job.title, href: `/jobs/${job.slug || job.id}` },
+          ]}
+        />
+        <SiteHeader />
+        <JobDetailContent job={job} />
+      </div>
+      <SiteFooter />
     </main>
   );
 }
