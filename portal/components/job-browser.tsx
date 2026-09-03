@@ -160,20 +160,20 @@ export function JobBrowser({
             <h1 className="font-display max-w-4xl text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[0.95]">
               {isDe ? (
                 <>
-                  ECHTE KIEZ-JOBS IN BERLIN.
-                  <span className="text-blue-600 block mt-1">DIREKT BEI NACHBARN & CAFÉS.</span>
+                  MINIJOBS & FLEXIBLE ARBEIT.
+                  <span className="text-blue-600 block mt-1">BERLIN KIEZ-STELLEN.</span>
                 </>
               ) : (
                 <>
-                  REAL BERLIN KIEZ JOBS.
-                  <span className="text-blue-600 block mt-1">DIRECT FROM LOCAL CAFÉS & SHOPS.</span>
+                  MINIJOBS & FLEXIBLE WORK.
+                  <span className="text-blue-600 block mt-1">ACROSS BERLIN.</span>
                 </>
               )}
             </h1>
-            <p className="mt-3.5 max-w-2xl text-sm text-slate-600 leading-relaxed sm:text-base">
+            <p className="mt-3 text-sm text-slate-600 max-w-xl sm:text-base">
               {isDe
-                ? 'Keine 3-Seiten-Anschreiben für eine Barista-Schicht. Keine anonymen Zeitarbeitsfirmen. Finde faire Minijobs (538 €), Teilzeitstellen und Spontan-Einsätze direkt vor deiner Haustür.'
-                : 'No 3-page cover letters just to pull espresso shots. Zero temp agencies. Find fair minijobs (€538), part-time work, and spontaneous shifts right in your neighborhood.'}
+                ? 'Finde Minijobs (538 €), Teilzeitstellen und Schichten direkt bei Berliner Betrieben.'
+                : 'Find minijobs (€538), part-time roles, and flexible shifts directly at local Berlin venues.'}
             </p>
 
             {/* High-Utility Search Console */}

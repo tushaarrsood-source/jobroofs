@@ -139,19 +139,19 @@ export function HousingBrowser({
               {isDe ? (
                 <>
                   WOHNUNGEN & WG-ZIMMER.
-                  <span className="text-blue-600 block mt-1">OHNE MAKLER-BULLSHIT.</span>
+                  <span className="text-blue-600 block mt-1">IN BERLIN.</span>
                 </>
               ) : (
                 <>
-                  FLATS & WG ROOMS IN BERLIN.
-                  <span className="text-blue-600 block mt-1">ZERO BROKER BS.</span>
+                  APARTMENTS & WG ROOMS.
+                  <span className="text-blue-600 block mt-1">IN BERLIN.</span>
                 </>
               )}
             </h1>
-            <p className="mt-3 text-sm leading-relaxed text-slate-600 max-w-2xl sm:text-base">
+            <p className="mt-3 text-sm leading-relaxed text-slate-600 max-w-xl sm:text-base">
               {isDe
-                ? 'Direkt von Mieter zu Mieter. Alle Inserate mit verbindlicher Wohnungsgeberbestätigung (Anmeldung nach § 19 BMG) und transparenter Warmmiete — ohne 80-Personen-Massen-Castings.'
-                : 'Direct from tenant to tenant. All listings include guaranteed Wohnungsgeberbestätigung (Anmeldung) and transparent warm rents with zero broker commissions.'}
+                ? 'Direkt von Mieter zu Mieter mit verbindlicher Anmeldung und transparenter Warmmiete.'
+                : 'Direct from tenant to tenant with guaranteed Anmeldung and transparent warm rents.'}
             </p>
           </div>
 
