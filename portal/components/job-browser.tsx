@@ -247,10 +247,10 @@ export function JobBrowser({
                       key={id}
                       type="button"
                       onClick={() => setIndustry(id)}
-                      className={`shrink-0 rounded-full px-3.5 py-1 text-xs font-medium transition cursor-pointer ${
+                      className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition cursor-pointer ${
                         selected
-                          ? 'bg-zinc-950 text-white'
-                          : 'border border-zinc-200 bg-white text-zinc-600 hover:border-zinc-400 hover:text-zinc-950'
+                          ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30'
+                          : 'border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900'
                       }`}
                     >
                       {label}
@@ -260,14 +260,14 @@ export function JobBrowser({
               </div>
 
               {/* View Switcher */}
-              <div className="flex items-center gap-1 self-end rounded-lg border border-zinc-200 bg-white p-1 shadow-2xs">
+              <div className="flex items-center gap-1 self-end rounded-xl border border-slate-200 bg-white p-1 shadow-2xs">
                 <button
                   type="button"
                   onClick={() => setViewMode('split')}
-                  className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition cursor-pointer ${
+                  className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
                     viewMode === 'split'
-                      ? 'bg-zinc-950 text-white'
-                      : 'text-zinc-500 hover:text-zinc-950'
+                      ? 'bg-blue-600 text-white shadow-2xs'
+                      : 'text-slate-500 hover:text-slate-900'
                   }`}
                   title="Liste & Karte geteilt"
                 >
@@ -277,10 +277,10 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setViewMode('list')}
-                  className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition cursor-pointer ${
+                  className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
                     viewMode === 'list'
-                      ? 'bg-zinc-950 text-white'
-                      : 'text-zinc-500 hover:text-zinc-950'
+                      ? 'bg-blue-600 text-white shadow-2xs'
+                      : 'text-slate-500 hover:text-slate-900'
                   }`}
                   title="Nur Liste"
                 >
@@ -290,10 +290,10 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setViewMode('map')}
-                  className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition cursor-pointer ${
+                  className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
                     viewMode === 'map'
-                      ? 'bg-zinc-950 text-white'
-                      : 'text-zinc-500 hover:text-zinc-950'
+                      ? 'bg-blue-600 text-white shadow-2xs'
+                      : 'text-slate-500 hover:text-slate-900'
                   }`}
                   title="Nur Karte"
                 >
@@ -307,11 +307,11 @@ export function JobBrowser({
       )}
 
       {/* Listings Section */}
-      <section id="jobs" className="bg-[#fafafa]">
+      <section id="jobs" className="bg-[#f8fafc]">
         <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-10">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl font-bold tracking-tight text-zinc-950">{effectiveSectionTitle}</h2>
+              <h2 className="text-xl font-bold tracking-tight text-slate-950">{effectiveSectionTitle}</h2>
               <p className="mt-1 text-xs text-zinc-500">
                 {visibleJobs.length} {t('jobsFound')}
               </p>
@@ -451,12 +451,12 @@ function JobCard({
   return (
     <Link
       href={`/jobs/${job.slug || job.id}`}
-      className={`group block overflow-hidden rounded-xl border bg-white p-5 transition cursor-pointer ${
+      className={`group block overflow-hidden rounded-2xl border bg-white p-5 transition-all duration-150 cursor-pointer ${
         isSelected
-          ? 'border-zinc-950 ring-1 ring-zinc-950 bg-zinc-50/40 shadow-xs'
+          ? 'border-blue-600 ring-2 ring-blue-600/30 bg-blue-50/20 shadow-sm'
           : isHovered
-          ? 'border-zinc-400 shadow-xs'
-          : 'border-zinc-200 hover:border-zinc-400 hover:shadow-xs'
+          ? 'border-blue-400 shadow-sm'
+          : 'border-slate-200/90 hover:border-blue-500 hover:shadow-md hover:shadow-blue-500/8'
       }`}
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -464,10 +464,10 @@ function JobCard({
           {/* Badge line */}
           <div className="flex flex-wrap items-center gap-1.5 mb-2">
             <span
-              className={`rounded px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase ${
+              className={`rounded px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase ${
                 employerPosted
-                  ? 'bg-zinc-900 text-white'
-                  : 'bg-zinc-100 text-zinc-600 border border-zinc-200'
+                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                  : 'bg-slate-100 text-slate-700 border border-slate-200'
               }`}
             >
               {employerPosted ? t('postedByEmployer') : t('verifiedSource')}
@@ -477,7 +477,7 @@ function JobCard({
               job.employmentForms.slice(0, 2).map((form: string) => (
                 <span
                   key={form}
-                  className="rounded bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-zinc-600 border border-zinc-200/60"
+                  className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 border border-slate-200/60"
                 >
                   {form}
                 </span>
@@ -485,16 +485,16 @@ function JobCard({
           </div>
 
           {/* Job Title */}
-          <h3 className="text-base font-bold text-zinc-900 group-hover:text-black tracking-tight leading-snug">
+          <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 tracking-tight leading-snug transition-colors">
             {job.title}
           </h3>
 
           {/* Company & District */}
-          <p className="mt-1 text-xs text-zinc-600">
-            <span className="font-semibold text-zinc-800">{job.company}</span>
-            <span className="mx-1.5 text-zinc-300">·</span>
-            <span className="inline-flex items-center gap-1 text-zinc-600">
-              <MapPin className="size-3 text-zinc-400" />
+          <p className="mt-1 text-xs text-slate-600">
+            <span className="font-semibold text-slate-800">{job.company}</span>
+            <span className="mx-1.5 text-slate-300">·</span>
+            <span className="inline-flex items-center gap-1 text-slate-600">
+              <MapPin className="size-3 text-blue-600" />
               {districtText}
             </span>
           </p>
@@ -502,25 +502,25 @@ function JobCard({
 
         {/* Wage / Compensation Badge */}
         <div className="flex shrink-0 items-baseline sm:flex-col sm:items-end sm:justify-start">
-          <span className="text-sm font-bold text-zinc-950 font-mono tracking-tight sm:text-base">
+          <span className="text-base font-black text-slate-900 font-mono tracking-tight sm:text-lg">
             {payLabel}
           </span>
         </div>
       </div>
 
       {/* Metadata footer */}
-      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-zinc-100 pt-3 text-[11px] text-zinc-500">
+      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-slate-100 pt-3 text-[11px] text-slate-500">
         <div className="flex items-center gap-1">
-          <Clock3 className="size-3 text-zinc-400" />
+          <Clock3 className="size-3 text-slate-400" />
           <span>{hoursLabel}</span>
         </div>
         <div className="flex items-center gap-1">
-          <CalendarDays className="size-3 text-zinc-400" />
+          <CalendarDays className="size-3 text-slate-400" />
           <span>{scheduleSummary}</span>
         </div>
-        <div className="ml-auto inline-flex items-center gap-1 font-semibold text-zinc-900 group-hover:underline">
+        <div className="ml-auto inline-flex items-center gap-1 font-bold text-blue-600 group-hover:translate-x-0.5 transition-transform">
           <span>Details</span>
-          <ArrowRight className="size-3 transition group-hover:translate-x-0.5" />
+          <ArrowRight className="size-3" />
         </div>
       </div>
     </Link>

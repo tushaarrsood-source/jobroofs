@@ -4,7 +4,6 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import {
   Search,
-  SlidersHorizontal,
   Home,
   CheckCircle2,
   MapPin,
@@ -13,8 +12,9 @@ import {
   ShieldCheck,
   LayoutGrid,
   List,
-  Map as MapIcon,
   X,
+  Sparkles,
+  Lock,
 } from 'lucide-react';
 import type { HousingListing, HousingListingType } from '@/lib/domain/housing-types';
 import { housingTypeLabels } from '@/lib/domain/housing-types';
@@ -28,6 +28,7 @@ const BERLIN_DISTRICTS = [
   'Kreuzberg',
   'Neukölln',
   'Pankow',
+  'Prenzlauer Berg',
   'Charlottenburg-Wilmersdorf',
   'Tempelhof-Schöneberg',
   'Lichtenberg',
@@ -35,7 +36,8 @@ const BERLIN_DISTRICTS = [
   'Steglitz-Zehlendorf',
   'Spandau',
   'Reinickendorf',
-  'Marzahn-Hellersdorf',
+  'Wedding',
+  'Moabit',
 ];
 
 export function HousingBrowser({
@@ -49,6 +51,7 @@ export function HousingBrowser({
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedDistrict, setSelectedDistrict] = useState<string>('all');
   const [onlyAnmeldung, setOnlyAnmeldung] = useState(false);
+  const [onlyFurnished, setOnlyFurnished] = useState(false);
   const [maxRent, setMaxRent] = useState<number | ''>('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
@@ -83,6 +86,11 @@ export function HousingBrowser({
         return false;
       }
 
+      // Furnished
+      if (onlyFurnished && item.furnished === 'unfurnished') {
+        return false;
+      }
+
       // Max rent
       if (maxRent !== '' && item.warmmieteEur > Number(maxRent)) {
         return false;
@@ -90,13 +98,14 @@ export function HousingBrowser({
 
       return true;
     });
-  }, [initialListings, query, selectedType, selectedDistrict, onlyAnmeldung, maxRent]);
+  }, [initialListings, query, selectedType, selectedDistrict, onlyAnmeldung, onlyFurnished, maxRent]);
 
   const hasActiveFilters =
     query !== '' ||
     selectedType !== 'all' ||
     selectedDistrict !== 'all' ||
     onlyAnmeldung ||
+    onlyFurnished ||
     maxRent !== '';
 
   const clearFilters = () => {
@@ -104,52 +113,81 @@ export function HousingBrowser({
     setSelectedType('all');
     setSelectedDistrict('all');
     setOnlyAnmeldung(false);
+    setOnlyFurnished(false);
     setMaxRent('');
   };
 
   return (
     <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-12">
-      {/* Hero Banner */}
-      <section className="relative overflow-hidden rounded-2xl bg-zinc-950 px-6 py-10 text-white shadow-sm md:px-12 md:py-14 border border-zinc-900">
+      {/* Hero Banner with European Authority & Trust Blue */}
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 px-6 py-12 text-white shadow-xl md:px-12 md:py-16 border border-slate-800">
         <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium text-emerald-300">
-            <ShieldCheck className="size-3.5" />
-            {t('housingHeroEyebrow')}
+          {/* Trust Eyebrow */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-500/10 px-3.5 py-1 text-xs font-semibold text-blue-300 backdrop-blur-md">
+            <ShieldCheck className="size-3.5 text-blue-400" />
+            <span>Geprüfter Berliner Wohnungsmarkt · Ohne Maklerprovision</span>
           </div>
-          <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-5xl lg:text-6xl leading-[1.1]">
-            {t('housingHeroTitle')}
+
+          <h1 className="mt-5 text-3xl font-black tracking-tight sm:text-5xl lg:text-6xl leading-[1.08]">
+            Wohnungen & WG-Zimmer in Berlin
           </h1>
-          <p className="mt-4 text-base leading-relaxed text-zinc-300 md:text-lg">
-            {t('housingHeroSubtitle')}
+          
+          <p className="mt-4 text-base leading-relaxed text-slate-300 sm:text-lg max-w-2xl">
+            {isDe
+              ? 'Finde verifizierte Wohnungen, WG-Zimmer und Zwischenmieten mit garantierter Anmeldung. Keine Vorkasse-Abzocke, keine Fake-Profile, 100% Direktkontakt.'
+              : 'Find verified apartments, flatshare rooms, and sublets with guaranteed Anmeldung. Protected against wire transfer scams, zero broker fees.'}
           </p>
 
-          <div className="mt-7 flex flex-wrap items-center gap-3">
+          {/* 4 Pillars of Trust */}
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 pt-2 border-t border-slate-800/80">
+            <div className="flex items-center gap-2">
+              <span className="grid size-6 place-items-center rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold shrink-0">✓</span>
+              <span className="text-xs font-medium text-slate-200">Mit Anmeldung</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="grid size-6 place-items-center rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold shrink-0">✓</span>
+              <span className="text-xs font-medium text-slate-200">0 € Maklergebühr</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="grid size-6 place-items-center rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold shrink-0">✓</span>
+              <span className="text-xs font-medium text-slate-200">BGB § 551 Kaution</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="grid size-6 place-items-center rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold shrink-0">✓</span>
+              <span className="text-xs font-medium text-slate-200">Direktkontakt</span>
+            </div>
+          </div>
+
+          <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
               href="/wohnen/list"
-              className="inline-flex h-10 items-center rounded-md bg-white px-5 text-xs font-bold text-zinc-950 shadow-xs transition hover:bg-zinc-100"
+              className="inline-flex h-11 items-center rounded-xl bg-blue-600 px-6 text-sm font-bold text-white shadow-md shadow-blue-600/30 transition hover:bg-blue-500 hover:shadow-lg"
             >
-              {t('housingPostButton')} <ArrowUpRight className="ml-1.5 size-3.5" />
+              {t('housingPostButton')} <ArrowUpRight className="ml-1.5 size-4" />
             </Link>
 
-            <span className="rounded-md border border-white/15 px-3 py-2 text-xs text-zinc-300">
-              {isDe ? 'Gegen Fake-Vermieter & Vorab-Zahlungen geschützt' : 'Protected against fake landlords & advance fee fraud'}
+            <span className="rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-xs text-slate-300">
+              {isDe ? '29 € für 30 Tage Laufzeit · Schützt vor Spam & Betrug' : '€29 for 30 days · Protects against spam & scams'}
             </span>
           </div>
         </div>
+
+        {/* Ambient background glow */}
+        <div className="pointer-events-none absolute -right-24 -bottom-24 size-96 rounded-full bg-blue-600/20 blur-3xl" />
       </section>
 
-      {/* Filter & Search Bar */}
-      <section className="mt-8 rounded-xl border border-zinc-200 bg-white p-4 shadow-2xs">
-        <div className="grid gap-2.5 md:grid-cols-[1.5fr_1fr_1fr_auto]">
+      {/* Modern Search & Filter Console */}
+      <section className="mt-8 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_120px]">
           {/* Search text */}
           <div className="relative">
-            <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-zinc-400" />
+            <Search className="absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={isDe ? 'Bezirk, Kiez, PLZ oder Stichwort...' : 'District, kiez, postcode or keyword...'}
-              className="h-10 w-full rounded-lg border border-zinc-200 bg-zinc-50 pr-3 pl-9 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-950 focus:bg-white focus:outline-none"
+              className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 pr-3 pl-10 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
             />
           </div>
 
@@ -158,7 +196,7 @@ export function HousingBrowser({
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="h-10 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-xs text-zinc-900 focus:border-zinc-950 focus:bg-white focus:outline-none"
+              className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
             >
               <option value="all">{t('housingAllTypes')}</option>
               {Object.entries(housingTypeLabels).map(([key, val]) => (
@@ -174,7 +212,7 @@ export function HousingBrowser({
             <select
               value={selectedDistrict}
               onChange={(e) => setSelectedDistrict(e.target.value)}
-              className="h-10 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-xs text-zinc-900 focus:border-zinc-950 focus:bg-white focus:outline-none"
+              className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
             >
               <option value="all">{t('housingAllDistricts')}</option>
               {BERLIN_DISTRICTS.map((dist) => (
@@ -191,49 +229,83 @@ export function HousingBrowser({
               type="number"
               value={maxRent}
               onChange={(e) => setMaxRent(e.target.value === '' ? '' : Number(e.target.value))}
-              placeholder="Max €"
-              className="h-10 w-24 rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-950 focus:bg-white focus:outline-none"
+              placeholder="Max € warm"
+              className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
             />
           </div>
         </div>
 
-        {/* Secondary quick filters */}
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 pt-3">
+        {/* Secondary quick filter chips */}
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-3">
           <div className="flex flex-wrap items-center gap-2">
+            {/* Anmeldung Toggle */}
             <button
               type="button"
               onClick={() => setOnlyAnmeldung(!onlyAnmeldung)}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold transition cursor-pointer ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold transition cursor-pointer ${
                 onlyAnmeldung
-                  ? 'border border-emerald-300 bg-emerald-50 text-emerald-900'
-                  : 'border border-zinc-200 bg-white text-zinc-600 hover:border-zinc-400 hover:text-zinc-950'
+                  ? 'border border-emerald-500 bg-emerald-50 text-emerald-800 shadow-xs'
+                  : 'border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900'
               }`}
             >
-              <CheckCircle2 className="size-3.5" />
-              {t('housingOnlyAnmeldung')}
+              <CheckCircle2 className={`size-3.5 ${onlyAnmeldung ? 'text-emerald-600' : 'text-slate-400'}`} />
+              <span>{t('housingOnlyAnmeldung')}</span>
             </button>
 
-            {hasActiveFilters ? (
+            {/* Furnished Toggle */}
+            <button
+              type="button"
+              onClick={() => setOnlyFurnished(!onlyFurnished)}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold transition cursor-pointer ${
+                onlyFurnished
+                  ? 'border border-blue-500 bg-blue-50 text-blue-800 shadow-xs'
+                  : 'border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900'
+              }`}
+            >
+              <Home className="size-3.5 text-slate-400" />
+              <span>Nur Möbliert</span>
+            </button>
+
+            {/* Quick Price Buttons */}
+            <div className="hidden sm:flex items-center gap-1.5 border-l border-slate-200 pl-2">
+              <span className="text-[11px] text-slate-400 font-medium mr-1">Bis:</span>
+              {[600, 850, 1100].map((price) => (
+                <button
+                  key={price}
+                  type="button"
+                  onClick={() => setMaxRent(maxRent === price ? '' : price)}
+                  className={`rounded-full px-2.5 py-1 text-xs font-medium transition cursor-pointer ${
+                    maxRent === price
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  {price} €
+                </button>
+              ))}
+            </div>
+
+            {hasActiveFilters && (
               <button
                 type="button"
                 onClick={clearFilters}
-                className="inline-flex items-center gap-1 rounded-full border border-zinc-200 px-3 py-1 text-xs text-zinc-600 hover:text-zinc-950 cursor-pointer"
+                className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition cursor-pointer"
               >
                 <X className="size-3" />
-                {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
+                <span>{isDe ? 'Filter löschen' : 'Reset filters'}</span>
               </button>
-            ) : null}
+            )}
           </div>
 
           {/* View toggle */}
-          <div className="flex items-center gap-1 rounded-lg border border-zinc-200 p-0.5">
+          <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1">
             <button
               type="button"
               onClick={() => setViewMode('grid')}
-              className={`rounded p-1.5 transition cursor-pointer ${
+              className={`rounded-lg p-1.5 transition cursor-pointer ${
                 viewMode === 'grid'
-                  ? 'bg-zinc-950 text-white'
-                  : 'text-zinc-500 hover:text-zinc-950'
+                  ? 'bg-white text-blue-600 shadow-2xs'
+                  : 'text-slate-500 hover:text-slate-900'
               }`}
               title="Grid View"
             >
@@ -242,10 +314,10 @@ export function HousingBrowser({
             <button
               type="button"
               onClick={() => setViewMode('list')}
-              className={`rounded p-1.5 transition cursor-pointer ${
+              className={`rounded-lg p-1.5 transition cursor-pointer ${
                 viewMode === 'list'
-                  ? 'bg-zinc-950 text-white'
-                  : 'text-zinc-500 hover:text-zinc-950'
+                  ? 'bg-white text-blue-600 shadow-2xs'
+                  : 'text-slate-500 hover:text-slate-900'
               }`}
               title="List View"
             >
@@ -256,56 +328,57 @@ export function HousingBrowser({
       </section>
 
       {/* Results Header */}
-      <div className="mt-6 flex items-center justify-between">
-        <p className="text-xs font-medium text-zinc-500">
-          <span className="font-bold text-zinc-950">{filteredListings.length}</span>{' '}
-          {isDe ? 'Wohnungs- & Zimmerangebote gefunden' : 'apartments & rooms found'}
+      <div className="mt-8 flex items-center justify-between">
+        <p className="text-sm font-semibold text-slate-600">
+          <span className="font-bold text-slate-950">{filteredListings.length}</span>{' '}
+          {isDe ? 'Wohnungs- & WG-Angebote gefunden' : 'apartments & rooms found'}
         </p>
 
         <Link
           href="/wohnen/list"
-          className="text-xs font-semibold text-zinc-900 hover:underline"
+          className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-800 hover:underline"
         >
-          {isDe ? '+ Eigenes Inserat aufgeben (29 €)' : '+ List your place (€29)'}
+          <span>{isDe ? '+ Eigenes Inserat aufgeben (29 €)' : '+ List your place (€29)'}</span>
+          <ArrowUpRight className="size-3" />
         </Link>
       </div>
 
-      {/* Listings Grid / List */}
-      {filteredListings.length === 0 ? (
-        <div className="mt-8 rounded-xl border border-foreground/12 bg-white p-12 text-center">
-          <Home className="mx-auto size-10 text-muted-foreground/50" />
-          <h3 className="mt-4 text-lg font-semibold">
-            {isDe ? 'Keine passenden Angebote gefunden' : 'No matching listings found'}
-          </h3>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {isDe
-              ? 'Versuche deine Filter zurückzusetzen oder einen anderen Bezirk auszuwählen.'
-              : 'Try resetting your filters or selecting a different district.'}
-          </p>
-          <button
-            type="button"
-            onClick={clearFilters}
-            className="mt-4 rounded-lg bg-[#18221e] px-4 py-2 text-xs font-semibold text-white hover:bg-[#2a3832]"
-          >
-            {isDe ? 'Alle Filter zurücksetzen' : 'Reset all filters'}
-          </button>
-        </div>
-      ) : (
-        <div
-          className={`mt-6 grid gap-6 ${
-            viewMode === 'grid'
-              ? 'sm:grid-cols-2 lg:grid-cols-3'
-              : 'grid-cols-1'
-          }`}
-        >
-          {filteredListings.map((item) => (
-            <HousingCard key={item.id} listing={item} />
-          ))}
-        </div>
-      )}
+      {/* Listings Grid */}
+      <div
+        className={`mt-6 ${
+          viewMode === 'grid'
+            ? 'grid gap-6 sm:grid-cols-2 lg:grid-cols-3'
+            : 'mx-auto max-w-4xl space-y-4'
+        }`}
+      >
+        {filteredListings.length === 0 ? (
+          <div className="col-span-full rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs">
+            <Home className="mx-auto size-10 text-slate-300" />
+            <h3 className="mt-4 text-base font-bold text-slate-900">
+              {isDe ? 'Keine Angebote für diese Filter gefunden' : 'No listings found'}
+            </h3>
+            <p className="mt-1 text-xs text-slate-500 max-w-md mx-auto">
+              {isDe
+                ? 'Versuche, deine Filter anzupassen oder das maximale Budget zu erhöhen.'
+                : 'Try adjusting your filters or expanding your budget.'}
+            </p>
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="mt-5 inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-blue-700 shadow-xs cursor-pointer"
+            >
+              {isDe ? 'Alle Filter zurücksetzen' : 'Reset all filters'}
+            </button>
+          </div>
+        ) : (
+          filteredListings.map((listing) => (
+            <HousingCard key={listing.id} listing={listing} />
+          ))
+        )}
+      </div>
 
-      {/* Zero Liability Notice */}
-      <div className="mt-12">
+      {/* Safety Notice Banner */}
+      <div className="mt-14">
         <PlatformDisclaimer type="housing" />
       </div>
     </div>

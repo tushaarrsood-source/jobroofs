@@ -23,6 +23,7 @@ const BERLIN_DISTRICTS = [
   'Kreuzberg',
   'Neukölln',
   'Pankow',
+  'Prenzlauer Berg',
   'Charlottenburg-Wilmersdorf',
   'Tempelhof-Schöneberg',
   'Lichtenberg',
@@ -30,7 +31,8 @@ const BERLIN_DISTRICTS = [
   'Steglitz-Zehlendorf',
   'Spandau',
   'Reinickendorf',
-  'Marzahn-Hellersdorf',
+  'Wedding',
+  'Moabit',
 ];
 
 export function HousingListingForm() {
@@ -65,36 +67,33 @@ export function HousingListingForm() {
     energyClass: 'C',
     heatingSource: 'Fernwärme',
     buildingYear: 1910,
-    images: [
-      'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80',
-    ],
+    images: [] as string[],
     description: '',
-    contactMethod: 'email' as 'email' | 'in_platform',
+    contactMethod: 'email' as 'email' | 'phone',
     contactEmail: '',
     contactName: '',
     contactPhone: '',
   });
 
-  // Photo URL input
   const [imageInput, setImageInput] = useState('');
+  const [agreedToDisclaimer, setAgreedToDisclaimer] = useState(false);
 
-  // Verification Dialog
+  // Verification step state
   const [submissionId, setSubmissionId] = useState<string | null>(null);
   const [verifyCode, setVerifyCode] = useState('');
   const [verifying, setVerifying] = useState(false);
   const [verifyError, setVerifyError] = useState<string | null>(null);
-  const [agreedToDisclaimer, setAgreedToDisclaimer] = useState(false);
 
-  // Auto-calculate warmmiete
+  // Auto-calculate warm rent
   const updateKaltmiete = (val: number) => {
     const kalt = Number(val) || 0;
     const warm = kalt + (Number(formData.nebenkostenEur) || 0);
-    const suggestedKaution = Math.min(kalt * 3, Number(formData.kautionEur) || kalt * 3);
+    const maxKaution = kalt * 3;
     setFormData((prev) => ({
       ...prev,
       kaltmieteEur: kalt,
       warmmieteEur: warm,
-      kautionEur: suggestedKaution,
+      kautionEur: Math.min(prev.kautionEur, maxKaution) || maxKaution,
     }));
   };
 
@@ -198,16 +197,16 @@ export function HousingListingForm() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-6">
         {/* Section 1: Basic Info & Type */}
-        <section className="rounded-xl border border-foreground/15 bg-white p-6 md:p-8">
-          <h2 className="text-lg font-semibold text-[#18221e]">
+        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+          <h2 className="text-base font-bold text-slate-900">
             1. {isDe ? 'Art des Inserats & Standort' : 'Listing Type & Location'}
           </h2>
 
           <div className="mt-5 space-y-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
                 {isDe ? 'Titel des Inserats' : 'Listing Title'} *
               </label>
               <input
@@ -216,19 +215,19 @@ export function HousingListingForm() {
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder={isDe ? 'z.B. Helles WG-Zimmer am Boxhagener Kiez mit Balkon' : 'e.g. Sunny room in shared flat with balcony'}
-                className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
               />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
                   {isDe ? 'Wohnform' : 'Type'} *
                 </label>
                 <select
                   value={formData.listingType}
                   onChange={(e) => setFormData({ ...formData, listingType: e.target.value as any })}
-                  className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                  className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
                 >
                   {Object.entries(housingTypeLabels).map(([k, v]) => (
                     <option key={k} value={k}>
@@ -239,13 +238,13 @@ export function HousingListingForm() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
                   {isDe ? 'Bezirk' : 'District'} *
                 </label>
                 <select
                   value={formData.district}
                   onChange={(e) => setFormData({ ...formData, district: e.target.value })}
-                  className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                  className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
                 >
                   {BERLIN_DISTRICTS.map((d) => (
                     <option key={d} value={d}>
@@ -258,7 +257,7 @@ export function HousingListingForm() {
 
             <div className="grid gap-4 sm:grid-cols-3">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
                   PLZ (Berlin) *
                 </label>
                 <input
@@ -268,12 +267,12 @@ export function HousingListingForm() {
                   value={formData.postcode}
                   onChange={(e) => setFormData({ ...formData, postcode: e.target.value })}
                   placeholder="10245"
-                  className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                  className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
                   {isDe ? 'Kiez / Viertel' : 'Kiez / Neighborhood'}
                 </label>
                 <input
@@ -281,12 +280,12 @@ export function HousingListingForm() {
                   value={formData.neighborhood}
                   onChange={(e) => setFormData({ ...formData, neighborhood: e.target.value })}
                   placeholder={isDe ? 'z.B. Boxhagener Kiez' : 'e.g. Wrangelkiez'}
-                  className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                  className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
                   {isDe ? 'Straße (optional)' : 'Street (optional)'}
                 </label>
                 <input
@@ -294,7 +293,7 @@ export function HousingListingForm() {
                   value={formData.streetAddress}
                   onChange={(e) => setFormData({ ...formData, streetAddress: e.target.value })}
                   placeholder="z.B. Gärtnerstr."
-                  className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                  className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
                 />
               </div>
             </div>
@@ -302,19 +301,19 @@ export function HousingListingForm() {
         </section>
 
         {/* Section 2: Financials & Deposit Compliance */}
-        <section className="rounded-xl border border-foreground/15 bg-white p-6 md:p-8">
+        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-[#18221e]">
+            <h2 className="text-base font-bold text-slate-900">
               2. {isDe ? 'Miete & Kaution (§ 551 BGB konform)' : 'Rent & Deposit (BGB compliant)'}
             </h2>
-            <span className="rounded bg-[#e2f3e6] px-2 py-0.5 text-[10px] font-semibold text-[#285a39]">
-              {isDe ? 'Preistransparenz' : 'Price Transparency'}
+            <span className="rounded-full bg-blue-50 border border-blue-200 px-2.5 py-0.5 text-[11px] font-bold text-blue-700">
+              Preistransparenz
             </span>
           </div>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-3">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
                 {isDe ? 'Kaltmiete (€)' : 'Cold rent (€)'} *
               </label>
               <input
@@ -323,12 +322,12 @@ export function HousingListingForm() {
                 min={150}
                 value={formData.kaltmieteEur}
                 onChange={(e) => updateKaltmiete(Number(e.target.value))}
-                className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition font-mono"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
                 {isDe ? 'Nebenkosten (€)' : 'Utilities (€)'}
               </label>
               <input
@@ -336,12 +335,12 @@ export function HousingListingForm() {
                 min={0}
                 value={formData.nebenkostenEur}
                 onChange={(e) => updateNebenkosten(Number(e.target.value))}
-                className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition font-mono"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
                 {isDe ? 'Warmmiete (€ gesamt)' : 'Warm rent (€ total)'} *
               </label>
               <input
@@ -349,14 +348,14 @@ export function HousingListingForm() {
                 required
                 value={formData.warmmieteEur}
                 onChange={(e) => setFormData({ ...formData, warmmieteEur: Number(e.target.value) })}
-                className="mt-1.5 h-10 w-full rounded-lg border border-[#385cdd]/30 bg-[#edf2ff]/30 px-3 text-sm font-bold text-[#18221e] focus:border-[#385cdd] focus:outline-none"
+                className="mt-1.5 h-11 w-full rounded-xl border border-blue-300 bg-blue-50/40 px-3.5 text-sm font-bold text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition font-mono"
               />
             </div>
           </div>
 
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
                 {isDe ? 'Kaution (€)' : 'Deposit (€)'}
               </label>
               <input
@@ -365,9 +364,9 @@ export function HousingListingForm() {
                 max={formData.kaltmieteEur * 3}
                 value={formData.kautionEur}
                 onChange={(e) => setFormData({ ...formData, kautionEur: Number(e.target.value) })}
-                className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition font-mono"
               />
-              <p className="mt-1 text-[11px] text-muted-foreground">
+              <p className="mt-1 text-[11px] text-slate-500">
                 {isDe
                   ? `Gesetzlich maximal 3 Kaltmieten: ${formData.kaltmieteEur * 3} €`
                   : `Legally capped at 3 net cold rents: €${formData.kaltmieteEur * 3}`}
@@ -377,14 +376,14 @@ export function HousingListingForm() {
         </section>
 
         {/* Section 3: Space & Amenities */}
-        <section className="rounded-xl border border-foreground/15 bg-white p-6 md:p-8">
-          <h2 className="text-lg font-semibold text-[#18221e]">
+        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+          <h2 className="text-base font-bold text-slate-900">
             3. {isDe ? 'Zimmergröße & Möblierung' : 'Room Size & Furnishing'}
           </h2>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-3">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
                 {isDe ? 'Größe (m²)' : 'Size (sqm)'} *
               </label>
               <input
@@ -393,12 +392,12 @@ export function HousingListingForm() {
                 min={5}
                 value={formData.roomSqm}
                 onChange={(e) => setFormData({ ...formData, roomSqm: Number(e.target.value) })}
-                className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition font-mono"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
                 {isDe ? 'Zimmer in der Wohnung' : 'Rooms in flat'}
               </label>
               <input
@@ -406,18 +405,18 @@ export function HousingListingForm() {
                 min={1}
                 value={formData.totalRooms}
                 onChange={(e) => setFormData({ ...formData, totalRooms: Number(e.target.value) })}
-                className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition font-mono"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
                 {isDe ? 'Möblierung' : 'Furnishing'}
               </label>
               <select
                 value={formData.furnished}
                 onChange={(e) => setFormData({ ...formData, furnished: e.target.value as any })}
-                className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
               >
                 <option value="fully">{isDe ? 'Voll möbliert' : 'Fully furnished'}</option>
                 <option value="partially">{isDe ? 'Teilmöbliert' : 'Partially furnished'}</option>
@@ -428,105 +427,142 @@ export function HousingListingForm() {
         </section>
 
         {/* Section 4: Legal & Anmeldung (The Berlin Core) */}
-        <section className="rounded-xl border border-foreground/15 bg-white p-6 md:p-8">
+        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-[#18221e]">
+            <h2 className="text-base font-bold text-slate-900">
               4. {isDe ? 'Rechtliches & Anmeldung' : 'Legal & Anmeldung'}
             </h2>
-            <ShieldCheck className="size-5 text-[#244b34]" />
+            <ShieldCheck className="size-5 text-emerald-600" />
           </div>
 
-          <div className="mt-5 space-y-4">
-            <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-foreground/10 bg-[#faf8f5] p-3.5 transition hover:border-[#385cdd]/40">
+          <div className="mt-5 space-y-3">
+            <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/60 p-4 transition hover:border-blue-500">
               <input
                 type="checkbox"
                 checked={formData.anmeldungPossible}
                 onChange={(e) => setFormData({ ...formData, anmeldungPossible: e.target.checked })}
-                className="mt-1 size-4 rounded text-[#385cdd]"
+                className="mt-1 size-4 rounded accent-blue-600"
               />
               <div>
-                <strong className="block text-sm font-semibold text-[#18221e]">
+                <strong className="block text-sm font-bold text-slate-900">
                   {isDe ? 'Anmeldung ist möglich (Wohnungsgeberbestätigung nach § 19 BMG)' : 'Anmeldung possible (Wohnungsgeberbestätigung provided)'}
                 </strong>
-                <span className="text-xs text-muted-foreground">
+                <p className="mt-0.5 text-xs text-slate-500 leading-relaxed">
                   {isDe
-                    ? 'Ich stelle die offizielle Wohnungsgeberbestätigung für das Bürgeramt rechtzeitig zur Verfügung.'
-                    : 'I will provide the official registration certificate required for the Berlin Bürgeramt.'}
-                </span>
+                    ? 'Bestätige, dass du dem Mieter die gesetzlich vorgeschriebene Bescheinigung für das Bürgeramt ausstellst.'
+                    : 'Confirm that you will provide the mandatory landlord confirmation for official city registration.'}
+                </p>
               </div>
             </label>
 
-            <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-foreground/10 bg-[#faf8f5] p-3.5 transition hover:border-[#385cdd]/40">
+            <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/60 p-4 transition hover:border-blue-500">
               <input
                 type="checkbox"
                 checked={formData.subletAuthorized}
                 onChange={(e) => setFormData({ ...formData, subletAuthorized: e.target.checked })}
-                className="mt-1 size-4 rounded text-[#385cdd]"
+                className="mt-1 size-4 rounded accent-blue-600"
               />
               <div>
-                <strong className="block text-sm font-semibold text-[#18221e]">
-                  {isDe ? 'Vom Eigentümer / Vermieter genehmigte Untermiete (§ 553 BGB)' : 'Authorized by property owner/landlord (§ 553 BGB)'}
+                <strong className="block text-sm font-bold text-slate-900">
+                  {isDe ? 'Untervermietung ist vom Eigentümer / Vermieter genehmigt' : 'Subletting authorized by landlord / owner'}
                 </strong>
-                <span className="text-xs text-muted-foreground">
+                <p className="mt-0.5 text-xs text-slate-500 leading-relaxed">
                   {isDe
-                    ? 'Die Erlaubnis zur Untervermietung liegt schriftlich vor oder ich bin selbst Eigentümer:in.'
-                    : 'Written subletting permission from the owner is available, or I am the owner.'}
-                </span>
+                    ? 'Schützt vor Kündigungen wegen unerlaubter Gebrauchsüberlassung (§ 540 BGB).'
+                    : 'Protects both parties against unauthorized sublease termination.'}
+                </p>
               </div>
             </label>
+          </div>
+        </section>
 
-            <div className="grid gap-4 sm:grid-cols-2 pt-2">
+        {/* Section 5: Dates & Contract */}
+        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+          <h2 className="text-base font-bold text-slate-900">
+            5. {isDe ? 'Laufzeit & Daten' : 'Duration & Dates'}
+          </h2>
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                {isDe ? 'Vertragsart' : 'Contract Type'} *
+              </label>
+              <select
+                value={formData.contractType}
+                onChange={(e) => setFormData({ ...formData, contractType: e.target.value as any })}
+                className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
+              >
+                <option value="fixed_term">{isDe ? 'Befristet (Zwischenmiete)' : 'Fixed-term'}</option>
+                <option value="open_ended">{isDe ? 'Unbefristet (Dauerhaft)' : 'Open-ended'}</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                {isDe ? 'Einzugsdatum' : 'Move-in date'} *
+              </label>
+              <input
+                type="date"
+                required
+                value={formData.moveInDate}
+                onChange={(e) => setFormData({ ...formData, moveInDate: e.target.value })}
+                className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
+              />
+            </div>
+
+            {formData.contractType === 'fixed_term' ? (
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {isDe ? 'Frei ab (Einzugsdatum)' : 'Move-in date'} *
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                  {isDe ? 'Auszugsdatum' : 'Move-out date'} *
                 </label>
                 <input
                   type="date"
                   required
-                  value={formData.moveInDate}
-                  onChange={(e) => setFormData({ ...formData, moveInDate: e.target.value })}
-                  className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {isDe ? 'Frei bis (optional bei unbefristet)' : 'Move-out date (optional)'}
-                </label>
-                <input
-                  type="date"
                   value={formData.moveOutDate}
                   onChange={(e) => setFormData({ ...formData, moveOutDate: e.target.value })}
-                  className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                  className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
                 />
               </div>
+            ) : null}
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                {isDe ? 'Mindestmietdauer (Monate)' : 'Min. stay (months)'}
+              </label>
+              <input
+                type="number"
+                min={1}
+                value={formData.minStayMonths}
+                onChange={(e) => setFormData({ ...formData, minStayMonths: Number(e.target.value) })}
+                className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition font-mono"
+              />
             </div>
           </div>
         </section>
 
-        {/* Section 5: Photos & Description */}
-        <section className="rounded-xl border border-foreground/15 bg-white p-6 md:p-8">
-          <h2 className="text-lg font-semibold text-[#18221e]">
-            5. {isDe ? 'Fotos & Beschreibung' : 'Photos & Description'}
+        {/* Section 6: Photos & Description */}
+        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+          <h2 className="text-base font-bold text-slate-900">
+            6. {isDe ? 'Fotos & Beschreibung' : 'Photos & Description'}
           </h2>
 
           <div className="mt-5 space-y-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {isDe ? 'Foto-URL hinzufügen' : 'Add Photo URL'}
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                {isDe ? 'Foto-URL hinzufügen (z.B. Unsplash, Imgur, Cloud)' : 'Add Photo URL'}
               </label>
               <div className="mt-1.5 flex gap-2">
                 <input
                   type="url"
                   value={imageInput}
                   onChange={(e) => setImageInput(e.target.value)}
-                  placeholder="https://images.unsplash.com/photo-..."
-                  className="h-10 flex-1 rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                  placeholder="https://images.unsplash.com/..."
+                  className="h-11 flex-1 rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
                 />
                 <button
                   type="button"
                   onClick={addImage}
-                  className="rounded-lg bg-[#18221e] px-4 text-xs font-semibold text-white hover:bg-[#2a3832]"
+                  className="h-11 rounded-xl bg-slate-900 px-4 text-xs font-bold text-white transition hover:bg-black cursor-pointer"
                 >
                   {isDe ? 'Hinzufügen' : 'Add'}
                 </button>
@@ -535,17 +571,14 @@ export function HousingListingForm() {
               {formData.images.length > 0 ? (
                 <div className="mt-3 flex flex-wrap gap-2">
                   {formData.images.map((img, idx) => (
-                    <div
-                      key={idx}
-                      className="group relative size-20 overflow-hidden rounded-lg border border-foreground/15 bg-neutral-100"
-                    >
+                    <div key={idx} className="group relative size-20 overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
                       <img src={img} alt="" className="h-full w-full object-cover" />
                       <button
                         type="button"
                         onClick={() => removeImage(idx)}
-                        className="absolute top-1 right-1 grid size-5 place-items-center rounded-full bg-black/75 text-[10px] text-white opacity-0 transition group-hover:opacity-100"
+                        className="absolute inset-0 flex items-center justify-center bg-black/60 text-xs font-bold text-white opacity-0 transition group-hover:opacity-100 cursor-pointer"
                       >
-                        ✕
+                        Löschen
                       </button>
                     </div>
                   ))}
@@ -554,83 +587,101 @@ export function HousingListingForm() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {isDe ? 'Ausführliche Beschreibung' : 'Detailed Description'} *
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                {isDe ? 'Beschreibung der Wohnung & WG-Leben' : 'Description'} *
               </label>
               <textarea
                 required
                 rows={5}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder={isDe ? 'Beschreibe die Wohnung, das Zimmer, die WG-Mitbewohner, die Nachbarschaft und die Anbindung an Öffis...' : 'Describe the flat, room, flatmates, neighborhood and transit access...'}
-                className="mt-1.5 w-full rounded-lg border border-foreground/15 bg-transparent p-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                placeholder={isDe ? 'Beschreibe das Zimmer, Mitbewohner, Kiez-Anbindung, Atmosphäre...' : 'Describe room, flatmates, transit links, atmosphere...'}
+                className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
               />
             </div>
           </div>
         </section>
 
-        {/* Section 6: Contact & 29 € Listing Fee */}
-        <section className="rounded-xl border border-foreground/15 bg-white p-6 md:p-8">
-          <h2 className="text-lg font-semibold text-[#18221e]">
-            6. {isDe ? 'Kontakt & Inseratsgebühr' : 'Contact & Listing Fee'}
+        {/* Section 7: Contact Info */}
+        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+          <h2 className="text-base font-bold text-slate-900">
+            7. {isDe ? 'Kontaktdaten für Interessenten' : 'Contact Details'}
           </h2>
 
-          <div className="mt-5 space-y-4">
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {isDe ? 'Deine Kontakt-E-Mail-Adresse' : 'Your Contact Email'} *
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                {isDe ? 'Dein Name / WG-Namen' : 'Name'} *
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.contactName}
+                onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
+                placeholder="z.B. Sarah & Felix"
+                className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                {isDe ? 'Kontakt E-Mail (verifiziert)' : 'Contact Email'} *
               </label>
               <input
                 type="email"
                 required
                 value={formData.contactEmail}
                 onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
-                placeholder="deine.email@gmail.com"
-                className="mt-1.5 h-10 w-full rounded-lg border border-foreground/15 bg-transparent px-3 text-sm focus:border-[#385cdd] focus:outline-none"
+                placeholder="deine-email@posteo.de"
+                className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
               />
-              <p className="mt-1 text-[11px] text-muted-foreground">
-                {isDe
-                  ? 'An diese Adresse senden wir den 6-stelligen Bestätigungscode.'
-                  : 'We will send a 6-digit confirmation code to this address.'}
-              </p>
             </div>
+          </div>
+        </section>
 
-            <div className="rounded-xl border border-[#385cdd]/30 bg-[#edf2ff]/40 p-5">
-              <div className="flex items-start justify-between">
+        {/* Section 8: Pricing, Platform Terms & Zero-Liability */}
+        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+          <h2 className="text-base font-bold text-slate-900">
+            8. {isDe ? 'Einstellgebühr & Haftungsausschluss' : 'Listing Fee & Terms'}
+          </h2>
+
+          <div className="mt-5 space-y-4">
+            <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-4">
+              <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold text-[#18221e]">
-                    KIEZJOB Wohnungs-Inserat (30 Tage)
+                  <h3 className="font-bold text-slate-900 text-sm">
+                    KIEZJOB Wohnungs-Inserat (30 Tage Laufzeit)
                   </h3>
-                  <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                  <p className="mt-1 text-xs text-slate-600 leading-relaxed max-w-lg">
                     {isDe
-                      ? 'Die einmalige Einstellgebühr von 29 € schützt Wohnungssuchende wirksam vor Betrügern, Massen-Scam-Bots und gefälschten Angeboten.'
-                      : 'The one-time listing fee of €29 effectively protects seekers against scammers, bot networks and fake landlords.'}
+                      ? 'Die Schutzgebühr von 29 € hält unser Portal 100% frei von Fake-Profilen, Betrügern und automatisierten Spam-Bots.'
+                      : 'The protective fee of €29 keeps our portal 100% free of fake profiles, scammers, and spam bots.'}
                   </p>
                 </div>
                 <div className="text-right">
-                  <span className="text-2xl font-bold text-[#18221e]">29 €</span>
-                  <span className="block text-[10px] text-muted-foreground">inkl. MwSt.</span>
+                  <span className="text-2xl font-black font-mono text-slate-900">29 €</span>
+                  <span className="block text-[10px] text-slate-500">inkl. MwSt.</span>
                 </div>
               </div>
             </div>
 
             {/* Mandatory Liability Waiver */}
-            <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-foreground/15 bg-[#faf8f5] p-3.5 transition hover:border-[#385cdd]/40">
+            <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:border-blue-500">
               <input
                 type="checkbox"
                 required
                 checked={agreedToDisclaimer}
                 onChange={(e) => setAgreedToDisclaimer(e.target.checked)}
-                className="mt-1 size-4 rounded text-[#385cdd]"
+                className="mt-1 size-4 rounded accent-blue-600"
               />
-              <span className="text-xs leading-relaxed text-[#3c4a42]">
+              <span className="text-xs leading-relaxed text-slate-600">
                 {isDe ? (
                   <>
-                    <strong>Haftungsausschluss & Plattform-Bedingungen:</strong> Ich bestätige, dass alle Angaben wahrheitsgemäß sind und ich zur Vermietung/Untervermietung berechtigt bin. Ich nehme zur Kenntnis, dass KIEZJOB eine reine Anzeigen- und Vermittlungsplattform (Schwarzes Brett) ist, keine Miet- oder Untermietverträge vermittelt oder abschließt und für Mieter, Vermieter oder Mietverhältnisse keinerlei Haftung übernimmt.
+                    <strong className="text-slate-900">Haftungsausschluss & Plattform-Bedingungen:</strong> Ich bestätige, dass alle Angaben wahrheitsgemäß sind und ich zur Vermietung/Untervermietung berechtigt bin. Ich nehme zur Kenntnis, dass KIEZJOB ein reines Online-Anzeigenportal (Schwarzes Brett) ist, keine Miet- oder Untermietverträge vermittelt oder abschließt und für Mieter, Vermieter oder Mietverhältnisse keinerlei Haftung übernimmt.
                   </>
                 ) : (
                   <>
-                    <strong>Liability Disclaimer & Platform Terms:</strong> I confirm all information is true and that I am legally authorized to offer this accommodation. I acknowledge that KIEZJOB is strictly an advertising directory / bulletin board, does not broker or execute tenancy contracts, and bears zero liability for landlords, tenants, or rental relationships.
+                    <strong className="text-slate-900">Liability Disclaimer & Platform Terms:</strong> I confirm all information is true and that I am legally authorized to offer this accommodation. I acknowledge that KIEZJOB is strictly an advertising directory / bulletin board, does not broker or execute tenancy contracts, and bears zero liability for landlords, tenants, or rental relationships.
                   </>
                 )}
               </span>
@@ -639,7 +690,7 @@ export function HousingListingForm() {
         </section>
 
         {errorMsg ? (
-          <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-xs text-red-700">
+          <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-xs font-semibold text-red-700">
             {errorMsg}
           </div>
         ) : null}
@@ -648,7 +699,7 @@ export function HousingListingForm() {
         <button
           type="submit"
           disabled={loading || !agreedToDisclaimer}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#18221e] px-6 text-sm font-semibold text-white transition hover:bg-[#2a3832] disabled:opacity-50"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-bold text-white transition hover:bg-blue-700 shadow-md shadow-blue-600/25 disabled:opacity-50 cursor-pointer"
         >
           {loading ? (
             <>
@@ -666,12 +717,12 @@ export function HousingListingForm() {
 
       {/* Verification Modal Dialog */}
       {submissionId ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-          <div className="w-full max-w-md rounded-xl border border-foreground/15 bg-white p-6 shadow-2xl">
-            <h3 className="text-lg font-bold text-[#18221e]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs">
+          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
+            <h3 className="text-lg font-bold text-slate-900">
               {isDe ? 'E-Mail-Bestätigung' : 'Email Confirmation'}
             </h3>
-            <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+            <p className="mt-2 text-xs text-slate-500 leading-relaxed">
               {isDe
                 ? `Wir haben einen 6-stelligen Bestätigungscode an ${formData.contactEmail} gesendet.`
                 : `We sent a 6-digit confirmation code to ${formData.contactEmail}.`}
@@ -685,25 +736,25 @@ export function HousingListingForm() {
                 value={verifyCode}
                 onChange={(e) => setVerifyCode(e.target.value)}
                 placeholder="123456"
-                className="h-12 w-full text-center font-mono text-2xl tracking-widest rounded-lg border border-foreground/20 focus:border-[#385cdd] focus:outline-none"
+                className="h-12 w-full text-center font-mono text-2xl tracking-widest rounded-xl border border-slate-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 focus:outline-none"
               />
 
               {verifyError ? (
-                <p className="text-xs text-red-600">{verifyError}</p>
+                <p className="text-xs text-red-600 font-semibold">{verifyError}</p>
               ) : null}
 
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => setSubmissionId(null)}
-                  className="h-10 flex-1 rounded-lg border border-foreground/15 text-xs font-semibold text-muted-foreground hover:text-foreground"
+                  className="h-10 flex-1 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer"
                 >
                   {isDe ? 'Zurück' : 'Back'}
                 </button>
                 <button
                   type="submit"
                   disabled={verifying || verifyCode.length < 6}
-                  className="flex h-10 flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#385cdd] text-xs font-semibold text-white transition hover:bg-[#2e4ec5] disabled:opacity-50"
+                  className="flex h-10 flex-1 items-center justify-center gap-1.5 rounded-xl bg-blue-600 text-xs font-bold text-white transition hover:bg-blue-700 disabled:opacity-50 cursor-pointer shadow-xs"
                 >
                   {verifying ? (
                     <Loader2 className="size-3.5 animate-spin" />

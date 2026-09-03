@@ -67,19 +67,19 @@ export default async function LatestJobsPage() {
 
       <CategoryCarousel title="Browse jobs by category across Berlin" eyebrow="Explore Industries" />
 
-      <section className="border-t border-zinc-200 bg-zinc-950 text-white">
+      <section className="border-t border-slate-200 bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950 text-white">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 py-12 md:flex-row md:items-center md:justify-between md:px-10">
           <div>
             <p className="text-xl font-bold tracking-tight md:text-2xl">
               Are you an employer hiring in Berlin?
             </p>
-            <p className="mt-1.5 text-xs text-zinc-400">
+            <p className="mt-1.5 text-xs text-slate-300">
               Post your job for €29 single listing (30 days active). Direct applicant contact.
             </p>
           </div>
           <Link
             href="/post-a-job"
-            className="inline-flex h-10 items-center rounded-md bg-white px-4 text-xs font-bold text-zinc-950 transition hover:bg-zinc-100 shadow-xs"
+            className="inline-flex h-10 items-center rounded-xl bg-blue-600 px-5 text-xs font-bold text-white shadow-md shadow-blue-600/30 transition hover:bg-blue-500"
           >
             Post a job <ArrowRight className="ml-1.5 size-3.5" />
           </Link>

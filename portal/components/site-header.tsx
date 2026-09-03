@@ -9,31 +9,31 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
   const { t } = useTranslation();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-zinc-200/80 bg-white/95 backdrop-blur-md">
-      <div className="mx-auto flex h-15 max-w-[1440px] items-center justify-between px-5 md:px-10">
+    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-5 md:px-10">
         <Link
           href="/"
-          className="group flex items-center gap-2 transition-opacity hover:opacity-90"
+          className="group flex items-center gap-2.5 transition-opacity hover:opacity-95"
         >
-          <span className="font-black text-xl tracking-tight text-zinc-950 font-sans">
-            KIEZJOB
+          <span className="flex items-center font-black text-xl tracking-tight text-slate-900 font-sans">
+            KIEZ<span className="text-blue-600">JOB</span>
           </span>
-          <span className="text-[11px] font-medium tracking-wider text-zinc-400 uppercase">
-            · BERLIN
+          <span className="rounded bg-blue-50 border border-blue-200/60 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-blue-700 uppercase">
+            BERLIN
           </span>
           {control ? (
-            <span className="ml-2 rounded-full bg-zinc-100 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-zinc-600 border border-zinc-200">
+            <span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-slate-600 border border-slate-200">
               {t('controlRoom')}
             </span>
           ) : null}
         </Link>
 
         <div className="flex items-center gap-3 sm:gap-6">
-          <nav className="flex items-center gap-4 text-xs font-medium sm:gap-6 sm:text-sm">
+          <nav className="flex items-center gap-4 text-xs font-semibold sm:gap-6 sm:text-sm">
             {control ? (
               <Link
                 href="/"
-                className="inline-flex items-center gap-1.5 font-medium text-zinc-700 hover:text-zinc-950 hover:underline"
+                className="inline-flex items-center gap-1.5 font-medium text-slate-700 hover:text-blue-600 hover:underline"
               >
                 {t('publicPortal')} <ArrowUpRight className="size-3.5" />
               </Link>
@@ -41,34 +41,34 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
               <>
                 <Link
                   href="/direct-employers"
-                  className="hidden text-zinc-600 hover:text-zinc-950 transition-colors sm:inline"
+                  className="hidden text-slate-600 hover:text-blue-600 transition-colors sm:inline"
                 >
                   {t('directEmployers')}
                 </Link>
                 <Link
                   href="/latest-jobs"
-                  className="hidden text-zinc-600 hover:text-zinc-950 transition-colors md:inline"
+                  className="hidden text-slate-600 hover:text-blue-600 transition-colors md:inline"
                 >
                   {t('latestJobs')}
                 </Link>
                 <Link
                   href="/#niches"
-                  className="hidden text-zinc-600 hover:text-zinc-950 transition-colors lg:inline"
+                  className="hidden text-slate-600 hover:text-blue-600 transition-colors lg:inline"
                 >
                   {t('categories')}
                 </Link>
                 <Link
                   href="/wohnen"
-                  className="inline-flex items-center gap-1.5 font-semibold text-zinc-900 transition hover:text-black"
+                  className="inline-flex items-center gap-1.5 font-bold text-slate-900 transition hover:text-blue-600"
                 >
                   <span>{t('navHousing')}</span>
-                  <span className="rounded bg-zinc-100 border border-zinc-200 px-1.5 py-0.2 text-[10px] font-bold text-zinc-800">
+                  <span className="rounded bg-blue-600 text-white px-1.5 py-0.2 text-[9px] font-bold tracking-wide uppercase">
                     Neu
                   </span>
                 </Link>
                 <Link
                   href="/post-a-job"
-                  className="inline-flex h-8.5 items-center rounded-md bg-zinc-950 px-3.5 text-xs font-semibold text-white transition hover:bg-zinc-800 shadow-xs"
+                  className="inline-flex h-9 items-center rounded-lg bg-blue-600 px-4 text-xs font-bold text-white transition hover:bg-blue-700 shadow-sm shadow-blue-500/20"
                 >
                   {t('postAJob')} <ArrowUpRight className="ml-1 size-3" />
                 </Link>
@@ -76,7 +76,7 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
             )}
           </nav>
 
-          <div className="border-l border-zinc-200 pl-3 sm:pl-5">
+          <div className="border-l border-slate-200 pl-3 sm:pl-5">
             <LanguageToggle />
           </div>
         </div>

@@ -70,7 +70,7 @@ export function CategoryCarousel({
               type="button"
               onClick={() => scroll('left')}
               disabled={!canScrollLeft}
-              className="grid size-8 place-items-center rounded-lg border border-zinc-200 bg-white text-zinc-700 shadow-2xs transition hover:bg-zinc-950 hover:text-white disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-zinc-700 cursor-pointer"
+              className="grid size-8 place-items-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-2xs transition hover:bg-blue-600 hover:text-white hover:border-blue-600 disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-slate-700 cursor-pointer"
               aria-label="Scroll left"
             >
               <ChevronLeft className="size-4" />
@@ -79,7 +79,7 @@ export function CategoryCarousel({
               type="button"
               onClick={() => scroll('right')}
               disabled={!canScrollRight}
-              className="grid size-8 place-items-center rounded-lg border border-zinc-200 bg-white text-zinc-700 shadow-2xs transition hover:bg-zinc-950 hover:text-white disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-zinc-700 cursor-pointer"
+              className="grid size-8 place-items-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-2xs transition hover:bg-blue-600 hover:text-white hover:border-blue-600 disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-slate-700 cursor-pointer"
               aria-label="Scroll right"
             >
               <ChevronRight className="size-4" />
@@ -101,11 +101,11 @@ export function CategoryCarousel({
               <Link
                 key={niche.id}
                 href={`/categories/${niche.id}`}
-                className="group relative flex w-[280px] shrink-0 snap-start flex-col justify-between rounded-xl border border-zinc-200 bg-white p-5 shadow-2xs transition hover:border-zinc-950 hover:shadow-xs sm:w-[300px] cursor-pointer"
+                className="group relative flex w-[280px] shrink-0 snap-start flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs transition duration-150 hover:border-blue-500 hover:shadow-md hover:shadow-blue-500/8 sm:w-[300px] cursor-pointer"
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono text-zinc-500 uppercase tracking-wider">
+                    <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider">
                       {secondaryLabel}
                     </span>
                     {niche.priority === 'launch' && (
@@ -115,15 +115,15 @@ export function CategoryCarousel({
                     )}
                   </div>
 
-                  <h3 className="mt-3 text-base font-bold tracking-tight text-zinc-900 group-hover:text-black">
+                  <h3 className="mt-3 text-base font-bold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors">
                     {primaryLabel}
                   </h3>
-                  <p className="mt-1.5 text-xs leading-relaxed text-zinc-500 line-clamp-2">
+                  <p className="mt-1.5 text-xs leading-relaxed text-slate-500 line-clamp-2">
                     {niche.description}
                   </p>
                 </div>
 
-                <div className="mt-5 flex items-center justify-between border-t border-zinc-100 pt-3 text-xs font-semibold text-zinc-900">
+                <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-3 text-xs font-bold text-blue-600">
                   <span>{t('browseCategory')}</span>
                   <ArrowRight className="size-3 transition group-hover:translate-x-1" />
                 </div>

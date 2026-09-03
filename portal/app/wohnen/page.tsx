@@ -78,7 +78,7 @@ export default async function HousingPage() {
   const allListings = [...dbListings, ...previewHousingListings];
 
   return (
-    <main className="min-h-screen bg-[#fafafa] text-zinc-900 flex flex-col justify-between">
+    <main className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col justify-between">
       <div>
         <SiteHeader />
         <HousingBrowser initialListings={allListings} />
