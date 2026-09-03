@@ -92,54 +92,10 @@ export async function POST(request: Request) {
       }
     }
 
-    if (hasActiveSubscription) {
-      // Auto-publish immediately under active annual pass
-      const { job, nicheIds } = await convertSubmissionToJob(
-        { ...submission, payloadJson: submission.payload_json },
-        submission.employer_id,
-      );
+    const stripeSecret = process.env.STRIPE_SECRET_KEY;
 
-      // Insert job
-      const jobCols = Object.keys(job).map((k) =>
-        k.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`),
-      );
-      const jobVals = Object.values(job);
-      const placeholders = jobVals.map(() => "?").join(", ");
-
-      await d1
-        .prepare(
-          `INSERT INTO jobs (${jobCols.join(", ")}) VALUES (${placeholders})`,
-        )
-        .bind(...jobVals)
-        .run();
-
-      // Insert job niches
-      if (nicheIds && nicheIds.length > 0) {
-        for (let i = 0; i < nicheIds.length; i++) {
-          const isPrimary = i === 0 ? 1 : 0;
-          await d1
-            .prepare(
-              `INSERT INTO job_niches (job_id, niche_id, is_primary, evidence) VALUES (?, ?, ?, ?)`,
-            )
-            .bind(job.id, nicheIds[i], isPrimary, "Employer selected")
-            .run();
-        }
-      }
-
-      await d1
-        .prepare(
-          `UPDATE employer_submissions SET status = 'approved', payment_status = 'paid' WHERE id = ?`,
-        )
-        .bind(submissionId)
-        .run();
-
-      return NextResponse.json({ status: "published", jobId: job.id });
-    } else {
-      // Create Stripe Checkout session (€49 single or €799 annual unlimited)
-      const stripeSecret = process.env.STRIPE_SECRET_KEY;
-      if (!stripeSecret) {
-        throw new Error("STRIPE_SECRET_KEY is not configured");
-      }
+    if (!hasActiveSubscription && stripeSecret) {
+      // Create Stripe Checkout session (€29 single or €499 annual unlimited)
 
       const isAnnual = submission.pricing_plan === "annual";
       const unitAmount = isAnnual ? "49900" : "2900"; // €499.00 or €29.00
@@ -190,11 +146,53 @@ export async function POST(request: Request) {
         .bind(stripeData.id, submissionId)
         .run();
 
-      return NextResponse.json({
-        status: "payment_required",
-        checkoutUrl: stripeData.url,
-      });
+        return NextResponse.json({
+          status: "payment_required",
+          checkoutUrl: stripeData.url,
+        });
+      }
+
+    // Auto-publish immediately under active annual pass OR local development without Stripe keys
+    const { job, nicheIds } = await convertSubmissionToJob(
+      { ...submission, payloadJson: submission.payload_json },
+      submission.employer_id,
+    );
+
+    // Insert job
+    const jobCols = Object.keys(job).map((k) =>
+      k.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`),
+    );
+    const jobVals = Object.values(job).map((v) => (v === undefined ? null : v));
+    const placeholders = jobVals.map(() => "?").join(", ");
+
+    await d1
+      .prepare(
+        `INSERT INTO jobs (${jobCols.join(", ")}) VALUES (${placeholders})`,
+      )
+      .bind(...jobVals)
+      .run();
+
+    // Insert job niches
+    if (nicheIds && nicheIds.length > 0) {
+      for (let i = 0; i < nicheIds.length; i++) {
+        const isPrimary = i === 0 ? 1 : 0;
+        await d1
+          .prepare(
+            `INSERT INTO job_niches (job_id, niche_id, is_primary, evidence) VALUES (?, ?, ?, ?)`,
+          )
+          .bind(job.id, nicheIds[i], isPrimary, "Employer selected")
+          .run();
+      }
     }
+
+    await d1
+      .prepare(
+        `UPDATE employer_submissions SET status = 'approved', payment_status = 'paid' WHERE id = ?`,
+      )
+      .bind(submissionId)
+      .run();
+
+    return NextResponse.json({ status: "published", jobId: job.id });
   } catch (error) {
     console.error("Verify error:", error);
     return NextResponse.json(

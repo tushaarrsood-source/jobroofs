@@ -89,7 +89,14 @@ export async function convertSubmissionToJob(
 
   // Application Method
   const applicationMethod = payload.applicationMethod || "email";
-  const applicationEmail = applicationMethod === "email" ? (payload.applicationEmail || payload.submitterEmail || null) : null;
+  const applicationEmail =
+    applicationMethod === "email"
+      ? (payload.applicationEmail ||
+        payload.submitterEmail ||
+        submission.submitter_email ||
+        submission.submitterEmail ||
+        "bewerbung@kiezjob.de")
+      : null;
   const applicationUrl = applicationMethod === "external_link" ? (payload.applicationUrl || null) : null;
 
   const job = {
