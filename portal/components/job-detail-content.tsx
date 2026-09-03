@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { getGoogleMapsUrl } from '@/lib/domain/berlin-geo';
 import { useTranslation } from '@/lib/i18n/language-context';
+import { PlatformDisclaimer } from '@/components/platform-disclaimer';
 import dynamic from 'next/dynamic';
 
 const JobMap = dynamic(() => import('@/components/job-map').then((mod) => mod.JobMap), {
@@ -316,6 +317,10 @@ export function JobDetailContent({ job }: { job: any }) {
             </dl>
           </section>
         </aside>
+      </div>
+
+      <div className="mt-8">
+        <PlatformDisclaimer type="jobs" />
       </div>
     </div>
   );
