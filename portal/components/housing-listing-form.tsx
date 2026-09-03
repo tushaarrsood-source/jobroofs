@@ -141,7 +141,7 @@ export function HousingListingForm() {
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json() as Record<string, any>;
       if (!res.ok) {
         if (data.reasons && Array.isArray(data.reasons)) {
           setErrorMsg(data.reasons.join('\n'));
@@ -177,7 +177,7 @@ export function HousingListingForm() {
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json() as Record<string, any>;
       if (!res.ok) {
         setVerifyError(data.error || 'Ungültiger oder abgelaufener Code.');
         setVerifying(false);

@@ -108,14 +108,86 @@ export function JobMap({
     let isMounted = true;
 
     async function updateMarkers() {
-      // If a job is explicitly selected from the list, center on it
-      if (selectedJobId) {
-        const target = jobs.find((j) => j.id === selectedJobId || j.slug === selectedJobId);
-        if (target) {
-          const coords = resolveJobCoordinates(target);
-          map.panTo([coords.lat, coords.lng], { animate: true, duration: 0.5 });
-          setActiveJob(target);
+      try {
+        const L = (await import('leaflet')).default;
+        if (!isMounted || !mapInstanceRef.current) return;
+
+        const map = mapInstanceRef.current;
+        const currentMarkers = markersRef.current;
+
+        // Remove existing markers
+        currentMarkers.forEach((marker) => {
+          try { marker.remove(); } catch {}
+        });
+        currentMarkers.clear();
+
+        if (!jobs || jobs.length === 0) return;
+
+        const bounds = L.latLngBounds([]);
+
+        jobs.forEach((job) => {
+          try {
+            const coords = resolveJobCoordinates(job);
+            const isSelected = selectedJobId === job.id || selectedJobId === job.slug;
+            const isHovered = hoveredJobId === job.id || hoveredJobId === job.slug;
+            const isActive = isSelected || isHovered;
+
+            const iconHtml = `
+              <div class="kiez-map-pin ${isActive ? 'active' : ''}">
+                <div class="pin-badge">
+                  <span class="pin-rate">${coords.badgeLabel}</span>
+                </div>
+                <div class="pin-stem"></div>
+              </div>
+            `;
+
+            const customIcon = L.divIcon({
+              className: 'kiez-pin-container',
+              html: iconHtml,
+              iconSize: [60, 36],
+              iconAnchor: [30, 34],
+              popupAnchor: [0, -32],
+            });
+
+            const marker = L.marker([coords.lat, coords.lng], {
+              icon: customIcon,
+              zIndexOffset: isActive ? 1000 : 100,
+            }).addTo(map);
+
+            marker.on('click', () => {
+              setActiveJob(job);
+              if (onSelectJob) onSelectJob(job.id);
+              map.panTo([coords.lat, coords.lng], { animate: true, duration: 0.5 });
+            });
+
+            currentMarkers.set(job.id, marker);
+            bounds.extend([coords.lat, coords.lng]);
+          } catch {}
+        });
+
+        // If exactly 1 job, pan to it
+        if (jobs.length === 1 && centerSingleJob) {
+          const singleCoords = resolveJobCoordinates(jobs[0]);
+          map.setView([singleCoords.lat, singleCoords.lng], miniMode ? 14 : 14, { animate: true });
+          return;
         }
+
+        // If a specific job is selected, pan to it
+        if (selectedJobId) {
+          const target = jobs.find((j) => j.id === selectedJobId || j.slug === selectedJobId);
+          if (target) {
+            const coords = resolveJobCoordinates(target);
+            map.panTo([coords.lat, coords.lng], { animate: true, duration: 0.5 });
+            setActiveJob(target);
+          }
+        }
+
+        // Fit to all markers for multi-job view
+        if (bounds.isValid() && jobs.length > 1 && !miniMode) {
+          map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+        }
+      } catch (err) {
+        console.warn('Leaflet updateMarkers notice:', err);
       }
     }
 
@@ -124,7 +196,7 @@ export function JobMap({
     return () => {
       isMounted = false;
     };
-  }, [jobs, selectedJobId, hoveredJobId, isMapReady, onSelectJob, centerSingleJob, miniMode]);
+  }, [jobs, isMapReady, selectedJobId, hoveredJobId, miniMode, centerSingleJob, onSelectJob]);
 
   // Reset to Berlin Overview
   const handleResetView = () => {
