@@ -4,10 +4,12 @@ export const translations = {
   de: {
     // Brand & Navigation
     brandTagline: 'Berlin Flexible Arbeit & Minijobs',
+    allJobs: 'Jobs',
     directEmployers: 'Direkt von Arbeitgebern',
     latestJobs: 'Neueste Jobs',
     categories: 'Kategorien',
     postAJob: 'Job schalten',
+    postListing: 'Inserat aufgeben',
     controlRoom: 'Control Room',
     publicPortal: 'Öffentliches Portal',
     allDistricts: 'Alle 12 Berliner Bezirke',
@@ -243,10 +245,12 @@ export const translations = {
   en: {
     // Brand & Navigation
     brandTagline: 'Berlin Flexible Work & Minijobs',
+    allJobs: 'Jobs',
     directEmployers: 'Direct from Employers',
     latestJobs: 'Latest Jobs',
     categories: 'Categories',
     postAJob: 'Post a Job',
+    postListing: 'Post a listing',
     controlRoom: 'Control Room',
     publicPortal: 'Public Portal',
     allDistricts: 'All 12 Berlin Districts',
