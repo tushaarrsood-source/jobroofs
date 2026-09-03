@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { CheckCircle2, ShieldCheck, MapPin, Calendar, Home, ArrowRight } from 'lucide-react';
+import { CheckCircle2, ShieldCheck, MapPin, Calendar, ArrowRight } from 'lucide-react';
 import type { HousingListing } from '@/lib/domain/housing-types';
 import { housingTypeLabels } from '@/lib/domain/housing-types';
 import { useTranslation } from '@/lib/i18n/language-context';
@@ -20,136 +20,103 @@ export function HousingCard({ listing }: { listing: HousingListing }) {
   const photoCount = listing.images?.length || 1;
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs transition duration-200 hover:border-blue-500 hover:shadow-md hover:shadow-blue-500/8 cursor-pointer">
-      {/* Image Thumbnail Container */}
+    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-2xs transition hover:border-slate-800 hover:shadow-sm">
+      {/* Image Thumbnail */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
         <img
           src={primaryImage}
           alt={listing.title}
-          className="h-full w-full object-cover transition duration-300 group-hover:scale-103"
+          className="h-full w-full object-cover transition duration-200 group-hover:scale-102"
           loading="lazy"
         />
-        
+
         {/* Top Badges */}
-        <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-1.5 pointer-events-none">
-          <span className="rounded-md bg-slate-900/85 px-2.5 py-1 text-[11px] font-bold tracking-wider uppercase text-white backdrop-blur-md shadow-xs">
+        <div className="absolute top-2.5 left-2.5 right-2.5 flex items-start justify-between gap-1 pointer-events-none">
+          <span className="rounded bg-slate-900/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
             {isDe ? typeInfo.de : typeInfo.en}
           </span>
-          
+
           {listing.anmeldungPossible ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm backdrop-blur-md">
-              <CheckCircle2 className="size-3.5" />
+            <span className="inline-flex items-center gap-1 rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-xs">
+              <CheckCircle2 className="size-3" />
               <span>Anmeldung ✓</span>
             </span>
           ) : (
-            <span className="rounded-full bg-amber-500/90 px-2.5 py-1 text-[11px] font-semibold text-white shadow-xs backdrop-blur-md">
+            <span className="rounded bg-amber-500/95 px-2 py-0.5 text-[10px] font-semibold text-white">
               Keine Anmeldung
             </span>
           )}
         </div>
 
-        {/* Bottom Image Badges */}
-        <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[11px] text-white pointer-events-none">
-          {listing.subletAuthorized ? (
-            <span className="inline-flex items-center gap-1 rounded-md bg-slate-900/75 px-2 py-0.5 font-medium backdrop-blur-xs">
-              <ShieldCheck className="size-3 text-emerald-400" />
-              <span>{isDe ? 'Vermieter-Erlaubnis liegt vor' : 'Landlord authorized'}</span>
-            </span>
-          ) : <span />}
-
-          {photoCount > 1 && (
-            <span className="rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-medium backdrop-blur-xs">
-              {photoCount} Fotos
-            </span>
-          )}
-        </div>
+        {/* Bottom image stats */}
+        {photoCount > 1 && (
+          <span className="absolute bottom-2 right-2 rounded bg-black/60 px-1.5 py-0.5 text-[10px] font-medium text-white pointer-events-none">
+            {photoCount} Fotos
+          </span>
+        )}
       </div>
 
-      {/* Content */}
-      <div className="flex flex-1 flex-col p-5">
+      {/* Card Content */}
+      <div className="flex flex-1 flex-col p-4">
         {/* District & Location */}
         <div className="flex items-center justify-between text-xs text-slate-500">
           <span className="inline-flex items-center gap-1 font-semibold text-slate-700">
             <MapPin className="size-3.5 text-blue-600 shrink-0" />
-            <span className="text-slate-900">{listing.district}</span>
+            <span>{listing.district}</span>
             {listing.neighborhood ? (
-              <span className="text-slate-500">· {listing.neighborhood}</span>
+              <span className="text-slate-400">· {listing.neighborhood}</span>
             ) : null}
           </span>
           <span className="font-mono text-[11px] text-slate-400">PLZ {listing.postcode}</span>
         </div>
 
         {/* Title */}
-        <h3 className="mt-2.5 text-base font-bold leading-snug tracking-tight text-slate-900 transition-colors group-hover:text-blue-600">
+        <h3 className="mt-2 text-sm font-bold leading-snug tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
           <Link href={`/wohnen/${listing.id}`} className="focus:outline-none">
             <span className="absolute inset-0" aria-hidden="true" />
             {listing.title}
           </Link>
         </h3>
 
-        {/* Room & Flat specs - Clean Chips */}
-        <div className="mt-3 flex flex-wrap items-center gap-1.5 text-xs text-slate-600">
-          <span className="rounded-md bg-slate-100 px-2 py-1 font-semibold text-slate-800">
-            {listing.roomSqm} m²
-          </span>
-          <span className="rounded-md bg-slate-100 px-2 py-1 font-semibold text-slate-800">
-            {listing.totalRooms}{' '}
-            {listing.totalRooms === 1 ? (isDe ? 'Zimmer' : 'Room') : isDe ? 'Zimmer' : 'Rooms'}
-          </span>
-          <span className="rounded-md bg-slate-100 px-2 py-1 text-slate-700">
-            {listing.furnished === 'fully'
-              ? isDe ? 'Möbliert' : 'Furnished'
-              : listing.furnished === 'partially'
-              ? isDe ? 'Teilmöbliert' : 'Partial'
-              : isDe ? 'Unmöbliert' : 'Unfurnished'}
-          </span>
-          {listing.floorLevel !== null && listing.floorLevel !== undefined && (
-            <span className="rounded-md bg-slate-100 px-2 py-1 text-slate-600">
-              {listing.floorLevel}. OG
-            </span>
-          )}
-        </div>
+        {/* Specs row */}
+        <p className="mt-2 text-xs text-slate-600">
+          <strong>{listing.roomSqm} m²</strong> · {listing.totalRooms} {listing.totalRooms === 1 ? 'Zimmer' : 'Zimmer'} ·{' '}
+          {listing.furnished === 'fully'
+            ? 'Voll möbliert'
+            : listing.furnished === 'partially'
+            ? 'Teilmöbliert'
+            : 'Unmöbliert'}
+          {listing.floorLevel !== null && listing.floorLevel !== undefined ? ` · ${listing.floorLevel}. OG` : ''}
+        </p>
 
-        {/* Move-in & Duration */}
-        <div className="mt-3 flex items-center gap-1.5 text-xs text-slate-500">
-          <Calendar className="size-3.5 text-blue-500 shrink-0" />
-          <span>
-            {isDe ? 'Frei ab:' : 'Available:'}{' '}
-            <strong className="font-semibold text-slate-800">{listing.moveInDate}</strong>
-          </span>
+        {/* Availability */}
+        <div className="mt-2 flex items-center gap-1 text-[11px] text-slate-500">
+          <Calendar className="size-3 text-slate-400 shrink-0" />
+          <span>Frei ab <strong>{listing.moveInDate}</strong></span>
           {listing.moveOutDate ? (
-            <span>
-              {isDe ? 'bis' : 'until'} {listing.moveOutDate}
-            </span>
+            <span>bis {listing.moveOutDate}</span>
           ) : (
-            <span className="rounded-full bg-blue-50 px-2 py-0.2 text-[10px] font-bold text-blue-700 border border-blue-200/60">
-              {isDe ? 'Unbefristet' : 'Long-term'}
-            </span>
+            <span className="font-medium text-blue-700">(Unbefristet)</span>
           )}
         </div>
 
-        {/* Price & Action Row */}
-        <div className="mt-5 border-t border-slate-100 pt-3.5 flex items-baseline justify-between">
+        {/* Price & Action */}
+        <div className="mt-4 border-t border-slate-100 pt-3 flex items-baseline justify-between">
           <div>
             <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-black font-mono tracking-tight text-slate-900">
+              <span className="text-xl font-black font-mono tracking-tight text-slate-900">
                 {listing.warmmieteEur} €
               </span>
-              <span className="text-xs font-semibold text-slate-500">
-                {isDe ? 'warm / M.' : 'warm / mo.'}
-              </span>
+              <span className="text-xs text-slate-500">warm / M.</span>
             </div>
-            <div className="mt-0.5 text-[11px] font-mono text-slate-400">
-              <span>{listing.kaltmieteEur} € Kalt</span>
-              {listing.nebenkostenEur > 0 ? (
-                <span> + {listing.nebenkostenEur} € NK</span>
-              ) : null}
+            <div className="text-[11px] font-mono text-slate-400">
+              {listing.kaltmieteEur} € Kalt + {listing.nebenkostenEur} € NK
             </div>
           </div>
 
           <div className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 group-hover:translate-x-0.5 transition-transform">
-            <span>{isDe ? 'Ansehen' : 'View'}</span>
-            <ArrowRight className="size-3.5" />
+            <span>Ansehen</span>
+            <ArrowRight className="size-3" />
           </div>
         </div>
       </div>

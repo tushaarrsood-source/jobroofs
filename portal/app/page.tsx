@@ -55,29 +55,26 @@ export default async function Home() {
 
       <LatestJobs jobs={latestJobs} />
 
-      <section className="border-t border-slate-200 bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950 text-white">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 py-14 md:flex-row md:items-center md:justify-between md:px-10">
+      <section className="border-t border-slate-200 bg-slate-900 text-white">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 py-12 md:flex-row md:items-center md:justify-between md:px-10">
           <div>
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-blue-400/30 bg-blue-500/10 px-3 py-0.5 text-xs font-semibold text-blue-300 mb-3">
-              KIEZJOB · Schneller Direktkontakt
-            </div>
-            <p className="text-2xl font-black tracking-tight sm:text-3xl">
-              Flexible Arbeitskräfte oder Nachmieter in Berlin gesucht?
-            </p>
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              Selbst inserieren auf KIEZJOB
+            </h2>
             <p className="mt-2 text-xs text-slate-300 max-w-xl leading-relaxed sm:text-sm">
-              Inseriere deinen Job oder dein WG-Zimmer / deine Wohnung für einmalig 29 € (30 Tage Laufzeit). Ohne Abo, 100% Direktkontakt ohne Maklerprovision.
+              Du suchst eine flexible Aushilfe für dein Café oder einen Nachmieter für deine WG? Inseriere in 2 Minuten für einmalig 29 € (30 Tage aktiv) — 100% Direktkontakt ohne Makler und ohne Zeitarbeitsfirmen.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <Link
               href="/post-a-job"
-              className="inline-flex h-11 items-center rounded-xl bg-blue-600 px-5 text-xs font-bold text-white shadow-md shadow-blue-600/30 transition hover:bg-blue-500"
+              className="inline-flex h-10 items-center rounded-lg bg-blue-600 px-4 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
             >
               Job inserieren (29 €) <ArrowRight className="ml-1.5 size-3.5" />
             </Link>
             <Link
               href="/wohnen/list"
-              className="inline-flex h-11 items-center rounded-xl border border-white/20 bg-white/10 px-5 text-xs font-bold text-white transition hover:bg-white/20 backdrop-blur-xs"
+              className="inline-flex h-10 items-center rounded-lg border border-slate-700 bg-slate-800 px-4 text-xs font-bold text-white transition hover:bg-slate-700"
             >
               Wohnung inserieren (29 €)
             </Link>

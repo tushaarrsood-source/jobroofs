@@ -54,13 +54,10 @@ export function CategoryCarousel({
       <div className="mx-auto max-w-[1440px] px-5 md:px-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
-              {effectiveEyebrow}
-            </p>
-            <h2 className="mt-1.5 text-2xl font-bold tracking-tight text-zinc-950 sm:text-3xl">
+            <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
               {effectiveTitle}
             </h2>
-            <p className="mt-1 text-xs text-zinc-500">
+            <p className="mt-1 text-xs text-slate-500">
               {t('curatedCategories', { count: niches.length })}
             </p>
           </div>

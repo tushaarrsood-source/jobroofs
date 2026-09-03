@@ -155,32 +155,26 @@ export function JobBrowser({
   return (
     <>
       {showHero && (
-        <section className="border-b border-zinc-200/80 bg-[#fafafa]">
-          <div className="mx-auto max-w-[1440px] px-5 py-12 md:px-10 md:py-16">
-            <div className="flex flex-wrap items-center gap-2 mb-4">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-0.5 text-xs font-medium text-zinc-700 shadow-2xs">
-                <span className="size-1.5 rounded-full bg-emerald-600" />
-                {t('heroEyebrow')}
-              </span>
-              <span className="text-xs text-zinc-400 hidden sm:inline">· 100% Direktkontakt · Ohne Vermittler</span>
-            </div>
-
-            <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-zinc-950 sm:text-5xl leading-[1.1]">
-              {effectivePageTitle}
+        <section className="border-b border-slate-200 bg-white">
+          <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-12">
+            <h1 className="max-w-3xl text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl leading-tight">
+              {isDe ? 'Minijobs & flexible Arbeit in Berlin' : 'Minijobs & Flexible Work in Berlin'}
             </h1>
-            <p className="mt-4 max-w-2xl text-base text-zinc-600 leading-relaxed">
-              {effectivePageSubtitle}
+            <p className="mt-2.5 max-w-2xl text-sm text-slate-600 leading-relaxed sm:text-base">
+              {isDe
+                ? 'Finde faire Nebenjobs, Teilzeitstellen und Schichten direkt bei Berliner Betrieben, Cafés, Bars und Kiez-Läden. 100% Direktkontakt ohne Zeitarbeit.'
+                : 'Find fair part-time work, minijobs, and shifts directly at Berlin venues, cafés, bars, and local businesses. 100% direct contact.'}
             </p>
 
-            {/* Unified Search Console */}
-            <div className="mt-8 rounded-2xl border border-zinc-200/90 bg-white p-2.5 shadow-sm md:p-3">
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-[1fr_220px_200px_180px]">
+            {/* High-Utility Search Console */}
+            <div className="mt-6 rounded-xl border border-slate-300/90 bg-white p-2 shadow-xs">
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-[1.4fr_220px_200px_180px]">
                 <div className="relative flex items-center">
-                  <Search className="pointer-events-none absolute left-3.5 size-4 text-zinc-400" />
+                  <Search className="pointer-events-none absolute left-3 size-4 text-slate-400" />
                   <Input
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
-                    className="h-11 border-0 bg-zinc-50 pl-10 text-sm placeholder:text-zinc-400 focus-visible:ring-1 focus-visible:ring-zinc-900 shadow-none rounded-lg"
+                    className="h-10 border-slate-200 bg-slate-50/70 pl-9 text-xs placeholder:text-slate-400 focus-visible:ring-1 focus-visible:ring-blue-600 rounded-lg"
                     placeholder={t('searchPlaceholder')}
                     aria-label="Jobtitel oder Kiez suchen"
                   />
@@ -190,7 +184,7 @@ export function JobBrowser({
                 <NativeSelect
                   value={district}
                   onChange={(event) => setDistrict(event.target.value)}
-                  className="h-11 border-zinc-200 bg-zinc-50 text-sm rounded-lg"
+                  className="h-10 border-slate-200 bg-slate-50/70 text-xs rounded-lg"
                   aria-label="Bezirk filtern"
                 >
                   {berlinDistricts.map((d) => (
@@ -204,7 +198,7 @@ export function JobBrowser({
                 <NativeSelect
                   value={employment}
                   onChange={(event) => setEmployment(event.target.value)}
-                  className="h-11 border-zinc-200 bg-zinc-50 text-sm rounded-lg"
+                  className="h-10 border-slate-200 bg-slate-50/70 text-xs rounded-lg"
                   aria-label="Beschäftigungsart"
                 >
                   <NativeSelectOption value="all">{t('allJobTypes')}</NativeSelectOption>
@@ -219,7 +213,7 @@ export function JobBrowser({
                 <NativeSelect
                   value={payInterval}
                   onChange={(event) => setPayInterval(event.target.value)}
-                  className="h-11 border-zinc-200 bg-zinc-50 text-sm rounded-lg"
+                  className="h-10 border-slate-200 bg-slate-50/70 text-xs rounded-lg"
                   aria-label="Vergütungsintervall"
                 >
                   <NativeSelectOption value="all">{t('anyPayType')}</NativeSelectOption>
@@ -231,8 +225,8 @@ export function JobBrowser({
             </div>
 
             {/* Quick Filter Pills & View Switcher */}
-            <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
                 {featuredNiches.map((id) => {
                   const selected = industry === id;
                   const nicheObj = getIndustry(id);
@@ -536,9 +530,8 @@ export function LatestJobs({ jobs }: { jobs: any[] }) {
       <div className="mx-auto max-w-[1440px] px-5 py-12 md:px-10 md:py-16">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div>
-            <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">{t('heroEyebrow')}</p>
-            <h2 className="mt-1 text-2xl font-bold tracking-tight text-zinc-950 md:text-3xl">
-              {t('latestJobs')}
+            <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+              {t('latestJobs')} in Berlin
             </h2>
           </div>
           <Link

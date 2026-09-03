@@ -63,7 +63,7 @@ export function HousingDetailContent({ listing }: { listing: HousingListing }) {
         {/* Main Content Column */}
         <article className="space-y-6">
           {/* Header & Badges */}
-          <div className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+          <div className="rounded-xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-md bg-blue-50 border border-blue-200 px-2.5 py-0.5 text-xs font-bold tracking-wider uppercase text-blue-700">
                 {isDe ? typeInfo.de : typeInfo.en}
@@ -140,7 +140,7 @@ export function HousingDetailContent({ listing }: { listing: HousingListing }) {
           </div>
 
           {/* Key Facts Grid */}
-          <div className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+          <div className="rounded-xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
             <h2 className="text-lg font-bold text-slate-900">
               {isDe ? 'Eckdaten & Ausstattung' : 'Key Facts & Equipment'}
             </h2>
@@ -214,7 +214,7 @@ export function HousingDetailContent({ listing }: { listing: HousingListing }) {
           </div>
 
           {/* Description */}
-          <div className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+          <div className="rounded-xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
             <h2 className="text-lg font-bold text-slate-900">
               {isDe ? 'Beschreibung' : 'Description'}
             </h2>
@@ -322,7 +322,7 @@ export function HousingDetailContent({ listing }: { listing: HousingListing }) {
           </div>
 
           {/* Safety Card with Blue Authority */}
-          <div className="rounded-2xl border border-blue-200/80 bg-blue-50/70 p-4.5 text-xs text-blue-950">
+          <div className="rounded-xl border border-blue-200/80 bg-blue-50/70 p-4.5 text-xs text-blue-950">
             <div className="flex items-start gap-2.5">
               <ShieldCheck className="size-4 shrink-0 text-blue-600 mt-0.5" />
               <div>

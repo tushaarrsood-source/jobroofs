@@ -199,7 +199,7 @@ export function HousingListingForm() {
     <div className="mx-auto max-w-3xl">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Section 1: Basic Info & Type */}
-        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+        <section className="rounded-xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
           <h2 className="text-base font-bold text-slate-900">
             1. {isDe ? 'Art des Inserats & Standort' : 'Listing Type & Location'}
           </h2>
@@ -301,7 +301,7 @@ export function HousingListingForm() {
         </section>
 
         {/* Section 2: Financials & Deposit Compliance */}
-        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+        <section className="rounded-xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-bold text-slate-900">
               2. {isDe ? 'Miete & Kaution (§ 551 BGB konform)' : 'Rent & Deposit (BGB compliant)'}
@@ -376,7 +376,7 @@ export function HousingListingForm() {
         </section>
 
         {/* Section 3: Space & Amenities */}
-        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+        <section className="rounded-xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
           <h2 className="text-base font-bold text-slate-900">
             3. {isDe ? 'Zimmergröße & Möblierung' : 'Room Size & Furnishing'}
           </h2>
@@ -427,7 +427,7 @@ export function HousingListingForm() {
         </section>
 
         {/* Section 4: Legal & Anmeldung (The Berlin Core) */}
-        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+        <section className="rounded-xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-bold text-slate-900">
               4. {isDe ? 'Rechtliches & Anmeldung' : 'Legal & Anmeldung'}
@@ -477,7 +477,7 @@ export function HousingListingForm() {
         </section>
 
         {/* Section 5: Dates & Contract */}
-        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+        <section className="rounded-xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
           <h2 className="text-base font-bold text-slate-900">
             5. {isDe ? 'Laufzeit & Daten' : 'Duration & Dates'}
           </h2>
@@ -541,7 +541,7 @@ export function HousingListingForm() {
         </section>
 
         {/* Section 6: Photos & Description */}
-        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+        <section className="rounded-xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
           <h2 className="text-base font-bold text-slate-900">
             6. {isDe ? 'Fotos & Beschreibung' : 'Photos & Description'}
           </h2>
@@ -603,7 +603,7 @@ export function HousingListingForm() {
         </section>
 
         {/* Section 7: Contact Info */}
-        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+        <section className="rounded-xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
           <h2 className="text-base font-bold text-slate-900">
             7. {isDe ? 'Kontaktdaten für Interessenten' : 'Contact Details'}
           </h2>
@@ -640,7 +640,7 @@ export function HousingListingForm() {
         </section>
 
         {/* Section 8: Pricing, Platform Terms & Zero-Liability */}
-        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
+        <section className="rounded-xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
           <h2 className="text-base font-bold text-slate-900">
             8. {isDe ? 'Einstellgebühr & Haftungsausschluss' : 'Listing Fee & Terms'}
           </h2>

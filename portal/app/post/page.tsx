@@ -19,29 +19,25 @@ export default function PostChooserPage() {
       <div>
         <SiteHeader />
 
-        <main className="mx-auto max-w-4xl px-5 py-12 md:py-20">
+        <main className="mx-auto max-w-4xl px-5 py-10 md:py-16">
           <div className="text-center max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
-              <ShieldCheck className="size-3.5 text-blue-600" />
-              KIEZJOB · Unabhängig & Direkt
-            </div>
-            <h1 className="mt-4 text-3xl font-black tracking-tight text-slate-900 sm:text-5xl">
+            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
               Was möchtest du inserieren?
             </h1>
-            <p className="mt-3 text-sm text-slate-600 leading-relaxed sm:text-base">
+            <p className="mt-2 text-sm text-slate-600 leading-relaxed sm:text-base">
               Erreiche tausende Berliner Minijobber, Aushilfen und Wohnungssuchende.
-              Einmalig 29 € für 30 Tage Laufzeit · Kein Abo, kein Vermittler.
+              Einmalig 29 € für 30 Tage Laufzeit — kein Abo, kein Vermittler.
             </p>
           </div>
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-2">
+          <div className="mt-10 grid gap-6 sm:grid-cols-2">
             {/* Option 1: Job */}
-            <div className="flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-7 shadow-xs hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/8 transition duration-200">
+            <div className="flex flex-col justify-between rounded-xl border border-slate-200/90 bg-white p-6 shadow-xs hover:border-blue-600 transition duration-150">
               <div>
-                <div className="grid size-12 place-items-center rounded-2xl bg-blue-50 border border-blue-100 text-blue-600">
-                  <BriefcaseBusiness className="size-6" />
+                <div className="grid size-11 place-items-center rounded-lg bg-blue-50 border border-blue-100 text-blue-600">
+                  <BriefcaseBusiness className="size-5" />
                 </div>
-                <h2 className="mt-5 text-xl font-bold tracking-tight text-slate-900">
+                <h2 className="mt-4 text-lg font-bold tracking-tight text-slate-900">
                   Stellenanzeige / Job
                 </h2>
                 <p className="mt-2 text-xs text-slate-600 leading-relaxed">
@@ -77,12 +73,12 @@ export default function PostChooserPage() {
             </div>
 
             {/* Option 2: Housing */}
-            <div className="flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-7 shadow-xs hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/8 transition duration-200">
+            <div className="flex flex-col justify-between rounded-xl border border-slate-200/90 bg-white p-6 shadow-xs hover:border-emerald-600 transition duration-150">
               <div>
-                <div className="grid size-12 place-items-center rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600">
-                  <Home className="size-6" />
+                <div className="grid size-11 place-items-center rounded-lg bg-emerald-50 border border-emerald-100 text-emerald-600">
+                  <Home className="size-5" />
                 </div>
-                <h2 className="mt-5 text-xl font-bold tracking-tight text-slate-900">
+                <h2 className="mt-4 text-lg font-bold tracking-tight text-slate-900">
                   Wohnung / WG-Zimmer
                 </h2>
                 <p className="mt-2 text-xs text-slate-600 leading-relaxed">
