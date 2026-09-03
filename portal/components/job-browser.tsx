@@ -234,30 +234,7 @@ export function JobBrowser({
               </div>
             </div>
 
-            {/* Human Intent Quick Pills (Inspired by Atly / Real Berlin Needs) */}
-            <div className="mt-3.5 flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Beliebt:</span>
-              {[
-                { label: isDe ? '☕ Trinkgeld bar' : '☕ Cash Tips', q: 'Trinkgeld' },
-                { label: isDe ? '⚡ Sofort anfangen' : '⚡ Start Immediately', q: 'Sofort' },
-                { label: isDe ? '🇬🇧 Englisch reicht' : '🇬🇧 English OK', q: 'English' },
-                { label: isDe ? '🌙 Nacht & Weekend' : '🌙 Night & Weekend', q: 'Wochenende' },
-                { label: isDe ? '🚲 Kurier & Gastro' : '🚲 Courier & Gastro', q: 'Kurier' },
-              ].map((pill) => (
-                <button
-                  key={pill.q}
-                  type="button"
-                  onClick={() => setQuery(query === pill.q ? '' : pill.q)}
-                  className={`inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
-                    query === pill.q
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'border border-slate-200 bg-slate-50/80 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
-                  }`}
-                >
-                  {pill.label}
-                </button>
-              ))}
-            </div>
+
 
             {/* Quick Filter Pills & View Switcher */}
             <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
