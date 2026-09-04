@@ -20,46 +20,46 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
   const isHousingActive = !isMapActive && pathname.startsWith('/wohnen');
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 glass-chrome shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-3 sm:px-4 md:px-6">
-        {/* Left: Brand Logo */}
+    <header className="sticky top-0 z-50 border-b border-black/[0.06] glass-chrome shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+      <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between px-3 sm:px-4 md:px-6">
+        {/* Left: Brand Logo (Apple Minimalist) */}
         <Link
           href="/"
-          className="group flex items-center gap-2 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] select-none"
+          className="group flex items-center gap-1.5 transition-transform duration-140 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] select-none"
         >
-          <span className="flex items-center font-display text-2xl font-bold tracking-tight text-slate-900">
-            JOB<span className="text-blue-600">ROOFS</span>
+          <span className="flex items-center text-lg font-bold tracking-tight text-[#1d1d1f]">
+            JOB<span className="text-[#0071e3]">ROOFS</span>
           </span>
-          <span className="rounded bg-slate-900 px-1.5 py-0.5 font-mono text-[9px] font-bold tracking-widest text-white uppercase">
-            BERLIN
+          <span className="text-[10px] font-semibold text-[#86868b] tracking-wider uppercase pl-0.5">
+            Berlin
           </span>
           {control ? (
-            <span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-slate-600 border border-slate-200">
+            <span className="ml-2 rounded-full bg-black/[0.04] px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-[#86868b] border border-black/[0.06]">
               {t('controlRoom')}
             </span>
           ) : null}
         </Link>
 
         {/* Right: Navigation & Actions */}
-        <div className="flex items-center gap-2 sm:gap-6">
+        <div className="flex items-center gap-2 sm:gap-5">
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-4 lg:gap-6 text-sm font-semibold">
+          <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-[#1d1d1f]">
             {control ? (
               <Link
                 href="/"
-                className="inline-flex items-center gap-1.5 font-medium text-slate-700 hover:text-blue-600 hover:underline transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-[#86868b] hover:text-[#1d1d1f] transition-colors"
               >
                 {t('publicPortal')} <ArrowUpRight className="size-3.5" />
               </Link>
             ) : (
-              <>
+              <div className="flex items-center gap-1 pr-2">
                 {/* 1. Jobs Link */}
                 <Link
                   href="/"
-                  className={`py-1 transition-colors duration-150 active:scale-[0.97] ${
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition active:scale-[0.97] ${
                     isJobsActive
-                      ? 'text-slate-900 font-bold border-b-2 border-blue-600'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-black/[0.06] text-[#1d1d1f] font-semibold'
+                      : 'text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.03]'
                   }`}
                 >
                   Jobs
@@ -68,10 +68,10 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
                 {/* 2. Housing Link */}
                 <Link
                   href="/wohnen"
-                  className={`py-1 transition-colors duration-150 active:scale-[0.97] ${
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition active:scale-[0.97] ${
                     isHousingActive
-                      ? 'text-slate-900 font-bold border-b-2 border-blue-600'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-black/[0.06] text-[#1d1d1f] font-semibold'
+                      : 'text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.03]'
                   }`}
                 >
                   {isDe ? 'Wohnen' : 'Housing'}
@@ -80,10 +80,10 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
                 {/* 3. Karte Link */}
                 <Link
                   href="/karte"
-                  className={`py-1 transition-colors duration-150 active:scale-[0.97] ${
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition active:scale-[0.97] ${
                     isMapActive
-                      ? 'text-slate-900 font-bold border-b-2 border-blue-600'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-black/[0.06] text-[#1d1d1f] font-semibold'
+                      : 'text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.03]'
                   }`}
                 >
                   {isDe ? 'Karte' : 'Map'}
@@ -92,59 +92,35 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
                 {/* 4. Profil Link */}
                 <Link
                   href="/profil"
-                  className={`py-1 transition-colors duration-150 active:scale-[0.97] ${
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition active:scale-[0.97] ${
                     pathname.startsWith('/profil')
-                      ? 'text-slate-900 font-bold border-b-2 border-blue-600'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-black/[0.06] text-[#1d1d1f] font-semibold'
+                      : 'text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.03]'
                   }`}
                 >
                   {isDe ? 'Profil' : 'Profile'}
                 </Link>
-
-                {/* 4. Housing direct post button */}
-                <Link
-                  href="/wohnen/list"
-                  className="btn-tactile inline-flex h-9 items-center rounded-xl border border-slate-300/90 bg-white px-3.5 text-xs font-bold text-slate-800 shadow-xs hover:bg-slate-50 hover:text-blue-600"
-                >
-                  + {isDe ? 'Wohnung inserieren' : 'List a Room'}
-                </Link>
-
-                {/* 5. Post a Job button */}
-                <Link
-                  href="/post-a-job"
-                  className="btn-tactile inline-flex h-9 items-center rounded-xl bg-blue-600 px-3.5 text-xs font-bold text-white shadow-xs hover:bg-blue-700"
-                >
-                  + {isDe ? 'Job inserieren' : 'Post a Job'}
-                </Link>
-              </>
+              </div>
             )}
+
+            {/* Single Unified Apple Primary Action */}
+            <Link
+              href="/post"
+              className="apple-btn-primary"
+            >
+              <span>+ {isDe ? 'Inserieren' : 'Post'}</span>
+            </Link>
           </nav>
 
-          {/* Mobile Quick Category Switcher */}
-          <div className="flex md:hidden items-center gap-1">
-            <Link
-              href="/"
-              className={`rounded-md px-2.5 py-1 text-xs font-semibold transition ${
-                isJobsActive
-                  ? 'bg-slate-900 text-white'
-                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-              }`}
-            >
-              Jobs
-            </Link>
-            <Link
-              href="/wohnen"
-              className={`rounded-md px-2.5 py-1 text-xs font-semibold transition ${
-                isHousingActive
-                  ? 'bg-slate-900 text-white'
-                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-              }`}
-            >
-              {isDe ? 'Wohnen' : 'Housing'}
-            </Link>
-          </div>
+          {/* Mobile Single Post Pill */}
+          <Link
+            href="/post"
+            className="flex md:hidden apple-btn-primary !h-7.5 !px-3 !text-[11px]"
+          >
+            <span>+ {isDe ? 'Inserieren' : 'Post'}</span>
+          </Link>
 
-          <div className="border-l border-slate-200 pl-2 sm:pl-5">
+          <div className="border-l border-black/[0.08] pl-2 sm:pl-3">
             <LanguageToggle />
           </div>
         </div>

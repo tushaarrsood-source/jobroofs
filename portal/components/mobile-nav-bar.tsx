@@ -24,7 +24,7 @@ export function MobileNavBar() {
     <>
       <nav
         aria-label="Mobile Navigation"
-        className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t border-slate-200/70 glass-chrome shadow-[0_-2px_12px_rgba(0,0,0,0.03)]"
+        className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t border-black/[0.06] bg-white/80 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.03)]"
         style={{
           paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 6px)',
         }}
@@ -35,8 +35,8 @@ export function MobileNavBar() {
             href="/"
             className={`flex flex-1 flex-col items-center justify-center py-1 transition-[color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.92] select-none ${
               isJobs && !isMap
-                ? 'text-blue-600 font-semibold'
-                : 'text-slate-500 hover:text-slate-800'
+                ? 'text-[#0071e3] font-semibold'
+                : 'text-[#86868b] hover:text-[#1d1d1f]'
             }`}
           >
             <Briefcase className="size-5" />
@@ -48,8 +48,8 @@ export function MobileNavBar() {
             href="/wohnen"
             className={`flex flex-1 flex-col items-center justify-center py-1 transition-[color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.92] select-none ${
               isHousing && !isMap
-                ? 'text-blue-600 font-semibold'
-                : 'text-slate-500 hover:text-slate-800'
+                ? 'text-[#0071e3] font-semibold'
+                : 'text-[#86868b] hover:text-[#1d1d1f]'
             }`}
           >
             <Home className="size-5" />
@@ -64,7 +64,7 @@ export function MobileNavBar() {
               type="button"
               onClick={() => setIsPostDrawerOpen(true)}
               aria-label="Inserat aufgeben"
-              className="flex size-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-xs transition-[transform,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.91] hover:bg-blue-700 cursor-pointer will-change-transform"
+              className="flex size-10 items-center justify-center rounded-full bg-[#1d1d1f] text-white shadow-sm transition-[transform,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.91] hover:bg-black cursor-pointer will-change-transform"
             >
               <Plus className="size-5 stroke-[2.5]" />
             </button>
@@ -75,8 +75,8 @@ export function MobileNavBar() {
             href="/karte"
             className={`flex flex-1 flex-col items-center justify-center py-1 transition-[color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.92] select-none ${
               isMap
-                ? 'text-blue-600 font-semibold'
-                : 'text-slate-500 hover:text-slate-800'
+                ? 'text-[#0071e3] font-semibold'
+                : 'text-[#86868b] hover:text-[#1d1d1f]'
             }`}
           >
             <MapPin className="size-5" />
@@ -90,8 +90,8 @@ export function MobileNavBar() {
             href="/profil"
             className={`flex flex-1 flex-col items-center justify-center py-1 transition-[color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.92] select-none cursor-pointer ${
               isProfile
-                ? 'text-blue-600 font-semibold'
-                : 'text-slate-500 hover:text-slate-800'
+                ? 'text-[#0071e3] font-semibold'
+                : 'text-[#86868b] hover:text-[#1d1d1f]'
             }`}
           >
             <User className="size-5" />

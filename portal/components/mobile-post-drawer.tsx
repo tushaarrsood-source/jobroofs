@@ -19,22 +19,22 @@ export function MobilePostDrawer({ isOpen, onClose }: MobilePostDrawerProps) {
     <div className="fixed inset-0 z-[100] flex flex-col justify-end md:hidden">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
-      {/* Sheet */}
-      <div className="relative z-10 rounded-t-2xl border-t border-slate-200 bg-white p-5 text-slate-900 shadow-2xl drawer-enter">
+      {/* Apple Sheet */}
+      <div className="relative z-10 rounded-t-[28px] border-t border-black/[0.06] bg-white p-6 text-[#1d1d1f] shadow-2xl drawer-enter">
         {/* Grab bar */}
-        <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-slate-300" />
+        <div className="mx-auto mb-5 h-1.5 w-10 rounded-full bg-black/15" />
 
         {/* Header */}
-        <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="mb-5 flex items-center justify-between border-b border-black/[0.04] pb-3.5">
           <div>
-            <h3 className="font-display text-base font-bold tracking-tight text-slate-900">
+            <h3 className="text-[17px] font-semibold tracking-tight text-[#1d1d1f]">
               {isDe ? 'Inserat aufgeben' : 'Create Listing'}
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#86868b]">
               {isDe ? 'Wähle die passende Kategorie für dein Angebot' : 'Select listing category'}
             </p>
           </div>
@@ -42,9 +42,9 @@ export function MobilePostDrawer({ isOpen, onClose }: MobilePostDrawerProps) {
             type="button"
             onClick={onClose}
             aria-label="Schließen"
-            className="flex size-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.92] cursor-pointer"
+            className="flex size-7.5 items-center justify-center rounded-full bg-black/[0.05] text-[#86868b] hover:bg-black/[0.1] hover:text-[#1d1d1f] transition-all active:scale-[0.92] cursor-pointer"
           >
-            <X className="size-5" />
+            <X className="size-4" />
           </button>
         </div>
 
@@ -54,58 +54,58 @@ export function MobilePostDrawer({ isOpen, onClose }: MobilePostDrawerProps) {
           <Link
             href="/post-a-job"
             onClick={onClose}
-            className="group flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50/70 p-4 transition-[border-color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-blue-300 hover:bg-blue-50/40 active:scale-[0.98] card-tactile"
+            className="group flex items-center justify-between rounded-[20px] border border-black/[0.06] bg-[#f5f5f7]/60 p-4 transition-all duration-200 hover:border-black/[0.12] hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.04)] active:scale-[0.98]"
           >
             <div className="flex items-start gap-3">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-xs transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.05]">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#1d1d1f] text-white shadow-xs transition-transform duration-150 group-hover:scale-[1.04]">
                 <Briefcase className="size-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                  <span className="text-[15px] font-semibold text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors">
                     {isDe ? 'Job inserieren' : 'Post a Job'}
                   </span>
-                  <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-semibold text-blue-800">
-                    ab 29 € · 30 Tage
+                  <span className="rounded-full bg-black/[0.05] px-2 py-0.5 text-[10px] font-medium text-[#1d1d1f]">
+                    ab 29 € · 30d
                   </span>
                 </div>
-                <p className="mt-0.5 text-xs text-slate-500 line-clamp-1">
+                <p className="mt-0.5 text-xs text-[#86868b] line-clamp-1">
                   {isDe
                     ? 'Aushilfen, Schichten oder Minijobs im Kiez finden.'
                     : 'Find helpers, shifts or minijobbers in your kiez.'}
                 </p>
               </div>
             </div>
-            <ChevronRight className="size-4 text-slate-400 group-hover:text-blue-600 shrink-0 transition-transform duration-150 group-hover:translate-x-0.5" />
+            <ChevronRight className="size-4 text-[#86868b] group-hover:text-[#0071e3] shrink-0 transition-transform duration-150 group-hover:translate-x-0.5" />
           </Link>
 
           {/* 2. Wohnung Inserat */}
           <Link
             href="/wohnen/list"
             onClick={onClose}
-            className="group flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50/70 p-4 transition-[border-color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-emerald-300 hover:bg-emerald-50/40 active:scale-[0.98] card-tactile"
+            className="group flex items-center justify-between rounded-[20px] border border-black/[0.06] bg-[#f5f5f7]/60 p-4 transition-all duration-200 hover:border-black/[0.12] hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.04)] active:scale-[0.98]"
           >
             <div className="flex items-start gap-3">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.05]">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#1d1d1f] text-white shadow-xs transition-transform duration-150 group-hover:scale-[1.04]">
                 <Home className="size-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-slate-900 group-hover:text-emerald-600 transition-colors">
+                  <span className="text-[15px] font-semibold text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors">
                     {isDe ? 'Wohnung / WG inserieren' : 'List Apartment or Room'}
                   </span>
-                  <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-800">
-                    ab 29 € · 30 Tage
+                  <span className="rounded-full bg-black/[0.05] px-2 py-0.5 text-[10px] font-medium text-[#1d1d1f]">
+                    ab 29 € · 30d
                   </span>
                 </div>
-                <p className="mt-0.5 text-xs text-slate-500 line-clamp-1">
+                <p className="mt-0.5 text-xs text-[#86868b] line-clamp-1">
                   {isDe
                     ? 'WG-Zimmer, Nachmieter oder Zwischenmiete ohne Makler.'
                     : 'List flatshares, successor tenants or sublets.'}
                 </p>
               </div>
             </div>
-            <ChevronRight className="size-4 text-slate-400 group-hover:text-emerald-600 shrink-0 transition-transform duration-150 group-hover:translate-x-0.5" />
+            <ChevronRight className="size-4 text-[#86868b] group-hover:text-[#0071e3] shrink-0 transition-transform duration-150 group-hover:translate-x-0.5" />
           </Link>
         </div>
 

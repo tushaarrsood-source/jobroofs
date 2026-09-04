@@ -191,45 +191,34 @@ export function JobBrowser({
   return (
     <>
       {showHero && (
-        <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-6 pt-3 pb-3 md:pt-4 md:pb-4">
-            <div className="flex flex-col gap-1.5 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-950">
-                  {isDe ? (
-                    <>Minijobs (603 €) & Flexible Arbeit in Berlin</>
-                  ) : (
-                    <>Minijobs (€603) & Flexible Work in Berlin</>
-                  )}
-                </h1>
-                <p className="mt-0.5 text-xs text-slate-500 max-w-xl">
-                  {isDe
-                    ? 'Direktkontakt zu Berliner Betrieben, Gastronomie, Events und Kiez-Shops.'
-                    : 'Direct contact with local Berlin venues, hospitality, events, and shops.'}
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                <Link
-                  href="/post"
-                  className="inline-flex h-9 items-center rounded-lg bg-blue-600 px-3.5 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
-                >
-                  + {isDe ? 'Stelle schalten (ab 29 €)' : 'Post a job (from €29)'}
-                </Link>
-              </div>
+        <section className="border-b border-black/[0.06] bg-white">
+          <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-6 pt-5 pb-4 md:pt-6 md:pb-5">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-[-0.025em] text-[#1d1d1f] leading-tight">
+                {isDe ? (
+                  <>Minijobs (603 €) & Flexible Arbeit in Berlin</>
+                ) : (
+                  <>Minijobs (€603) & Flexible Work in Berlin</>
+                )}
+              </h1>
+              <p className="mt-1 text-xs sm:text-sm text-[#86868b] max-w-xl leading-relaxed">
+                {isDe
+                  ? 'Direktkontakt zu Berliner Betrieben, Gastronomie, Events und Kiez-Shops.'
+                  : 'Direct contact with local Berlin venues, hospitality, events, and shops.'}
+              </p>
             </div>
 
-            {/* High-Utility Compact Search & Controls Bar */}
-            <div className="mt-2.5 rounded-lg border border-slate-200 bg-white p-1 shadow-2xs">
+            {/* Apple Spotlight Search & Controls Bar */}
+            <div className="mt-4 apple-spotlight p-1.5">
               <div className="flex flex-col gap-1.5 md:flex-row md:items-center">
                 {/* Search Input + Mobile single toggle icon */}
                 <div className="flex items-center gap-1.5 flex-1 w-full">
                   <div className="relative flex-1">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                    <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-[#86868b]" />
                     <Input
                       value={query}
                       onChange={(event) => setQuery(event.target.value)}
-                      className="h-8.5 border-slate-200 bg-slate-50/70 pl-8.5 pr-8 text-xs placeholder:text-slate-400 focus-visible:ring-1 focus-visible:ring-blue-600 rounded-md w-full"
+                      className="h-9 border-none bg-transparent pl-9 pr-8 text-xs text-[#1d1d1f] placeholder:text-[#86868b] focus-visible:ring-0 rounded-lg w-full"
                       placeholder={t('searchPlaceholder')}
                       aria-label="Jobtitel oder Kiez suchen"
                     />
@@ -237,7 +226,7 @@ export function JobBrowser({
                       <button
                         type="button"
                         onClick={() => setQuery('')}
-                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer text-xs"
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#86868b] hover:text-[#1d1d1f] cursor-pointer text-xs"
                       >
                         ✕
                       </button>
@@ -249,13 +238,13 @@ export function JobBrowser({
                     type="button"
                     onClick={() => setViewMode(viewMode === 'map' ? 'list' : 'map')}
                     aria-label={viewMode === 'map' ? 'Zur Liste wechseln' : 'Zur Karte wechseln'}
-                    className="md:hidden flex size-8.5 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-700 shadow-2xs transition active:scale-95 cursor-pointer hover:bg-slate-100"
+                    className="md:hidden flex size-8.5 shrink-0 items-center justify-center rounded-lg bg-black/[0.04] text-[#1d1d1f] transition active:scale-95 cursor-pointer hover:bg-black/[0.08]"
                     title={viewMode === 'map' ? 'Liste' : 'Karte'}
                   >
                     {viewMode === 'map' ? (
-                      <List className="size-4 text-blue-600" />
+                      <List className="size-4 text-[#0071e3]" />
                     ) : (
-                      <MapIcon className="size-4 text-blue-600" />
+                      <MapIcon className="size-4 text-[#0071e3]" />
                     )}
                   </button>
                 </div>
@@ -266,7 +255,7 @@ export function JobBrowser({
                     <NativeSelect
                       value={district}
                       onChange={(event) => setDistrict(event.target.value)}
-                      className="h-8.5 border-slate-200 bg-slate-50/70 text-xs rounded-md w-full"
+                      className="h-8.5 border-none bg-black/[0.04] hover:bg-black/[0.06] text-xs font-medium text-[#1d1d1f] rounded-lg w-full"
                       aria-label="Bezirk filtern"
                     >
                       {berlinDistricts.map((d) => (
@@ -281,7 +270,7 @@ export function JobBrowser({
                     <NativeSelect
                       value={employment}
                       onChange={(event) => setEmployment(event.target.value)}
-                      className="h-8.5 border-slate-200 bg-slate-50/70 text-xs rounded-md w-full"
+                      className="h-8.5 border-none bg-black/[0.04] hover:bg-black/[0.06] text-xs font-medium text-[#1d1d1f] rounded-lg w-full"
                       aria-label="Beschäftigungsart"
                     >
                       <NativeSelectOption value="all">{t('allJobTypes')}</NativeSelectOption>
@@ -294,62 +283,56 @@ export function JobBrowser({
                   </div>
                 </div>
 
-                {/* View Switcher: Desktop only */}
-                <div className="hidden md:flex items-center justify-center gap-0.5 rounded-md border border-slate-200 bg-slate-100/90 p-0.5 shrink-0">
+                {/* View Switcher: Apple Segmented Control (Desktop) */}
+                <div className="hidden md:flex apple-segmented shrink-0">
                   <button
                     type="button"
                     onClick={() => setViewMode('split')}
-                    className={`flex items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
-                      viewMode === 'split'
-                        ? 'bg-blue-600 text-white shadow-2xs'
-                        : 'text-slate-600 hover:text-slate-900'
+                    className={`apple-segmented-item flex items-center gap-1.5 ${
+                      viewMode === 'split' ? 'active' : ''
                     }`}
                     title="Liste & Karte geteilt"
                   >
-                    <Layers className="size-3" />
+                    <Layers className="size-3.5" />
                     <span>Split</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setViewMode('list')}
-                    className={`flex items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
-                      viewMode === 'list'
-                        ? 'bg-blue-600 text-white shadow-2xs'
-                        : 'text-slate-600 hover:text-slate-900'
+                    className={`apple-segmented-item flex items-center gap-1.5 ${
+                      viewMode === 'list' ? 'active' : ''
                     }`}
                     title="Nur Liste"
                   >
-                    <List className="size-3" />
+                    <List className="size-3.5" />
                     <span>Liste</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setViewMode('map')}
-                    className={`flex items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
-                      viewMode === 'map'
-                        ? 'bg-blue-600 text-white shadow-2xs'
-                        : 'text-slate-600 hover:text-slate-900'
+                    className={`apple-segmented-item flex items-center gap-1.5 ${
+                      viewMode === 'map' ? 'active' : ''
                     }`}
                     title="Nur Karte"
                   >
-                    <MapIcon className="size-3" />
+                    <MapIcon className="size-3.5" />
                     <span>Karte</span>
                   </button>
                 </div>
               </div>
 
-              {/* Quick Filter Chips */}
-              <div className="mt-1.5 flex items-center gap-1.5 overflow-x-auto pt-1 pb-0.5 text-[11px] scrollbar-none border-t border-slate-100">
+              {/* Quick Filter Chips: Apple Pill Style */}
+              <div className="mt-2 flex items-center gap-1.5 overflow-x-auto pt-1.5 pb-0.5 text-xs scrollbar-none border-t border-black/[0.04]">
                 <button
                   type="button"
                   onClick={() => {
                     setDistrict('all');
                     setEmployment('all');
                   }}
-                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap ${
                     district === 'all' && employment === 'all'
-                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-[#1d1d1f] text-white shadow-xs font-semibold'
+                      : 'bg-black/[0.04] text-[#1d1d1f] hover:bg-black/[0.07]'
                   }`}
                 >
                   {isDe ? 'Alle' : 'All'}
@@ -357,10 +340,10 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setEmployment(employment === 'minijob' ? 'all' : 'minijob')}
-                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap ${
                     employment === 'minijob'
-                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-[#1d1d1f] text-white shadow-xs font-semibold'
+                      : 'bg-black/[0.04] text-[#1d1d1f] hover:bg-black/[0.07]'
                   }`}
                 >
                   Minijob (603 €)
@@ -368,10 +351,10 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setEmployment(employment === 'part-time' ? 'all' : 'part-time')}
-                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap ${
                     employment === 'part-time'
-                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-[#1d1d1f] text-white shadow-xs font-semibold'
+                      : 'bg-black/[0.04] text-[#1d1d1f] hover:bg-black/[0.07]'
                   }`}
                 >
                   Teilzeit
@@ -379,10 +362,10 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setEmployment(employment === '1-day' ? 'all' : '1-day')}
-                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap ${
                     employment === '1-day'
-                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-[#1d1d1f] text-white shadow-xs font-semibold'
+                      : 'bg-black/[0.04] text-[#1d1d1f] hover:bg-black/[0.07]'
                   }`}
                 >
                   Tages-Schichten
@@ -390,10 +373,10 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setDistrict(district === 'Kreuzberg' ? 'all' : 'Kreuzberg')}
-                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap ${
                     district === 'Kreuzberg'
-                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-[#1d1d1f] text-white shadow-xs font-semibold'
+                      : 'bg-black/[0.04] text-[#1d1d1f] hover:bg-black/[0.07]'
                   }`}
                 >
                   Kreuzberg
@@ -401,10 +384,10 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setDistrict(district === 'Mitte' ? 'all' : 'Mitte')}
-                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap ${
                     district === 'Mitte'
-                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-[#1d1d1f] text-white shadow-xs font-semibold'
+                      : 'bg-black/[0.04] text-[#1d1d1f] hover:bg-black/[0.07]'
                   }`}
                 >
                   Mitte
@@ -412,10 +395,10 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setDistrict(district === 'Neukölln' ? 'all' : 'Neukölln')}
-                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap ${
                     district === 'Neukölln'
-                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-[#1d1d1f] text-white shadow-xs font-semibold'
+                      : 'bg-black/[0.04] text-[#1d1d1f] hover:bg-black/[0.07]'
                   }`}
                 >
                   Neukölln
@@ -423,10 +406,10 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setDistrict(district === 'Friedrichshain' ? 'all' : 'Friedrichshain')}
-                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap ${
                     district === 'Friedrichshain'
-                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-[#1d1d1f] text-white shadow-xs font-semibold'
+                      : 'bg-black/[0.04] text-[#1d1d1f] hover:bg-black/[0.07]'
                   }`}
                 >
                   Friedrichshain
@@ -436,7 +419,7 @@ export function JobBrowser({
                   <button
                     type="button"
                     onClick={clearFilters}
-                    className="pill-tactile ml-auto text-[11px] text-blue-600 hover:text-blue-800 font-semibold cursor-pointer whitespace-nowrap"
+                    className="pill-tactile ml-auto text-xs text-[#0071e3] hover:underline font-medium cursor-pointer whitespace-nowrap"
                   >
                     ✕ {isDe ? 'Zurücksetzen' : 'Reset'}
                   </button>
@@ -594,90 +577,78 @@ function JobCard({
   const hoursLabel = job.hoursLabel || job.hours?.label || t('flexibleHours');
   const scheduleSummary = job.scheduleSummary || job.schedule?.summary || t('flexibleShifts');
   const districtText = job.district ? `${job.district}${job.postcode ? `, ${job.postcode}` : ''}` : 'Berlin';
+  const isFeatured = job.tier === 'premium' || job.isFeatured;
 
   return (
     <Link
       href={`/jobs/${job.slug || job.id}`}
-      className={`group block overflow-hidden rounded-xl border bg-white p-5 card-tactile cursor-pointer ${
+      className={`group block overflow-hidden rounded-[20px] border bg-white p-5 cursor-pointer transition-all duration-200 active:scale-[0.99] ${
         isSelected
-          ? 'border-blue-600 ring-2 ring-blue-600/30 bg-blue-50/20 shadow-sm'
+          ? 'border-transparent ring-2 ring-[#0071e3] shadow-md'
           : isHovered
-          ? 'border-blue-400 shadow-sm'
-          : 'border-slate-200/90 hover:border-slate-900 hover:shadow-xs'
+          ? 'border-black/[0.14] shadow-[0_4px_16px_rgba(0,0,0,0.04)]'
+          : 'border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:border-black/[0.12] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:-translate-y-[1px]'
       }`}
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
-          {/* Badge line */}
-          <div className="flex flex-wrap items-center gap-1.5 mb-2">
-            <span
-              className={`rounded px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase ${
-                employerPosted
-                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                  : 'bg-slate-100 text-slate-700 border border-slate-200'
-              }`}
-            >
-              {employerPosted ? t('postedByEmployer') : t('verifiedSource')}
-            </span>
-
-            {job.tier === 'premium' || job.isFeatured ? (
-              <span className="rounded bg-amber-400 px-2 py-0.5 text-[10px] font-bold text-slate-950 shadow-2xs">
-                ⭐ Featured · 60 Tage
-              </span>
-            ) : (
-              <span className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 border border-slate-200">
-                30 Tage aktiv
-              </span>
-            )}
-
-            {job.employmentForms &&
-              job.employmentForms.slice(0, 2).map((form: string) => (
-                <span
-                  key={form}
-                  className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 border border-slate-200/60"
-                >
-                  {form}
+          {/* Subtle Tags (Apple Restraint: Only show if featured or specific form, no badge clutter) */}
+          {(isFeatured || (job.employmentForms && job.employmentForms.length > 0)) && (
+            <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
+              {isFeatured && (
+                <span className="rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-amber-900">
+                  Featured · 60d
                 </span>
-              ))}
-          </div>
+              )}
+              {job.employmentForms &&
+                job.employmentForms.slice(0, 2).map((form: string) => (
+                  <span
+                    key={form}
+                    className="rounded-full bg-black/[0.04] px-2.5 py-0.5 text-[11px] font-medium text-[#86868b]"
+                  >
+                    {form}
+                  </span>
+                ))}
+            </div>
+          )}
 
-          {/* Job Title */}
-          <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 tracking-tight leading-snug transition-colors">
+          {/* Job Title (Apple SF Pro Style: Optical hierarchy with negative tracking) */}
+          <h3 className="text-[17px] font-semibold text-[#1d1d1f] tracking-tight leading-snug group-hover:text-[#0071e3] transition-colors">
             {job.title}
           </h3>
 
           {/* Company & District */}
-          <p className="mt-1 text-xs text-slate-600">
-            <span className="font-semibold text-slate-800">{job.company}</span>
-            <span className="mx-1.5 text-slate-300">·</span>
-            <span className="inline-flex items-center gap-1 text-slate-600">
-              <MapPin className="size-3 text-blue-600" />
+          <p className="mt-1 flex flex-wrap items-center gap-1.5 text-[13px] text-[#86868b]">
+            <span className="font-medium text-[#1d1d1f]">{job.company}</span>
+            <span className="text-black/20">·</span>
+            <span className="inline-flex items-center gap-1 text-[#86868b]">
+              <MapPin className="size-3 text-[#86868b]" />
               {districtText}
             </span>
           </p>
         </div>
 
-        {/* Wage / Compensation Badge */}
+        {/* Wage / Compensation Badge (Clean Apple Pill) */}
         <div className="flex shrink-0 items-baseline sm:flex-col sm:items-end sm:justify-start">
-          <span className="rounded-md bg-slate-900 px-2.5 py-1 text-xs font-black text-white font-mono tracking-tight sm:text-sm">
+          <span className="rounded-full bg-black/[0.04] px-3 py-1 text-[13px] font-semibold text-[#1d1d1f] font-mono tracking-tight">
             {payLabel}
           </span>
         </div>
       </div>
 
       {/* Metadata footer */}
-      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-slate-100 pt-3 text-[11px] text-slate-500">
+      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-black/[0.04] pt-3 text-[12px] text-[#86868b]">
         <div className="flex items-center gap-1">
-          <Clock3 className="size-3 text-slate-400" />
+          <Clock3 className="size-3.5 text-[#86868b]" />
           <span>{hoursLabel}</span>
         </div>
         <div className="flex items-center gap-1">
-          <CalendarDays className="size-3 text-slate-400" />
+          <CalendarDays className="size-3.5 text-[#86868b]" />
           <span>{scheduleSummary}</span>
         </div>
-        <div className="ml-auto inline-flex items-center gap-1 font-bold text-blue-600 group-hover:translate-x-0.5 transition-transform">
+        <div className="ml-auto inline-flex items-center gap-1 text-[13px] font-medium text-[#0071e3] group-hover:translate-x-0.5 transition-transform">
           <span>Details</span>
-          <ArrowRight className="size-3" />
+          <ArrowRight className="size-3.5" />
         </div>
       </div>
     </Link>
@@ -689,50 +660,50 @@ export function LatestJobs({ jobs }: { jobs: any[] }) {
   if (!jobs || jobs.length === 0) return null;
 
   return (
-    <section className="border-t border-zinc-200/80 bg-white">
-      <div className="mx-auto max-w-[1440px] px-5 py-12 md:px-10 md:py-16">
+    <section className="border-t border-black/[0.06] bg-[#f5f5f7]/50 py-12 md:py-16">
+      <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-6">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+            <h2 className="text-2xl font-bold tracking-tight text-[#1d1d1f]">
               {t('latestJobs')} in Berlin
             </h2>
           </div>
           <Link
             href="/latest-jobs"
-            className="inline-flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-800 shadow-2xs transition hover:border-zinc-400 hover:text-zinc-950"
+            className="apple-btn-secondary !h-8 !px-3.5 !text-xs"
           >
             <span>{t('viewAllLatest')}</span>
             <ArrowRight className="size-3" />
           </Link>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {jobs.slice(0, 6).map((job) => (
             <Link
               key={job.id}
               href={`/jobs/${job.slug || job.id}`}
-              className="group flex flex-col justify-between rounded-xl border border-zinc-200 bg-zinc-50/50 p-4.5 transition hover:border-zinc-950 hover:bg-white hover:shadow-2xs"
+              className="group flex flex-col justify-between rounded-[20px] border border-black/[0.06] bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.02)] transition-all duration-200 hover:border-black/[0.12] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:-translate-y-[1px] active:scale-[0.99]"
             >
               <div>
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-mono text-xs font-bold text-zinc-900">
+                  <span className="font-mono text-xs font-semibold text-[#1d1d1f]">
                     {formatPinBadge(job)}
                   </span>
-                  <span className="text-[11px] text-zinc-500 truncate">
+                  <span className="text-[12px] text-[#86868b] truncate">
                     {job.district || 'Berlin'}
                   </span>
                 </div>
-                <h3 className="mt-2.5 font-bold text-sm text-zinc-900 group-hover:text-black line-clamp-2">
+                <h3 className="mt-2.5 text-[15px] font-semibold text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors line-clamp-2">
                   {job.title}
                 </h3>
-                <p className="mt-1 text-xs text-zinc-500 line-clamp-1">
+                <p className="mt-1 text-[13px] text-[#86868b] line-clamp-1">
                   {job.company}
                 </p>
               </div>
 
-              <div className="mt-3.5 flex items-center justify-between border-t border-zinc-200/60 pt-2.5 text-xs font-semibold text-zinc-900">
-                <span>{t('browseCategory')}</span>
-                <ArrowRight className="size-3 transition group-hover:translate-x-0.5" />
+              <div className="mt-4 flex items-center justify-between border-t border-black/[0.04] pt-3 text-xs font-medium text-[#1d1d1f]">
+                <span className="text-[#86868b]">{t('browseCategory')}</span>
+                <ArrowRight className="size-3.5 text-[#0071e3] transition group-hover:translate-x-0.5" />
               </div>
             </Link>
           ))}

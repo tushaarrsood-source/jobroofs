@@ -24,23 +24,21 @@ export function KiezMapPage({
 
   return (
     <div className="mx-auto max-w-[1440px] px-2 sm:px-4 md:px-6 py-3 sm:py-4">
-      {/* Top Controls Header Bar */}
-      <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-slate-200 bg-white p-2.5 sm:p-3 shadow-xs">
-        {/* Toggle Switch: Jobs vs Homes */}
-        <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
+      {/* Top Controls Header Bar - Apple Design */}
+      <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between rounded-[20px] border border-black/[0.06] bg-white p-2.5 sm:p-3 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+        {/* Apple Segmented Switch: Jobs vs Homes */}
+        <div className="apple-segmented">
           <button
             type="button"
             onClick={() => setActiveTab('jobs')}
-            className={`pill-tactile flex items-center gap-2 rounded-lg px-3 sm:px-4 py-2 text-xs font-bold transition cursor-pointer select-none ${
-              activeTab === 'jobs'
-                ? 'bg-white text-blue-600 shadow-xs ring-1 ring-slate-200/80'
-                : 'text-slate-600 hover:text-slate-900'
+            className={`apple-segmented-item !px-4 !py-2 ${
+              activeTab === 'jobs' ? 'active' : ''
             }`}
           >
             <Briefcase className="size-4" />
             <span>{isDe ? 'Jobs (Vergütung)' : 'Jobs (Pay)'}</span>
-            <span className={`rounded-full px-1.5 py-0.2 text-[10px] font-mono font-bold ${
-              activeTab === 'jobs' ? 'bg-blue-50 text-blue-700' : 'bg-slate-200/70 text-slate-600'
+            <span className={`rounded-full px-2 py-0.5 text-[10px] font-mono font-medium ${
+              activeTab === 'jobs' ? 'bg-black/[0.08] text-[#1d1d1f]' : 'bg-black/[0.04] text-[#86868b]'
             }`}>
               {initialJobs.length}
             </span>
@@ -49,27 +47,25 @@ export function KiezMapPage({
           <button
             type="button"
             onClick={() => setActiveTab('homes')}
-            className={`pill-tactile flex items-center gap-2 rounded-lg px-3 sm:px-4 py-2 text-xs font-bold transition cursor-pointer select-none ${
-              activeTab === 'homes'
-                ? 'bg-white text-blue-600 shadow-xs ring-1 ring-slate-200/80'
-                : 'text-slate-600 hover:text-slate-900'
+            className={`apple-segmented-item !px-4 !py-2 ${
+              activeTab === 'homes' ? 'active' : ''
             }`}
           >
             <Home className="size-4" />
             <span>{isDe ? 'Wohnen (Warmmiete)' : 'Homes (Warm Rent)'}</span>
-            <span className={`rounded-full px-1.5 py-0.2 text-[10px] font-mono font-bold ${
-              activeTab === 'homes' ? 'bg-blue-50 text-blue-700' : 'bg-slate-200/70 text-slate-600'
+            <span className={`rounded-full px-2 py-0.5 text-[10px] font-mono font-medium ${
+              activeTab === 'homes' ? 'bg-black/[0.08] text-[#1d1d1f]' : 'bg-black/[0.04] text-[#86868b]'
             }`}>
               {initialHousing.length}
             </span>
           </button>
         </div>
 
-        {/* Action Buttons: Post a Job and Post a Room */}
+        {/* Action Buttons: Post a Job and Post a Room (Apple Styling) */}
         <div className="flex items-center gap-2 self-end sm:self-auto">
           <Link
             href="/post-a-job"
-            className="btn-tactile inline-flex h-9 items-center gap-1.5 rounded-xl bg-blue-600 px-3.5 text-xs font-bold text-white shadow-xs hover:bg-blue-700"
+            className="apple-btn-primary !h-9 !px-3.5 !text-xs"
           >
             <Plus className="size-3.5 stroke-[2.5]" />
             <span>{isDe ? 'Job inserieren' : 'Post a Job'}</span>
@@ -77,7 +73,7 @@ export function KiezMapPage({
 
           <Link
             href="/wohnen/list"
-            className="btn-tactile inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-300/90 bg-white px-3.5 text-xs font-bold text-slate-800 shadow-xs hover:bg-slate-50 hover:text-blue-600"
+            className="apple-btn-secondary !h-9 !px-3.5 !text-xs"
           >
             <Plus className="size-3.5 stroke-[2.5]" />
             <span>{isDe ? 'Wohnung inserieren' : 'List a Room'}</span>
@@ -86,7 +82,7 @@ export function KiezMapPage({
       </div>
 
       {/* Tall Interactive Map Container */}
-      <div className="relative h-[calc(100vh-190px)] min-h-[560px] w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-sm">
+      <div className="relative h-[calc(100vh-190px)] min-h-[560px] w-full overflow-hidden rounded-[20px] border border-black/[0.06] bg-[#f5f5f7] shadow-sm">
         {activeTab === 'jobs' ? (
           <JobMap
             jobs={initialJobs}
@@ -103,9 +99,9 @@ export function KiezMapPage({
       </div>
 
       {/* Bottom Hint on Mobile */}
-      <div className="mt-2.5 flex items-center justify-between px-1 text-[11px] text-slate-500">
+      <div className="mt-2.5 flex items-center justify-between px-1 text-[11px] text-[#86868b]">
         <span className="flex items-center gap-1">
-          <MapPin className="size-3 text-slate-400" />
+          <MapPin className="size-3 text-[#86868b]" />
           {activeTab === 'jobs'
             ? isDe ? 'Pins zeigen Stundenlohn / Festgehalt' : 'Pins show hourly wage / salary'
             : isDe ? 'Pins zeigen monatliche Warmmiete' : 'Pins show monthly warm rent'

@@ -149,49 +149,38 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
 
   return (
     <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-6 pt-3 pb-3 md:pt-4 md:pb-4">
-      {/* Editorial Header - Compact & Clean */}
-      <section className="border-b border-slate-200 pb-3">
-        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-950">
-              {isDe ? 'Wohnungen & WG-Zimmer in Berlin' : 'Apartments & WG Rooms in Berlin'}
-            </h1>
-            <p className="mt-0.5 text-xs text-slate-500">
-              {isDe
-                ? 'Direktkontakt mit Warmmiete, Kaution nach BGB und verbindlicher Angabe zur Anmeldung.'
-                : 'Direct contact with warm rent, legal deposit limits, and verified Anmeldung status.'}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            <Link
-              href="/wohnen/list"
-              className="inline-flex h-9 items-center rounded-lg bg-blue-600 px-3.5 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
-            >
-              + {isDe ? 'Inserieren (ab 29 €)' : 'Post a room (from €29)'}
-            </Link>
-          </div>
+      {/* Editorial Header - Apple Minimalist (Single primary action lives in site header) */}
+      <section className="border-b border-black/[0.06] pb-3">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#1d1d1f]">
+            {isDe ? 'Wohnungen & WG-Zimmer in Berlin' : 'Apartments & WG Rooms in Berlin'}
+          </h1>
+          <p className="mt-0.5 text-xs text-[#86868b]">
+            {isDe
+              ? 'Direktkontakt mit Warmmiete, Kaution nach BGB und verbindlicher Angabe zur Anmeldung.'
+              : 'Direct contact with warm rent, legal deposit limits, and verified Anmeldung status.'}
+          </p>
         </div>
 
-        {/* High-Utility Compact Search & Controls Bar */}
-        <div className="mt-2.5 rounded-lg border border-slate-200 bg-white p-1 shadow-2xs">
+        {/* Apple Spotlight Search & Controls Bar */}
+        <div className="mt-3 rounded-[20px] border border-black/[0.06] bg-white p-2 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
           <div className="flex flex-col gap-1.5 md:flex-row md:items-center">
             {/* Search input + Mobile single toggle icon */}
             <div className="flex items-center gap-1.5 flex-1 w-full">
               <div className="relative flex-1">
-                <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-[#86868b]" />
                 <input
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={isDe ? 'Bezirk, Kiez, PLZ oder Stichwort...' : 'Search district, kiez or postcode...'}
-                  className="h-8.5 w-full rounded-md border border-slate-200 bg-slate-50/70 pr-8 pl-8.5 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                  className="h-9 w-full rounded-xl bg-black/[0.03] pr-8 pl-9 text-xs text-[#1d1d1f] placeholder:text-[#86868b] focus:bg-white focus:outline-none focus:ring-1 focus:ring-black/[0.12] transition-all"
                 />
                 {query && (
                   <button
                     type="button"
                     onClick={() => setQuery('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer text-xs"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#86868b] hover:text-[#1d1d1f] cursor-pointer text-xs"
                   >
                     ✕
                   </button>
@@ -203,13 +192,13 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
                 type="button"
                 onClick={() => setViewMode(viewMode === 'map' ? 'split' : 'map')}
                 aria-label={viewMode === 'map' ? 'Zur Liste wechseln' : 'Zur Karte wechseln'}
-                className="md:hidden flex size-8.5 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-700 shadow-2xs transition active:scale-95 cursor-pointer hover:bg-slate-100"
+                className="md:hidden flex size-9 shrink-0 items-center justify-center rounded-xl bg-black/[0.04] text-[#1d1d1f] transition active:scale-95 cursor-pointer hover:bg-black/[0.08]"
                 title={viewMode === 'map' ? 'Liste' : 'Karte'}
               >
                 {viewMode === 'map' ? (
-                  <List className="size-4 text-blue-600" />
+                  <List className="size-4 text-[#1d1d1f]" />
                 ) : (
-                  <MapIcon className="size-4 text-blue-600" />
+                  <MapIcon className="size-4 text-[#1d1d1f]" />
                 )}
               </button>
             </div>
@@ -221,7 +210,7 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
                 <select
                   value={selectedType}
                   onChange={(e) => setSelectedType(e.target.value)}
-                  className="h-8.5 w-full rounded-md border border-slate-200 bg-slate-50/70 px-2 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                  className="h-9 w-full rounded-xl border border-black/[0.08] bg-black/[0.02] px-3 text-xs text-[#1d1d1f] font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-black/[0.12] transition-all"
                 >
                   <option value="all">{t('housingAllTypes')}</option>
                   {Object.entries(housingTypeLabels).map(([key, val]) => (
@@ -237,7 +226,7 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
                 <select
                   value={selectedDistrict}
                   onChange={(e) => setSelectedDistrict(e.target.value)}
-                  className="h-8.5 w-full rounded-md border border-slate-200 bg-slate-50/70 px-2 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                  className="h-9 w-full rounded-xl border border-black/[0.08] bg-black/[0.02] px-3 text-xs text-[#1d1d1f] font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-black/[0.12] transition-all"
                 >
                   <option value="all">{isDe ? 'Alle Bezirke' : 'All districts'}</option>
                   <option value="Mitte">Mitte</option>
@@ -258,61 +247,49 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
               </div>
             </div>
 
-            {/* View Switcher: Desktop only */}
-            <div className="hidden md:flex items-center justify-center gap-0.5 rounded-md border border-slate-200 bg-slate-100/90 p-0.5 shrink-0">
+            {/* Apple Segmented View Switcher: Desktop only */}
+            <div className="hidden md:flex items-center justify-center apple-segmented">
               <button
                 type="button"
                 onClick={() => setViewMode('split')}
-                className={`flex items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
-                  viewMode === 'split'
-                    ? 'bg-blue-600 text-white shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
+                className={`apple-segmented-item ${viewMode === 'split' ? 'active' : ''}`}
                 title="Geteilte Ansicht"
               >
-                <Layers className="size-3" />
+                <Layers className="size-3.5" />
                 <span>Split</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setViewMode('map')}
-                className={`flex items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
-                  viewMode === 'map'
-                    ? 'bg-blue-600 text-white shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
+                className={`apple-segmented-item ${viewMode === 'map' ? 'active' : ''}`}
                 title="Karten-Ansicht"
               >
-                <MapIcon className="size-3" />
+                <MapIcon className="size-3.5" />
                 <span>Karte</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
-                className={`flex items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
-                  viewMode === 'grid'
-                    ? 'bg-blue-600 text-white shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
+                className={`apple-segmented-item ${viewMode === 'grid' ? 'active' : ''}`}
                 title="Raster-Ansicht"
               >
-                <LayoutGrid className="size-3" />
+                <LayoutGrid className="size-3.5" />
                 <span>Raster</span>
               </button>
             </div>
           </div>
 
-          {/* Quick Filter Chips */}
-          <div className="mt-1.5 flex items-center gap-1.5 overflow-x-auto pt-1 pb-0.5 text-[11px] scrollbar-none border-t border-slate-100">
+          {/* Quick Filter Chips (Apple Pills) */}
+          <div className="mt-2 flex items-center gap-1.5 overflow-x-auto pt-1.5 pb-0.5 text-[12px] scrollbar-none border-t border-black/[0.04]">
             <button
               type="button"
               onClick={clearFilters}
-              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap active:scale-[0.97] ${
                 !hasActiveFilters
-                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#1d1d1f] text-white shadow-2xs'
+                  : 'bg-black/[0.04] text-[#86868b] hover:bg-black/[0.08] hover:text-[#1d1d1f]'
               }`}
             >
               {isDe ? 'Alle' : 'All'}
@@ -320,10 +297,10 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setSelectedType(selectedType === 'wg_room' ? 'all' : 'wg_room')}
-              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap active:scale-[0.97] ${
                 selectedType === 'wg_room'
-                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#1d1d1f] text-white shadow-2xs'
+                  : 'bg-black/[0.04] text-[#86868b] hover:bg-black/[0.08] hover:text-[#1d1d1f]'
               }`}
             >
               WG-Zimmer
@@ -331,10 +308,10 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setSelectedType(selectedType === 'entire_apartment' ? 'all' : 'entire_apartment')}
-              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap active:scale-[0.97] ${
                 selectedType === 'entire_apartment'
-                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#1d1d1f] text-white shadow-2xs'
+                  : 'bg-black/[0.04] text-[#86868b] hover:bg-black/[0.08] hover:text-[#1d1d1f]'
               }`}
             >
               1-Zimmer / Wohnung
@@ -342,10 +319,10 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setSelectedType(selectedType === 'sublet' ? 'all' : 'sublet')}
-              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap active:scale-[0.97] ${
                 selectedType === 'sublet'
-                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#1d1d1f] text-white shadow-2xs'
+                  : 'bg-black/[0.04] text-[#86868b] hover:bg-black/[0.08] hover:text-[#1d1d1f]'
               }`}
             >
               Zwischenmiete
@@ -353,22 +330,22 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setOnlyAnmeldung(!onlyAnmeldung)}
-              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap flex items-center gap-1 ${
+              className={`rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap flex items-center gap-1 active:scale-[0.97] ${
                 onlyAnmeldung
-                  ? 'bg-emerald-600 text-white font-semibold shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#1d1d1f] text-white shadow-2xs'
+                  : 'bg-black/[0.04] text-[#86868b] hover:bg-black/[0.08] hover:text-[#1d1d1f]'
               }`}
             >
-              <CheckCircle2 className="size-2.5" />
+              <CheckCircle2 className="size-3" />
               <span>Anmeldung ✓</span>
             </button>
             <button
               type="button"
               onClick={() => setMaxRent(maxRent === 600 ? null : 600)}
-              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap active:scale-[0.97] ${
                 maxRent === 600
-                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#1d1d1f] text-white shadow-2xs'
+                  : 'bg-black/[0.04] text-[#86868b] hover:bg-black/[0.08] hover:text-[#1d1d1f]'
               }`}
             >
               &lt; 600 € warm
@@ -376,10 +353,10 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setSelectedDistrict(selectedDistrict === 'Kreuzberg' ? 'all' : 'Kreuzberg')}
-              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap active:scale-[0.97] ${
                 selectedDistrict === 'Kreuzberg'
-                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#1d1d1f] text-white shadow-2xs'
+                  : 'bg-black/[0.04] text-[#86868b] hover:bg-black/[0.08] hover:text-[#1d1d1f]'
               }`}
             >
               Kreuzberg
@@ -387,10 +364,10 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setSelectedDistrict(selectedDistrict === 'Neukölln' ? 'all' : 'Neukölln')}
-              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap active:scale-[0.97] ${
                 selectedDistrict === 'Neukölln'
-                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#1d1d1f] text-white shadow-2xs'
+                  : 'bg-black/[0.04] text-[#86868b] hover:bg-black/[0.08] hover:text-[#1d1d1f]'
               }`}
             >
               Neukölln
@@ -398,10 +375,10 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setSelectedDistrict(selectedDistrict === 'Mitte' ? 'all' : 'Mitte')}
-              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap active:scale-[0.97] ${
                 selectedDistrict === 'Mitte'
-                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#1d1d1f] text-white shadow-2xs'
+                  : 'bg-black/[0.04] text-[#86868b] hover:bg-black/[0.08] hover:text-[#1d1d1f]'
               }`}
             >
               Mitte
@@ -411,7 +388,7 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
               <button
                 type="button"
                 onClick={clearFilters}
-                className="pill-tactile ml-auto text-[11px] text-blue-600 hover:text-blue-800 font-semibold cursor-pointer whitespace-nowrap"
+                className="ml-auto text-[12px] text-[#0071e3] hover:underline font-medium cursor-pointer whitespace-nowrap active:scale-[0.97]"
               >
                 ✕ {isDe ? 'Zurücksetzen' : 'Reset'}
               </button>
@@ -421,18 +398,18 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
       </section>
 
       {/* Results Header */}
-      <div className="mt-3.5 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
+      <div className="mt-3.5 flex flex-wrap items-center justify-between gap-2 text-xs text-[#86868b]">
         <p>
-          <strong className="font-bold text-slate-900">{filteredListings.length}</strong>{' '}
+          <strong className="font-semibold text-[#1d1d1f]">{filteredListings.length}</strong>{' '}
           {isDe ? 'Wohnungen & WG-Zimmer in Berlin' : 'listings in Berlin'}
         </p>
 
         <div className="hidden md:flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-md bg-slate-100 border border-slate-200 px-2 py-0.5 text-xs font-medium text-slate-700">
-            <span className="size-1.5 rounded-full bg-emerald-600" />
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-black/[0.04] px-2.5 py-0.5 text-xs font-medium text-[#1d1d1f]">
+            <span className="size-1.5 rounded-full bg-emerald-500" />
             Live Kiez-Karte
           </span>
-          <span className="hidden sm:inline text-[11px] text-slate-400">
+          <span className="hidden sm:inline text-[11px] text-[#86868b]">
             Geprüft nach BGB § 551 (max. 3 Kaltmieten Kaution)
           </span>
         </div>
@@ -457,18 +434,18 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             {/* Cards List */}
             <div className="space-y-4">
               {filteredListings.length === 0 ? (
-                <div className="rounded-xl border border-slate-200 bg-white p-12 text-center">
-                  <Home className="mx-auto size-8 text-slate-300" />
-                  <h3 className="mt-3 text-sm font-bold text-slate-900">
+                <div className="rounded-[20px] border border-black/[0.06] bg-white p-12 text-center shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+                  <Home className="mx-auto size-8 text-[#86868b]" />
+                  <h3 className="mt-3 text-sm font-semibold text-[#1d1d1f]">
                     Keine Inserate für deine Filtereinstellungen gefunden
                   </h3>
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p className="mt-1 text-xs text-[#86868b]">
                     Versuche, den maximalen Mietpreis zu erhöhen oder die Bezirksauswahl zu erweitern.
                   </p>
                   <button
                     type="button"
                     onClick={clearFilters}
-                    className="mt-4 inline-flex items-center rounded-lg bg-blue-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-blue-700 cursor-pointer"
+                    className="apple-btn-primary mt-4"
                   >
                     Filter zurücksetzen
                   </button>
@@ -508,7 +485,7 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
                   selectedListingId={selectedListingId}
                   hoveredListingId={hoveredListingId}
                   onSelectListing={handleSelectListingFromMap}
-                  className="h-full w-full rounded-2xl border border-slate-200 shadow-sm"
+                  className="h-full w-full rounded-[20px] border border-black/[0.06] shadow-sm"
                 />
               </div>
             </div>
@@ -517,18 +494,18 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
           /* Grid View */
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {filteredListings.length === 0 ? (
-              <div className="col-span-full rounded-xl border border-slate-200 bg-white p-12 text-center">
-                <Home className="mx-auto size-8 text-slate-300" />
-                <h3 className="mt-3 text-sm font-bold text-slate-900">
+              <div className="col-span-full rounded-[20px] border border-black/[0.06] bg-white p-12 text-center shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+                <Home className="mx-auto size-8 text-[#86868b]" />
+                <h3 className="mt-3 text-sm font-semibold text-[#1d1d1f]">
                   Keine Inserate für deine Filtereinstellungen gefunden
                 </h3>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-[#86868b]">
                   Versuche, den maximalen Mietpreis zu erhöhen oder die Bezirksauswahl zu erweitern.
                 </p>
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="mt-4 inline-flex items-center rounded-lg bg-blue-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-blue-700 cursor-pointer"
+                  className="apple-btn-primary mt-4"
                 >
                   Filter zurücksetzen
                 </button>
@@ -549,18 +526,18 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
           /* List View */
           <div className="mx-auto max-w-4xl space-y-3">
             {filteredListings.length === 0 ? (
-              <div className="rounded-xl border border-slate-200 bg-white p-12 text-center">
-                <Home className="mx-auto size-8 text-slate-300" />
-                <h3 className="mt-3 text-sm font-bold text-slate-900">
+              <div className="rounded-[20px] border border-black/[0.06] bg-white p-12 text-center shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+                <Home className="mx-auto size-8 text-[#86868b]" />
+                <h3 className="mt-3 text-sm font-semibold text-[#1d1d1f]">
                   Keine Inserate für deine Filtereinstellungen gefunden
                 </h3>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-[#86868b]">
                   Versuche, den maximalen Mietpreis zu erhöhen oder die Bezirksauswahl zu erweitern.
                 </p>
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="mt-4 inline-flex items-center rounded-lg bg-blue-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-blue-700 cursor-pointer"
+                  className="apple-btn-primary mt-4"
                 >
                   Filter zurücksetzen
                 </button>
