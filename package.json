@@ -1,0 +1,9 @@
+﻿{
+  "name": "jobroofs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix portal run build",
+    "start": "npm --prefix portal run start"
+  }
+}
