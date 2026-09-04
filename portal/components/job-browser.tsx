@@ -156,75 +156,133 @@ export function JobBrowser({
     <>
       {showHero && (
         <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto max-w-[1440px] px-5 py-10 md:px-10 md:py-16">
-            <h1 className="font-display max-w-4xl text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[0.95]">
+          <div className="mx-auto max-w-[1440px] px-5 pt-6 pb-4 md:px-10 md:pt-8 md:pb-5">
+            <h1 className="font-display max-w-4xl text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[0.98]">
               {isDe ? (
                 <>
                   MINIJOBS & FLEXIBLE ARBEIT.
-                  <span className="text-blue-600 block mt-1">BERLIN KIEZ-STELLEN.</span>
+                  <span className="text-blue-600 block mt-0.5">BERLIN KIEZ-STELLEN.</span>
                 </>
               ) : (
                 <>
                   MINIJOBS & FLEXIBLE WORK.
-                  <span className="text-blue-600 block mt-1">ACROSS BERLIN.</span>
+                  <span className="text-blue-600 block mt-0.5">ACROSS BERLIN.</span>
                 </>
               )}
             </h1>
-            <p className="mt-3 text-sm text-slate-600 max-w-xl sm:text-base">
+            <p className="mt-1.5 text-xs sm:text-sm text-slate-600 max-w-xl">
               {isDe
                 ? 'Finde Minijobs (603 €), Teilzeitstellen und Schichten direkt bei Berliner Betrieben.'
                 : 'Find minijobs (€603), part-time roles, and flexible shifts directly at local Berlin venues.'}
             </p>
 
-            {/* High-Utility Minimalist Search Bar */}
-            <div className="mt-8 rounded-xl border border-slate-300/90 bg-white p-2.5 shadow-xs">
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-[1.6fr_240px_220px]">
-                <div className="relative flex items-center">
-                  <Search className="pointer-events-none absolute left-3 size-4 text-slate-400" />
+            {/* High-Utility Compact Search & Controls Bar */}
+            <div className="mt-3.5 rounded-xl border border-slate-300/90 bg-white p-1.5 shadow-xs">
+              <div className="flex flex-col gap-1.5 md:flex-row md:items-center">
+                {/* Search Input */}
+                <div className="relative flex-1">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
                   <Input
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
-                    className="h-11 border-slate-200 bg-slate-50/70 pl-9 text-xs placeholder:text-slate-400 focus-visible:ring-1 focus-visible:ring-blue-600 rounded-lg"
+                    className="h-9.5 border-slate-200 bg-slate-50/70 pl-9 pr-8 text-xs placeholder:text-slate-400 focus-visible:ring-1 focus-visible:ring-blue-600 rounded-lg w-full"
                     placeholder={t('searchPlaceholder')}
                     aria-label="Jobtitel oder Kiez suchen"
                   />
+                  {query && (
+                    <button
+                      type="button"
+                      onClick={() => setQuery('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer text-xs"
+                    >
+                      ✕
+                    </button>
+                  )}
                 </div>
 
                 {/* District Filter Dropdown */}
-                <NativeSelect
-                  value={district}
-                  onChange={(event) => setDistrict(event.target.value)}
-                  className="h-11 border-slate-200 bg-slate-50/70 text-xs rounded-lg"
-                  aria-label="Bezirk filtern"
-                >
-                  {berlinDistricts.map((d) => (
-                    <NativeSelectOption key={d.value} value={d.value}>
-                      {isDe ? d.labelDe : d.labelEn}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
+                <div className="w-full md:w-52">
+                  <NativeSelect
+                    value={district}
+                    onChange={(event) => setDistrict(event.target.value)}
+                    className="h-9.5 border-slate-200 bg-slate-50/70 text-xs rounded-lg w-full"
+                    aria-label="Bezirk filtern"
+                  >
+                    {berlinDistricts.map((d) => (
+                      <NativeSelectOption key={d.value} value={d.value}>
+                        {isDe ? d.labelDe : d.labelEn}
+                      </NativeSelectOption>
+                    ))}
+                  </NativeSelect>
+                </div>
 
                 {/* Employment Filter */}
-                <NativeSelect
-                  value={employment}
-                  onChange={(event) => setEmployment(event.target.value)}
-                  className="h-11 border-slate-200 bg-slate-50/70 text-xs rounded-lg"
-                  aria-label="Beschäftigungsart"
-                >
-                  <NativeSelectOption value="all">{t('allJobTypes')}</NativeSelectOption>
-                  <NativeSelectOption value="minijob">{t('minijob')}</NativeSelectOption>
-                  <NativeSelectOption value="part-time">{t('partTime')}</NativeSelectOption>
-                  <NativeSelectOption value="working student">{t('workingStudent')}</NativeSelectOption>
-                  <NativeSelectOption value="short-term">{t('tempShortTerm')}</NativeSelectOption>
-                  <NativeSelectOption value="1-day">{t('oneDayShift')}</NativeSelectOption>
-                </NativeSelect>
-              </div>
-            </div>
+                <div className="w-full md:w-44">
+                  <NativeSelect
+                    value={employment}
+                    onChange={(event) => setEmployment(event.target.value)}
+                    className="h-9.5 border-slate-200 bg-slate-50/70 text-xs rounded-lg w-full"
+                    aria-label="Beschäftigungsart"
+                  >
+                    <NativeSelectOption value="all">{t('allJobTypes')}</NativeSelectOption>
+                    <NativeSelectOption value="minijob">{t('minijob')}</NativeSelectOption>
+                    <NativeSelectOption value="part-time">{t('partTime')}</NativeSelectOption>
+                    <NativeSelectOption value="working student">{t('workingStudent')}</NativeSelectOption>
+                    <NativeSelectOption value="short-term">{t('tempShortTerm')}</NativeSelectOption>
+                    <NativeSelectOption value="1-day">{t('oneDayShift')}</NativeSelectOption>
+                  </NativeSelect>
+                </div>
 
-            {/* View Switcher & Active Filter Controls */}
-            <div className="mt-4 flex items-center justify-between">
-              <div>
-                {(query || district !== 'all' || employment !== 'all') ? (
+                {/* View Switcher inline */}
+                <div className="flex items-center gap-0.5 rounded-lg border border-slate-200 bg-slate-100/90 p-0.5 shrink-0 self-end md:self-auto">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('split')}
+                    className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                      viewMode === 'split'
+                        ? 'bg-blue-600 text-white shadow-2xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                    title="Liste & Karte geteilt"
+                  >
+                    <Layers className="size-3.5" />
+                    <span className="hidden sm:inline">{t('splitView')}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('list')}
+                    className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                      viewMode === 'list'
+                        ? 'bg-blue-600 text-white shadow-2xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                    title="Nur Liste"
+                  >
+                    <List className="size-3.5" />
+                    <span>{t('listView')}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('map')}
+                    className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                      viewMode === 'map'
+                        ? 'bg-blue-600 text-white shadow-2xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                    title="Nur Karte"
+                  >
+                    <MapIcon className="size-3.5" />
+                    <span>{t('mapView')}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Reset Filters Pill (only visible when filters are active) */}
+              {(query || district !== 'all' || employment !== 'all') && (
+                <div className="mt-1.5 pt-1.5 border-t border-slate-100 flex items-center justify-between text-xs px-1">
+                  <span className="text-slate-500 font-medium">
+                    {visibleJobs.length} {isDe ? 'Ergebnisse' : 'results'}
+                  </span>
                   <button
                     type="button"
                     onClick={() => {
@@ -232,55 +290,12 @@ export function JobBrowser({
                       setDistrict('all');
                       setEmployment('all');
                     }}
-                    className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 font-semibold cursor-pointer"
+                    className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 font-semibold cursor-pointer"
                   >
                     ✕ {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
                   </button>
-                ) : null}
-              </div>
-
-              {/* View Switcher */}
-              <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-2xs">
-                <button
-                  type="button"
-                  onClick={() => setViewMode('split')}
-                  className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
-                    viewMode === 'split'
-                      ? 'bg-blue-600 text-white shadow-2xs'
-                      : 'text-slate-500 hover:text-slate-900'
-                  }`}
-                  title="Liste & Karte geteilt"
-                >
-                  <Layers className="size-3.5" />
-                  <span className="hidden sm:inline">{t('splitView')}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setViewMode('list')}
-                  className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
-                    viewMode === 'list'
-                      ? 'bg-blue-600 text-white shadow-2xs'
-                      : 'text-slate-500 hover:text-slate-900'
-                  }`}
-                  title="Nur Liste"
-                >
-                  <List className="size-3.5" />
-                  <span>{t('listView')}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setViewMode('map')}
-                  className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
-                    viewMode === 'map'
-                      ? 'bg-blue-600 text-white shadow-2xs'
-                      : 'text-slate-500 hover:text-slate-900'
-                  }`}
-                  title="Nur Karte"
-                >
-                  <MapIcon className="size-3.5" />
-                  <span>{t('mapView')}</span>
-                </button>
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -288,8 +303,8 @@ export function JobBrowser({
 
       {/* Listings Section */}
       <section id="jobs" className="bg-[#f8fafc]">
-        <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-10">
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div className="mx-auto max-w-[1440px] px-5 py-4 md:px-10 md:py-6">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 className="text-xl font-bold tracking-tight text-slate-950">{effectiveSectionTitle}</h2>
               <p className="mt-1 text-xs text-zinc-500">

@@ -120,62 +120,71 @@ export function HousingBrowser({
   };
 
   return (
-    <div className="mx-auto max-w-[1440px] px-5 py-6 md:px-10 md:py-10">
+    <div className="mx-auto max-w-[1440px] px-5 pt-6 pb-4 md:px-10 md:pt-8 md:pb-5">
       {/* Editorial Header */}
-      <section className="border-b border-slate-200 pb-8">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <section className="border-b border-slate-200 pb-4">
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[0.95]">
+            <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[0.98]">
               {isDe ? (
                 <>
                   WOHNUNGEN & WG-ZIMMER.
-                  <span className="text-blue-600 block mt-1">IN BERLIN.</span>
+                  <span className="text-blue-600 block mt-0.5">IN BERLIN.</span>
                 </>
               ) : (
                 <>
                   APARTMENTS & WG ROOMS.
-                  <span className="text-blue-600 block mt-1">IN BERLIN.</span>
+                  <span className="text-blue-600 block mt-0.5">IN BERLIN.</span>
                 </>
               )}
             </h1>
-            <p className="mt-3 text-sm leading-relaxed text-slate-600 max-w-xl sm:text-base">
+            <p className="mt-1.5 text-xs sm:text-sm text-slate-600 max-w-xl">
               {isDe
                 ? 'Direkter Marktplatz von Nutzer zu Nutzer mit Angaben zur Anmeldung und Warmmiete.'
                 : 'Direct marketplace from user to user with Anmeldung details and warm rent breakdowns.'}
             </p>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             <Link
               href="/wohnen/list"
-              className="inline-flex h-11 items-center rounded-xl bg-blue-600 px-5 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
+              className="inline-flex h-9.5 items-center rounded-xl bg-blue-600 px-4 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
             >
               + {isDe ? 'Wohnung inserieren' : 'Post a room'}
             </Link>
           </div>
         </div>
 
-        {/* High-Utility Minimalist Search & Filter Bar */}
-        <div className="mt-7 rounded-xl border border-slate-300/90 bg-white p-2.5 shadow-xs">
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-[1.6fr_240px_220px]">
+        {/* High-Utility Compact Search & Controls Bar */}
+        <div className="mt-3.5 rounded-xl border border-slate-300/90 bg-white p-1.5 shadow-xs">
+          <div className="flex flex-col gap-1.5 md:flex-row md:items-center">
             {/* Search input */}
-            <div className="relative flex items-center">
-              <Search className="pointer-events-none absolute left-3 size-4 text-slate-400" />
+            <div className="relative flex-1">
+              <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
               <input
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={isDe ? 'Bezirk, Kiez, PLZ oder Stichwort...' : 'Search district, kiez or postcode...'}
-                className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50/70 pr-3 pl-9 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                className="h-9.5 w-full rounded-lg border border-slate-200 bg-slate-50/70 pr-8 pl-9 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
               />
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => setQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer text-xs"
+                >
+                  ✕
+                </button>
+              )}
             </div>
 
             {/* Type dropdown */}
-            <div>
+            <div className="w-full md:w-44">
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
-                className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50/70 px-3 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                className="h-9.5 w-full rounded-lg border border-slate-200 bg-slate-50/70 px-2.5 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
               >
                 <option value="all">{t('housingAllTypes')}</option>
                 {Object.entries(housingTypeLabels).map(([key, val]) => (
@@ -187,11 +196,11 @@ export function HousingBrowser({
             </div>
 
             {/* District dropdown */}
-            <div>
+            <div className="w-full md:w-48">
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50/70 px-3 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                className="h-9.5 w-full rounded-lg border border-slate-200 bg-slate-50/70 px-2.5 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
               >
                 <option value="all">{t('housingAllDistricts')}</option>
                 {BERLIN_DISTRICTS.map((dist) => (
@@ -201,78 +210,79 @@ export function HousingBrowser({
                 ))}
               </select>
             </div>
-          </div>
-        </div>
 
-        {/* View Switcher & Active Filter Controls */}
-        <div className="mt-4 flex items-center justify-between">
-          <div>
-            {hasActiveFilters && (
+            {/* View Mode Switcher inline */}
+            <div className="flex items-center gap-0.5 rounded-lg border border-slate-200 bg-slate-100/90 p-0.5 shrink-0 self-end md:self-auto">
+              <button
+                type="button"
+                onClick={() => setViewMode('split')}
+                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                  viewMode === 'split'
+                    ? 'bg-blue-600 text-white shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Split-Ansicht (Liste + Karte)"
+              >
+                <Layers className="size-3.5" />
+                <span className="hidden sm:inline">Split</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('list')}
+                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                  viewMode === 'list'
+                    ? 'bg-blue-600 text-white shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Kompakte Liste"
+              >
+                <List className="size-3.5" />
+                <span>Liste</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('map')}
+                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                  viewMode === 'map'
+                    ? 'bg-blue-600 text-white shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Nur Karte"
+              >
+                <MapIcon className="size-3.5" />
+                <span>Karte</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('grid')}
+                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                  viewMode === 'grid'
+                    ? 'bg-blue-600 text-white shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Raster-Ansicht"
+              >
+                <LayoutGrid className="size-3.5" />
+                <span className="hidden sm:inline">Raster</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Reset Filters Pill (only visible when filters are active) */}
+          {hasActiveFilters && (
+            <div className="mt-1.5 pt-1.5 border-t border-slate-100 flex items-center justify-between text-xs px-1">
+              <span className="text-slate-500 font-medium">
+                {visibleListings.length} {isDe ? 'Wohnungen gefunden' : 'listings found'}
+              </span>
               <button
                 type="button"
                 onClick={clearFilters}
-                className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 font-semibold cursor-pointer"
+                className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 font-semibold cursor-pointer"
               >
                 ✕ {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
               </button>
-            )}
-          </div>
-
-          {/* View Mode Switcher */}
-          <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-2xs">
-            <button
-              type="button"
-              onClick={() => setViewMode('split')}
-              className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
-                viewMode === 'split'
-                  ? 'bg-blue-600 text-white shadow-2xs'
-                  : 'text-slate-500 hover:text-slate-900'
-              }`}
-              title="Split-Ansicht (Liste + Karte)"
-            >
-              <Layers className="size-3.5" />
-              <span className="hidden sm:inline">Split</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('list')}
-              className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
-                viewMode === 'list'
-                  ? 'bg-blue-600 text-white shadow-2xs'
-                  : 'text-slate-500 hover:text-slate-900'
-              }`}
-              title="Kompakte Liste"
-            >
-              <List className="size-3.5" />
-              <span>Liste</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('map')}
-              className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
-                viewMode === 'map'
-                  ? 'bg-blue-600 text-white shadow-2xs'
-                  : 'text-slate-500 hover:text-slate-900'
-              }`}
-              title="Nur Karte"
-            >
-              <MapIcon className="size-3.5" />
-              <span>Karte</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('grid')}
-              className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
-                viewMode === 'grid'
-                  ? 'bg-blue-600 text-white shadow-2xs'
-                  : 'text-slate-500 hover:text-slate-900'
-              }`}
-              title="Raster-Ansicht"
-            >
-              <LayoutGrid className="size-3.5" />
-              <span className="hidden sm:inline">Raster</span>
-            </button>
-          </div>
+            </div>
+          )}
         </div>
       </section>
 
