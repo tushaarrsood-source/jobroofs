@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { housingTypeLabels, type HousingListingType } from '@/lib/domain/housing-types';
 import { useTranslation } from '@/lib/i18n/language-context';
+import { saveMyListing } from '@/lib/storage/my-listings';
 
 const HousingMap = dynamic(() => import('@/components/housing-map').then((mod) => mod.HousingMap), {
   ssr: false,
@@ -246,6 +247,24 @@ export function HousingListingForm() {
         setVerifying(false);
         return;
       }
+
+      try {
+        const listingId = data.listingId || `housing-${Date.now()}`;
+        saveMyListing({
+          id: listingId,
+          type: 'housing',
+          title: formData.title || 'Wohnung / WG-Zimmer',
+          subtitle: `${formData.district} · ${formData.roomSqm || 20} m²`,
+          badgeLabel: `${formData.warmmieteEur || 600} €`,
+          tier: formData.tier,
+          tierLabel: formData.tier === 'premium' ? '⭐ Premium Plus (60 Tage)' : 'Standard (30 Tage)',
+          status: 'active',
+          postedAt: new Date().toISOString(),
+          expiresAt: new Date(Date.now() + (formData.tier === 'premium' ? 60 : 30) * 86400000).toISOString(),
+          linkUrl: `/wohnen`,
+          pricePaidEur: formData.tier === 'premium' ? 49 : 29,
+        });
+      } catch {}
 
       if (data.checkoutUrl) {
         window.location.href = data.checkoutUrl;

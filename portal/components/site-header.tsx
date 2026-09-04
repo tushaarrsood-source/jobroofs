@@ -10,12 +10,14 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
   const { t, isDe } = useTranslation();
   const pathname = usePathname();
 
+  const isMapActive = pathname.startsWith('/karte');
   const isJobsActive =
-    pathname === '/' ||
-    pathname.startsWith('/jobs') ||
-    pathname.startsWith('/categories') ||
-    pathname === '/post-a-job';
-  const isHousingActive = pathname.startsWith('/wohnen');
+    !isMapActive &&
+    (pathname === '/' ||
+      pathname.startsWith('/jobs') ||
+      pathname.startsWith('/categories') ||
+      pathname === '/post-a-job');
+  const isHousingActive = !isMapActive && pathname.startsWith('/wohnen');
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur-md">
@@ -75,7 +77,19 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
                   {isDe ? 'Wohnen' : 'Housing'}
                 </Link>
 
-                {/* 3. Profil Link */}
+                {/* 3. Karte Link */}
+                <Link
+                  href="/karte"
+                  className={`py-1 transition-colors ${
+                    isMapActive
+                      ? 'text-slate-900 font-bold border-b-2 border-blue-600'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  {isDe ? 'Karte' : 'Map'}
+                </Link>
+
+                {/* 4. Profil Link */}
                 <Link
                   href="/profil"
                   className={`py-1 transition-colors ${

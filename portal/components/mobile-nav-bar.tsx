@@ -15,10 +15,10 @@ export function MobileNavBar() {
   const [isProfileDrawerOpen, setIsProfileDrawerOpen] = useState(false);
 
   // Active route indicators
-  const isJobs = pathname === '/' || pathname.startsWith('/jobs') || pathname.startsWith('/categories');
-  const isHousing = pathname.startsWith('/wohnen');
+  const isMap = pathname === '/karte' || pathname.startsWith('/karte') || pathname.includes('view=map');
+  const isJobs = (pathname === '/' || pathname.startsWith('/jobs') || pathname.startsWith('/categories')) && !isMap;
+  const isHousing = pathname.startsWith('/wohnen') && !isMap;
   const isProfile = pathname.startsWith('/profil');
-  const isMap = pathname.includes('view=map');
 
   return (
     <>
@@ -72,7 +72,7 @@ export function MobileNavBar() {
 
           {/* 4. Map Tab */}
           <Link
-            href={isHousing ? '/wohnen?view=map' : '/?view=map'}
+            href="/karte"
             className={`flex flex-1 flex-col items-center justify-center py-1 transition-colors ${
               isMap
                 ? 'text-blue-600 font-semibold'

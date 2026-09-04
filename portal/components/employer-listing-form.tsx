@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { industryNiches } from '@/lib/domain/taxonomy';
 import { formatVerbatimPointers } from '@/lib/domain/text-format';
 import { useTranslation } from '@/lib/i18n/language-context';
+import { saveMyListing } from '@/lib/storage/my-listings';
 import Link from '@/components/ui/link';
 
 interface SubmitResponse {
@@ -41,6 +42,7 @@ export function EmployerListingForm() {
   const [scheduleType, setScheduleType] = useState<'shift_1day' | 'flexible' | 'regular'>('regular');
   
   const [submissionId, setSubmissionId] = useState<string | null>(null);
+  const [submittedSnapshot, setSubmittedSnapshot] = useState<any>(null);
   const [verificationCode, setVerificationCode] = useState('');
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'submitting' | 'verify' | 'verifying' | 'published' | 'needs_review' | 'payment_required'>('idle');
   const [publishedSlug, setPublishedSlug] = useState<string | null>(null);
@@ -109,6 +111,7 @@ export function EmployerListingForm() {
     const submitterEmail = (data.contactEmail as string) || (data.applicationEmail as string) || '';
 
     try {
+      setSubmittedSnapshot(data);
       const res = await fetch('/api/employer/submit', {
         method: 'POST',
         body: JSON.stringify({
@@ -143,10 +146,44 @@ export function EmployerListingForm() {
       });
       const result = (await res.json()) as VerifyResponse;
       if (result.status === 'payment_required' && result.checkoutUrl) {
+        try {
+          const fallbackSlug = result.slug || result.jobId || `job-${Date.now()}`;
+          saveMyListing({
+            id: fallbackSlug,
+            type: 'job',
+            title: (submittedSnapshot?.title as string) || 'Neues Job-Inserat',
+            subtitle: `${submittedSnapshot?.company || 'Arbeitgeber'} · ${submittedSnapshot?.district || 'Berlin'}`,
+            badgeLabel: (submittedSnapshot?.payText as string) || 'Vergütung n.V.',
+            tier: pricingPlan,
+            tierLabel: pricingPlan === 'premium' ? '⭐ Premium Plus (60 Tage)' : 'Standard (30 Tage)',
+            status: 'active',
+            postedAt: new Date().toISOString(),
+            expiresAt: new Date(Date.now() + (pricingPlan === 'premium' ? 60 : 30) * 86400000).toISOString(),
+            linkUrl: `/jobs/${fallbackSlug}`,
+            pricePaidEur: pricingPlan === 'premium' ? 49 : 29,
+          });
+        } catch {}
         window.location.href = result.checkoutUrl;
       } else if (result.status === 'published') {
-        setPublishedSlug(result.slug || result.jobId || null);
+        const slug = result.slug || result.jobId || `job-${Date.now()}`;
+        setPublishedSlug(slug);
         setSubmitStatus('published');
+        try {
+          saveMyListing({
+            id: slug,
+            type: 'job',
+            title: (submittedSnapshot?.title as string) || 'Neues Job-Inserat',
+            subtitle: `${submittedSnapshot?.company || 'Arbeitgeber'} · ${submittedSnapshot?.district || 'Berlin'}`,
+            badgeLabel: (submittedSnapshot?.payText as string) || 'Vergütung n.V.',
+            tier: pricingPlan,
+            tierLabel: pricingPlan === 'premium' ? '⭐ Premium Plus (60 Tage)' : 'Standard (30 Tage)',
+            status: 'active',
+            postedAt: new Date().toISOString(),
+            expiresAt: new Date(Date.now() + (pricingPlan === 'premium' ? 60 : 30) * 86400000).toISOString(),
+            linkUrl: `/jobs/${slug}`,
+            pricePaidEur: pricingPlan === 'premium' ? 49 : 29,
+          });
+        } catch {}
       } else if (result.status === 'needs_review') {
         setSubmitStatus('needs_review');
       } else {

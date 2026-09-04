@@ -4,9 +4,10 @@ import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { User, Globe, Briefcase, Home, HelpCircle, Shield, ChevronRight, ArrowRight } from 'lucide-react';
 import { LanguageToggle } from '@/components/language-toggle';
+import { MyListings } from '@/components/my-listings';
 
 export const metadata: Metadata = {
-  title: 'Mein Bereich � JOBROOFS',
+  title: 'Mein Bereich · JOBROOFS',
   description: 'Verwalte deine Inserate, Spracheinstellungen und gespeicherte Angebote auf JOBROOFS.',
 };
 
@@ -16,7 +17,7 @@ export default function ProfilePage() {
       <div>
         <SiteHeader />
         
-        <div className="mx-auto max-w-xl px-5 py-8 sm:py-12">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 py-6 sm:py-10 space-y-6">
           {/* User card */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
             <div className="flex items-center gap-4">
@@ -43,10 +44,13 @@ export default function ProfilePage() {
             </div>
           </div>
 
+          {/* User's Listings Section */}
+          <MyListings />
+
           {/* Quick actions */}
-          <div className="mt-6 space-y-3">
+          <div className="space-y-3">
             <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 px-1">
-              Aktionen & Inserate
+              Aktionen & Services
             </h2>
 
             <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white divide-y divide-slate-100 shadow-xs">
