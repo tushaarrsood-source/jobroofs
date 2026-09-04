@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono, Oswald } from 'next/font/google';
 import { LanguageProvider } from '@/lib/i18n/language-context';
+import { PWAProvider } from '@/components/pwa-provider';
+import { MobileNavBar } from '@/components/mobile-nav-bar';
+import { PWAInstallBanner } from '@/components/pwa-install-banner';
 import './globals.css';
 
 const geistSans = Geist({
@@ -20,9 +23,12 @@ const oswald = Oswald({
 });
 
 export const viewport: Viewport = {
-  themeColor: '#18221e',
+  themeColor: '#0f172a',
   width: 'device-width',
   initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
 };
 
 export const metadata: Metadata = {
@@ -86,8 +92,21 @@ export const metadata: Metadata = {
       'x-default': 'https://jobroofs.com',
     },
   },
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'JOBROOFS',
+  },
   icons: {
-    icon: '/favicon.svg',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
 };
 
@@ -98,10 +117,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de">
+      <head>
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} antialiased selection:bg-blue-600 selection:text-white pb-20 md:pb-0`}
       >
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          <PWAProvider>
+            {children}
+            <MobileNavBar />
+            <PWAInstallBanner />
+          </PWAProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

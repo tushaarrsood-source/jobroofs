@@ -39,8 +39,9 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
         </Link>
 
         {/* Right: Navigation & Actions */}
-        <div className="flex items-center gap-3 sm:gap-6">
-          <nav className="flex items-center gap-3 sm:gap-6 text-xs sm:text-sm font-semibold">
+        <div className="flex items-center gap-2 sm:gap-6">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-4 lg:gap-6 text-sm font-semibold">
             {control ? (
               <Link
                 href="/"
@@ -77,7 +78,7 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
                 {/* 3. Housing direct post button */}
                 <Link
                   href="/wohnen/list"
-                  className="inline-flex h-9 items-center rounded-lg bg-blue-600 px-3.5 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
+                  className="inline-flex h-9 items-center rounded-lg border border-slate-300 bg-slate-50 px-3.5 text-xs font-bold text-slate-800 transition hover:bg-slate-100 hover:text-blue-600"
                 >
                   + {isDe ? 'Wohnung inserieren' : 'List a Room'}
                 </Link>
@@ -93,7 +94,13 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
             )}
           </nav>
 
-          <div className="border-l border-slate-200 pl-3 sm:pl-5">
+          {/* Mobile Status Indicator (Futuristic Cyber Pill) */}
+          <div className="flex md:hidden items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-50/80 px-2 py-0.5 text-[10px] font-bold text-emerald-800 font-mono">
+            <span className="size-1.5 rounded-full bg-emerald-500 animate-ping" />
+            <span>BERLIN LIVE</span>
+          </div>
+
+          <div className="border-l border-slate-200 pl-2 sm:pl-5">
             <LanguageToggle />
           </div>
         </div>

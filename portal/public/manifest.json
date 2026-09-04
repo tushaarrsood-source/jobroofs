@@ -1,0 +1,72 @@
+{
+  "name": "JOBROOFS — Berlin Flexible Jobs & Housing",
+  "short_name": "JOBROOFS",
+  "description": "Direct marketplace for flexible work, minijobs (603 €), WG rooms and apartments across Berlin.",
+  "start_url": "/",
+  "id": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "orientation": "portrait-primary",
+  "theme_color": "#0f172a",
+  "background_color": "#0f172a",
+  "lang": "de-DE",
+  "dir": "ltr",
+  "categories": ["jobs", "business", "lifestyle", "social"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Jobs Berlin",
+      "short_name": "Jobs",
+      "description": "Flexible Minijobs, Aushilfe & Teilzeit in Berlin durchsuchen",
+      "url": "/",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Wohnen Berlin",
+      "short_name": "Wohnen",
+      "description": "WG-Zimmer, Wohnungen & Zwischenmiete in Berlin finden",
+      "url": "/wohnen",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Job inserieren",
+      "short_name": "Job +",
+      "description": "Aushilfe oder Minijob in 2 Minuten ausschreiben",
+      "url": "/post-a-job",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Wohnung inserieren",
+      "short_name": "Wohnung +",
+      "description": "WG-Zimmer oder Nachmieter kostenlos inserieren",
+      "url": "/wohnen/list",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
