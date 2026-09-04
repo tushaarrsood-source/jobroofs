@@ -20,7 +20,7 @@ export async function generateMetadata({
       title: `${listing.title} (${listing.district}) — ${listing.warmmieteEur} € warm`,
       description: `${listing.title} in ${listing.district}, Berlin. ${listing.roomSqm} m², ${listing.warmmieteEur} € warm. Anmeldung: ${listing.anmeldungPossible ? 'Ja' : 'Nein'}.`,
       openGraph: {
-        title: `${listing.title} · KIEZJOB Wohnen`,
+        title: `${listing.title} · JOBROOFS Wohnen`,
         description: `${listing.warmmieteEur} € warm · ${listing.district}, Berlin.`,
         url: `/wohnen/${id}`,
       },
@@ -58,6 +58,8 @@ export default async function HousingDetailPage({
           postcode: r.postcode,
           neighborhood: r.neighborhood,
           streetAddress: r.street_address,
+          latitude: r.latitude ? Number(r.latitude) : null,
+          longitude: r.longitude ? Number(r.longitude) : null,
           kaltmieteEur: r.kaltmiete_eur,
           nebenkostenEur: r.nebenkosten_eur,
           warmmieteEur: r.warmmiete_eur,

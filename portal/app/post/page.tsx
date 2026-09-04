@@ -5,9 +5,9 @@ import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 
 export const metadata: Metadata = {
-  title: 'Inserat aufgeben — Job oder Wohnung inserieren · KIEZJOB Berlin',
+  title: 'Inserat aufgeben — Job oder Wohnung inserieren · JOBROOFS Berlin',
   description:
-    'Wähle deine Kategorie: Stellenanzeige für flexible Minijobs schalten oder Wohnung/WG-Zimmer in Berlin inserieren. 29 € für 30 Tage.',
+    'Wähle deine Kategorie: Stellenanzeige für flexible Minijobs schalten oder Wohnung/WG-Zimmer in Berlin inserieren. 30 Tage Laufzeit.',
   alternates: {
     canonical: '/post',
   },
@@ -26,7 +26,7 @@ export default function PostChooserPage() {
             </h1>
             <p className="mt-2 text-sm text-slate-600 leading-relaxed sm:text-base">
               Erreiche tausende Berliner Minijobber, Aushilfen und Wohnungssuchende.
-              Einmalig 29 € für 30 Tage Laufzeit — kein Abo, kein Vermittler.
+              30 Tage Laufzeit — kein Abo, 100% Direktkontakt.
             </p>
           </div>
 
@@ -46,7 +46,7 @@ export default function PostChooserPage() {
 
                 <ul className="mt-4 space-y-2 text-xs text-slate-500">
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span> 30 Tage aktiv auf KIEZJOB & OpenStreetMap
+                    <span className="text-emerald-600 font-bold">✓</span> 30 Tage aktiv auf JOBROOFS & OpenStreetMap
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-emerald-600 font-bold">✓</span> Direkte Bewerbungen per E-Mail oder Link
@@ -59,8 +59,10 @@ export default function PostChooserPage() {
 
               <div className="mt-8 border-t border-slate-100 pt-5 flex items-center justify-between">
                 <div>
-                  <span className="text-2xl font-black font-mono text-slate-900">29 €</span>
-                  <span className="block text-[10px] text-slate-400">einmalig / 30 Tage</span>
+                  <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-700">
+                    30 Tage Laufzeit
+                  </span>
+                  <span className="block text-[10px] text-slate-400 mt-0.5">Keine automatische Verlängerung</span>
                 </div>
                 <Link
                   href="/post-a-job"
@@ -100,8 +102,10 @@ export default function PostChooserPage() {
 
               <div className="mt-8 border-t border-slate-100 pt-5 flex items-center justify-between">
                 <div>
-                  <span className="text-2xl font-black font-mono text-slate-900">29 €</span>
-                  <span className="block text-[10px] text-slate-400">einmalig / 30 Tage</span>
+                  <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">
+                    30 Tage Laufzeit
+                  </span>
+                  <span className="block text-[10px] text-slate-400 mt-0.5">Keine automatische Verlängerung</span>
                 </div>
                 <Link
                   href="/wohnen/list"

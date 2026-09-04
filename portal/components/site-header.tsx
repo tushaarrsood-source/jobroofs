@@ -26,7 +26,7 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
           className="group flex items-center gap-2 transition-opacity hover:opacity-95"
         >
           <span className="flex items-center font-display text-2xl font-bold tracking-wider text-slate-900">
-            KIEZ<span className="text-blue-600">JOB</span>
+            JOB<span className="text-blue-600">ROOFS</span>
           </span>
           <span className="rounded bg-slate-900 px-1.5 py-0.5 font-mono text-[9px] font-bold tracking-widest text-white uppercase">
             BERLIN

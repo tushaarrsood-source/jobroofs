@@ -7,7 +7,7 @@ export function PostAJobHeader() {
 
   return (
     <div>
-      <p className="text-sm font-medium text-[#385cdd]">{t('postJobForEmployers')}</p>
+      <p className="text-sm font-semibold text-blue-600">{t('postJobForEmployers')}</p>
       <h1 className="mt-2 text-4xl font-semibold tracking-[-0.045em] md:text-6xl">
         {t('postJobHeading')}
       </h1>

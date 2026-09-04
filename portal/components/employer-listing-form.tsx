@@ -162,7 +162,7 @@ export function EmployerListingForm() {
   if (submitStatus === 'verify' || submitStatus === 'verifying') {
     return (
       <div className="mt-9 rounded-xl border border-foreground/15 bg-white p-7 text-center max-w-md mx-auto">
-        <Mail className="mx-auto size-12 text-[#385cdd]" />
+        <Mail className="mx-auto size-12 text-blue-600" />
         <h2 className="mt-4 text-2xl font-semibold">{t('checkEmailTitle')}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           {t('checkEmailDesc')}
@@ -177,7 +177,7 @@ export function EmployerListingForm() {
             maxLength={6}
             required
           />
-          <Button type="submit" disabled={submitStatus === 'verifying'} className="w-full h-11 bg-[#18221e] text-white">
+          <Button type="submit" disabled={submitStatus === 'verifying'} className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold cursor-pointer shadow-sm">
             {submitStatus === 'verifying' ? t('verifying') : t('verifyAndContinue')}
           </Button>
         </form>
@@ -197,14 +197,14 @@ export function EmployerListingForm() {
           {publishedSlug && (
             <Link
               href={`/jobs/${publishedSlug}`}
-              className="inline-flex h-11 items-center rounded-lg bg-[#385cdd] px-6 text-sm font-semibold text-white"
+              className="inline-flex h-11 items-center rounded-lg bg-blue-600 hover:bg-blue-700 px-6 text-sm font-semibold text-white cursor-pointer shadow-sm"
             >
               {t('viewListingLive')}
             </Link>
           )}
           <Link
             href="/"
-            className="inline-flex h-11 items-center rounded-lg border border-foreground/15 bg-white px-6 text-sm font-semibold hover:bg-foreground/5"
+            className="inline-flex h-11 items-center rounded-lg border border-foreground/15 bg-white px-6 text-sm font-semibold hover:bg-foreground/5 cursor-pointer"
           >
             {t('backToPortal')}
           </Link>
@@ -223,35 +223,6 @@ export function EmployerListingForm() {
           <Field label={t('workEmailLabel')}>
             <Input name="contactEmail" required type="email" placeholder="owner@company.de" className="h-11" />
           </Field>
-          
-          <div className="mt-4">
-            <Field label={t('sectionAccountTitle')}>
-              <div className="grid gap-3 sm:grid-cols-2">
-                <button
-                  type="button"
-                  onClick={() => setPricingPlan('single')}
-                  className={`rounded-xl border p-4 text-left transition ${pricingPlan === 'single' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
-                >
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold">{t('singleListingTitle')}</p>
-                    <span className="rounded-md bg-[#385cdd]/10 px-2 py-0.5 text-xs font-bold text-[#385cdd]">{t('singleListingPrice')}</span>
-                  </div>
-                  <p className="mt-1 text-xs text-muted-foreground">{t('singleListingDesc')}</p>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPricingPlan('annual')}
-                  className={`rounded-xl border p-4 text-left transition ${pricingPlan === 'annual' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
-                >
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold">{t('annualListingTitle')}</p>
-                    <span className="rounded-md bg-[#245e3c]/10 px-2 py-0.5 text-xs font-bold text-[#245e3c]">{t('annualListingPrice')}</span>
-                  </div>
-                  <p className="mt-1 text-xs text-muted-foreground">{t('annualListingDesc')}</p>
-                </button>
-              </div>
-            </Field>
-          </div>
         </FormSection>
 
         <FormSection number="01" title={t('sectionJobTitle')}>
@@ -273,7 +244,7 @@ export function EmployerListingForm() {
                     <label key={niche.id} className="flex items-center gap-2 cursor-pointer text-sm">
                       <input 
                         type="checkbox" 
-                        className="rounded text-[#385cdd]"
+                        className="rounded accent-blue-600"
                         checked={selectedNiches.includes(niche.id)}
                         onChange={() => handleNicheToggle(niche.id)}
                       />
@@ -357,7 +328,7 @@ export function EmployerListingForm() {
                 <button
                   type="button"
                   onClick={() => setScheduleType('shift_1day')}
-                  className={`rounded-xl border p-3.5 text-left transition ${scheduleType === 'shift_1day' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
+                  className={`rounded-xl border p-3.5 text-left transition cursor-pointer ${scheduleType === 'shift_1day' ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600' : 'border-foreground/15 bg-white hover:border-blue-300'}`}
                 >
                   <p className="text-sm font-semibold">{t('schedule1DayTitle')}</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">{t('schedule1DayDesc')}</p>
@@ -365,7 +336,7 @@ export function EmployerListingForm() {
                 <button
                   type="button"
                   onClick={() => setScheduleType('flexible')}
-                  className={`rounded-xl border p-3.5 text-left transition ${scheduleType === 'flexible' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
+                  className={`rounded-xl border p-3.5 text-left transition cursor-pointer ${scheduleType === 'flexible' ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600' : 'border-foreground/15 bg-white hover:border-blue-300'}`}
                 >
                   <p className="text-sm font-semibold">{t('scheduleFlexTitle')}</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">{t('scheduleFlexDesc')}</p>
@@ -373,7 +344,7 @@ export function EmployerListingForm() {
                 <button
                   type="button"
                   onClick={() => setScheduleType('regular')}
-                  className={`rounded-xl border p-3.5 text-left transition ${scheduleType === 'regular' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
+                  className={`rounded-xl border p-3.5 text-left transition cursor-pointer ${scheduleType === 'regular' ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600' : 'border-foreground/15 bg-white hover:border-blue-300'}`}
                 >
                   <p className="text-sm font-semibold">{t('scheduleRegularTitle')}</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">{t('scheduleRegularDesc')}</p>
@@ -428,7 +399,7 @@ export function EmployerListingForm() {
             <button
               type="button"
               onClick={() => setPayMode('fixed')}
-              className={`rounded-xl border p-4 text-left transition ${payMode === 'fixed' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
+              className={`rounded-xl border p-4 text-left transition cursor-pointer ${payMode === 'fixed' ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600' : 'border-foreground/15 bg-white hover:border-blue-300'}`}
             >
               <p className="text-sm font-semibold">{t('payModeFixedTitle')}</p>
               <p className="mt-1 text-xs text-muted-foreground">
@@ -438,7 +409,7 @@ export function EmployerListingForm() {
             <button
               type="button"
               onClick={() => setPayMode('discuss')}
-              className={`rounded-xl border p-4 text-left transition ${payMode === 'discuss' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
+              className={`rounded-xl border p-4 text-left transition cursor-pointer ${payMode === 'discuss' ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600' : 'border-foreground/15 bg-white hover:border-blue-300'}`}
             >
               <p className="text-sm font-semibold">{t('payModeDiscussTitle')}</p>
               <p className="mt-1 text-xs text-muted-foreground">
@@ -508,9 +479,9 @@ export function EmployerListingForm() {
             <button
               type="button"
               onClick={() => setApplicationMethod('email')}
-              className={`rounded-xl border p-4 text-left transition ${applicationMethod === 'email' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
+              className={`rounded-xl border p-4 text-left transition cursor-pointer ${applicationMethod === 'email' ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600' : 'border-foreground/15 bg-white hover:border-blue-300'}`}
             >
-              <Mail className="size-5 text-[#385cdd]" />
+              <Mail className="size-5 text-blue-600" />
               <p className="mt-3 text-sm font-semibold">{t('applyByEmail')}</p>
               <p className="mt-1 text-xs text-muted-foreground">
                 {t('applyByEmailDesc')}
@@ -519,7 +490,7 @@ export function EmployerListingForm() {
             <button
               type="button"
               onClick={() => setApplicationMethod('external_link')}
-              className={`rounded-xl border p-4 text-left transition ${applicationMethod === 'external_link' ? 'border-[#385cdd] bg-[#eef1ff] ring-1 ring-[#385cdd]' : 'border-foreground/15 bg-white'}`}
+              className={`rounded-xl border p-4 text-left transition cursor-pointer ${applicationMethod === 'external_link' ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600' : 'border-foreground/15 bg-white hover:border-blue-300'}`}
             >
               <ExternalLink className="size-5 text-[#245e3c]" />
               <p className="mt-3 text-sm font-semibold">{t('applyByWebsite')}</p>
@@ -557,15 +528,74 @@ export function EmployerListingForm() {
           </Field>
         </FormSection>
 
-        <div className="flex flex-col gap-4 rounded-xl bg-[#18221e] p-6 text-white sm:flex-row sm:items-center sm:justify-between">
+        <FormSection number="05" title={isDe ? 'Veröffentlichung & Tarif' : 'Plan & Activation'}>
+          <p className="text-sm text-muted-foreground">
+            {isDe
+              ? 'Wähle dein Veröffentlichungsmodell vor der Bestätigung und Stripe-Aktivierung.'
+              : 'Choose your publishing plan before verification and Stripe activation.'}
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 mt-4">
+            <button
+              type="button"
+              onClick={() => setPricingPlan('single')}
+              className={`rounded-xl border p-4 text-left transition cursor-pointer ${
+                pricingPlan === 'single'
+                  ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600'
+                  : 'border-foreground/15 bg-white hover:border-blue-300'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold text-slate-900">{t('singleListingTitle')}</p>
+                <span className="rounded-md bg-blue-600/10 px-2 py-0.5 text-xs font-bold text-blue-700">
+                  {t('singleListingPrice')}
+                </span>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">{t('singleListingDesc')}</p>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPricingPlan('annual')}
+              className={`rounded-xl border p-4 text-left transition cursor-pointer ${
+                pricingPlan === 'annual'
+                  ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600'
+                  : 'border-foreground/15 bg-white hover:border-blue-300'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold text-slate-900">{t('annualListingTitle')}</p>
+                <span className="rounded-md bg-emerald-700/10 px-2 py-0.5 text-xs font-bold text-emerald-800">
+                  {t('annualListingPrice')}
+                </span>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">{t('annualListingDesc')}</p>
+            </button>
+          </div>
+        </FormSection>
+
+        <div className="flex flex-col gap-4 rounded-xl bg-slate-900 p-6 text-white sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="font-semibold text-lg">{t('postSubmitBoxTitle')}</p>
-            <p className="mt-1 text-sm text-white/70">
-              {t('postSubmitBoxDesc')}
+            <p className="mt-1 text-sm text-slate-300">
+              {pricingPlan === 'annual'
+                ? (isDe
+                    ? 'Jahres-Flatrate (499 €) · Unbegrenzt Stellen schalten für 12 Monate'
+                    : 'Annual Unlimited (€499) · Unlimited job postings for 12 months')
+                : (isDe
+                    ? 'Einzelschaltung (29 €) · 30 Tage Laufzeit auf JOBROOFS'
+                    : 'Single Listing (€29) · 30 days active on JOBROOFS')}
             </p>
           </div>
-          <Button type="submit" size="lg" disabled={submitStatus === 'submitting'} className="h-12 bg-white px-8 font-semibold text-[#18221e] hover:bg-white/90">
-            {submitStatus === 'submitting' ? t('submitting') : t('continueToVerification')}
+          <Button
+            type="submit"
+            size="lg"
+            disabled={submitStatus === 'submitting'}
+            className="h-12 bg-blue-600 px-8 font-semibold text-white hover:bg-blue-700 cursor-pointer shadow-md shadow-blue-600/30"
+          >
+            {submitStatus === 'submitting'
+              ? t('submitting')
+              : (isDe
+                  ? `Weiter zur Zahlung (${pricingPlan === 'annual' ? '499 €' : '29 €'})`
+                  : `Continue to Payment (${pricingPlan === 'annual' ? '€499' : '€29'})`)}
           </Button>
         </div>
       </form>

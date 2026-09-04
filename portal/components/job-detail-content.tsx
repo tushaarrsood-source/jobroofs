@@ -202,7 +202,7 @@ export function JobDetailContent({ job }: { job: any }) {
                 </p>
                 <a
                   href={`mailto:${job.application.email}?subject=${encodeURIComponent(
-                    `Application: ${job.title} via KIEZJOB`,
+                    `Application: ${job.title} via JOBROOFS`,
                   )}`}
                   className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-zinc-950 px-4 text-xs font-semibold text-white transition hover:bg-black"
                 >

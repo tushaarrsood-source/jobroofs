@@ -9,16 +9,16 @@ export function WebSiteJsonLd() {
   const data = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'KIEZJOB',
-    alternateName: 'KIEZJOB Berlin',
-    url: 'https://kiezjob.de',
+    name: 'JOBROOFS',
+    alternateName: 'JOBROOFS Berlin',
+    url: 'https://jobroofs.com',
     description:
-      "Berlin's portal for Minijobs, part-time work, temporary gigs, working student roles, and flexible shifts.",
+      "Berlin's portal for flexible work, Minijobs, neighborhood housing, and rooms.",
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://kiezjob.de/?q={search_term_string}',
+        urlTemplate: 'https://jobroofs.com/?q={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },
@@ -126,8 +126,8 @@ export function JobPostingJsonLd({ job }: JobPostingJsonLdProps) {
     description,
     identifier: {
       '@type': 'PropertyValue',
-      name: 'KIEZJOB',
-      value: `KIEZJOB-${job.id || job.slug || 'listing'}`,
+      name: 'JOBROOFS',
+      value: `JOBROOFS-${job.id || job.slug || 'listing'}`,
     },
     datePosted,
     validThrough,
@@ -205,7 +205,7 @@ export function BreadcrumbJsonLd({ items }: { items: BreadcrumbItem[] }) {
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: `https://kiezjob.de${item.href}`,
+      item: `https://jobroofs.com${item.href}`,
     })),
   };
 

@@ -6,9 +6,9 @@ import { SiteFooter } from '@/components/site-footer';
 import { HousingListingForm } from '@/components/housing-listing-form';
 
 export const metadata = {
-  title: 'Wohnung oder WG-Zimmer in Berlin inserieren (29 € / 30 Tage)',
+  title: 'Wohnung oder WG-Zimmer in Berlin inserieren | JOBROOFS',
   description:
-    'Inseriere dein Zimmer, deine Zwischenmiete oder Wohnung in Berlin. 29 € für 30 Tage — direkter Marktplatz für Wohnungssuchende.',
+    'Inseriere dein Zimmer, deine Zwischenmiete oder Wohnung in Berlin für 30 Tage — direkter Marktplatz für Wohnungssuchende.',
   alternates: {
     canonical: '/wohnen/list',
   },
@@ -32,7 +32,7 @@ export default function HousingListPage() {
           <div className="mt-5 border-b border-zinc-200 pb-6">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-3 py-0.5 text-xs font-semibold text-emerald-900">
               <ShieldCheck className="size-3.5 text-emerald-700" />
-              29 € Einstellgebühr · 100% vor Fake-Interessenten geschützt
+              100% vor Fake-Interessenten und Spam geschützt
             </div>
 
             <h1 className="mt-3 text-3xl font-bold tracking-tight text-zinc-950 md:text-4xl">

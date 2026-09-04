@@ -1,3 +1,5 @@
+import { resolveHousingCoordinates } from '@/lib/domain/berlin-geo';
+
 export function convertHousingSubmissionToListing(
   submission: { id: string; payloadJson: string; submitterEmail: string },
 ) {
@@ -9,6 +11,16 @@ export function convertHousingSubmissionToListing(
   const nebenkosten = Number(payload.nebenkostenEur) || 0;
   const warmmiete = Number(payload.warmmieteEur) || kaltmiete + nebenkosten;
 
+  const coords = resolveHousingCoordinates({
+    latitude: payload.latitude,
+    longitude: payload.longitude,
+    postcode: payload.postcode || '10115',
+    district: payload.district || 'Berlin',
+    neighborhood: payload.neighborhood,
+    streetAddress: payload.streetAddress,
+    warmmieteEur: warmmiete,
+  });
+
   return {
     id: `house_${crypto.randomUUID().slice(0, 20)}`,
     submissionId: submission.id,
@@ -18,6 +30,8 @@ export function convertHousingSubmissionToListing(
     postcode: payload.postcode || '10115',
     neighborhood: payload.neighborhood || null,
     streetAddress: payload.streetAddress || null,
+    latitude: coords.lat,
+    longitude: coords.lng,
     kaltmieteEur: kaltmiete,
     nebenkostenEur: nebenkosten,
     warmmieteEur: warmmiete,

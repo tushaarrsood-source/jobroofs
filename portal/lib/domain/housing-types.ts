@@ -28,6 +28,8 @@ export interface HousingListing {
   postcode: string;
   neighborhood?: string | null;
   streetAddress?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   kaltmieteEur: number;
   nebenkostenEur: number;
   warmmieteEur: number;

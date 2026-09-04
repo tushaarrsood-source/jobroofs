@@ -176,9 +176,9 @@ export function JobBrowser({
                 : 'Find minijobs (€603), part-time roles, and flexible shifts directly at local Berlin venues.'}
             </p>
 
-            {/* High-Utility Search Console */}
+            {/* High-Utility Minimalist Search Bar */}
             <div className="mt-8 rounded-xl border border-slate-300/90 bg-white p-2.5 shadow-xs">
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-[1.4fr_220px_200px_180px]">
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-[1.6fr_240px_220px]">
                 <div className="relative flex items-center">
                   <Search className="pointer-events-none absolute left-3 size-4 text-slate-400" />
                   <Input
@@ -218,55 +218,29 @@ export function JobBrowser({
                   <NativeSelectOption value="short-term">{t('tempShortTerm')}</NativeSelectOption>
                   <NativeSelectOption value="1-day">{t('oneDayShift')}</NativeSelectOption>
                 </NativeSelect>
-
-                {/* Pay Interval */}
-                <NativeSelect
-                  value={payInterval}
-                  onChange={(event) => setPayInterval(event.target.value)}
-                  className="h-11 border-slate-200 bg-slate-50/70 text-xs rounded-lg"
-                  aria-label="Vergütungsintervall"
-                >
-                  <NativeSelectOption value="all">{t('anyPayType')}</NativeSelectOption>
-                  <NativeSelectOption value="hour">{t('payPerHour')}</NativeSelectOption>
-                  <NativeSelectOption value="shift">{t('payPerShift')}</NativeSelectOption>
-                  <NativeSelectOption value="month">{t('payPerMonth')}</NativeSelectOption>
-                </NativeSelect>
               </div>
             </div>
 
-
-
-            {/* Quick Filter Pills & View Switcher */}
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-                {featuredNiches.map((id) => {
-                  const selected = industry === id;
-                  const nicheObj = getIndustry(id);
-                  const label =
-                    id === 'all'
-                      ? t('allCategories')
-                      : isDe
-                      ? nicheObj?.labelDe || nicheObj?.label
-                      : nicheObj?.label;
-                  return (
-                    <button
-                      key={id}
-                      type="button"
-                      onClick={() => setIndustry(id)}
-                      className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition cursor-pointer ${
-                        selected
-                          ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30'
-                          : 'border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900'
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
+            {/* View Switcher & Active Filter Controls */}
+            <div className="mt-4 flex items-center justify-between">
+              <div>
+                {(query || district !== 'all' || employment !== 'all') ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setQuery('');
+                      setDistrict('all');
+                      setEmployment('all');
+                    }}
+                    className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 font-semibold cursor-pointer"
+                  >
+                    ✕ {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
+                  </button>
+                ) : null}
               </div>
 
               {/* View Switcher */}
-              <div className="flex items-center gap-1 self-end rounded-xl border border-slate-200 bg-white p-1 shadow-2xs">
+              <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-2xs">
                 <button
                   type="button"
                   onClick={() => setViewMode('split')}

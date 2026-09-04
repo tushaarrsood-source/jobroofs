@@ -5,11 +5,11 @@ import { EmployerListingForm } from '@/components/employer-listing-form';
 import { PostAJobHeader } from '@/components/post-a-job-header';
 
 export const metadata: Metadata = {
-  title: 'Job inserieren — Berliner Minijob & Aushilfskräfte finden (ab 29 €)',
+  title: 'Job inserieren — Berliner Minijob & Aushilfskräfte finden | JOBROOFS',
   description:
-    'Inseriere dein Stellenangebot direkt an tausende Berliner Minijobber, Aushilfen und Werkstudierende. 29 € Einstellgebühr.',
+    'Inseriere dein Stellenangebot direkt an tausende Berliner Minijobber, Aushilfen und Werkstudierende. Schnell, direkt und ohne Personalvermittler.',
   openGraph: {
-    title: 'Job inserieren · KIEZJOB Berlin',
+    title: 'Job inserieren · JOBROOFS Berlin',
     description:
       'Erreiche aktive Berliner Bewerber für Minijobs, Teilzeitstellen und flexible Schichten.',
     url: '/post-a-job',

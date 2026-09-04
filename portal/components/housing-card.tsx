@@ -6,7 +6,15 @@ import type { HousingListing } from '@/lib/domain/housing-types';
 import { housingTypeLabels } from '@/lib/domain/housing-types';
 import { useTranslation } from '@/lib/i18n/language-context';
 
-export function HousingCard({ listing }: { listing: HousingListing }) {
+export function HousingCard({
+  listing,
+  isSelected = false,
+  isHovered = false,
+}: {
+  listing: HousingListing;
+  isSelected?: boolean;
+  isHovered?: boolean;
+}) {
   const { isDe } = useTranslation();
   const typeInfo = housingTypeLabels[listing.listingType] || {
     de: listing.listingType,
@@ -20,7 +28,15 @@ export function HousingCard({ listing }: { listing: HousingListing }) {
   const photoCount = listing.images?.length || 1;
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-2xs transition hover:border-slate-800 hover:shadow-sm">
+    <article
+      className={`group relative flex flex-col overflow-hidden rounded-xl border bg-white shadow-2xs transition duration-150 ${
+        isSelected
+          ? 'border-blue-600 ring-2 ring-blue-600/30 shadow-md'
+          : isHovered
+            ? 'border-blue-400 shadow-sm'
+            : 'border-slate-200/90 hover:border-slate-400 hover:shadow-xs'
+      }`}
+    >
       {/* Image Thumbnail */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
         <img

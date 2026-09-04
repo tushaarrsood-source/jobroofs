@@ -4,7 +4,7 @@ import { PlatformDisclaimer } from '@/components/platform-disclaimer';
 
 export const metadata = {
   title: 'Impressum',
-  description: 'Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG) für KIEZJOB Berlin.',
+  description: 'Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG) für JOBROOFS Berlin.',
 };
 
 export default function ImpressumPage() {
@@ -28,7 +28,7 @@ export default function ImpressumPage() {
             <div>
               <h2 className="font-bold text-zinc-950 text-base">Dienstanbieter / Betreiber</h2>
               <p className="mt-1 text-zinc-600">
-                KIEZJOB Portal<br />
+                JOBROOFS Portal<br />
                 Berlin, Deutschland
               </p>
             </div>
@@ -36,15 +36,15 @@ export default function ImpressumPage() {
             <div>
               <h2 className="font-bold text-zinc-950 text-base">Kontakt</h2>
               <p className="mt-1 text-zinc-600">
-                E-Mail: <span className="font-mono text-zinc-900">kontakt@kiezjob.de</span><br />
-                Web: <span className="font-mono text-zinc-900">https://kiezjob.de</span>
+                E-Mail: <span className="font-mono text-zinc-900">kontakt@jobroofs.com</span><br />
+                Web: <span className="font-mono text-zinc-900">https://jobroofs.com</span>
               </p>
             </div>
 
             <div>
               <h2 className="font-bold text-zinc-950 text-base">Art des Dienstes</h2>
               <p className="mt-1 text-zinc-600">
-                KIEZJOB ist ein reines Online-Anzeigenportal und Schwarzes Brett für Minijobs, flexible Beschäftigungen und studentische/private Wohnungs- und Zimmerinserate im Raum Berlin. KIEZJOB vermittelt keine Arbeits- oder Mietverträge und tritt weder als Arbeitgeber, Arbeitsvermittler, Personalagentur noch als Vermieter oder Makler auf.
+                JOBROOFS ist ein reines Online-Anzeigenportal und Schwarzes Brett für Minijobs, flexible Beschäftigungen und studentische/private Wohnungs- und Zimmerinserate im Raum Berlin. JOBROOFS vermittelt keine Arbeits- oder Mietverträge und tritt weder als Arbeitgeber, Arbeitsvermittler, Personalagentur noch als Vermieter oder Makler auf.
               </p>
             </div>
 

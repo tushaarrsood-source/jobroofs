@@ -102,7 +102,7 @@ export default function ControlPage() {
                   One job record must pass every gate.
                 </p>
               </div>
-              <Bot className="size-5 text-[#385cdd]" />
+              <Bot className="size-5 text-blue-600" />
             </div>
             <div className="grid gap-px bg-foreground/10 sm:grid-cols-3">
               {[
@@ -286,7 +286,7 @@ export default function ControlPage() {
           <aside className="space-y-5">
             <div className="rounded-xl border border-foreground/12 bg-white p-5">
               <div className="flex items-center gap-2">
-                <Activity className="size-4 text-[#385cdd]" />
+                <Activity className="size-4 text-blue-600" />
                 <p className="text-sm font-semibold">Taxonomy dimensions</p>
               </div>
               <dl className="mt-5 space-y-3 text-sm">

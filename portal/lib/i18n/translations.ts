@@ -3,7 +3,7 @@ export type Locale = 'de' | 'en';
 export const translations = {
   de: {
     // Brand & Navigation
-    brandTagline: 'Berlin Flexible Arbeit & Minijobs',
+    brandTagline: 'JOBROOFS — Flexible Arbeit & Wohnen in Berlin',
     allJobs: 'Jobs',
     directEmployers: 'Direkt von Arbeitgebern',
     latestJobs: 'Neueste Jobs',
@@ -16,7 +16,7 @@ export const translations = {
     freeForJobSeekers: '100% Kostenlos für Bewerber',
 
     // Hero Section
-    heroEyebrow: "Berlins Portal für flexible Arbeit & Minijobs",
+    heroEyebrow: "Berlins Marktplatz für flexible Jobs & Wohnen",
     heroTitle: 'Das Berliner Portal für Minijobs, Teilzeit & flexible Schichten.',
     heroSubtitle:
       'Direkt von lokalen Berliner Arbeitgebern, Cafés, Venues und Nachbarn — Minijobs, Teilzeit, 1-Tages-Einsätze, Werkstudentenstellen und spontane Aushilfsjobs.',
@@ -108,8 +108,8 @@ export const translations = {
     postJobForEmployers: 'Für Berliner Arbeitgeber',
     postJobHeading: 'Job in Berlin schalten',
     postJobSubheading: 'Erreiche tausende aktive Berliner:innen auf der Suche nach Minijobs, Teilzeit, 1-Tages-Schichten und flexibler Arbeit.',
-    sectionAccountTitle: 'Konto & Tarifauswahl',
-    sectionAccountDesc: 'Gib deine E-Mail-Adresse ein, um dein Inserat zu verifizieren und zu verwalten.',
+    sectionAccountTitle: 'Arbeitgeber-Konto / Kontakt',
+    sectionAccountDesc: 'Gib deine geschäftliche E-Mail-Adresse ein. An diese Adresse senden wir den Bestätigungscode.',
     workEmailLabel: 'Deine geschäftliche / private Kontakt-E-Mail',
     singleListingTitle: 'Einzelnes Inserat',
     singleListingPrice: '29 €',
@@ -220,7 +220,7 @@ export const translations = {
     housingHeroEyebrow: 'Verifizierter Berliner Wohnungsmarkt',
     housingHeroTitle: 'Zimmer & Wohnungen in Berlin — ohne Fake-Profile.',
     housingHeroSubtitle: 'WG-Zimmer, Zwischenmiete, Nachmieter und Wohnungen. Direkter Marktplatz von Nutzer zu Nutzer mit Angaben zur Anmeldung und Warmmiete.',
-    housingPostButton: 'Wohnung inserieren (29 €)',
+    housingPostButton: 'Wohnung inserieren',
     housingAllTypes: 'Alle Wohnformen',
     housingAllDistricts: 'Alle Bezirke',
     housingOnlyAnmeldung: 'Nur mit Anmeldung',
@@ -239,12 +239,12 @@ export const translations = {
     housingContactLister: 'Inserent:in kontaktieren',
     housingBackToListings: '← Alle Wohnungen & Zimmer',
     housingPostTitle: 'Wohnung oder WG-Zimmer in Berlin inserieren',
-    housingPostSubtitle: 'Erreiche tausende verifizierte Studierende, Young Professionals und Wohnungssuchende in Berlin. 29 € für 30 Tage.',
+    housingPostSubtitle: 'Erreiche tausende verifizierte Studierende, Young Professionals und Wohnungssuchende in Berlin. 30 Tage Laufzeit.',
   },
 
   en: {
     // Brand & Navigation
-    brandTagline: 'Berlin Flexible Work & Minijobs',
+    brandTagline: 'JOBROOFS — Flexible Work & Housing in Berlin',
     allJobs: 'Jobs',
     directEmployers: 'Direct from Employers',
     latestJobs: 'Latest Jobs',
@@ -257,7 +257,7 @@ export const translations = {
     freeForJobSeekers: '100% Free for Job Seekers',
 
     // Hero Section
-    heroEyebrow: "Berlin's Flexible Work & Minijob Portal",
+    heroEyebrow: "Berlin's Marketplace for Flexible Work & Housing",
     heroTitle: 'The Berlin portal for Part-Time, Minijobs & Flexible Shifts.',
     heroSubtitle:
       'Direct from local employers & verified venues across Berlin — Minijobs, part-time work, 1-day shifts, working student roles, and spontaneous temporary gigs.',
@@ -349,8 +349,8 @@ export const translations = {
     postJobForEmployers: 'For Berlin Employers',
     postJobHeading: 'Post a Berlin job',
     postJobSubheading: 'Reach thousands of active Berlin job seekers looking for Minijobs, part-time work, 1-day shifts, and flexible hours.',
-    sectionAccountTitle: 'Account & Pricing Plan',
-    sectionAccountDesc: 'Enter your contact email to verify and manage your listing.',
+    sectionAccountTitle: 'Employer Account / Contact',
+    sectionAccountDesc: 'Enter your work email address. We send your verification code and applicant notifications here.',
     workEmailLabel: 'Your work / contact email',
     singleListingTitle: 'Single Job Listing',
     singleListingPrice: '€29',
@@ -461,7 +461,7 @@ export const translations = {
     housingHeroEyebrow: 'Verified Berlin Housing Market',
     housingHeroTitle: 'Rooms & Apartments in Berlin — Without Fake Profiles.',
     housingHeroSubtitle: 'Shared flat rooms (WG), sublets, successor leases and apartments. Direct marketplace between users with Anmeldung details and warm rent breakdowns.',
-    housingPostButton: 'List a place (€29)',
+    housingPostButton: 'List a place',
     housingAllTypes: 'All Housing Types',
     housingAllDistricts: 'All Districts',
     housingOnlyAnmeldung: 'Anmeldung Possible Only',
@@ -480,7 +480,7 @@ export const translations = {
     housingContactLister: 'Contact Lister',
     housingBackToListings: '← All Housing & Rooms',
     housingPostTitle: 'List a Room or Apartment in Berlin',
-    housingPostSubtitle: 'Reach thousands of verified students, young professionals and apartment seekers in Berlin. €29 for 30 days.',
+    housingPostSubtitle: 'Reach thousands of verified students, young professionals and apartment seekers in Berlin. 30 days active.',
   },
 } as const;
 

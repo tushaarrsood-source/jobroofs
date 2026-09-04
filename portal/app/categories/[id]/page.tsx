@@ -23,9 +23,9 @@ export async function generateMetadata({
 
   return {
     title: `${niche.label} — Minijobs & Flexible Work in Berlin`,
-    description: `${niche.description} Browse ${niche.label} (${niche.labelDe}) jobs in Berlin — Minijobs, part-time, temporary shifts. Apply directly on KIEZJOB.`,
+    description: `${niche.description} Browse ${niche.label} (${niche.labelDe}) jobs in Berlin — Minijobs, part-time, temporary shifts. Apply directly on JOBROOFS.`,
     openGraph: {
-      title: `${niche.label} — Minijobs & Flexible Work in Berlin · KIEZJOB`,
+      title: `${niche.label} — Minijobs & Flexible Work in Berlin · JOBROOFS`,
       description: `${niche.description} Browse and apply directly.`,
       url: `/categories/${id}`,
     },
@@ -71,7 +71,7 @@ export default async function CategoryPage({
       <div>
         <BreadcrumbJsonLd
           items={[
-            { name: 'KIEZJOB', href: '/' },
+            { name: 'JOBROOFS', href: '/' },
             { name: niche.label, href: `/categories/${id}` },
           ]}
         />

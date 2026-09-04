@@ -3,7 +3,7 @@ import { industryNiches } from '@/lib/domain/taxonomy';
 import { previewJobs } from '@/lib/domain/preview-data';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://kiezjob.de';
+  const baseUrl = 'https://jobroofs.com';
   const now = new Date();
 
   // Static pages
@@ -13,6 +13,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: now,
       changeFrequency: 'hourly',
       priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/wohnen`,
+      lastModified: now,
+      changeFrequency: 'hourly',
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/latest-jobs`,

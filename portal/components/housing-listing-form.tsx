@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import {
   Home,
   CheckCircle2,
@@ -13,9 +14,19 @@ import {
   Euro,
   Image as ImageIcon,
   Calendar,
+  MapPin,
 } from 'lucide-react';
 import { housingTypeLabels, type HousingListingType } from '@/lib/domain/housing-types';
 import { useTranslation } from '@/lib/i18n/language-context';
+
+const HousingMap = dynamic(() => import('@/components/housing-map').then((mod) => mod.HousingMap), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-full w-full items-center justify-center rounded-xl border border-slate-200 bg-slate-100/70 text-xs font-semibold text-slate-500">
+      Berlin Karte lädt...
+    </div>
+  ),
+});
 
 const BERLIN_DISTRICTS = [
   'Mitte',
@@ -77,6 +88,58 @@ export function HousingListingForm() {
 
   const [imageInput, setImageInput] = useState('');
   const [agreedToDisclaimer, setAgreedToDisclaimer] = useState(false);
+
+  // Live memoized listing for interactive map preview
+  const previewListingForMap = useMemo(() => {
+    return {
+      id: 'form-preview-live',
+      title: formData.title || 'Wohnungsvorschau',
+      listingType: formData.listingType,
+      district: formData.district,
+      postcode: formData.postcode,
+      neighborhood: formData.neighborhood,
+      streetAddress: formData.streetAddress,
+      warmmieteEur: formData.warmmieteEur || 750,
+      kaltmieteEur: formData.kaltmieteEur || 600,
+      nebenkostenEur: formData.nebenkostenEur || 150,
+      kautionEur: formData.kautionEur || 1800,
+      roomSqm: formData.roomSqm || 20,
+      totalRooms: formData.totalRooms || 1,
+      furnished: formData.furnished,
+      anmeldungPossible: formData.anmeldungPossible,
+      subletAuthorized: formData.subletAuthorized,
+      contractType: formData.contractType,
+      moveInDate: formData.moveInDate || '',
+      images: formData.images || [],
+      description: formData.description || '',
+      contactMethod: 'email' as const,
+      contactEmail: formData.contactEmail || 'user@example.com',
+      publicationState: 'draft' as const,
+      firstSeenAt: new Date().toISOString(),
+      expiresAt: new Date().toISOString(),
+    };
+  }, [
+    formData.title,
+    formData.listingType,
+    formData.district,
+    formData.postcode,
+    formData.neighborhood,
+    formData.streetAddress,
+    formData.warmmieteEur,
+    formData.kaltmieteEur,
+    formData.nebenkostenEur,
+    formData.kautionEur,
+    formData.roomSqm,
+    formData.totalRooms,
+    formData.furnished,
+    formData.anmeldungPossible,
+    formData.subletAuthorized,
+    formData.contractType,
+    formData.moveInDate,
+    formData.images,
+    formData.description,
+    formData.contactEmail,
+  ]);
 
   // Verification step state
   const [submissionId, setSubmissionId] = useState<string | null>(null);
@@ -294,6 +357,28 @@ export function HousingListingForm() {
                   onChange={(e) => setFormData({ ...formData, streetAddress: e.target.value })}
                   placeholder="z.B. Gärtnerstr."
                   className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
+                />
+              </div>
+            </div>
+
+            {/* Live Location Map Preview */}
+            <div className="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+              <div className="flex items-center justify-between border-b border-slate-200 bg-slate-100/80 px-3.5 py-2.5 text-xs">
+                <div className="flex items-center gap-1.5 font-semibold text-slate-700">
+                  <MapPin className="size-3.5 text-blue-600" />
+                  <span>{isDe ? 'Standortvorschau auf der Berlin-Karte (Live)' : 'Live Location Map Preview'}</span>
+                </div>
+                <span className="text-[11px] font-medium text-slate-500">
+                  {formData.district} {formData.postcode ? `· PLZ ${formData.postcode}` : ''}
+                </span>
+              </div>
+              <div className="h-44 w-full">
+                <HousingMap
+                  listings={[previewListingForMap]}
+                  miniMode
+                  centerSingleListing
+                  showCardOverlay={false}
+                  className="h-full w-full"
                 />
               </div>
             </div>
@@ -650,7 +735,7 @@ export function HousingListingForm() {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-bold text-slate-900 text-sm">
-                    KIEZJOB Wohnungs-Inserat (30 Tage Laufzeit)
+                    JOBROOFS Wohnungs-Inserat (30 Tage Laufzeit)
                   </h3>
                   <p className="mt-1 text-xs text-slate-600 leading-relaxed max-w-lg">
                     {isDe
@@ -677,11 +762,11 @@ export function HousingListingForm() {
               <span className="text-xs leading-relaxed text-slate-600">
                 {isDe ? (
                   <>
-                    <strong className="text-slate-900">Haftungsausschluss & Plattform-Bedingungen:</strong> Ich bestätige, dass alle Angaben wahrheitsgemäß sind und ich zur Vermietung/Untervermietung berechtigt bin. Ich nehme zur Kenntnis, dass KIEZJOB ein reines Online-Anzeigenportal (Schwarzes Brett) ist, keine Miet- oder Untermietverträge vermittelt oder abschließt und für Mieter, Vermieter oder Mietverhältnisse keinerlei Haftung übernimmt.
+                    <strong className="text-slate-900">Haftungsausschluss & Plattform-Bedingungen:</strong> Ich bestätige, dass alle Angaben wahrheitsgemäß sind und ich zur Vermietung/Untervermietung berechtigt bin. Ich nehme zur Kenntnis, dass JOBROOFS ein reines Online-Anzeigenportal (Schwarzes Brett) ist, keine Miet- oder Untermietverträge vermittelt oder abschließt und für Mieter, Vermieter oder Mietverhältnisse keinerlei Haftung übernimmt.
                   </>
                 ) : (
                   <>
-                    <strong className="text-slate-900">Liability Disclaimer & Platform Terms:</strong> I confirm all information is true and that I am legally authorized to offer this accommodation. I acknowledge that KIEZJOB is strictly an advertising directory / bulletin board, does not broker or execute tenancy contracts, and bears zero liability for landlords, tenants, or rental relationships.
+                    <strong className="text-slate-900">Liability Disclaimer & Platform Terms:</strong> I confirm all information is true and that I am legally authorized to offer this accommodation. I acknowledge that JOBROOFS is strictly an advertising directory / bulletin board, does not broker or execute tenancy contracts, and bears zero liability for landlords, tenants, or rental relationships.
                   </>
                 )}
               </span>

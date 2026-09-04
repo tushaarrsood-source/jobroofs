@@ -1,11 +1,11 @@
-# KIEZJOB ingestion architecture
+# JOBROOFS ingestion architecture
 
 Status: implemented core, credentialed source run pending  
 Date: 1 September 2026
 
 ## Product decision
 
-KIEZJOB has 30 niche agents, but they are **30 isolated profiles on one shared truth engine**.
+JOBROOFS has 30 niche agents, but they are **30 isolated profiles on one shared truth engine**.
 
 Each niche profile owns:
 

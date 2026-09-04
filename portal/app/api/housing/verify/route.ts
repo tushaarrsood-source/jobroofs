@@ -62,7 +62,7 @@ export async function POST(request: Request) {
             mode: "payment",
             "line_items[0][price_data][currency]": "EUR",
             "line_items[0][price_data][product_data][name]":
-              "KIEZJOB Housing Listing — 30 Days (Wohnungsinserat)",
+              "JOBROOFS Housing Listing — 30 Days (Wohnungsinserat)",
             "line_items[0][price_data][unit_amount]": "2900", // €29.00
             "line_items[0][quantity]": "1",
             "metadata[housingSubmissionId]": submissionId,

@@ -100,8 +100,8 @@ export async function POST(request: Request) {
       const isAnnual = submission.pricing_plan === "annual";
       const unitAmount = isAnnual ? "49900" : "2900"; // €499.00 or €29.00
       const productName = isAnnual
-        ? "KIEZJOB Annual Unlimited & Top Listing Pass (1 Year)"
-        : "KIEZJOB Single Job Listing (30 Days)";
+        ? "JOBROOFS Annual Unlimited & Top Listing Pass (1 Year)"
+        : "JOBROOFS Single Job Listing (30 Days)";
 
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 

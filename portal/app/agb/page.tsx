@@ -4,7 +4,7 @@ import { PlatformDisclaimer } from '@/components/platform-disclaimer';
 
 export const metadata = {
   title: 'AGB — Allgemeine Geschäftsbedingungen',
-  description: 'Nutzungsbedingungen für KIEZJOB Berlin.',
+  description: 'Nutzungsbedingungen für JOBROOFS Berlin.',
 };
 
 export default function AgbPage() {
@@ -21,14 +21,14 @@ export default function AgbPage() {
             Allgemeine Geschäftsbedingungen (AGB)
           </h1>
           <p className="mt-1 text-sm text-zinc-500">
-            Nutzungs- und Inseratsbedingungen für KIEZJOB Berlin
+            Nutzungs- und Inseratsbedingungen für JOBROOFS Berlin
           </p>
 
           <div className="mt-8 space-y-6 text-sm leading-relaxed border-t border-zinc-200 pt-6">
             <div>
               <h2 className="font-bold text-zinc-950 text-base">§ 1 Vertragsgegenstand & Status</h2>
               <p className="mt-1 text-zinc-600">
-                KIEZJOB betreibt ein reines Online-Anzeigenportal und Schwarzes Brett für Stellenanzeigen (Minijobs, Teilzeit, Aushilfen) sowie Wohnungs- und Zimmerangebote in Berlin. KIEZJOB vermittelt keine Arbeits- oder Mietverhältnisse und wird zu keinem Zeitpunkt Vertragspartei zwischen Suchenden und Inserierenden.
+                JOBROOFS betreibt ein reines Online-Anzeigenportal und Schwarzes Brett für Stellenanzeigen (Minijobs, Teilzeit, Aushilfen) sowie Wohnungs- und Zimmerangebote in Berlin. JOBROOFS vermittelt keine Arbeits- oder Mietverhältnisse und wird zu keinem Zeitpunkt Vertragspartei zwischen Suchenden und Inserierenden.
               </p>
             </div>
 
@@ -42,7 +42,7 @@ export default function AgbPage() {
             <div>
               <h2 className="font-bold text-zinc-950 text-base">§ 3 Pflichten der Inserenten & Verbotene Inhalte</h2>
               <p className="mt-1 text-zinc-600">
-                Inserenten sind verpflichtet, wahrheitsgemäße Angaben zu machen. Untersagt sind betrügerische Angebote, Vorkasse-Forderungen für Schlüssel oder Besichtigungen, diskriminierende Inserate oder Verstöße gegen Mietpreis- oder Arbeitszeitgesetze. KIEZJOB behält sich das Recht vor, unzulässige Inserate fristlos zu entfernen.
+                Inserenten sind verpflichtet, wahrheitsgemäße Angaben zu machen. Untersagt sind betrügerische Angebote, Vorkasse-Forderungen für Schlüssel oder Besichtigungen, diskriminierende Inserate oder Verstöße gegen Mietpreis- oder Arbeitszeitgesetze. JOBROOFS behält sich das Recht vor, unzulässige Inserate fristlos zu entfernen.
               </p>
             </div>
 

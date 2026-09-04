@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/control', '/api/'],
       },
     ],
-    sitemap: 'https://kiezjob.de/sitemap.xml',
+    sitemap: 'https://jobroofs.com/sitemap.xml',
   };
 }

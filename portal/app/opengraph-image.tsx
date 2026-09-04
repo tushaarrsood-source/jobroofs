@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'KIEZJOB — Berlin Portal for Part-Time, Minijobs & Flexible Shifts';
+export const alt = 'JOBROOFS — Berlin Portal for Flexible Jobs & Neighborhood Housing';
 export const size = {
   width: 1200,
   height: 630,
@@ -31,7 +31,7 @@ export default async function Image() {
               width: '48px',
               height: '48px',
               borderRadius: '12px',
-              background: '#385cdd',
+              background: '#1d4ed8',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -48,14 +48,14 @@ export default async function Image() {
               color: '#f4f0e7',
             }}
           >
-            KIEZJOB
+            JOBROOFS
           </span>
           <span
             style={{
               fontSize: '18px',
-              background: 'rgba(56, 92, 221, 0.25)',
-              color: '#7b9cf7',
-              border: '1px solid rgba(56, 92, 221, 0.4)',
+              background: 'rgba(29, 78, 216, 0.25)',
+              color: '#93c5fd',
+              border: '1px solid rgba(29, 78, 216, 0.4)',
               borderRadius: '20px',
               padding: '4px 14px',
               fontWeight: 600,
@@ -76,7 +76,7 @@ export default async function Image() {
               color: '#ffffff',
             }}
           >
-            The Berlin portal for Part-Time, Minijobs & Flexible Shifts.
+            The Berlin portal for Flexible Jobs & Neighborhood Housing.
           </h1>
           <p
             style={{
@@ -86,7 +86,7 @@ export default async function Image() {
               lineHeight: 1.4,
             }}
           >
-            Direct from local employers & verified venues across all 12 Berlin districts with transparent wages on map.
+            Direct listings from local employers & neighbors across Berlin districts with transparent pay.
           </p>
         </div>
 
@@ -100,11 +100,11 @@ export default async function Image() {
             fontWeight: 600,
           }}
         >
-          <span>☕ Minijobs (538€)</span>
+          <span>☕ Minijobs (603€)</span>
+          <span>•</span>
+          <span>🏡 Housing & Sublets</span>
           <span>•</span>
           <span>⚡ Flexible Shifts</span>
-          <span>•</span>
-          <span>🎓 Werkstudent</span>
           <span>•</span>
           <span>🗺️ OpenStreetMap</span>
         </div>

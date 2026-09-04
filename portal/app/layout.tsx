@@ -26,19 +26,22 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://kiezjob.de'),
+  metadataBase: new URL('https://jobroofs.com'),
   title: {
-    default: 'KIEZJOB — Berlin Portal for Part-Time, Minijobs & Flexible Shifts',
-    template: '%s · KIEZJOB',
+    default: 'JOBROOFS — Berlin Portal for Flexible Jobs & Neighborhood Housing',
+    template: '%s · JOBROOFS',
   },
   description:
-    'Direct from local employers & verified venues across Berlin — Minijobs, part-time work, temporary gigs, working student roles, and flexible shifts.',
+    'Direct marketplace for flexible work, minijobs, WG rooms and apartments across Berlin.',
   keywords: [
+    'Jobroofs',
     'Minijob Berlin',
     'Teilzeitjob Berlin',
     'Nebenjob Berlin',
     'Studentenjob Berlin',
     'Aushilfe Berlin',
+    'Wohnen Berlin',
+    'WG Zimmer Berlin',
     'Part time jobs Berlin',
     'Flexible work Berlin',
     'Temporary work Berlin',
@@ -51,18 +54,18 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     type: 'website',
-    siteName: 'KIEZJOB',
+    siteName: 'JOBROOFS',
     locale: 'de_DE',
-    url: 'https://kiezjob.de',
-    title: 'KIEZJOB — Berlin Portal for Part-Time, Minijobs & Flexible Shifts',
+    url: 'https://jobroofs.com',
+    title: 'JOBROOFS — Berlin Portal for Flexible Jobs & Neighborhood Housing',
     description:
-      'Direct from local employers & verified venues across Berlin — Minijobs, part-time work, temporary gigs, working student roles, and flexible shifts.',
+      'Direct marketplace for flexible work, minijobs, WG rooms and apartments across Berlin.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'KIEZJOB — Berlin Portal for Part-Time, Minijobs & Flexible Shifts',
+    title: 'JOBROOFS — Berlin Portal for Flexible Jobs & Neighborhood Housing',
     description:
-      'Direct from local employers & verified venues across Berlin — Minijobs, part-time work, temporary gigs, and flexible shifts.',
+      'Direct marketplace for flexible work, minijobs, WG rooms and apartments across Berlin.',
   },
   robots: {
     index: true,
@@ -78,9 +81,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
     languages: {
-      'de-DE': 'https://kiezjob.de',
-      'en-US': 'https://kiezjob.de',
-      'x-default': 'https://kiezjob.de',
+      'de-DE': 'https://jobroofs.com',
+      'en-US': 'https://jobroofs.com',
+      'x-default': 'https://jobroofs.com',
     },
   },
   icons: {

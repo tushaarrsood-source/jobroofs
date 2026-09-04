@@ -23,22 +23,22 @@ export function PlatformDisclaimer({
           <p className="text-[11px] text-zinc-500">
             {isDe ? (
               <>
-                KIEZJOB ist eine reine Informations- und Anzeigenplattform. KIEZJOB ist weder Immobilienmakler, Hausverwaltung, Vermieter, Arbeitgeber noch Partei von Miet-, Untermiet- oder Arbeitsverträgen. Alle Angaben in den Inseraten stammen ausschließlich von der jeweiligen inserierenden Person und werden von uns nicht auf inhaltliche Richtigkeit, rechtliche Zulässigkeit oder Bonität geprüft.
+                JOBROOFS ist eine reine Informations- und Anzeigenplattform. JOBROOFS ist weder Immobilienmakler, Hausverwaltung, Vermieter, Arbeitgeber noch Partei von Miet-, Untermiet- oder Arbeitsverträgen. Alle Angaben in den Inseraten stammen ausschließlich von der jeweiligen inserierenden Person und werden von uns nicht auf inhaltliche Richtigkeit, rechtliche Zulässigkeit oder Bonität geprüft.
               </>
             ) : (
               <>
-                KIEZJOB is strictly an advertising directory and bulletin board. KIEZJOB is not a real estate agency, property manager, landlord, employer, or party to any tenancy, sublet, or employment contract. All information in listings is provided solely by the posting party and is not verified by us for accuracy, legality, or creditworthiness.
+                JOBROOFS is strictly an advertising directory and bulletin board. JOBROOFS is not a real estate agency, property manager, landlord, employer, or party to any tenancy, sublet, or employment contract. All information in listings is provided solely by the posting party and is not verified by us for accuracy, legality, or creditworthiness.
               </>
             )}
           </p>
           <p className="text-[11px] text-zinc-500">
             {isDe ? (
               <>
-                Jeglicher Vertragsschluss und die gesamte Kommunikation erfolgen ausschließlich direkt zwischen Suchenden und Inserierenden. KIEZJOB übernimmt keinerlei Gewähr, Garantie oder Haftung für das Zustandekommen von Verträgen, Mietzahlungen, Kautionsrückzahlungen, Sach- oder Vermögensschäden.
+                Jeglicher Vertragsschluss und die gesamte Kommunikation erfolgen ausschließlich direkt zwischen Suchenden und Inserierenden. JOBROOFS übernimmt keinerlei Gewähr, Garantie oder Haftung für das Zustandekommen von Verträgen, Mietzahlungen, Kautionsrückzahlungen, Sach- oder Vermögensschäden.
               </>
             ) : (
               <>
-                Any agreement, transaction, and communication take place solely and directly between seekers and listers. KIEZJOB disclaims all warranties, representations, and liability for contract formation, rent payments, deposit returns, property damages, or financial loss.
+                Any agreement, transaction, and communication take place solely and directly between seekers and listers. JOBROOFS disclaims all warranties, representations, and liability for contract formation, rent payments, deposit returns, property damages, or financial loss.
               </>
             )}
           </p>

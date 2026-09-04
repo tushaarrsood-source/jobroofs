@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import {
   ArrowLeft,
   CheckCircle2,
@@ -16,11 +17,22 @@ import {
   Building,
   ShieldAlert,
   FileCheck,
+  Navigation,
 } from 'lucide-react';
 import type { HousingListing } from '@/lib/domain/housing-types';
 import { housingTypeLabels } from '@/lib/domain/housing-types';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { PlatformDisclaimer } from '@/components/platform-disclaimer';
+import { getHousingGoogleMapsUrl } from '@/lib/domain/berlin-geo';
+
+const HousingMap = dynamic(() => import('@/components/housing-map').then((mod) => mod.HousingMap), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-full w-full items-center justify-center rounded-xl border border-slate-200 bg-slate-100/70 text-xs font-semibold text-slate-500">
+      Berlin Karte lädt...
+    </div>
+  ),
+});
 
 export function HousingDetailContent({ listing }: { listing: HousingListing }) {
   const { t, isDe } = useTranslation();
@@ -320,6 +332,43 @@ export function HousingDetailContent({ listing }: { listing: HousingListing }) {
               </button>
             </div>
           </div>
+
+          {/* Location & Map Card */}
+          <section className="overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-xs">
+            <div className="p-4">
+              <h2 className="text-sm font-bold text-slate-900">
+                {isDe ? 'Standort & Umgebung' : 'Location & Neighborhood'}
+              </h2>
+              <p className="mt-0.5 text-xs text-slate-500">
+                {listing.streetAddress ? `${listing.streetAddress}, ` : ''}
+                {listing.neighborhood ? `${listing.neighborhood}, ` : ''}
+                {listing.district ? `${listing.district}, ` : ''}
+                {listing.postcode ? `${listing.postcode} ` : ''}Berlin
+              </p>
+            </div>
+
+            <div className="h-44 w-full border-t border-b border-slate-100">
+              <HousingMap
+                listings={[listing]}
+                miniMode
+                centerSingleListing
+                showCardOverlay={false}
+                className="h-full w-full"
+              />
+            </div>
+
+            <div className="p-3 bg-slate-50">
+              <a
+                href={getHousingGoogleMapsUrl(listing)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 transition hover:underline"
+              >
+                <Navigation className="size-3 text-blue-600" />
+                <span>{isDe ? 'In Google Maps öffnen' : 'Open in Google Maps'}</span>
+              </a>
+            </div>
+          </section>
 
           {/* Safety Card with Blue Authority */}
           <div className="rounded-xl border border-blue-200/80 bg-blue-50/70 p-4.5 text-xs text-blue-950">

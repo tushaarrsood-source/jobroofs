@@ -21,7 +21,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setMounted(true);
     try {
-      const stored = localStorage.getItem('kiezjob_locale') as Locale | null;
+      const stored = (localStorage.getItem('jobroofs_locale') ||
+        localStorage.getItem('kiezjob_locale')) as Locale | null;
       if (stored === 'de' || stored === 'en') {
         setLocaleState(stored);
       } else {
@@ -41,7 +42,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
     try {
-      localStorage.setItem('kiezjob_locale', newLocale);
+      localStorage.setItem('jobroofs_locale', newLocale);
       document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
     } catch {
       // Ignore storage errors

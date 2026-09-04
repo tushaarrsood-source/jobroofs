@@ -23,6 +23,8 @@ CREATE TABLE IF NOT EXISTS `housing_listings` (
 	`postcode` text NOT NULL,
 	`neighborhood` text,
 	`street_address` text,
+	`latitude` real,
+	`longitude` real,
 	`kaltmiete_eur` real NOT NULL,
 	`nebenkosten_eur` real DEFAULT 0 NOT NULL,
 	`warmmiete_eur` real NOT NULL,

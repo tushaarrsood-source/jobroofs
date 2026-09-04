@@ -14,7 +14,7 @@ export function SiteFooter() {
           <div className="space-y-3 md:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2">
               <span className="font-black text-lg tracking-tight text-slate-900">
-                KIEZ<span className="text-blue-600">JOB</span>
+                JOB<span className="text-blue-600">ROOFS</span>
               </span>
               <span className="text-[10px] font-bold tracking-wider text-blue-700 bg-blue-50 border border-blue-200/60 rounded px-1.5 py-0.2 uppercase">
                 BERLIN
@@ -28,8 +28,8 @@ export function SiteFooter() {
             <div className="pt-2">
               <p className="text-[11px] text-slate-400 leading-snug max-w-sm">
                 {isDe
-                  ? 'Reines Schwarzes Brett / Anzeigenportal. KIEZJOB ist kein Makler, Vermieter oder Arbeitgeber und haftet nicht für Miet-, Arbeitsverträge oder Zahlungen.'
-                  : 'Classifieds directory only. KIEZJOB is not a broker, landlord, or employer and assumes zero liability for tenancy agreements, job contracts, or payments.'}
+                  ? 'Reines Schwarzes Brett / Anzeigenportal. JOBROOFS ist kein Makler, Vermieter oder Arbeitgeber und haftet nicht für Miet-, Arbeitsverträge oder Zahlungen.'
+                  : 'Classifieds directory only. JOBROOFS is not a broker, landlord, or employer and assumes zero liability for tenancy agreements, job contracts, or payments.'}
               </p>
             </div>
           </div>
@@ -111,12 +111,12 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link href="/post-a-job" className="hover:text-blue-600 transition-colors">
-                  {isDe ? 'Job inserieren (29 €)' : 'Post a Job (€29)'}
+                  {isDe ? 'Job inserieren' : 'Post a Job'}
                 </Link>
               </li>
               <li>
                 <Link href="/wohnen/list" className="hover:text-blue-600 transition-colors">
-                  {isDe ? 'Wohnung inserieren (29 €)' : 'List Housing (€29)'}
+                  {isDe ? 'Wohnung inserieren' : 'List Housing'}
                 </Link>
               </li>
             </ul>
@@ -154,7 +154,7 @@ export function SiteFooter() {
 
         {/* Bottom Bar */}
         <div className="mt-12 flex flex-col gap-3 border-t border-slate-200 pt-6 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} KIEZJOB Berlin. Alle Rechte vorbehalten.</p>
+          <p>© {new Date().getFullYear()} JOBROOFS Berlin. Alle Rechte vorbehalten.</p>
           <p className="flex items-center gap-2">
             <span>100% DSGVO-konform</span>
             <span>·</span>

@@ -70,10 +70,15 @@ export function JobMap({
           zoomControl: !miniMode,
         });
 
-        // CartoDB Positron/Voyager Tiles for clean, high-contrast look
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-          subdomains: 'abcd',
+        // OpenStreetMap tiles (100% free, zero watermark) with optional CARTO key support
+        const cartoKey = process.env.NEXT_PUBLIC_CARTO_KEY;
+        const tileUrl = cartoKey
+          ? `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=${cartoKey}`
+          : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+        L.tileLayer(tileUrl, {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
           maxZoom: 19,
         }).addTo(map);
 
@@ -272,7 +277,7 @@ export function JobMap({
                 href={getGoogleMapsUrl(activeJob)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-muted-foreground transition hover:text-[#385cdd]"
+                className="inline-flex items-center gap-1 text-xs text-muted-foreground transition hover:text-blue-600"
                 title="Open location in Google Maps"
               >
                 <Navigation className="size-3 text-[#ed6a43]" />
@@ -280,7 +285,7 @@ export function JobMap({
               </a>
               <Link
                 href={`/jobs/${activeJob.slug || activeJob.id}`}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-[#385cdd] hover:underline"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:underline"
               >
                 <span>View listing</span>
                 <ArrowRight className="size-3" />

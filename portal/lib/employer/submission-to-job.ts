@@ -95,7 +95,7 @@ export async function convertSubmissionToJob(
         payload.submitterEmail ||
         submission.submitter_email ||
         submission.submitterEmail ||
-        "bewerbung@kiezjob.de")
+        "bewerbung@jobroofs.com")
       : null;
   const applicationUrl = applicationMethod === "external_link" ? (payload.applicationUrl || null) : null;
 

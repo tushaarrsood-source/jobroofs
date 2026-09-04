@@ -23,9 +23,9 @@ export async function generateMetadata({
     const district = job.district || 'Berlin';
     return {
       title: `${job.title} at ${job.company} (${district})`,
-      description: `${job.title} — ${payLabel} in ${district}, Berlin. ${job.employmentForms?.join(', ') || 'Flexible work'}. Apply directly on KIEZJOB.`,
+      description: `${job.title} — ${payLabel} in ${district}, Berlin. ${job.employmentForms?.join(', ') || 'Flexible work'}. Apply directly on JOBROOFS.`,
       openGraph: {
-        title: `${job.title} at ${job.company} (${district}) · KIEZJOB`,
+        title: `${job.title} at ${job.company} (${district}) · JOBROOFS`,
         description: `${payLabel} · ${district}, Berlin. Apply now.`,
         url: `/jobs/${slug}`,
       },
@@ -42,9 +42,9 @@ export async function generateMetadata({
   const payText = dbJob.payText || '';
   return {
     title: `${dbJob.title} at ${dbJob.company} (${district})`,
-    description: `${dbJob.title} — ${payText} in ${district}, Berlin. Apply directly on KIEZJOB.`,
+    description: `${dbJob.title} — ${payText} in ${district}, Berlin. Apply directly on JOBROOFS.`,
     openGraph: {
-      title: `${dbJob.title} at ${dbJob.company} (${district}) · KIEZJOB`,
+      title: `${dbJob.title} at ${dbJob.company} (${district}) · JOBROOFS`,
       description: `${payText} · ${district}, Berlin. Apply now.`,
       url: `/jobs/${slug}`,
     },
@@ -126,7 +126,7 @@ export default async function JobDetailPage({
         <SiteHeader />
         <div className="mx-auto max-w-3xl px-5 py-24 text-center">
           <h1 className="text-3xl font-semibold">Job not found</h1>
-          <Link href="/" className="mt-5 inline-block text-[#385cdd] underline">
+          <Link href="/" className="mt-5 inline-block text-blue-600 underline">
             Back to jobs
           </Link>
         </div>
@@ -139,7 +139,7 @@ export default async function JobDetailPage({
         <JobPostingJsonLd job={job} />
         <BreadcrumbJsonLd
           items={[
-            { name: 'KIEZJOB', href: '/' },
+            { name: 'JOBROOFS', href: '/' },
             { name: getIndustry(job.industryId)?.label || 'Jobs', href: `/categories/${job.industryId}` },
             { name: job.title, href: `/jobs/${job.slug || job.id}` },
           ]}

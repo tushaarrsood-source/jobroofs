@@ -300,3 +300,111 @@ export function getGoogleMapsUrl(job: any): string {
   const coords = resolveJobCoordinates(job);
   return `https://www.google.com/maps/search/?api=1&query=${coords.lat},${coords.lng}`;
 }
+
+/**
+ * Format custom pin badge label for a housing listing (e.g. "€750/m", "€1.200/m")
+ */
+export function formatHousingBadge(listing: any): string {
+  if (!listing) return '€750/m';
+
+  const rent = listing.warmmieteEur || listing.kaltmieteEur;
+  if (typeof rent === 'number' && !isNaN(rent) && rent > 0) {
+    if (rent >= 1000) {
+      const thousands = Math.floor(rent / 1000);
+      const remainder = Math.round(rent % 1000);
+      const formatted = remainder > 0 ? `€${thousands}.${remainder.toString().padStart(3, '0')}` : `€${thousands}.000`;
+      return `${formatted}/m`;
+    }
+    return `€${Math.round(rent)}/m`;
+  }
+
+  return '€750/m';
+}
+
+/**
+ * Resolve latitude and longitude coordinates for any housing listing
+ */
+export function resolveHousingCoordinates(listing: any): JobGeoLocation {
+  const badgeLabel = formatHousingBadge(listing);
+
+  if (
+    typeof listing.latitude === 'number' &&
+    typeof listing.longitude === 'number' &&
+    listing.latitude > 50 &&
+    listing.longitude > 10
+  ) {
+    return {
+      lat: listing.latitude,
+      lng: listing.longitude,
+      badgeLabel,
+      isExact: true,
+    };
+  }
+
+  const postcode = (listing.postcode || '').toString().trim().replace(/[^0-9]/g, '');
+  if (postcode && BERLIN_POSTCODE_COORDS[postcode]) {
+    const base = BERLIN_POSTCODE_COORDS[postcode];
+    const jitter = getJitter(listing.id || `housing-${postcode}`);
+    return {
+      lat: base.lat + jitter.dLat,
+      lng: base.lng + jitter.dLng,
+      badgeLabel,
+      isExact: false,
+    };
+  }
+
+  const rawDistrict = (listing.district || '').toLowerCase().trim();
+  const rawKiez = (listing.neighborhood || '').toLowerCase().trim();
+  const searchStr = `${rawDistrict} ${rawKiez}`
+    .replace(/berlin[- ]?/i, '')
+    .replace(/[^a-zäöüß_]/g, '')
+    .replace(/ä/g, 'ae')
+    .replace(/ö/g, 'oe')
+    .replace(/ü/g, 'ue')
+    .replace(/ß/g, 'ss');
+
+  for (const [key, coords] of Object.entries(BERLIN_DISTRICT_COORDS)) {
+    if (searchStr.includes(key) || key.includes(searchStr)) {
+      const jitter = getJitter(listing.id || `housing-${key}`, 789);
+      return {
+        lat: coords.lat + jitter.dLat,
+        lng: coords.lng + jitter.dLng,
+        badgeLabel,
+        isExact: false,
+      };
+    }
+  }
+
+  const jitter = getJitter(listing.id || 'housing-fallback', 999);
+  return {
+    lat: BERLIN_CENTER.lat + jitter.dLat * 2,
+    lng: BERLIN_CENTER.lng + jitter.dLng * 2,
+    badgeLabel,
+    isExact: false,
+  };
+}
+
+/**
+ * Generate a direct Google Maps redirection link for a housing listing
+ */
+export function getHousingGoogleMapsUrl(listing: any): string {
+  if (!listing) return 'https://www.google.com/maps/search/?api=1&query=Berlin';
+
+  const address = listing.streetAddress;
+  const district = listing.district;
+  const postcode = listing.postcode;
+  const kiez = listing.neighborhood;
+
+  if (address) {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address}, ${postcode ? `${postcode} ` : ''}Berlin`)}`;
+  }
+
+  if (district || postcode || kiez) {
+    const parts = [kiez, district, postcode, 'Berlin'].filter(Boolean).join(', ');
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parts)}`;
+  }
+
+  const coords = resolveHousingCoordinates(listing);
+  return `https://www.google.com/maps/search/?api=1&query=${coords.lat},${coords.lng}`;
+}
+

@@ -1,46 +1,47 @@
-# KIEZJOB — Berlin's Flexible Work & Minijob Portal
+# JOBROOFS — Berlin's Flexible Work & Housing Portal
 
-> KIEZJOB is Berlin's dedicated job board for flexible employment — Minijobs (538€/603€), part-time work (Teilzeit), student jobs (Werkstudent), temporary gigs, and individual shifts — across all 12 Berlin districts in German and English.
+> JOBROOFS is Berlin's dedicated portal for flexible employment — Minijobs (603€ limit / 13,90€ minimum wage), part-time work (Teilzeit), student jobs (Werkstudent), temporary gigs, and neighborhood housing / rooms — across all 12 Berlin districts in German and English.
 
 ## Core Pages
 
-- [Homepage](https://kiezjob.de/): Browse all flexible work opportunities in Berlin with interactive OpenStreetMap view
-- [Post a Job](https://kiezjob.de/post-a-job): Employers post job listings for €29 single or €499/year unlimited
-- [Direct from Employers](https://kiezjob.de/direct-employers): All jobs posted directly by verified Berlin employers
-- [Latest Verified Jobs](https://kiezjob.de/latest-jobs): Freshly sourced and verified job opportunities
+- [Homepage](https://jobroofs.com/): Browse all flexible work opportunities and rooms in Berlin with interactive OpenStreetMap view
+- [Housing & Sublets](https://jobroofs.com/wohnen): Direct neighborhood housing listings, WG rooms, Zwischenmiete, and apartments
+- [Post a Job](https://jobroofs.com/post-a-job): Employers post job listings for €29 single or €499/year unlimited
+- [Direct from Employers](https://jobroofs.com/direct-employers): All jobs posted directly by verified Berlin employers
+- [Latest Verified Jobs](https://jobroofs.com/latest-jobs): Freshly sourced and verified job opportunities
 
 ## Job Categories (30 Berlin Niches)
 
-- [Gastronomy & Cafés](https://kiezjob.de/categories/gastronomy): Restaurants, cafés, bakeries and catering teams
-- [Hotels & Accommodation](https://kiezjob.de/categories/hotels): Hotels, hostels, serviced apartments and guest houses
-- [Events & Venues](https://kiezjob.de/categories/events): Event crews, venues, trade fairs and temporary productions
-- [Retail & Shops](https://kiezjob.de/categories/retail): Independent shops, chains, fashion and specialty retail
-- [Supermarkets & Food Retail](https://kiezjob.de/categories/food-retail): Supermarkets, organic stores, kiosks and food counters
-- [Warehousing & Fulfilment](https://kiezjob.de/categories/warehousing): Order picking, packing, stock and distribution centre roles
-- [Logistics & Delivery](https://kiezjob.de/categories/logistics): Bicycle couriers, van drivers and last-mile delivery
-- [Cleaning & Facilities](https://kiezjob.de/categories/cleaning): Office, commercial and residential cleaning teams
-- [Office & Administration](https://kiezjob.de/categories/office-admin): Reception, data entry, filing and general office support
-- [Customer Support](https://kiezjob.de/categories/customer-support): Call centres, live chat and email support desks
-- [Sales & Promotion](https://kiezjob.de/categories/sales-promotion): In-store promotion, brand ambassadors, street marketing
-- [Tourism & Visitor Services](https://kiezjob.de/categories/tourism): Tour guides, museum staff, visitor information and travel agencies
-- [Culture, Museums & Theatres](https://kiezjob.de/categories/culture): Galleries, theatres, cinemas and cultural institutions
-- [Nightlife & Clubs](https://kiezjob.de/categories/nightlife): Bars, clubs, door staff and late-night hospitality
-- [Sports, Fitness & Recreation](https://kiezjob.de/categories/sports-fitness): Gyms, pools, coaching and leisure centres
-- [Childcare & Education](https://kiezjob.de/categories/childcare-education): After-school care, holiday programmes and tutoring
-- [Healthcare Support](https://kiezjob.de/categories/healthcare-support): Clinics, pharmacies, care assistants and patient transport
-- [Elder Care & Social Services](https://kiezjob.de/categories/elder-care): Home care, nursing support and social work assistants
-- [Security & Crowd Services](https://kiezjob.de/categories/security): Door supervision, event security and mobile patrols
-- [Construction & Trades](https://kiezjob.de/categories/construction-trades): Helpers for electricians, painters, plumbers and site crews
-- [Manufacturing & Production](https://kiezjob.de/categories/manufacturing): Assembly, machine operation and quality control
-- [Moving & Transport Help](https://kiezjob.de/categories/moving-transport): Furniture movers, van assistants and transport helpers
-- [Universities & Research](https://kiezjob.de/categories/universities-research): Student assistant (HiWi) and lab helper positions
-- [NGOs & Associations](https://kiezjob.de/categories/ngo-associations): Charities, community projects and volunteer coordination
-- [Media & Creative](https://kiezjob.de/categories/media-creative): Photography, video, design and content creation gigs
-- [Beauty & Wellness](https://kiezjob.de/categories/beauty-wellness): Salons, spas, massage and cosmetics
-- [Pet Care](https://kiezjob.de/categories/pet-care): Dog walking, pet sitting and veterinary assistance
-- [Gardening & Outdoor](https://kiezjob.de/categories/gardening-outdoor): Parks, landscaping and urban gardening projects
-- [Seasonal & Markets](https://kiezjob.de/categories/seasonal-markets): Christmas markets, summer festivals and pop-up stands
-- [Local Services](https://kiezjob.de/categories/local-services): Handyman, errands, personal assistance and odd jobs
+- [Gastronomy & Cafés](https://jobroofs.com/categories/gastronomy): Restaurants, cafés, bakeries and catering teams
+- [Hotels & Accommodation](https://jobroofs.com/categories/hotels): Hotels, hostels, serviced apartments and guest houses
+- [Events & Venues](https://jobroofs.com/categories/events): Event crews, venues, trade fairs and temporary productions
+- [Retail & Shops](https://jobroofs.com/categories/retail): Independent shops, chains, fashion and specialty retail
+- [Supermarkets & Food Retail](https://jobroofs.com/categories/food-retail): Supermarkets, organic stores, kiosks and food counters
+- [Warehousing & Fulfilment](https://jobroofs.com/categories/warehousing): Order picking, packing, stock and distribution centre roles
+- [Logistics & Delivery](https://jobroofs.com/categories/logistics): Bicycle couriers, van drivers and last-mile delivery
+- [Cleaning & Facilities](https://jobroofs.com/categories/cleaning): Office, commercial and residential cleaning teams
+- [Office & Administration](https://jobroofs.com/categories/office-admin): Reception, data entry, filing and general office support
+- [Customer Support](https://jobroofs.com/categories/customer-support): Call centres, live chat and email support desks
+- [Sales & Promotion](https://jobroofs.com/categories/sales-promotion): In-store promotion, brand ambassadors, street marketing
+- [Tourism & Visitor Services](https://jobroofs.com/categories/tourism): Tour guides, museum staff, visitor information and travel agencies
+- [Culture, Museums & Theatres](https://jobroofs.com/categories/culture): Galleries, theatres, cinemas and cultural institutions
+- [Nightlife & Clubs](https://jobroofs.com/categories/nightlife): Bars, clubs, door staff and late-night hospitality
+- [Sports, Fitness & Recreation](https://jobroofs.com/categories/sports-fitness): Gyms, pools, coaching and leisure centres
+- [Childcare & Education](https://jobroofs.com/categories/childcare-education): After-school care, holiday programmes and tutoring
+- [Healthcare Support](https://jobroofs.com/categories/healthcare-support): Clinics, pharmacies, care assistants and patient transport
+- [Elder Care & Social Services](https://jobroofs.com/categories/elder-care): Home care, nursing support and social work assistants
+- [Security & Crowd Services](https://jobroofs.com/categories/security): Door supervision, event security and mobile patrols
+- [Construction & Trades](https://jobroofs.com/categories/construction-trades): Helpers for electricians, painters, plumbers and site crews
+- [Manufacturing & Production](https://jobroofs.com/categories/manufacturing): Assembly, machine operation and quality control
+- [Moving & Transport Help](https://jobroofs.com/categories/moving-transport): Furniture movers, van assistants and transport helpers
+- [Universities & Research](https://jobroofs.com/categories/universities-research): Student assistant (HiWi) and lab helper positions
+- [NGOs & Associations](https://jobroofs.com/categories/ngo-associations): Charities, community projects and volunteer coordination
+- [Media & Creative](https://jobroofs.com/categories/media-creative): Photography, video, design and content creation gigs
+- [Beauty & Wellness](https://jobroofs.com/categories/beauty-wellness): Salons, spas, massage and cosmetics
+- [Pet Care](https://jobroofs.com/categories/pet-care): Dog walking, pet sitting and veterinary assistance
+- [Gardening & Outdoor](https://jobroofs.com/categories/gardening-outdoor): Parks, landscaping and urban gardening projects
+- [Seasonal & Markets](https://jobroofs.com/categories/seasonal-markets): Christmas markets, summer festivals and pop-up stands
+- [Local Services](https://jobroofs.com/categories/local-services): Handyman, errands, personal assistance and odd jobs
 
 ## Berlin District Coverage
 
@@ -48,14 +49,16 @@ All 12 Berlin districts (Bezirke): Mitte, Friedrichshain-Kreuzberg, Pankow (Pren
 
 ## Key Features
 
-- Interactive OpenStreetMap with wage pin badges for every job
-- Direct Google Maps navigation from job listings
-- Automatic verbatim text formatting for job descriptions
+- Interactive OpenStreetMap with wage & rent pin badges
+- Direct Google Maps navigation from job and housing listings
+- Automatic verbatim text formatting for descriptions
 - Transparent hourly/shift/monthly wage display
-- Direct employer email or website application (1-click)
-- Free for job seekers, always
+- Direct employer and host contact (1-click)
+- Free for job and room seekers, always
 
-## Pricing for Employers
+## Pricing
 
 - Single Job Listing: €29 (30 days active)
+- Single Housing Listing: €29 (30 days active)
 - Annual Unlimited & Top Listing: €499/year
+

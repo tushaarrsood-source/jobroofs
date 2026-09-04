@@ -64,7 +64,7 @@ export default async function Home() {
               DEIN KIEZ BRAUCHT DICH.
             </h2>
             <p className="mt-2 text-xs text-slate-300 max-w-xl leading-relaxed sm:text-sm">
-              Du suchst eine flexible Aushilfe für dein Café oder einen Nachmieter für deine WG? Inseriere in 2 Minuten für einmalig 29 € (30 Tage aktiv) — 100% Direktkontakt ohne Zeitarbeit und ohne Makler.
+              Du suchst eine flexible Aushilfe für dein Café oder einen Nachmieter für deine WG? Inseriere in 2 Minuten (30 Tage aktiv) — 100% Direktkontakt ohne Zeitarbeit und ohne Makler.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 shrink-0">
@@ -72,13 +72,13 @@ export default async function Home() {
               href="/post-a-job"
               className="inline-flex h-11 items-center rounded-xl bg-blue-600 px-5 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
             >
-              Job inserieren (29 €) <ArrowRight className="ml-1.5 size-3.5" />
+              Job inserieren <ArrowRight className="ml-1.5 size-3.5" />
             </Link>
             <Link
               href="/wohnen/list"
               className="inline-flex h-11 items-center rounded-xl border border-slate-700 bg-slate-900 px-5 text-xs font-bold text-white transition hover:bg-slate-800"
             >
-              Wohnung inserieren (29 €)
+              Wohnung inserieren
             </Link>
           </div>
         </div>

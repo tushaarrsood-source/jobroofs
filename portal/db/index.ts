@@ -80,7 +80,7 @@ class LocalMockD1PreparedStatement {
           return {
             id: target,
             payload_json: item.params?.[2] || '{}',
-            submitter_email: item.params?.[1] || 'dev@kiezjob.de',
+            submitter_email: item.params?.[1] || 'dev@jobroofs.com',
             ...item,
           } as unknown as T;
         }
@@ -89,7 +89,7 @@ class LocalMockD1PreparedStatement {
             return {
               id: item.id,
               payload_json: item.params?.[2] || '{}',
-              submitter_email: item.params?.[1] || 'dev@kiezjob.de',
+              submitter_email: item.params?.[1] || 'dev@jobroofs.com',
               ...item,
             } as unknown as T;
           }

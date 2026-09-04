@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     'All latest verified flexible jobs, minijobs, shifts, and part-time positions across Berlin with transparent wages.',
   openGraph: {
-    title: 'Latest Verified Jobs in Berlin · KIEZJOB',
+    title: 'Latest Verified Jobs in Berlin · JOBROOFS',
     description:
       'All latest verified flexible jobs, minijobs, shifts, and part-time positions across Berlin.',
     url: '/latest-jobs',
@@ -74,7 +74,7 @@ export default async function LatestJobsPage() {
               Are you an employer hiring in Berlin?
             </p>
             <p className="mt-1.5 text-xs text-slate-300">
-              Post your job for €29 single listing (30 days active). Direct applicant contact.
+              Post your job in minutes (30 days active). Direct applicant contact.
             </p>
           </div>
           <Link

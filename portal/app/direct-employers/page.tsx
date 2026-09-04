@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     'Browse all job openings posted directly by Berlin employers, cafés, venues, and local companies. Minijobs, part-time, temporary shifts.',
   openGraph: {
-    title: 'Direct from Employers — Jobs in Berlin · KIEZJOB',
+    title: 'Direct from Employers — Jobs in Berlin · JOBROOFS',
     description:
       'Browse all job openings posted directly by Berlin employers.',
     url: '/direct-employers',
@@ -50,7 +50,7 @@ export default async function DirectEmployersPage() {
     <main className="min-h-screen bg-background text-foreground">
       <SiteHeader />
 
-      <div className="border-b border-foreground/15 bg-[#eef1ff] py-2.5 text-center text-xs font-semibold text-[#385cdd]">
+      <div className="border-b border-blue-100 bg-blue-50/70 py-2.5 text-center text-xs font-semibold text-blue-700">
         <span className="inline-flex items-center gap-1.5">
           <ShieldCheck className="size-4" /> 100% Direct Employer Listings &middot; Direct Contact & Transparent Pay
         </span>
@@ -74,7 +74,7 @@ export default async function DirectEmployersPage() {
               Are you an employer hiring in Berlin?
             </p>
             <p className="mt-1.5 text-xs text-slate-300">
-              Post your job for €29 single listing (30 days active). Direct applicant contact.
+              Post your job in minutes (30 days active). Direct applicant contact.
             </p>
           </div>
           <Link

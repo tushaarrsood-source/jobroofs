@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     canonical: '/wohnen',
   },
   openGraph: {
-    title: 'Wohnen in Berlin · KIEZJOB',
+    title: 'Wohnen in Berlin · JOBROOFS',
     description:
       'WG-Zimmer, Zwischenmieten & Wohnungen in Berlin direkt von Nutzer zu Nutzer.',
     url: '/wohnen',
@@ -41,6 +41,8 @@ export default async function HousingPage() {
         postcode: r.postcode,
         neighborhood: r.neighborhood,
         streetAddress: r.street_address,
+        latitude: r.latitude ? Number(r.latitude) : null,
+        longitude: r.longitude ? Number(r.longitude) : null,
         kaltmieteEur: r.kaltmiete_eur,
         nebenkostenEur: r.nebenkosten_eur,
         warmmieteEur: r.warmmiete_eur,

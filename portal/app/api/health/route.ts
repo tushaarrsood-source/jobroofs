@@ -7,7 +7,7 @@ import { nicheAgentProfiles } from '@/lib/agents/niche-agents';
 export async function GET() {
   return Response.json({
     ok: true,
-    service: 'kiezjob-portal',
+    service: 'jobroofs-portal',
     publication: 'locked',
     database: 'schema_ready',
     retrieval: getFirecrawlReadiness(),

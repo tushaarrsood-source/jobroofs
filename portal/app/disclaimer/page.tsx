@@ -4,7 +4,7 @@ import { PlatformDisclaimer } from '@/components/platform-disclaimer';
 
 export const metadata = {
   title: 'Haftungsausschluss / Disclaimer',
-  description: 'Haftungsausschluss für KIEZJOB Berlin.',
+  description: 'Haftungsausschluss für JOBROOFS Berlin.',
 };
 
 export default function DisclaimerPage() {

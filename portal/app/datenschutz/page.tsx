@@ -3,7 +3,7 @@ import { SiteFooter } from '@/components/site-footer';
 
 export const metadata = {
   title: 'Datenschutzerklärung',
-  description: 'Datenschutzerklärung nach der DSGVO für KIEZJOB Berlin.',
+  description: 'Datenschutzerklärung nach der DSGVO für JOBROOFS Berlin.',
 };
 
 export default function DatenschutzPage() {
