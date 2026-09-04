@@ -106,7 +106,7 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body
-        className={`${inter.variable} antialiased selection:bg-[#0071e3] selection:text-white pb-20 md:pb-0 font-sans`}
+        className={`${inter.variable} antialiased selection:bg-[#0071e3] selection:text-white pb-24 md:pb-0 font-sans`}
       >
         <LanguageProvider>
           {children}

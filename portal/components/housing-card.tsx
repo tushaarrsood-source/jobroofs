@@ -50,39 +50,39 @@ export function HousingCard({
 
         {/* Top Badges (Apple Frosted Glass Overlay) */}
         <div className="absolute top-2.5 left-2.5 right-2.5 flex items-start justify-between gap-1.5 pointer-events-none">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="rounded-full bg-black/50 backdrop-blur-md px-2.5 py-0.5 text-[11px] font-medium text-white border border-white/10">
+          <div className="flex flex-wrap items-center gap-1">
+            <span className="rounded-full bg-black/55 backdrop-blur-md px-2.5 py-0.5 text-[10.5px] sm:text-[11px] font-medium text-white border border-white/10">
               {isDe ? typeInfo.de : typeInfo.en}
             </span>
             {isFeatured && (
-              <span className="rounded-full bg-amber-400 px-2.5 py-0.5 text-[11px] font-semibold text-black shadow-xs">
-                Featured · 60d
+              <span className="rounded-full bg-amber-400 px-2 py-0.5 text-[10.5px] font-semibold text-black shadow-xs">
+                Featured
               </span>
             )}
           </div>
 
           {listing.anmeldungPossible ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600/90 backdrop-blur-md px-2.5 py-0.5 text-[11px] font-semibold text-white shadow-xs">
+            <span className="inline-flex items-center gap-1 shrink-0 rounded-full bg-emerald-600/90 backdrop-blur-md px-2 py-0.5 text-[10.5px] sm:text-[11px] font-semibold text-white shadow-xs">
               <CheckCircle2 className="size-3" />
               <span>Anmeldung ✓</span>
             </span>
           ) : (
-            <span className="rounded-full bg-black/40 backdrop-blur-md px-2.5 py-0.5 text-[11px] font-medium text-white/80">
-              Keine Anmeldung
+            <span className="shrink-0 rounded-full bg-black/40 backdrop-blur-md px-2 py-0.5 text-[10.5px] font-medium text-white/80">
+              Ohne Anmeldung
             </span>
           )}
         </div>
 
         {/* Bottom image stats */}
         {photoCount > 1 && (
-          <span className="absolute bottom-2.5 right-2.5 rounded-full bg-black/50 backdrop-blur-md px-2.5 py-0.5 text-[11px] font-medium text-white pointer-events-none border border-white/10">
+          <span className="absolute bottom-2.5 right-2.5 rounded-full bg-black/50 backdrop-blur-md px-2 py-0.5 text-[10.5px] font-medium text-white pointer-events-none border border-white/10">
             {photoCount} Fotos
           </span>
         )}
       </div>
 
       {/* Card Content */}
-      <div className="flex flex-1 flex-col p-5">
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
         {/* District & Location */}
         <div className="flex items-center justify-between text-[13px] text-[#86868b]">
           <span className="inline-flex items-center gap-1 font-medium text-[#1d1d1f]">

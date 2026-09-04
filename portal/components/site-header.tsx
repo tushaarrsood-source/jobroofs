@@ -112,15 +112,7 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
             </Link>
           </nav>
 
-          {/* Mobile Single Post Pill */}
-          <Link
-            href="/post"
-            className="flex md:hidden apple-btn-primary !h-7.5 !px-3 !text-[11px]"
-          >
-            <span>+ {isDe ? 'Inserieren' : 'Post'}</span>
-          </Link>
-
-          <div className="border-l border-black/[0.08] pl-2 sm:pl-3">
+          <div className="md:border-l md:border-black/[0.08] md:pl-3">
             <LanguageToggle />
           </div>
         </div>

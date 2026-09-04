@@ -47,7 +47,7 @@ export default function AgbPage() {
             </div>
 
             <div className="pt-4">
-              <PlatformDisclaimer type="housing" />
+              <PlatformDisclaimer type="housing" variant="full" />
             </div>
           </div>
         </main>

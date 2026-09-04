@@ -61,8 +61,8 @@ export function KiezMapPage({
           </button>
         </div>
 
-        {/* Action Buttons: Post a Job and Post a Room (Apple Styling) */}
-        <div className="flex items-center gap-2 self-end sm:self-auto">
+        {/* Action Buttons: Post a Job and Post a Room (Desktop only - mobile has bottom +) */}
+        <div className="hidden sm:flex items-center gap-2">
           <Link
             href="/post-a-job"
             className="apple-btn-primary !h-9 !px-3.5 !text-xs"
@@ -82,7 +82,7 @@ export function KiezMapPage({
       </div>
 
       {/* Tall Interactive Map Container */}
-      <div className="relative h-[calc(100vh-190px)] min-h-[560px] w-full overflow-hidden rounded-[20px] border border-black/[0.06] bg-[#f5f5f7] shadow-sm">
+      <div className="relative h-[calc(100vh-150px)] min-h-[480px] sm:h-[calc(100vh-190px)] sm:min-h-[560px] w-full overflow-hidden rounded-[20px] border border-black/[0.06] bg-[#f5f5f7] shadow-sm">
         {activeTab === 'jobs' ? (
           <JobMap
             jobs={initialJobs}

@@ -46,7 +46,7 @@ const featuredNiches = [
 ];
 
 const berlinDistricts = [
-  { value: 'all', labelDe: 'Ganz Berlin (Alle Bezirke)', labelEn: 'All Berlin Districts' },
+  { value: 'all', labelDe: 'Alle Bezirke', labelEn: 'All Districts' },
   { value: 'mitte', labelDe: 'Mitte', labelEn: 'Mitte' },
   { value: 'kreuzberg', labelDe: 'Kreuzberg', labelEn: 'Kreuzberg' },
   { value: 'friedrichshain', labelDe: 'Friedrichshain', labelEn: 'Friedrichshain' },
@@ -175,16 +175,16 @@ export function JobBrowser({
     <>
       {showHero && (
         <section className="border-b border-black/[0.06] bg-white">
-          <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-6 pt-5 pb-4 md:pt-6 md:pb-5">
+          <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-6 pt-3.5 pb-2.5 md:pt-6 md:pb-5">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-[-0.025em] text-[#1d1d1f] leading-tight">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-[-0.025em] text-[#1d1d1f] leading-snug">
                 {isDe ? (
                   <>Minijobs (603 €) & Flexible Arbeit in Berlin</>
                 ) : (
                   <>Minijobs (€603) & Flexible Work in Berlin</>
                 )}
               </h1>
-              <p className="mt-1 text-xs sm:text-sm text-[#86868b] max-w-xl leading-relaxed">
+              <p className="mt-0.5 text-xs sm:text-sm text-[#86868b] max-w-xl leading-relaxed">
                 {isDe
                   ? 'Direktkontakt zu Berliner Betrieben, Gastronomie, Events und Kiez-Shops.'
                   : 'Direct contact with local Berlin venues, hospitality, events, and shops.'}
@@ -192,7 +192,7 @@ export function JobBrowser({
             </div>
 
             {/* Apple Spotlight Search & Controls Bar */}
-            <div className="mt-4 apple-spotlight p-1.5">
+            <div className="mt-3 md:mt-4 apple-spotlight p-1.5">
               <div className="flex flex-col gap-1.5 md:flex-row md:items-center">
                 {/* Search Input */}
                 <div className="relative flex-1">
@@ -239,7 +239,7 @@ export function JobBrowser({
                       className="h-8.5 border-none bg-black/[0.04] hover:bg-black/[0.06] text-xs font-medium text-[#1d1d1f] rounded-lg w-full"
                       aria-label="Beschäftigungsart"
                     >
-                      <NativeSelectOption value="all">{t('allJobTypes')}</NativeSelectOption>
+                      <NativeSelectOption value="all">{isDe ? 'Alle Job-Arten' : 'All Job Types'}</NativeSelectOption>
                       <NativeSelectOption value="minijob">{t('minijob')}</NativeSelectOption>
                       <NativeSelectOption value="part-time">{t('partTime')}</NativeSelectOption>
                       <NativeSelectOption value="working student">{t('workingStudent')}</NativeSelectOption>
@@ -342,6 +342,39 @@ export function JobBrowser({
                   }`}
                 >
                   Friedrichshain
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDistrict(district === 'Prenzlauer Berg' ? 'all' : 'Prenzlauer Berg')}
+                  className={`pill-tactile rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap ${
+                    district === 'Prenzlauer Berg'
+                      ? 'bg-[#1d1d1f] text-white shadow-xs font-semibold'
+                      : 'bg-black/[0.04] text-[#1d1d1f] hover:bg-black/[0.07]'
+                  }`}
+                >
+                  Prenzl. Berg
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDistrict(district === 'Schöneberg' ? 'all' : 'Schöneberg')}
+                  className={`pill-tactile rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap ${
+                    district === 'Schöneberg'
+                      ? 'bg-[#1d1d1f] text-white shadow-xs font-semibold'
+                      : 'bg-black/[0.04] text-[#1d1d1f] hover:bg-black/[0.07]'
+                  }`}
+                >
+                  Schöneberg
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDistrict(district === 'Charlottenburg' ? 'all' : 'Charlottenburg')}
+                  className={`pill-tactile rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap ${
+                    district === 'Charlottenburg'
+                      ? 'bg-[#1d1d1f] text-white shadow-xs font-semibold'
+                      : 'bg-black/[0.04] text-[#1d1d1f] hover:bg-black/[0.07]'
+                  }`}
+                >
+                  Charlottenburg
                 </button>
 
                 {hasActiveFilters && (
@@ -474,7 +507,7 @@ function JobCard({
   return (
     <Link
       href={`/jobs/${job.slug || job.id}`}
-      className={`group block overflow-hidden rounded-[20px] border bg-white p-5 cursor-pointer transition-all duration-200 active:scale-[0.99] ${
+      className={`group block overflow-hidden rounded-[20px] border bg-white p-4 sm:p-5 cursor-pointer transition-all duration-200 active:scale-[0.99] ${
         isSelected
           ? 'border-transparent ring-2 ring-[#0071e3] shadow-md'
           : isHovered
@@ -482,21 +515,21 @@ function JobCard({
           : 'border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:border-black/[0.12] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:-translate-y-[1px]'
       }`}
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex items-start justify-between gap-2.5 sm:gap-3">
         <div className="min-w-0 flex-1">
           {/* Subtle Tags (Apple Restraint: Only show if featured or specific form, no badge clutter) */}
           {(isFeatured || (job.employmentForms && job.employmentForms.length > 0)) && (
-            <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
+            <div className="flex flex-wrap items-center gap-1.5 mb-2">
               {isFeatured && (
-                <span className="rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-amber-900">
-                  Featured · 60d
+                <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10.5px] sm:text-[11px] font-semibold text-amber-900">
+                  Featured
                 </span>
               )}
               {job.employmentForms &&
                 job.employmentForms.slice(0, 2).map((form: string) => (
                   <span
                     key={form}
-                    className="rounded-full bg-black/[0.04] px-2.5 py-0.5 text-[11px] font-medium text-[#86868b]"
+                    className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[10.5px] sm:text-[11px] font-medium text-[#86868b]"
                   >
                     {form}
                   </span>
@@ -505,12 +538,12 @@ function JobCard({
           )}
 
           {/* Job Title (Apple SF Pro Style: Optical hierarchy with negative tracking) */}
-          <h3 className="text-[17px] font-semibold text-[#1d1d1f] tracking-tight leading-snug group-hover:text-[#0071e3] transition-colors">
+          <h3 className="text-[15.5px] sm:text-[17px] font-semibold text-[#1d1d1f] tracking-tight leading-snug group-hover:text-[#0071e3] transition-colors">
             {job.title}
           </h3>
 
           {/* Company & District */}
-          <p className="mt-1 flex flex-wrap items-center gap-1.5 text-[13px] text-[#86868b]">
+          <p className="mt-1 flex flex-wrap items-center gap-1.5 text-[12.5px] sm:text-[13px] text-[#86868b]">
             <span className="font-medium text-[#1d1d1f]">{job.company}</span>
             <span className="text-black/20">·</span>
             <span className="inline-flex items-center gap-1 text-[#86868b]">
@@ -521,24 +554,26 @@ function JobCard({
         </div>
 
         {/* Wage / Compensation Badge (Clean Apple Pill) */}
-        <div className="flex shrink-0 items-baseline sm:flex-col sm:items-end sm:justify-start">
-          <span className="rounded-full bg-black/[0.04] px-3 py-1 text-[13px] font-semibold text-[#1d1d1f] font-mono tracking-tight">
+        <div className="shrink-0">
+          <span className="inline-block rounded-full bg-black/[0.04] px-2.5 py-1 text-[12px] sm:text-[13px] font-semibold text-[#1d1d1f] font-mono tracking-tight whitespace-nowrap">
             {payLabel}
           </span>
         </div>
       </div>
 
       {/* Metadata footer */}
-      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-black/[0.04] pt-3 text-[12px] text-[#86868b]">
-        <div className="flex items-center gap-1">
-          <Clock3 className="size-3.5 text-[#86868b]" />
-          <span>{hoursLabel}</span>
+      <div className="mt-3 flex items-center justify-between border-t border-black/[0.04] pt-2.5 text-[11.5px] sm:text-[12px] text-[#86868b]">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1">
+            <Clock3 className="size-3 text-[#86868b]" />
+            <span>{hoursLabel}</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-1">
+            <CalendarDays className="size-3 text-[#86868b]" />
+            <span>{scheduleSummary}</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1">
-          <CalendarDays className="size-3.5 text-[#86868b]" />
-          <span>{scheduleSummary}</span>
-        </div>
-        <div className="ml-auto inline-flex items-center gap-1 text-[13px] font-medium text-[#0071e3] group-hover:translate-x-0.5 transition-transform">
+        <div className="inline-flex items-center gap-1 text-[12px] sm:text-[13px] font-medium text-[#0071e3] group-hover:translate-x-0.5 transition-transform">
           <span>Details</span>
           <ArrowRight className="size-3.5" />
         </div>

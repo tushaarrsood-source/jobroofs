@@ -23,7 +23,6 @@ import type { HousingListing, HousingListingType } from '@/lib/domain/housing-ty
 import { housingTypeLabels } from '@/lib/domain/housing-types';
 import { HousingCard } from '@/components/housing-card';
 import { useTranslation } from '@/lib/i18n/language-context';
-import { PlatformDisclaimer } from '@/components/platform-disclaimer';
 import { isListingExpired } from '@/lib/domain/entitlements';
 
 const HousingMap = dynamic(() => import('@/components/housing-map').then((mod) => mod.HousingMap), {
@@ -316,6 +315,28 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             >
               Mitte
             </button>
+            <button
+              type="button"
+              onClick={() => setSelectedDistrict(selectedDistrict === 'Friedrichshain' ? 'all' : 'Friedrichshain')}
+              className={`rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap active:scale-[0.97] ${
+                selectedDistrict === 'Friedrichshain'
+                  ? 'bg-[#1d1d1f] text-white shadow-2xs'
+                  : 'bg-black/[0.04] text-[#86868b] hover:bg-black/[0.08] hover:text-[#1d1d1f]'
+              }`}
+            >
+              Friedrichshain
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedDistrict(selectedDistrict === 'Prenzlauer Berg' ? 'all' : 'Prenzlauer Berg')}
+              className={`rounded-full px-3 py-1 font-medium transition cursor-pointer whitespace-nowrap active:scale-[0.97] ${
+                selectedDistrict === 'Prenzlauer Berg'
+                  ? 'bg-[#1d1d1f] text-white shadow-2xs'
+                  : 'bg-black/[0.04] text-[#86868b] hover:bg-black/[0.08] hover:text-[#1d1d1f]'
+              }`}
+            >
+              Prenzl. Berg
+            </button>
 
             {hasActiveFilters && (
               <button
@@ -413,10 +434,6 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
         </div>
       </div>
 
-      {/* Disclaimer */}
-      <div className="mt-12">
-        <PlatformDisclaimer type="housing" />
-      </div>
     </div>
   );
 }

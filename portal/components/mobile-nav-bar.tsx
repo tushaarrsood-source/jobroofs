@@ -33,26 +33,26 @@ export function MobileNavBar() {
           {/* 1. Jobs Tab */}
           <Link
             href="/"
-            className={`flex flex-1 flex-col items-center justify-center py-1 transition-[color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.92] select-none ${
+            className={`flex flex-1 flex-col items-center justify-center py-1 transition-all duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.88] select-none ${
               isJobs && !isMap
                 ? 'text-[#0071e3] font-semibold'
                 : 'text-[#86868b] hover:text-[#1d1d1f]'
             }`}
           >
-            <Briefcase className="size-5" />
+            <Briefcase className={`size-5 transition-transform duration-150 ${isJobs && !isMap ? 'scale-110 stroke-[2.4]' : 'stroke-[1.8]'}`} />
             <span className="mt-0.5 text-[10px] tracking-tight">Jobs</span>
           </Link>
 
           {/* 2. Housing Tab */}
           <Link
             href="/wohnen"
-            className={`flex flex-1 flex-col items-center justify-center py-1 transition-[color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.92] select-none ${
+            className={`flex flex-1 flex-col items-center justify-center py-1 transition-all duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.88] select-none ${
               isHousing && !isMap
                 ? 'text-[#0071e3] font-semibold'
                 : 'text-[#86868b] hover:text-[#1d1d1f]'
             }`}
           >
-            <Home className="size-5" />
+            <Home className={`size-5 transition-transform duration-150 ${isHousing && !isMap ? 'scale-110 stroke-[2.4]' : 'stroke-[1.8]'}`} />
             <span className="mt-0.5 text-[10px] tracking-tight">
               {isDe ? 'Wohnen' : 'Housing'}
             </span>
@@ -64,22 +64,22 @@ export function MobileNavBar() {
               type="button"
               onClick={() => setIsPostDrawerOpen(true)}
               aria-label="Inserat aufgeben"
-              className="flex size-10 items-center justify-center rounded-full bg-[#1d1d1f] text-white shadow-sm transition-[transform,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.91] hover:bg-black cursor-pointer will-change-transform"
+              className="flex size-10 items-center justify-center rounded-full bg-[#1d1d1f] text-white shadow-[0_2px_10px_rgba(0,0,0,0.18)] ring-[3px] ring-white transition-[transform,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.88] hover:bg-black cursor-pointer will-change-transform"
             >
-              <Plus className="size-5 stroke-[2.5]" />
+              <Plus className="size-5 stroke-[2.6]" />
             </button>
           </div>
 
           {/* 4. Map Tab */}
           <Link
             href="/karte"
-            className={`flex flex-1 flex-col items-center justify-center py-1 transition-[color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.92] select-none ${
+            className={`flex flex-1 flex-col items-center justify-center py-1 transition-all duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.88] select-none ${
               isMap
                 ? 'text-[#0071e3] font-semibold'
                 : 'text-[#86868b] hover:text-[#1d1d1f]'
             }`}
           >
-            <MapPin className="size-5" />
+            <MapPin className={`size-5 transition-transform duration-150 ${isMap ? 'scale-110 stroke-[2.4]' : 'stroke-[1.8]'}`} />
             <span className="mt-0.5 text-[10px] tracking-tight">
               {isDe ? 'Karte' : 'Map'}
             </span>
@@ -88,13 +88,13 @@ export function MobileNavBar() {
           {/* 5. Profile Tab */}
           <Link
             href="/profil"
-            className={`flex flex-1 flex-col items-center justify-center py-1 transition-[color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.92] select-none cursor-pointer ${
+            className={`flex flex-1 flex-col items-center justify-center py-1 transition-all duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.88] select-none cursor-pointer ${
               isProfile
                 ? 'text-[#0071e3] font-semibold'
                 : 'text-[#86868b] hover:text-[#1d1d1f]'
             }`}
           >
-            <User className="size-5" />
+            <User className={`size-5 transition-transform duration-150 ${isProfile ? 'scale-110 stroke-[2.4]' : 'stroke-[1.8]'}`} />
             <span className="mt-0.5 text-[10px] tracking-tight">
               {isDe ? 'Profil' : 'Profile'}
             </span>

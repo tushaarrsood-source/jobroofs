@@ -25,7 +25,7 @@ export default function DisclaimerPage() {
           </p>
 
           <div className="mt-8 space-y-6 text-sm leading-relaxed border-t border-zinc-200 pt-6">
-            <PlatformDisclaimer type="housing" />
+            <PlatformDisclaimer type="housing" variant="full" />
 
             <div className="pt-4 space-y-4 text-zinc-600">
               <h2 className="font-bold text-zinc-950 text-base">Haftung für Inhalte</h2>
