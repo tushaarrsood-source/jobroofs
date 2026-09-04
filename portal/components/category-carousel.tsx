@@ -67,7 +67,7 @@ export function CategoryCarousel({
               type="button"
               onClick={() => scroll('left')}
               disabled={!canScrollLeft}
-              className="grid size-8 place-items-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-2xs transition hover:bg-blue-600 hover:text-white hover:border-blue-600 disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-slate-700 cursor-pointer"
+              className="grid size-8 place-items-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-2xs transition-[background-color,color,border-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-blue-600 hover:text-white hover:border-blue-600 active:scale-[0.92] disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-slate-700 cursor-pointer"
               aria-label="Scroll left"
             >
               <ChevronLeft className="size-4" />
@@ -76,7 +76,7 @@ export function CategoryCarousel({
               type="button"
               onClick={() => scroll('right')}
               disabled={!canScrollRight}
-              className="grid size-8 place-items-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-2xs transition hover:bg-blue-600 hover:text-white hover:border-blue-600 disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-slate-700 cursor-pointer"
+              className="grid size-8 place-items-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-2xs transition-[background-color,color,border-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-blue-600 hover:text-white hover:border-blue-600 active:scale-[0.92] disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-slate-700 cursor-pointer"
               aria-label="Scroll right"
             >
               <ChevronRight className="size-4" />
@@ -98,7 +98,7 @@ export function CategoryCarousel({
               <Link
                 key={niche.id}
                 href={`/categories/${niche.id}`}
-                className="group relative flex w-[280px] shrink-0 snap-start flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs transition duration-150 hover:border-blue-500 hover:shadow-md hover:shadow-blue-500/8 sm:w-[300px] cursor-pointer"
+                className="group relative flex w-[280px] shrink-0 snap-start flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs transition-[border-color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-blue-500 hover:shadow-md hover:shadow-blue-500/8 sm:w-[300px] cursor-pointer card-tactile"
               >
                 <div>
                   <div className="flex items-center justify-between">
@@ -122,7 +122,7 @@ export function CategoryCarousel({
 
                 <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-3 text-xs font-bold text-blue-600">
                   <span>{t('browseCategory')}</span>
-                  <ArrowRight className="size-3 transition group-hover:translate-x-1" />
+                  <ArrowRight className="size-3 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-1" />
                 </div>
               </Link>
             );

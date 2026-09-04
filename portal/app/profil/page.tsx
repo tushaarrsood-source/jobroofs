@@ -29,7 +29,7 @@ export default function ProfilePage() {
                   Mein Bereich
                 </h1>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  JOBROOFS � Berlin Direkt-Marktplatz
+                  JOBROOFS · Berlin Direkt-Marktplatz
                 </p>
               </div>
             </div>
@@ -56,7 +56,7 @@ export default function ProfilePage() {
             <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white divide-y divide-slate-100 shadow-xs">
               <Link
                 href="/post-a-job"
-                className="flex items-center justify-between p-4 text-sm font-medium text-slate-800 hover:bg-slate-50 transition"
+                className="flex items-center justify-between p-4 text-sm font-medium text-slate-800 hover:bg-slate-50 transition-[background-color,transform] duration-150 active:scale-[0.99] cursor-pointer"
               >
                 <div className="flex items-center gap-3">
                   <div className="flex size-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
@@ -64,7 +64,7 @@ export default function ProfilePage() {
                   </div>
                   <div>
                     <div className="text-slate-900 font-semibold">Job inserieren</div>
-                    <div className="text-xs text-slate-500 font-normal">Aushilfe, Minijob 603 �, Teilzeit</div>
+                    <div className="text-xs text-slate-500 font-normal">Aushilfe, Minijob 603 €, Teilzeit</div>
                   </div>
                 </div>
                 <ChevronRight className="size-4 text-slate-400" />
@@ -72,7 +72,7 @@ export default function ProfilePage() {
 
               <Link
                 href="/wohnen/list"
-                className="flex items-center justify-between p-4 text-sm font-medium text-slate-800 hover:bg-slate-50 transition"
+                className="flex items-center justify-between p-4 text-sm font-medium text-slate-800 hover:bg-slate-50 transition-[background-color,transform] duration-150 active:scale-[0.99] cursor-pointer"
               >
                 <div className="flex items-center gap-3">
                   <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
@@ -88,7 +88,7 @@ export default function ProfilePage() {
 
               <a
                 href="mailto:kontakt@jobroofs.com"
-                className="flex items-center justify-between p-4 text-sm font-medium text-slate-800 hover:bg-slate-50 transition"
+                className="flex items-center justify-between p-4 text-sm font-medium text-slate-800 hover:bg-slate-50 transition-[background-color,transform] duration-150 active:scale-[0.99] cursor-pointer"
               >
                 <div className="flex items-center gap-3">
                   <div className="flex size-9 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
@@ -104,7 +104,7 @@ export default function ProfilePage() {
 
               <Link
                 href="/impressum"
-                className="flex items-center justify-between p-4 text-sm font-medium text-slate-800 hover:bg-slate-50 transition"
+                className="flex items-center justify-between p-4 text-sm font-medium text-slate-800 hover:bg-slate-50 transition-[background-color,transform] duration-150 active:scale-[0.99] cursor-pointer"
               >
                 <div className="flex items-center gap-3">
                   <div className="flex size-9 items-center justify-center rounded-lg bg-slate-50 text-slate-600">

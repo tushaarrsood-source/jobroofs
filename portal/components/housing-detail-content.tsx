@@ -307,7 +307,7 @@ export function HousingDetailContent({ listing }: { listing: HousingListing }) {
 
               <a
                 href={`mailto:${listing.contactEmail}?subject=Anfrage: ${encodeURIComponent(listing.title)}`}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-xs font-bold text-white shadow-md shadow-blue-600/20 transition hover:bg-blue-700"
+                className="btn-tactile flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-xs font-bold text-white shadow-md shadow-blue-600/20 transition hover:bg-blue-700 cursor-pointer"
               >
                 <Mail className="size-4" />
                 {t('housingContactLister')}
@@ -316,7 +316,7 @@ export function HousingDetailContent({ listing }: { listing: HousingListing }) {
               <button
                 type="button"
                 onClick={copyContactEmail}
-                className="flex h-9 w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900 cursor-pointer"
+                className="btn-tactile flex h-9 w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900 cursor-pointer"
               >
                 {copiedEmail ? (
                   <>

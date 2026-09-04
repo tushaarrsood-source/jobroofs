@@ -324,10 +324,13 @@ export function JobBrowser({
               <div className="mt-1.5 flex items-center gap-1.5 overflow-x-auto pt-1 pb-0.5 text-[11px] scrollbar-none border-t border-slate-100">
                 <button
                   type="button"
-                  onClick={clearFilters}
-                  className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
-                    !hasActiveFilters
-                      ? 'bg-blue-600 text-white font-semibold'
+                  onClick={() => {
+                    setDistrict('all');
+                    setEmployment('all');
+                  }}
+                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                    district === 'all' && employment === 'all'
+                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -336,9 +339,9 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setEmployment(employment === 'minijob' ? 'all' : 'minijob')}
-                  className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                     employment === 'minijob'
-                      ? 'bg-blue-600 text-white font-semibold'
+                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -347,9 +350,9 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setEmployment(employment === 'part-time' ? 'all' : 'part-time')}
-                  className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                     employment === 'part-time'
-                      ? 'bg-blue-600 text-white font-semibold'
+                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -358,9 +361,9 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setEmployment(employment === '1-day' ? 'all' : '1-day')}
-                  className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                     employment === '1-day'
-                      ? 'bg-blue-600 text-white font-semibold'
+                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -369,9 +372,9 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setDistrict(district === 'Kreuzberg' ? 'all' : 'Kreuzberg')}
-                  className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                     district === 'Kreuzberg'
-                      ? 'bg-blue-600 text-white font-semibold'
+                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -380,9 +383,9 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setDistrict(district === 'Mitte' ? 'all' : 'Mitte')}
-                  className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                     district === 'Mitte'
-                      ? 'bg-blue-600 text-white font-semibold'
+                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -391,9 +394,9 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setDistrict(district === 'Neukölln' ? 'all' : 'Neukölln')}
-                  className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                     district === 'Neukölln'
-                      ? 'bg-blue-600 text-white font-semibold'
+                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -402,9 +405,9 @@ export function JobBrowser({
                 <button
                   type="button"
                   onClick={() => setDistrict(district === 'Friedrichshain' ? 'all' : 'Friedrichshain')}
-                  className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                  className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                     district === 'Friedrichshain'
-                      ? 'bg-blue-600 text-white font-semibold'
+                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -415,7 +418,7 @@ export function JobBrowser({
                   <button
                     type="button"
                     onClick={clearFilters}
-                    className="ml-auto text-[11px] text-blue-600 hover:text-blue-800 font-semibold cursor-pointer whitespace-nowrap"
+                    className="pill-tactile ml-auto text-[11px] text-blue-600 hover:text-blue-800 font-semibold cursor-pointer whitespace-nowrap"
                   >
                     ✕ {isDe ? 'Zurücksetzen' : 'Reset'}
                   </button>
@@ -477,7 +480,7 @@ export function JobBrowser({
                     <p className="mt-1 text-xs text-zinc-500">Passe deine Suchbegriffe oder Bezirksauswahl an.</p>
                   </div>
                 ) : (
-                  visibleJobs.map((job) => {
+                  visibleJobs.map((job, idx) => {
                     const isSelected = selectedJobId === job.id || selectedJobId === job.slug;
                     const isHovered = hoveredJobId === job.id || hoveredJobId === job.slug;
                     const wageBadge = formatPinBadge(job);
@@ -488,6 +491,8 @@ export function JobBrowser({
                         ref={(el) => {
                           jobCardsRef.current[job.id] = el;
                         }}
+                        className="stagger-in"
+                        style={{ animationDelay: `${Math.min(idx * 35, 300)}ms` }}
                         onMouseEnter={() => setHoveredJobId(job.id)}
                         onMouseLeave={() => setHoveredJobId(null)}
                       >
@@ -525,12 +530,17 @@ export function JobBrowser({
                   <p className="mt-1 text-xs text-zinc-500">Passe deine Suchbegriffe oder Bezirksauswahl an.</p>
                 </div>
               ) : (
-                visibleJobs.map((job) => (
-                  <JobCard
+                visibleJobs.map((job, idx) => (
+                  <div
                     key={job.id}
-                    job={job}
-                    wageBadge={formatPinBadge(job)}
-                  />
+                    className="stagger-in"
+                    style={{ animationDelay: `${Math.min(idx * 35, 300)}ms` }}
+                  >
+                    <JobCard
+                      job={job}
+                      wageBadge={formatPinBadge(job)}
+                    />
+                  </div>
                 ))
               )}
             </div>
@@ -570,12 +580,12 @@ function JobCard({
   return (
     <Link
       href={`/jobs/${job.slug || job.id}`}
-      className={`group block overflow-hidden rounded-xl border bg-white p-5 transition duration-150 cursor-pointer ${
+      className={`group block overflow-hidden rounded-xl border bg-white p-5 card-tactile cursor-pointer ${
         isSelected
           ? 'border-blue-600 ring-2 ring-blue-600/30 bg-blue-50/20 shadow-sm'
           : isHovered
           ? 'border-blue-400 shadow-sm'
-          : 'border-slate-200/90 hover:border-slate-900 hover:shadow-sm'
+          : 'border-slate-200/90 hover:border-slate-900 hover:shadow-xs'
       }`}
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">

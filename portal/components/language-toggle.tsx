@@ -14,10 +14,10 @@ export function LanguageToggle({ className = '' }: { className?: string }) {
       <button
         type="button"
         onClick={() => setLocale('de')}
-        className={`rounded-md px-2 py-1 transition ${
+        className={`rounded-md px-2.5 py-1 text-xs font-semibold pill-tactile cursor-pointer transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] ${
           locale === 'de'
-            ? 'bg-[#18221e] text-white'
-            : 'text-muted-foreground hover:text-foreground'
+            ? 'bg-[#18221e] text-white shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900'
         }`}
         aria-pressed={locale === 'de'}
       >
@@ -26,10 +26,10 @@ export function LanguageToggle({ className = '' }: { className?: string }) {
       <button
         type="button"
         onClick={() => setLocale('en')}
-        className={`rounded-md px-2 py-1 transition ${
+        className={`rounded-md px-2.5 py-1 text-xs font-semibold pill-tactile cursor-pointer transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] ${
           locale === 'en'
-            ? 'bg-[#18221e] text-white'
-            : 'text-muted-foreground hover:text-foreground'
+            ? 'bg-[#18221e] text-white shadow-2xs'
+            : 'text-slate-600 hover:text-slate-900'
         }`}
         aria-pressed={locale === 'en'}
       >

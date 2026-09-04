@@ -30,7 +30,7 @@ export function HousingCard({
   return (
     <Link
       href={`/wohnen/${listing.id}`}
-      className={`group relative flex flex-col overflow-hidden rounded-xl border bg-white shadow-2xs transition duration-150 cursor-pointer ${
+      className={`group relative flex flex-col overflow-hidden rounded-xl border bg-white card-tactile cursor-pointer ${
         isSelected
           ? 'border-blue-600 ring-2 ring-blue-600/30 shadow-md'
           : isHovered
@@ -43,7 +43,7 @@ export function HousingCard({
         <img
           src={primaryImage}
           alt={listing.title}
-          className="h-full w-full object-cover transition duration-200 group-hover:scale-102"
+          className="h-full w-full object-cover transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-103"
           loading="lazy"
         />
 

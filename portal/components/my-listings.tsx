@@ -60,7 +60,7 @@ export function MyListings() {
           <button
             type="button"
             onClick={() => setFilter('all')}
-            className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+            className={`pill-tactile rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer select-none ${
               filter === 'all'
                 ? 'bg-white text-slate-900 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
@@ -71,7 +71,7 @@ export function MyListings() {
           <button
             type="button"
             onClick={() => setFilter('job')}
-            className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+            className={`pill-tactile rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer select-none ${
               filter === 'job'
                 ? 'bg-white text-blue-600 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
@@ -82,7 +82,7 @@ export function MyListings() {
           <button
             type="button"
             onClick={() => setFilter('housing')}
-            className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+            className={`pill-tactile rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer select-none ${
               filter === 'housing'
                 ? 'bg-white text-emerald-600 shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
@@ -130,7 +130,7 @@ export function MyListings() {
             return (
               <div
                 key={listing.id}
-                className="rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300 hover:shadow-xs"
+                className="rounded-xl border border-slate-200 bg-white p-4 card-tactile"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-start gap-3">
@@ -209,7 +209,7 @@ export function MyListings() {
 
                     <Link
                       href={listing.linkUrl}
-                      className="inline-flex items-center gap-1 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-blue-600"
+                      className="btn-tactile inline-flex items-center gap-1 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-blue-600"
                     >
                       <span>{isDe ? 'Inserat ansehen' : 'View Listing'}</span>
                       <ExternalLink className="size-3" />

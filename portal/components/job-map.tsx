@@ -239,39 +239,39 @@ export function JobMap({
       {/* Interactive Job Preview Card Overlay */}
       {showCardOverlay && activeJob && !miniMode && (
         <div className="absolute bottom-4 left-4 right-4 z-[500] sm:left-auto sm:right-4 sm:w-80">
-          <div className="relative rounded-xl border border-foreground/15 bg-white p-4 shadow-[0_12px_32px_rgba(24,34,30,0.18)] transition-all">
+          <div className="relative rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-[0_12px_32px_rgba(15,23,42,0.12)] backdrop-blur-md popover-enter">
             <button
               type="button"
               onClick={() => setActiveJob(null)}
-              className="absolute top-3 right-3 grid size-6 place-items-center rounded-full bg-foreground/5 text-muted-foreground transition hover:bg-foreground/10 hover:text-foreground"
+              className="absolute top-3 right-3 grid size-6 place-items-center rounded-full bg-slate-100 text-slate-500 transition-transform duration-100 active:scale-90 hover:bg-slate-200 hover:text-slate-800 cursor-pointer"
               aria-label="Close preview"
             >
               <X className="size-3.5" />
             </button>
 
             <div className="flex items-center gap-2">
-              <span className="rounded-md bg-[#e8f6ed] px-2 py-0.5 text-xs font-bold text-[#245e3c]">
+              <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-bold text-emerald-700 border border-emerald-200">
                 {resolveJobCoordinates(activeJob).badgeLabel}
               </span>
-              <span className="text-xs text-muted-foreground truncate">
+              <span className="text-xs text-slate-500 truncate font-medium">
                 {activeJob.district ? `${activeJob.district}` : 'Berlin'}
               </span>
             </div>
 
-            <h3 className="mt-2 text-sm font-semibold leading-tight line-clamp-2">
+            <h3 className="mt-2 text-sm font-bold text-slate-900 leading-tight line-clamp-2">
               {activeJob.title}
             </h3>
 
-            <p className="mt-1 text-xs text-muted-foreground line-clamp-1">
+            <p className="mt-1 text-xs text-slate-500 line-clamp-1">
               {activeJob.company}
             </p>
 
-            <div className="mt-3 flex items-center justify-between border-t border-foreground/10 pt-2.5">
+            <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5">
               <a
                 href={getGoogleMapsUrl(activeJob)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-muted-foreground transition hover:text-blue-600"
+                className="inline-flex items-center gap-1 text-xs text-slate-500 transition hover:text-blue-600"
                 title="Open location in Google Maps"
               >
                 <Navigation className="size-3 text-[#ed6a43]" />
@@ -279,7 +279,7 @@ export function JobMap({
               </a>
               <Link
                 href={`/jobs/${activeJob.slug || activeJob.id}`}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:underline"
+                className="btn-tactile inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-700"
               >
                 <span>View listing</span>
                 <ArrowRight className="size-3" />

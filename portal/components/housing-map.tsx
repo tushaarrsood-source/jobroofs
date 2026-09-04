@@ -247,7 +247,7 @@ export function HousingMap({
       {/* Floating Listing Detail Overlay Card */}
       {showCardOverlay && activeListing && !miniMode && (
         <div className="absolute right-4 bottom-4 left-4 z-[400] max-w-sm sm:left-auto">
-          <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-xl shadow-slate-900/10 backdrop-blur-sm transition animate-in fade-in slide-in-from-bottom-3 duration-200">
+          <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 p-4 shadow-xl shadow-slate-900/10 backdrop-blur-md popover-enter">
             {/* Close Button */}
             <button
               type="button"
@@ -255,7 +255,7 @@ export function HousingMap({
                 setActiveListing(null);
                 if (onSelectListing) onSelectListing(null);
               }}
-              className="absolute top-3 right-3 rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition cursor-pointer"
+              className="absolute top-3 right-3 rounded-full p-1 text-slate-400 transition-transform duration-100 active:scale-90 hover:bg-slate-100 hover:text-slate-700 cursor-pointer"
             >
               <X className="size-4" />
             </button>
@@ -312,7 +312,7 @@ export function HousingMap({
             <div className="mt-3.5 flex items-center gap-2 border-t border-slate-100 pt-3">
               <Link
                 href={`/wohnen/${activeListing.id}`}
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-3 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
+                className="btn-tactile flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-3 py-2 text-xs font-bold text-white shadow-xs hover:bg-blue-700"
               >
                 <span>Details ansehen</span>
                 <ArrowRight className="size-3" />
@@ -321,7 +321,7 @@ export function HousingMap({
                 href={getHousingGoogleMapsUrl(activeListing)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2 text-slate-600 hover:border-slate-300 hover:text-slate-900 transition"
+                className="btn-tactile flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2 text-slate-600 hover:border-slate-300 hover:text-slate-900"
                 title="In Google Maps öffnen"
               >
                 <Navigation className="size-3.5" />

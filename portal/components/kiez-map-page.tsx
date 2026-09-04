@@ -31,7 +31,7 @@ export function KiezMapPage({
           <button
             type="button"
             onClick={() => setActiveTab('jobs')}
-            className={`flex items-center gap-2 rounded-lg px-3 sm:px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+            className={`pill-tactile flex items-center gap-2 rounded-lg px-3 sm:px-4 py-2 text-xs font-bold transition cursor-pointer select-none ${
               activeTab === 'jobs'
                 ? 'bg-white text-blue-600 shadow-xs ring-1 ring-slate-200/80'
                 : 'text-slate-600 hover:text-slate-900'
@@ -49,7 +49,7 @@ export function KiezMapPage({
           <button
             type="button"
             onClick={() => setActiveTab('homes')}
-            className={`flex items-center gap-2 rounded-lg px-3 sm:px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+            className={`pill-tactile flex items-center gap-2 rounded-lg px-3 sm:px-4 py-2 text-xs font-bold transition cursor-pointer select-none ${
               activeTab === 'homes'
                 ? 'bg-white text-blue-600 shadow-xs ring-1 ring-slate-200/80'
                 : 'text-slate-600 hover:text-slate-900'
@@ -69,7 +69,7 @@ export function KiezMapPage({
         <div className="flex items-center gap-2 self-end sm:self-auto">
           <Link
             href="/post-a-job"
-            className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-blue-600 px-3.5 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
+            className="btn-tactile inline-flex h-9 items-center gap-1.5 rounded-xl bg-blue-600 px-3.5 text-xs font-bold text-white shadow-xs hover:bg-blue-700"
           >
             <Plus className="size-3.5 stroke-[2.5]" />
             <span>{isDe ? 'Job inserieren' : 'Post a Job'}</span>
@@ -77,7 +77,7 @@ export function KiezMapPage({
 
           <Link
             href="/wohnen/list"
-            className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 text-xs font-bold text-slate-800 shadow-xs transition hover:bg-slate-50 hover:text-blue-600"
+            className="btn-tactile inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-300/90 bg-white px-3.5 text-xs font-bold text-slate-800 shadow-xs hover:bg-slate-50 hover:text-blue-600"
           >
             <Plus className="size-3.5 stroke-[2.5]" />
             <span>{isDe ? 'Wohnung inserieren' : 'List a Room'}</span>

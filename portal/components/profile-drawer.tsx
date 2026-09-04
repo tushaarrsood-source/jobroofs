@@ -24,7 +24,7 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
       />
 
       {/* Sheet */}
-      <div className="relative z-10 rounded-t-2xl border-t border-slate-200 bg-white p-5 text-slate-900 shadow-2xl animate-in slide-in-from-bottom duration-200">
+      <div className="relative z-10 rounded-t-2xl border-t border-slate-200 bg-white p-5 text-slate-900 shadow-2xl drawer-enter">
         {/* Grab bar */}
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-slate-300" />
 
@@ -39,15 +39,15 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
                 {isDe ? 'Mein Bereich' : 'My Account'}
               </h3>
               <p className="text-xs text-slate-500">
-                {isDe ? 'JOBROOFS Berlin' : 'JOBROOFS Berlin'}
+                JOBROOFS · Berlin
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Schlie�en"
-            className="flex size-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition cursor-pointer"
+            aria-label="Schließen"
+            className="flex size-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.92] cursor-pointer"
           >
             <X className="size-5" />
           </button>
@@ -55,6 +55,19 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
 
         {/* Menu Options */}
         <div className="divide-y divide-slate-100 text-sm">
+          {/* My Listings & Account */}
+          <Link
+            href="/profil"
+            onClick={onClose}
+            className="flex items-center justify-between py-3 text-slate-800 hover:text-blue-600 transition-[color,transform] duration-150 active:scale-[0.98]"
+          >
+            <div className="flex items-center gap-2.5 font-medium">
+              <User className="size-4 text-blue-600" />
+              <span>{isDe ? 'Meine Inserate verwalten' : 'Manage My Listings'}</span>
+            </div>
+            <ChevronRight className="size-4 text-slate-400" />
+          </Link>
+
           {/* Language Switch */}
           <div className="flex items-center justify-between py-3">
             <div className="flex items-center gap-2.5 text-slate-700">
@@ -64,9 +77,9 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
             <button
               type="button"
               onClick={toggleLocale}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-100 transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-100 transition-[background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.95] cursor-pointer"
             >
-              <span>{locale === 'de' ? '???? Deutsch' : '???? English'}</span>
+              <span>{locale === 'de' ? '🇩🇪 Deutsch' : '🇬🇧 English'}</span>
               <ChevronRight className="size-3 text-slate-400" />
             </button>
           </div>
@@ -75,7 +88,7 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
           <Link
             href="/post-a-job"
             onClick={onClose}
-            className="flex items-center justify-between py-3 text-slate-700 hover:text-blue-600 transition"
+            className="flex items-center justify-between py-3 text-slate-700 hover:text-blue-600 transition-[color,transform] duration-150 active:scale-[0.98]"
           >
             <div className="flex items-center gap-2.5">
               <Briefcase className="size-4 text-blue-600" />
@@ -88,7 +101,7 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
           <Link
             href="/wohnen/list"
             onClick={onClose}
-            className="flex items-center justify-between py-3 text-slate-700 hover:text-blue-600 transition"
+            className="flex items-center justify-between py-3 text-slate-700 hover:text-blue-600 transition-[color,transform] duration-150 active:scale-[0.98]"
           >
             <div className="flex items-center gap-2.5">
               <Home className="size-4 text-emerald-600" />
@@ -101,7 +114,7 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
           <a
             href="mailto:kontakt@jobroofs.com"
             onClick={onClose}
-            className="flex items-center justify-between py-3 text-slate-700 hover:text-blue-600 transition"
+            className="flex items-center justify-between py-3 text-slate-700 hover:text-blue-600 transition-[color,transform] duration-150 active:scale-[0.98]"
           >
             <div className="flex items-center gap-2.5">
               <HelpCircle className="size-4 text-slate-400" />
@@ -114,7 +127,7 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
           <Link
             href="/impressum"
             onClick={onClose}
-            className="flex items-center justify-between py-3 text-slate-700 hover:text-blue-600 transition"
+            className="flex items-center justify-between py-3 text-slate-700 hover:text-blue-600 transition-[color,transform] duration-150 active:scale-[0.98]"
           >
             <div className="flex items-center gap-2.5">
               <Shield className="size-4 text-slate-400" />
@@ -126,7 +139,7 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
 
         {/* Footer info */}
         <div className="mt-4 pt-3 border-t border-slate-100 text-center text-[11px] text-slate-400">
-          JOBROOFS � Berlin Flexible Jobs & Housing
+          JOBROOFS · Berlin Flexible Jobs & Housing
         </div>
 
         {/* iPhone bottom spacing */}

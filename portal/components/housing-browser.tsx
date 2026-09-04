@@ -289,9 +289,9 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={clearFilters}
-              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                 !hasActiveFilters
-                  ? 'bg-blue-600 text-white font-semibold'
+                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -300,9 +300,9 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setSelectedType(selectedType === 'wg_room' ? 'all' : 'wg_room')}
-              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                 selectedType === 'wg_room'
-                  ? 'bg-blue-600 text-white font-semibold'
+                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -311,9 +311,9 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setSelectedType(selectedType === 'entire_apartment' ? 'all' : 'entire_apartment')}
-              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                 selectedType === 'entire_apartment'
-                  ? 'bg-blue-600 text-white font-semibold'
+                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -322,9 +322,9 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setSelectedType(selectedType === 'sublet' ? 'all' : 'sublet')}
-              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                 selectedType === 'sublet'
-                  ? 'bg-blue-600 text-white font-semibold'
+                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -333,9 +333,9 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setOnlyAnmeldung(!onlyAnmeldung)}
-              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap flex items-center gap-1 ${
+              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap flex items-center gap-1 ${
                 onlyAnmeldung
-                  ? 'bg-emerald-600 text-white font-semibold'
+                  ? 'bg-emerald-600 text-white font-semibold shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -345,9 +345,9 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setMaxRent(maxRent === 600 ? null : 600)}
-              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                 maxRent === 600
-                  ? 'bg-blue-600 text-white font-semibold'
+                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -356,9 +356,9 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setSelectedDistrict(selectedDistrict === 'Kreuzberg' ? 'all' : 'Kreuzberg')}
-              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                 selectedDistrict === 'Kreuzberg'
-                  ? 'bg-blue-600 text-white font-semibold'
+                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -367,9 +367,9 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setSelectedDistrict(selectedDistrict === 'Neukölln' ? 'all' : 'Neukölln')}
-              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                 selectedDistrict === 'Neukölln'
-                  ? 'bg-blue-600 text-white font-semibold'
+                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -378,9 +378,9 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
             <button
               type="button"
               onClick={() => setSelectedDistrict(selectedDistrict === 'Mitte' ? 'all' : 'Mitte')}
-              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+              className={`pill-tactile rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
                 selectedDistrict === 'Mitte'
-                  ? 'bg-blue-600 text-white font-semibold'
+                  ? 'bg-blue-600 text-white font-semibold shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -391,7 +391,7 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
               <button
                 type="button"
                 onClick={clearFilters}
-                className="ml-auto text-[11px] text-blue-600 hover:text-blue-800 font-semibold cursor-pointer whitespace-nowrap"
+                className="pill-tactile ml-auto text-[11px] text-blue-600 hover:text-blue-800 font-semibold cursor-pointer whitespace-nowrap"
               >
                 ✕ {isDe ? 'Zurücksetzen' : 'Reset'}
               </button>
@@ -454,7 +454,7 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
                   </button>
                 </div>
               ) : (
-                filteredListings.map((listing) => {
+                filteredListings.map((listing, idx) => {
                   const isSelected = selectedListingId === listing.id;
                   const isHovered = hoveredListingId === listing.id;
 
@@ -464,6 +464,8 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
                       ref={(el) => {
                         listingCardsRef.current[listing.id] = el;
                       }}
+                      className="stagger-in"
+                      style={{ animationDelay: `${Math.min(idx * 35, 300)}ms` }}
                       onMouseEnter={() => setHoveredListingId(listing.id)}
                       onMouseLeave={() => setHoveredListingId(null)}
                     >
@@ -512,8 +514,14 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
                 </button>
               </div>
             ) : (
-              filteredListings.map((listing) => (
-                <HousingCard key={listing.id} listing={listing} />
+              filteredListings.map((listing, idx) => (
+                <div
+                  key={listing.id}
+                  className="stagger-in"
+                  style={{ animationDelay: `${Math.min(idx * 35, 300)}ms` }}
+                >
+                  <HousingCard listing={listing} />
+                </div>
               ))
             )}
           </div>

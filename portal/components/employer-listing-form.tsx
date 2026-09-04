@@ -575,9 +575,9 @@ export function EmployerListingForm() {
             <button
               type="button"
               onClick={() => setPricingPlan('standard')}
-              className={`rounded-xl border p-4 text-left transition cursor-pointer ${
+              className={`rounded-xl border p-4 text-left transition-[border-color,background-color,transform,box-shadow] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] cursor-pointer card-tactile ${
                 pricingPlan === 'standard'
-                  ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600'
+                  ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600 shadow-xs'
                   : 'border-foreground/15 bg-white hover:border-blue-300'
               }`}
             >
@@ -604,9 +604,9 @@ export function EmployerListingForm() {
             <button
               type="button"
               onClick={() => setPricingPlan('premium')}
-              className={`rounded-xl border p-4 text-left transition cursor-pointer relative ${
+              className={`rounded-xl border p-4 text-left transition-[border-color,background-color,transform,box-shadow] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] cursor-pointer relative card-tactile ${
                 pricingPlan === 'premium'
-                  ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600'
+                  ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600 shadow-xs'
                   : 'border-foreground/15 bg-white hover:border-blue-300'
               }`}
             >

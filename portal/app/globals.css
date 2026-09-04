@@ -104,6 +104,19 @@ body {
   --sidebar-accent-foreground: #1e40af;
   --sidebar-border: #e2e8f0;
   --sidebar-ring: #1d4ed8;
+
+  /* Emil Kowalski Design Engineering Physics Tokens */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.12);
+
+  /* Precise Duration Budgets */
+  --duration-press: 140ms;
+  --duration-tooltip: 160ms;
+  --duration-popover: 180ms;
+  --duration-drawer-enter: 280ms;
+  --duration-drawer-exit: 180ms;
 }
 
 .dark {
@@ -310,5 +323,118 @@ body {
 .leaflet-control-attribution {
   display: none !important;
 }
+
+/* ==========================================================================
+   Emil Kowalski Craft Utilities & Tactile Micro-Interactions
+   ========================================================================== */
+
+/* 1. Tactile Press Feedback (Apple/Emil standard: scale down to 0.97 on press) */
+.btn-tactile {
+  transition: transform var(--duration-press) var(--ease-out),
+              background-color var(--duration-press) ease-out,
+              border-color var(--duration-press) ease-out,
+              box-shadow var(--duration-press) ease-out,
+              opacity var(--duration-press) ease-out;
+  will-change: transform;
+}
+.btn-tactile:active {
+  transform: scale(0.97);
+}
+
+/* 2. Tactile Filter Pills & Segmented Switches */
+.pill-tactile {
+  transition: transform 120ms var(--ease-out),
+              background-color 140ms ease-out,
+              border-color 140ms ease-out,
+              color 140ms ease-out,
+              box-shadow 140ms ease-out;
+  will-change: transform;
+}
+.pill-tactile:active {
+  transform: scale(0.95);
+}
+
+/* 3. Cards with Subtle Interactive Depth */
+.card-tactile {
+  transition: transform var(--duration-press) var(--ease-out),
+              border-color var(--duration-press) ease-out,
+              box-shadow var(--duration-press) var(--ease-out);
+  will-change: transform;
+}
+@media (hover: hover) and (pointer: fine) {
+  .card-tactile:hover {
+    transform: translateY(-1.5px);
+    box-shadow: 0 6px 20px -4px rgba(15, 23, 42, 0.08);
+  }
+}
+.card-tactile:active {
+  transform: scale(0.992);
+}
+
+/* 4. Translucent Floating Chrome with Specular Highlight Rim */
+.glass-chrome {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+/* 5. Cascading Stagger Entrance (35ms per item, purely decorative) */
+@keyframes emilCascadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.stagger-in {
+  animation: emilCascadeIn 220ms var(--ease-out) both;
+}
+
+/* 6. Origin-Aware Popovers & Overlay Cards */
+.popover-enter {
+  animation: emilPopoverEnter var(--duration-popover) var(--ease-out) both;
+  transform-origin: var(--transform-origin, center bottom);
+}
+@keyframes emilPopoverEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 7. Asymmetric Drawer Curves */
+.drawer-enter {
+  transition: transform var(--duration-drawer-enter) var(--ease-drawer);
+}
+.drawer-exit {
+  transition: transform var(--duration-drawer-exit) var(--ease-out);
+}
+
+/* 8. Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .stagger-in {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
 
 
