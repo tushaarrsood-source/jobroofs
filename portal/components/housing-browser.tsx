@@ -62,10 +62,6 @@ export function HousingBrowser({
   const [query, setQuery] = useState('');
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedDistrict, setSelectedDistrict] = useState<string>('all');
-  const [onlyAnmeldung, setOnlyAnmeldung] = useState(false);
-  const [onlyFurnished, setOnlyFurnished] = useState(false);
-  const [maxRent, setMaxRent] = useState<number | ''>('');
-  const [sortBy, setSortBy] = useState<'newest' | 'price_asc' | 'price_desc' | 'sqm_desc'>('newest');
   const [viewMode, setViewMode] = useState<'split' | 'map' | 'grid' | 'list'>('split');
   const [selectedListingId, setSelectedListingId] = useState<string | null>(null);
   const [hoveredListingId, setHoveredListingId] = useState<string | null>(null);
@@ -84,7 +80,7 @@ export function HousingBrowser({
 
   // Filter listings
   const filteredListings = useMemo(() => {
-    let result = initialListings.filter((item) => {
+    return initialListings.filter((item) => {
       // Search query
       if (query.trim()) {
         const q = query.toLowerCase();
@@ -108,51 +104,19 @@ export function HousingBrowser({
         return false;
       }
 
-      // Anmeldung
-      if (onlyAnmeldung && !item.anmeldungPossible) {
-        return false;
-      }
-
-      // Furnished
-      if (onlyFurnished && item.furnished === 'unfurnished') {
-        return false;
-      }
-
-      // Max rent
-      if (maxRent !== '' && item.warmmieteEur > Number(maxRent)) {
-        return false;
-      }
-
       return true;
     });
-
-    // Sorting
-    if (sortBy === 'price_asc') {
-      result.sort((a, b) => a.warmmieteEur - b.warmmieteEur);
-    } else if (sortBy === 'price_desc') {
-      result.sort((a, b) => b.warmmieteEur - a.warmmieteEur);
-    } else if (sortBy === 'sqm_desc') {
-      result.sort((a, b) => b.roomSqm - a.roomSqm);
-    }
-
-    return result;
-  }, [initialListings, query, selectedType, selectedDistrict, onlyAnmeldung, onlyFurnished, maxRent, sortBy]);
+  }, [initialListings, query, selectedType, selectedDistrict]);
 
   const hasActiveFilters =
     query !== '' ||
     selectedType !== 'all' ||
-    selectedDistrict !== 'all' ||
-    onlyAnmeldung ||
-    onlyFurnished ||
-    maxRent !== '';
+    selectedDistrict !== 'all';
 
   const clearFilters = () => {
     setQuery('');
     setSelectedType('all');
     setSelectedDistrict('all');
-    setOnlyAnmeldung(false);
-    setOnlyFurnished(false);
-    setMaxRent('');
   };
 
   return (
@@ -191,190 +155,123 @@ export function HousingBrowser({
           </div>
         </div>
 
-        {/* High-Utility Search & Filter Bar */}
-        <div className="mt-7 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_130px]">
-          {/* Search input */}
-          <div className="relative">
-            <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder={isDe ? 'Bezirk, Kiez, PLZ oder Stichwort...' : 'Search district, kiez or postcode...'}
-              className="h-11 w-full rounded-lg border border-slate-300 bg-white pr-3 pl-9 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
-            />
-          </div>
+        {/* High-Utility Minimalist Search & Filter Bar */}
+        <div className="mt-7 rounded-xl border border-slate-300/90 bg-white p-2.5 shadow-xs">
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-[1.6fr_240px_220px]">
+            {/* Search input */}
+            <div className="relative flex items-center">
+              <Search className="pointer-events-none absolute left-3 size-4 text-slate-400" />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={isDe ? 'Bezirk, Kiez, PLZ oder Stichwort...' : 'Search district, kiez or postcode...'}
+                className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50/70 pr-3 pl-9 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              />
+            </div>
 
-          {/* Type dropdown */}
-          <div>
-            <select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-              className="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
-            >
-              <option value="all">{t('housingAllTypes')}</option>
-              {Object.entries(housingTypeLabels).map(([key, val]) => (
-                <option key={key} value={key}>
-                  {isDe ? val.de : val.en}
-                </option>
-              ))}
-            </select>
-          </div>
+            {/* Type dropdown */}
+            <div>
+              <select
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
+                className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50/70 px-3 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              >
+                <option value="all">{t('housingAllTypes')}</option>
+                {Object.entries(housingTypeLabels).map(([key, val]) => (
+                  <option key={key} value={key}>
+                    {isDe ? val.de : val.en}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* District dropdown */}
-          <div>
-            <select
-              value={selectedDistrict}
-              onChange={(e) => setSelectedDistrict(e.target.value)}
-              className="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
-            >
-              <option value="all">{t('housingAllDistricts')}</option>
-              {BERLIN_DISTRICTS.map((dist) => (
-                <option key={dist} value={dist}>
-                  {dist}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Max rent */}
-          <div>
-            <input
-              type="number"
-              value={maxRent}
-              onChange={(e) => setMaxRent(e.target.value === '' ? '' : Number(e.target.value))}
-              placeholder="Max. € warm"
-              className="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 font-mono"
-            />
+            {/* District dropdown */}
+            <div>
+              <select
+                value={selectedDistrict}
+                onChange={(e) => setSelectedDistrict(e.target.value)}
+                className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50/70 px-3 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              >
+                <option value="all">{t('housingAllDistricts')}</option>
+                {BERLIN_DISTRICTS.map((dist) => (
+                  <option key={dist} value={dist}>
+                    {dist}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
-        {/* Filter chips & Presets */}
-        <div className="mt-3.5 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setOnlyAnmeldung(!onlyAnmeldung)}
-              className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
-                onlyAnmeldung
-                  ? 'border border-emerald-600 bg-emerald-600 text-white shadow-xs'
-                  : 'border border-slate-300 bg-white text-slate-700 hover:border-slate-400'
-              }`}
-            >
-              <CheckCircle2 className={`size-3.5 ${onlyAnmeldung ? 'text-white' : 'text-emerald-600'}`} />
-              <span>{t('housingOnlyAnmeldung')}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setOnlyFurnished(!onlyFurnished)}
-              className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
-                onlyFurnished
-                  ? 'border border-blue-600 bg-blue-600 text-white shadow-xs'
-                  : 'border border-slate-300 bg-white text-slate-700 hover:border-slate-400'
-              }`}
-            >
-              <Home className={`size-3.5 ${onlyFurnished ? 'text-white' : 'text-slate-400'}`} />
-              <span>Möbliert</span>
-            </button>
-
-            <div className="hidden sm:flex items-center gap-1 border-l border-slate-200 pl-2">
-              <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider mr-1">Bis:</span>
-              {[600, 750, 900, 1100].map((price) => (
-                <button
-                  key={price}
-                  type="button"
-                  onClick={() => setMaxRent(maxRent === price ? '' : price)}
-                  className={`rounded-md px-2.5 py-1 text-xs font-mono transition cursor-pointer ${
-                    maxRent === price
-                      ? 'bg-slate-900 text-white font-bold'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  {price} €
-                </button>
-              ))}
-            </div>
-
+        {/* View Switcher & Active Filter Controls */}
+        <div className="mt-4 flex items-center justify-between">
+          <div>
             {hasActiveFilters && (
               <button
                 type="button"
                 onClick={clearFilters}
-                className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-600 hover:text-slate-900 transition cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 font-semibold cursor-pointer"
               >
-                <X className="size-3" />
-                <span>Filter löschen</span>
+                ✕ {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
               </button>
             )}
           </div>
 
-          {/* Sort selector & View toggle */}
-          <div className="flex flex-wrap items-center gap-2">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="h-9 rounded-lg border border-slate-300 bg-white px-2.5 text-xs text-slate-700 focus:border-blue-600 focus:outline-none"
+          {/* View Mode Switcher */}
+          <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-2xs">
+            <button
+              type="button"
+              onClick={() => setViewMode('split')}
+              className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                viewMode === 'split'
+                  ? 'bg-blue-600 text-white shadow-2xs'
+                  : 'text-slate-500 hover:text-slate-900'
+              }`}
+              title="Split-Ansicht (Liste + Karte)"
             >
-              <option value="newest">Neueste zuerst</option>
-              <option value="price_asc">Miete: aufsteigend</option>
-              <option value="price_desc">Miete: absteigend</option>
-              <option value="sqm_desc">Größe: absteigend</option>
-            </select>
-
-            <div className="flex items-center rounded-lg border border-slate-300 bg-white p-1">
-              <button
-                type="button"
-                onClick={() => setViewMode('split')}
-                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
-                  viewMode === 'split'
-                    ? 'bg-blue-600 text-white shadow-2xs'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-                title="Split-Ansicht (Liste + Karte)"
-              >
-                <Layers className="size-3.5" />
-                <span className="hidden sm:inline">Split</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode('map')}
-                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
-                  viewMode === 'map'
-                    ? 'bg-blue-600 text-white shadow-2xs'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-                title="Nur Karte"
-              >
-                <MapIcon className="size-3.5" />
-                <span className="hidden sm:inline">Karte</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode('grid')}
-                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
-                  viewMode === 'grid'
-                    ? 'bg-blue-600 text-white shadow-2xs'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-                title="Raster-Ansicht"
-              >
-                <LayoutGrid className="size-3.5" />
-                <span className="hidden sm:inline">Raster</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode('list')}
-                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
-                  viewMode === 'list'
-                    ? 'bg-blue-600 text-white shadow-2xs'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-                title="Listen-Ansicht"
-              >
-                <List className="size-3.5" />
-                <span className="hidden sm:inline">Liste</span>
-              </button>
-            </div>
+              <Layers className="size-3.5" />
+              <span className="hidden sm:inline">Split</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('list')}
+              className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                viewMode === 'list'
+                  ? 'bg-blue-600 text-white shadow-2xs'
+                  : 'text-slate-500 hover:text-slate-900'
+              }`}
+              title="Kompakte Liste"
+            >
+              <List className="size-3.5" />
+              <span>Liste</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('map')}
+              className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                viewMode === 'map'
+                  ? 'bg-blue-600 text-white shadow-2xs'
+                  : 'text-slate-500 hover:text-slate-900'
+              }`}
+              title="Nur Karte"
+            >
+              <MapIcon className="size-3.5" />
+              <span>Karte</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                viewMode === 'grid'
+                  ? 'bg-blue-600 text-white shadow-2xs'
+                  : 'text-slate-500 hover:text-slate-900'
+              }`}
+              title="Raster-Ansicht"
+            >
+              <LayoutGrid className="size-3.5" />
+              <span className="hidden sm:inline">Raster</span>
+            </button>
           </div>
         </div>
       </section>
