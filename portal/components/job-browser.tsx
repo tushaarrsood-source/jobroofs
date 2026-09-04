@@ -172,8 +172,8 @@ export function JobBrowser({
             </h1>
             <p className="mt-3 text-sm text-slate-600 max-w-xl sm:text-base">
               {isDe
-                ? 'Finde Minijobs (538 €), Teilzeitstellen und Schichten direkt bei Berliner Betrieben.'
-                : 'Find minijobs (€538), part-time roles, and flexible shifts directly at local Berlin venues.'}
+                ? 'Finde Minijobs (603 €), Teilzeitstellen und Schichten direkt bei Berliner Betrieben.'
+                : 'Find minijobs (€603), part-time roles, and flexible shifts directly at local Berlin venues.'}
             </p>
 
             {/* High-Utility Search Console */}
@@ -212,7 +212,7 @@ export function JobBrowser({
                   aria-label="Beschäftigungsart"
                 >
                   <NativeSelectOption value="all">{t('allJobTypes')}</NativeSelectOption>
-                  <NativeSelectOption value="minijob">{t('minijob')} (538 €)</NativeSelectOption>
+                  <NativeSelectOption value="minijob">{t('minijob')}</NativeSelectOption>
                   <NativeSelectOption value="part-time">{t('partTime')}</NativeSelectOption>
                   <NativeSelectOption value="working student">{t('workingStudent')}</NativeSelectOption>
                   <NativeSelectOption value="short-term">{t('tempShortTerm')}</NativeSelectOption>

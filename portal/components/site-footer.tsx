@@ -22,8 +22,8 @@ export function SiteFooter() {
             </Link>
             <p className="text-xs leading-relaxed text-slate-500 max-w-sm">
               {isDe
-                ? 'Das unabhängige Berliner Schwarze Brett für flexible Jobs, Minijobs (538 €), Teilzeitstellen und Kiez-Wohnungen. 100% Direktkontakt ohne Maklergebühren.'
-                : 'The independent Berlin bulletin board for flexible work, minijobs, part-time shifts and neighbourhood housing. 100% direct contact with zero broker fees.'}
+                ? 'Das unabhängige Berliner Schwarze Brett für flexible Jobs, Minijobs (603 €), Teilzeitstellen und Kiez-Wohnungen. 100% Direktkontakt ohne Maklergebühren.'
+                : 'The independent Berlin bulletin board for flexible work, minijobs (603 €), part-time shifts and neighbourhood housing. 100% direct contact with zero broker fees.'}
             </p>
             <div className="pt-2">
               <p className="text-[11px] text-slate-400 leading-snug max-w-sm">
@@ -86,7 +86,7 @@ export function SiteFooter() {
             <ul className="space-y-2 text-xs">
               <li>
                 <Link href="/categories/temp-shifts" className="hover:text-blue-600 transition-colors">
-                  {isDe ? 'Minijobs (538 €)' : 'Minijobs (€538)'}
+                  {isDe ? 'Minijobs (603 €)' : 'Minijobs (€603)'}
                 </Link>
               </li>
               <li>

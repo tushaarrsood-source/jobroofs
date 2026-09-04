@@ -41,7 +41,7 @@ export default function PostChooserPage() {
                   Stellenanzeige / Job
                 </h2>
                 <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                  Finde Minijobber (538 €), Baristas, Kellner, Kuriere, Eventhelfer oder Werkstudenten in deinem Kiez.
+                  Finde Minijobber (603 €), Baristas, Kellner, Kuriere, Eventhelfer oder Werkstudenten in deinem Kiez.
                 </p>
 
                 <ul className="mt-4 space-y-2 text-xs text-slate-500">

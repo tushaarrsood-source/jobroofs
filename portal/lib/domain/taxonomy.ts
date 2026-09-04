@@ -299,7 +299,7 @@ export const roleFamilies = [
 ] as const;
 
 export const employmentForms = [
-  ['minijob', 'Minijob (up to 538€)'],
+  ['minijob', 'Minijob (up to 603€)'],
   ['part-time', 'Part-time / Teilzeit'],
   ['temp-day-shift', '1-day shift / Tagesjob (Single shift)'],
   ['short-term', 'Short-term / Kurzfristige Beschäftigung (Aushilfe)'],
