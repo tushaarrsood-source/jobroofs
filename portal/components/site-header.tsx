@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import Link from '@/components/ui/link';
 import { usePathname } from 'next/navigation';
 import { ArrowUpRight } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
@@ -75,7 +75,19 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
                   {isDe ? 'Wohnen' : 'Housing'}
                 </Link>
 
-                {/* 3. Housing direct post button */}
+                {/* 3. Profil Link */}
+                <Link
+                  href="/profil"
+                  className={`py-1 transition-colors ${
+                    pathname.startsWith('/profil')
+                      ? 'text-slate-900 font-bold border-b-2 border-blue-600'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  {isDe ? 'Profil' : 'Profile'}
+                </Link>
+
+                {/* 4. Housing direct post button */}
                 <Link
                   href="/wohnen/list"
                   className="inline-flex h-9 items-center rounded-lg border border-slate-300 bg-slate-50 px-3.5 text-xs font-bold text-slate-800 transition hover:bg-slate-100 hover:text-blue-600"
@@ -83,7 +95,7 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
                   + {isDe ? 'Wohnung inserieren' : 'List a Room'}
                 </Link>
 
-                {/* 4. Post a Job button */}
+                {/* 5. Post a Job button */}
                 <Link
                   href="/post-a-job"
                   className="inline-flex h-9 items-center rounded-lg bg-blue-600 px-3.5 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"

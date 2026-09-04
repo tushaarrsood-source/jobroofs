@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useMemo, useRef } from 'react';
-import Link from 'next/link';
+import { useState, useMemo, useRef, useEffect } from 'react';
+import Link from '@/components/ui/link';
 import dynamic from 'next/dynamic';
 import {
   Search,
@@ -65,8 +65,25 @@ export function HousingBrowser({
   const [viewMode, setViewMode] = useState<'split' | 'map' | 'grid' | 'list'>('split');
   const [selectedListingId, setSelectedListingId] = useState<string | null>(null);
   const [hoveredListingId, setHoveredListingId] = useState<string | null>(null);
-
   const listingCardsRef = useRef<Record<string, HTMLDivElement | null>>({});
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const checkView = () => {
+      const params = new URLSearchParams(window.location.search);
+      const v = params.get('view');
+      if (v === 'map') {
+        setViewMode('map');
+      } else if (v === 'list') {
+        setViewMode('list');
+      } else if (v === 'grid') {
+        setViewMode('grid');
+      }
+    };
+    checkView();
+    window.addEventListener('popstate', checkView);
+    return () => window.removeEventListener('popstate', checkView);
+  }, []);
 
   const handleSelectListingFromMap = (id: string | null) => {
     setSelectedListingId(id);

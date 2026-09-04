@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import Link from 'next/link';
+import Link from '@/components/ui/link';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { industryNiches, type IndustryNiche } from '@/lib/domain/taxonomy';
 import { useTranslation } from '@/lib/i18n/language-context';

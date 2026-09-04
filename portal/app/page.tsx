@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/ui/link';
 import { ArrowRight } from 'lucide-react';
 import { JobBrowser, LatestJobs } from '@/components/job-browser';
 import { SiteHeader } from '@/components/site-header';

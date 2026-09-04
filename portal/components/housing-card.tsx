@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import Link from '@/components/ui/link';
 import { CheckCircle2, ShieldCheck, MapPin, Calendar, ArrowRight } from 'lucide-react';
 import type { HousingListing } from '@/lib/domain/housing-types';
 import { housingTypeLabels } from '@/lib/domain/housing-types';

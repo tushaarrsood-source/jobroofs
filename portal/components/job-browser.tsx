@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
-import { useMemo, useState, useRef } from 'react';
+import Link from '@/components/ui/link';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import {
   ArrowRight,
   BriefcaseBusiness,
@@ -89,6 +89,22 @@ export function JobBrowser({
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
   const [hoveredJobId, setHoveredJobId] = useState<string | null>(null);
   const jobCardsRef = useRef<Record<string, HTMLDivElement | null>>({});
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const checkView = () => {
+      const params = new URLSearchParams(window.location.search);
+      const v = params.get('view');
+      if (v === 'map') {
+        setViewMode('map');
+      } else if (v === 'list') {
+        setViewMode('list');
+      }
+    };
+    checkView();
+    window.addEventListener('popstate', checkView);
+    return () => window.removeEventListener('popstate', checkView);
+  }, []);
 
   const effectivePageTitle = pageTitle || t('heroTitle');
   const effectivePageSubtitle = pageSubtitle || t('heroSubtitle');
@@ -365,7 +381,6 @@ export function JobBrowser({
                         }}
                         onMouseEnter={() => setHoveredJobId(job.id)}
                         onMouseLeave={() => setHoveredJobId(null)}
-                        onClick={() => setSelectedJobId(job.id)}
                       >
                         <JobCard
                           job={job}

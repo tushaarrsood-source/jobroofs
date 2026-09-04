@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { industryNiches } from '@/lib/domain/taxonomy';
 import { formatVerbatimPointers } from '@/lib/domain/text-format';
 import { useTranslation } from '@/lib/i18n/language-context';
-import Link from 'next/link';
+import Link from '@/components/ui/link';
 
 interface SubmitResponse {
   submissionId?: string;

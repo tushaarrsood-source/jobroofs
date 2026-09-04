@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/ui/link';
 import type { Metadata } from 'next';
 import { ArrowLeft, ArrowRight, Clock3, Euro, MapPin } from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';

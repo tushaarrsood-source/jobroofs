@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
+import Link from '@/components/ui/link';
 import { ArrowRight, CheckCircle2, Home, MapPin, Navigation, RotateCcw, X } from 'lucide-react';
 import { BERLIN_CENTER, getHousingGoogleMapsUrl, resolveHousingCoordinates } from '@/lib/domain/berlin-geo';
 import { housingTypeLabels } from '@/lib/domain/housing-types';

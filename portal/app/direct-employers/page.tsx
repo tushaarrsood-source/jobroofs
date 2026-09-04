@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/ui/link';
 import type { Metadata } from 'next';
 import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { JobBrowser } from '@/components/job-browser';

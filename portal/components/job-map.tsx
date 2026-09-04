@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
+import Link from '@/components/ui/link';
 import { ArrowRight, BriefcaseBusiness, Euro, MapPin, Navigation, RotateCcw, X } from 'lucide-react';
 import { BERLIN_CENTER, getGoogleMapsUrl, resolveJobCoordinates } from '@/lib/domain/berlin-geo';
 import { getIndustry } from '@/lib/domain/taxonomy';

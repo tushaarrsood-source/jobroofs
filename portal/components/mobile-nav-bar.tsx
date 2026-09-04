@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
+import Link from '@/components/ui/link';
 import { usePathname } from 'next/navigation';
 import { Briefcase, Home, Plus, MapPin, User } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
@@ -72,7 +72,7 @@ export function MobileNavBar() {
 
           {/* 4. Map Tab */}
           <Link
-            href={isHousing ? '/wohnen?view=map#housing' : '/?view=map#jobs'}
+            href={isHousing ? '/wohnen?view=map' : '/?view=map'}
             className={`flex flex-1 flex-col items-center justify-center py-1 transition-colors ${
               isMap
                 ? 'text-blue-600 font-semibold'
@@ -86,9 +86,8 @@ export function MobileNavBar() {
           </Link>
 
           {/* 5. Profile Tab */}
-          <button
-            type="button"
-            onClick={() => setIsProfileDrawerOpen(true)}
+          <Link
+            href="/profil"
             className={`flex flex-1 flex-col items-center justify-center py-1 transition-colors cursor-pointer ${
               isProfile
                 ? 'text-blue-600 font-semibold'
@@ -99,7 +98,7 @@ export function MobileNavBar() {
             <span className="mt-0.5 text-[10px] tracking-tight">
               {isDe ? 'Profil' : 'Profile'}
             </span>
-          </button>
+          </Link>
         </div>
       </nav>
 

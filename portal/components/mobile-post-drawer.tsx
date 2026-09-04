@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
+import Link from '@/components/ui/link';
 import { Briefcase, Home, X, ChevronRight } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
 
