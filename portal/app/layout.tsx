@@ -1,23 +1,13 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono, Oswald } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { LanguageProvider } from '@/lib/i18n/language-context';
 import { MobileNavBar } from '@/components/mobile-nav-bar';
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
-
-const oswald = Oswald({
-  variable: '--font-oswald',
-  subsets: ['latin'],
-  weight: ['500', '600', '700'],
+  display: 'swap',
 });
 
 export const viewport: Viewport = {
@@ -116,7 +106,7 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} antialiased selection:bg-blue-600 selection:text-white pb-20 md:pb-0`}
+        className={`${inter.variable} antialiased selection:bg-[#0071e3] selection:text-white pb-20 md:pb-0 font-sans`}
       >
         <LanguageProvider>
           {children}

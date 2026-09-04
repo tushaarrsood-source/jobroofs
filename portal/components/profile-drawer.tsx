@@ -35,7 +35,7 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
               <User className="size-5" />
             </div>
             <div>
-              <h3 className="font-display text-base font-bold tracking-tight text-slate-900">
+              <h3 className="text-base font-semibold tracking-[-0.015em] text-[#1d1d1f]">
                 {isDe ? 'Mein Bereich' : 'My Account'}
               </h3>
               <p className="text-xs text-slate-500">

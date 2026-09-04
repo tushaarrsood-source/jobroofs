@@ -19,25 +19,25 @@ export default function ProfilePage() {
         
         <div className="mx-auto max-w-2xl px-4 sm:px-6 py-6 sm:py-10 space-y-6">
           {/* User card */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+          <div className="rounded-[20px] border border-black/[0.06] bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
             <div className="flex items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-full bg-slate-100 text-slate-700">
+              <div className="flex size-14 items-center justify-center rounded-full bg-black/[0.04] text-[#1d1d1f]">
                 <User className="size-7" />
               </div>
               <div>
-                <h1 className="font-display text-xl font-bold text-slate-900">
+                <h1 className="text-xl font-bold tracking-tight text-[#1d1d1f]">
                   Mein Bereich
                 </h1>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-[#86868b] mt-0.5">
                   JOBROOFS · Berlin Direkt-Marktplatz
                 </p>
               </div>
             </div>
 
             {/* Language toggle row */}
-            <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
-              <div className="flex items-center gap-2 text-sm text-slate-700 font-medium">
-                <Globe className="size-4 text-slate-400" />
+            <div className="mt-6 flex items-center justify-between border-t border-black/[0.04] pt-4">
+              <div className="flex items-center gap-2 text-sm text-[#1d1d1f] font-medium">
+                <Globe className="size-4 text-[#86868b]" />
                 <span>Sprache / Language</span>
               </div>
               <LanguageToggle />
@@ -49,41 +49,41 @@ export default function ProfilePage() {
 
           {/* Quick actions */}
           <div className="space-y-3">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 px-1">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#86868b] px-1">
               Aktionen & Services
             </h2>
 
-            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white divide-y divide-slate-100 shadow-xs">
+            <div className="overflow-hidden rounded-[20px] border border-black/[0.06] bg-white divide-y divide-black/[0.04] shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
               <Link
                 href="/post-a-job"
-                className="flex items-center justify-between p-4 text-sm font-medium text-slate-800 hover:bg-slate-50 transition-[background-color,transform] duration-150 active:scale-[0.99] cursor-pointer"
+                className="flex items-center justify-between p-4.5 text-sm font-medium text-[#1d1d1f] hover:bg-black/[0.02] transition-colors active:scale-[0.99] cursor-pointer"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex size-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                  <div className="flex size-10 items-center justify-center rounded-2xl bg-black/[0.04] text-[#1d1d1f]">
                     <Briefcase className="size-5" />
                   </div>
                   <div>
-                    <div className="text-slate-900 font-semibold">Job inserieren</div>
-                    <div className="text-xs text-slate-500 font-normal">Aushilfe, Minijob 603 €, Teilzeit</div>
+                    <div className="text-[#1d1d1f] font-semibold">Job inserieren</div>
+                    <div className="text-xs text-[#86868b] font-normal">Aushilfe, Minijob 603 €, Teilzeit</div>
                   </div>
                 </div>
-                <ChevronRight className="size-4 text-slate-400" />
+                <ChevronRight className="size-4 text-[#86868b]" />
               </Link>
 
               <Link
                 href="/wohnen/list"
-                className="flex items-center justify-between p-4 text-sm font-medium text-slate-800 hover:bg-slate-50 transition-[background-color,transform] duration-150 active:scale-[0.99] cursor-pointer"
+                className="flex items-center justify-between p-4.5 text-sm font-medium text-[#1d1d1f] hover:bg-black/[0.02] transition-colors active:scale-[0.99] cursor-pointer"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                  <div className="flex size-10 items-center justify-center rounded-2xl bg-black/[0.04] text-[#1d1d1f]">
                     <Home className="size-5" />
                   </div>
                   <div>
-                    <div className="text-slate-900 font-semibold">Wohnung oder WG inserieren</div>
-                    <div className="text-xs text-slate-500 font-normal">WG-Zimmer, Nachmieter, Zwischenmiete</div>
+                    <div className="text-[#1d1d1f] font-semibold">Wohnung oder WG inserieren</div>
+                    <div className="text-xs text-[#86868b] font-normal">WG-Zimmer, Nachmieter, Zwischenmiete</div>
                   </div>
                 </div>
-                <ChevronRight className="size-4 text-slate-400" />
+                <ChevronRight className="size-4 text-[#86868b]" />
               </Link>
 
               <a

@@ -55,26 +55,26 @@ export default async function Home() {
 
 
 
-      <section className="border-t border-slate-200 bg-slate-950 text-white">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-5 px-3 sm:px-4 md:px-6 py-8 md:py-10 md:flex-row md:items-center md:justify-between">
+      <section className="border-t border-black/[0.06] bg-[#1d1d1f] text-white">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-5 px-3 sm:px-4 md:px-6 py-10 md:py-14 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="font-display text-3xl font-bold tracking-wide sm:text-5xl text-white">
-              DEIN KIEZ BRAUCHT DICH.
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">
+              Dein Kiez braucht dich.
             </h2>
-            <p className="mt-2 text-xs text-slate-300 max-w-xl leading-relaxed sm:text-sm">
+            <p className="mt-2 text-xs text-[#a1a1a6] max-w-xl leading-relaxed sm:text-sm">
               Du suchst eine flexible Aushilfe für dein Café oder einen Nachmieter für deine WG? Inseriere in 2 Minuten (30 Tage aktiv) — 100% Direktkontakt ohne Zeitarbeit und ohne Makler.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <Link
               href="/post-a-job"
-              className="inline-flex h-11 items-center rounded-xl bg-blue-600 px-5 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
+              className="apple-btn-primary !bg-white !text-[#1d1d1f] hover:!bg-[#f5f5f7] !h-10 !px-5"
             >
               Job inserieren <ArrowRight className="ml-1.5 size-3.5" />
             </Link>
             <Link
               href="/wohnen/list"
-              className="inline-flex h-11 items-center rounded-xl border border-slate-700 bg-slate-900 px-5 text-xs font-bold text-white transition hover:bg-slate-800"
+              className="apple-btn-secondary !bg-white/10 !text-white !border-white/15 hover:!bg-white/15 !h-10 !px-5"
             >
               Wohnung inserieren
             </Link>

@@ -15,16 +15,16 @@ export const metadata: Metadata = {
 
 export default function PostChooserPage() {
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col justify-between">
+    <div className="min-h-screen bg-[#f5f5f7] text-[#1d1d1f] flex flex-col justify-between">
       <div>
         <SiteHeader />
 
-        <main className="mx-auto max-w-4xl px-5 py-10 md:py-16">
+        <main className="mx-auto max-w-4xl px-4 sm:px-6 py-10 md:py-16">
           <div className="text-center max-w-2xl mx-auto">
-            <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-slate-900 leading-[0.98]">
-              WAS MÖCHTEST DU INSERIEREN?
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#1d1d1f]">
+              Was möchtest du inserieren?
             </h1>
-            <p className="mt-2 text-sm text-slate-600 leading-relaxed sm:text-base">
+            <p className="mt-2 text-sm text-[#86868b] leading-relaxed sm:text-base">
               Erreiche tausende Berliner Minijobber, Aushilfen und Wohnungssuchende.
               30 Tage Laufzeit — kein Abo, 100% Direktkontakt.
             </p>
@@ -32,19 +32,19 @@ export default function PostChooserPage() {
 
           <div className="mt-10 grid gap-6 sm:grid-cols-2">
             {/* Option 1: Job */}
-            <div className="flex flex-col justify-between rounded-xl border border-slate-200/90 bg-white p-6 shadow-xs hover:border-blue-600 transition duration-150">
+            <div className="flex flex-col justify-between rounded-[24px] border border-black/[0.06] bg-white p-7 shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:border-black/[0.12] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all duration-200">
               <div>
-                <div className="grid size-11 place-items-center rounded-lg bg-blue-50 border border-blue-100 text-blue-600">
-                  <BriefcaseBusiness className="size-5" />
+                <div className="grid size-12 place-items-center rounded-2xl bg-black/[0.04] text-[#1d1d1f]">
+                  <BriefcaseBusiness className="size-6" />
                 </div>
-                <h2 className="mt-4 text-lg font-bold tracking-tight text-slate-900">
+                <h2 className="mt-4 text-lg font-semibold tracking-tight text-[#1d1d1f]">
                   Stellenanzeige / Job
                 </h2>
-                <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+                <p className="mt-2 text-xs text-[#86868b] leading-relaxed">
                   Finde Minijobber (603 €), Baristas, Kellner, Kuriere, Eventhelfer oder Werkstudenten in deinem Kiez.
                 </p>
 
-                <ul className="mt-4 space-y-2 text-xs text-slate-500">
+                <ul className="mt-5 space-y-2.5 text-xs text-[#86868b]">
                   <li className="flex items-center gap-2">
                     <span className="text-emerald-600 font-bold">✓</span> 30 Tage (29 €) oder 60 Tage (49 €) auf JOBROOFS Kiezkarte
                   </li>
@@ -57,16 +57,16 @@ export default function PostChooserPage() {
                 </ul>
               </div>
 
-              <div className="mt-8 border-t border-slate-100 pt-5 flex items-center justify-between">
+              <div className="mt-8 border-t border-black/[0.04] pt-5 flex items-center justify-between">
                 <div>
-                  <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-700">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-black/[0.05] px-2.5 py-1 text-xs font-semibold text-[#1d1d1f]">
                     ab 29 € · 30 / 60 Tage
                   </span>
-                  <span className="block text-[10px] text-slate-400 mt-0.5">Kein Abo · Einmalzahlung</span>
+                  <span className="block text-[10px] text-[#86868b] mt-0.5">Kein Abo · Einmalzahlung</span>
                 </div>
                 <Link
                   href="/post-a-job"
-                  className="inline-flex h-11 items-center gap-1.5 rounded-xl bg-blue-600 px-5 text-xs font-bold text-white transition hover:bg-blue-700 shadow-sm shadow-blue-500/20"
+                  className="apple-btn-primary"
                 >
                   <span>Job inserieren</span>
                   <ArrowRight className="size-3.5" />
@@ -75,19 +75,19 @@ export default function PostChooserPage() {
             </div>
 
             {/* Option 2: Housing */}
-            <div className="flex flex-col justify-between rounded-xl border border-slate-200/90 bg-white p-6 shadow-xs hover:border-emerald-600 transition duration-150">
+            <div className="flex flex-col justify-between rounded-[24px] border border-black/[0.06] bg-white p-7 shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:border-black/[0.12] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-all duration-200">
               <div>
-                <div className="grid size-11 place-items-center rounded-lg bg-emerald-50 border border-emerald-100 text-emerald-600">
-                  <Home className="size-5" />
+                <div className="grid size-12 place-items-center rounded-2xl bg-black/[0.04] text-[#1d1d1f]">
+                  <Home className="size-6" />
                 </div>
-                <h2 className="mt-4 text-lg font-bold tracking-tight text-slate-900">
+                <h2 className="mt-4 text-lg font-semibold tracking-tight text-[#1d1d1f]">
                   Wohnung / WG-Zimmer
                 </h2>
-                <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+                <p className="mt-2 text-xs text-[#86868b] leading-relaxed">
                   Finde verlässliche Nachmieter, Zwischenmieter oder WG-Mitbewohner in Berlin ohne Maklergebühren.
                 </p>
 
-                <ul className="mt-4 space-y-2 text-xs text-slate-500">
+                <ul className="mt-5 space-y-2.5 text-xs text-[#86868b]">
                   <li className="flex items-center gap-2">
                     <span className="text-emerald-600 font-bold">✓</span> 30 Tage (29 €) oder 60 Tage (49 €) · Kiezkarte & Liste
                   </li>
@@ -100,16 +100,16 @@ export default function PostChooserPage() {
                 </ul>
               </div>
 
-              <div className="mt-8 border-t border-slate-100 pt-5 flex items-center justify-between">
+              <div className="mt-8 border-t border-black/[0.04] pt-5 flex items-center justify-between">
                 <div>
-                  <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-black/[0.05] px-2.5 py-1 text-xs font-semibold text-[#1d1d1f]">
                     ab 29 € · 30 / 60 Tage
                   </span>
-                  <span className="block text-[10px] text-slate-400 mt-0.5">Kein Abo · Einmalzahlung</span>
+                  <span className="block text-[10px] text-[#86868b] mt-0.5">Kein Abo · Einmalzahlung</span>
                 </div>
                 <Link
                   href="/wohnen/list"
-                  className="inline-flex h-11 items-center gap-1.5 rounded-xl bg-slate-900 px-5 text-xs font-bold text-white transition hover:bg-black shadow-sm"
+                  className="apple-btn-primary"
                 >
                   <span>Wohnung inserieren</span>
                   <ArrowRight className="size-3.5" />

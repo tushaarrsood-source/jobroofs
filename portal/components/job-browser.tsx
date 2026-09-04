@@ -86,26 +86,9 @@ export function JobBrowser({
   const [district, setDistrict] = useState('all');
   const [employment, setEmployment] = useState('all');
   const [payInterval, setPayInterval] = useState('all');
-  const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split');
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
   const [hoveredJobId, setHoveredJobId] = useState<string | null>(null);
   const jobCardsRef = useRef<Record<string, HTMLDivElement | null>>({});
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const checkView = () => {
-      const params = new URLSearchParams(window.location.search);
-      const v = params.get('view');
-      if (v === 'map') {
-        setViewMode('map');
-      } else if (v === 'list') {
-        setViewMode('list');
-      }
-    };
-    checkView();
-    window.addEventListener('popstate', checkView);
-    return () => window.removeEventListener('popstate', checkView);
-  }, []);
 
   const effectivePageTitle = pageTitle || t('heroTitle');
   const effectivePageSubtitle = pageSubtitle || t('heroSubtitle');
@@ -211,42 +194,25 @@ export function JobBrowser({
             {/* Apple Spotlight Search & Controls Bar */}
             <div className="mt-4 apple-spotlight p-1.5">
               <div className="flex flex-col gap-1.5 md:flex-row md:items-center">
-                {/* Search Input + Mobile single toggle icon */}
-                <div className="flex items-center gap-1.5 flex-1 w-full">
-                  <div className="relative flex-1">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-[#86868b]" />
-                    <Input
-                      value={query}
-                      onChange={(event) => setQuery(event.target.value)}
-                      className="h-9 border-none bg-transparent pl-9 pr-8 text-xs text-[#1d1d1f] placeholder:text-[#86868b] focus-visible:ring-0 rounded-lg w-full"
-                      placeholder={t('searchPlaceholder')}
-                      aria-label="Jobtitel oder Kiez suchen"
-                    />
-                    {query && (
-                      <button
-                        type="button"
-                        onClick={() => setQuery('')}
-                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#86868b] hover:text-[#1d1d1f] cursor-pointer text-xs"
-                      >
-                        ✕
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Single icon on mobile to toggle view mode (saves space) */}
-                  <button
-                    type="button"
-                    onClick={() => setViewMode(viewMode === 'map' ? 'list' : 'map')}
-                    aria-label={viewMode === 'map' ? 'Zur Liste wechseln' : 'Zur Karte wechseln'}
-                    className="md:hidden flex size-8.5 shrink-0 items-center justify-center rounded-lg bg-black/[0.04] text-[#1d1d1f] transition active:scale-95 cursor-pointer hover:bg-black/[0.08]"
-                    title={viewMode === 'map' ? 'Liste' : 'Karte'}
-                  >
-                    {viewMode === 'map' ? (
-                      <List className="size-4 text-[#0071e3]" />
-                    ) : (
-                      <MapIcon className="size-4 text-[#0071e3]" />
-                    )}
-                  </button>
+                {/* Search Input */}
+                <div className="relative flex-1">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-[#86868b]" />
+                  <Input
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                    className="h-9 border-none bg-transparent pl-9 pr-8 text-xs text-[#1d1d1f] placeholder:text-[#86868b] focus-visible:ring-0 rounded-lg w-full"
+                    placeholder={t('searchPlaceholder')}
+                    aria-label="Jobtitel oder Kiez suchen"
+                  />
+                  {query && (
+                    <button
+                      type="button"
+                      onClick={() => setQuery('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#86868b] hover:text-[#1d1d1f] cursor-pointer text-xs"
+                    >
+                      ✕
+                    </button>
+                  )}
                 </div>
 
                 {/* Filter Dropdowns: 2-column grid on mobile */}
@@ -281,43 +247,6 @@ export function JobBrowser({
                       <NativeSelectOption value="1-day">{t('oneDayShift')}</NativeSelectOption>
                     </NativeSelect>
                   </div>
-                </div>
-
-                {/* View Switcher: Apple Segmented Control (Desktop) */}
-                <div className="hidden md:flex apple-segmented shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => setViewMode('split')}
-                    className={`apple-segmented-item flex items-center gap-1.5 ${
-                      viewMode === 'split' ? 'active' : ''
-                    }`}
-                    title="Liste & Karte geteilt"
-                  >
-                    <Layers className="size-3.5" />
-                    <span>Split</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setViewMode('list')}
-                    className={`apple-segmented-item flex items-center gap-1.5 ${
-                      viewMode === 'list' ? 'active' : ''
-                    }`}
-                    title="Nur Liste"
-                  >
-                    <List className="size-3.5" />
-                    <span>Liste</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setViewMode('map')}
-                    className={`apple-segmented-item flex items-center gap-1.5 ${
-                      viewMode === 'map' ? 'active' : ''
-                    }`}
-                    title="Nur Karte"
-                  >
-                    <MapIcon className="size-3.5" />
-                    <span>Karte</span>
-                  </button>
                 </div>
               </div>
 
@@ -458,94 +387,57 @@ export function JobBrowser({
             </div>
           </div>
 
-          {/* Render based on view mode */}
-          {viewMode === 'map' ? (
-            /* Full Map View */
-            <div className="h-[750px] w-full rounded-2xl overflow-hidden border border-zinc-200 shadow-sm">
-              <JobMap
-                jobs={visibleJobs}
-                selectedJobId={selectedJobId}
-                hoveredJobId={hoveredJobId}
-                onSelectJob={handleSelectJobFromMap}
-                className="h-full w-full"
-              />
-            </div>
-          ) : viewMode === 'split' ? (
-            /* Split View (List + Sticky Map) */
-            <div className="grid gap-6 lg:grid-cols-[1fr_520px] xl:grid-cols-[1fr_620px]">
-              {/* Job Cards Column */}
-              <div className="space-y-3">
-                {visibleJobs.length === 0 ? (
-                  <div className="rounded-xl border border-zinc-200 bg-white p-12 text-center">
-                    <p className="font-semibold text-base text-zinc-900">Keine Jobs für diese Filter gefunden</p>
-                    <p className="mt-1 text-xs text-zinc-500">Passe deine Suchbegriffe oder Bezirksauswahl an.</p>
-                  </div>
-                ) : (
-                  visibleJobs.map((job, idx) => {
-                    const isSelected = selectedJobId === job.id || selectedJobId === job.slug;
-                    const isHovered = hoveredJobId === job.id || hoveredJobId === job.slug;
-                    const wageBadge = formatPinBadge(job);
-
-                    return (
-                      <div
-                        key={job.id}
-                        ref={(el) => {
-                          jobCardsRef.current[job.id] = el;
-                        }}
-                        className="stagger-in"
-                        style={{ animationDelay: `${Math.min(idx * 35, 300)}ms` }}
-                        onMouseEnter={() => setHoveredJobId(job.id)}
-                        onMouseLeave={() => setHoveredJobId(null)}
-                      >
-                        <JobCard
-                          job={job}
-                          isSelected={isSelected}
-                          isHovered={isHovered}
-                          wageBadge={wageBadge}
-                        />
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-
-              {/* Sticky Map Column */}
-              <div className="hidden lg:block">
-                <div className="sticky top-20 h-[calc(100vh-110px)] min-h-[500px]">
-                  <JobMap
-                    jobs={visibleJobs}
-                    selectedJobId={selectedJobId}
-                    hoveredJobId={hoveredJobId}
-                    onSelectJob={handleSelectJobFromMap}
-                    className="h-full w-full rounded-2xl border border-zinc-200 shadow-sm"
-                  />
-                </div>
-              </div>
-            </div>
-          ) : (
-            /* List Only View */
-            <div className="mx-auto max-w-[1080px] space-y-3">
+          {/* Split View (List + Sticky Map on Desktop) */}
+          <div className="grid gap-6 lg:grid-cols-[1fr_520px] xl:grid-cols-[1fr_620px]">
+            {/* Job Cards Column */}
+            <div className="space-y-3">
               {visibleJobs.length === 0 ? (
-                <div className="rounded-xl border border-zinc-200 bg-white p-12 text-center">
-                  <p className="font-semibold text-base text-zinc-900">Keine Jobs für diese Filter gefunden</p>
-                  <p className="mt-1 text-xs text-zinc-500">Passe deine Suchbegriffe oder Bezirksauswahl an.</p>
+                <div className="rounded-[20px] border border-black/[0.06] bg-white p-12 text-center shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+                  <p className="font-semibold text-base text-[#1d1d1f]">Keine Jobs für diese Filter gefunden</p>
+                  <p className="mt-1 text-xs text-[#86868b]">Passe deine Suchbegriffe oder Bezirksauswahl an.</p>
                 </div>
               ) : (
-                visibleJobs.map((job, idx) => (
-                  <div
-                    key={job.id}
-                    className="stagger-in"
-                    style={{ animationDelay: `${Math.min(idx * 35, 300)}ms` }}
-                  >
-                    <JobCard
-                      job={job}
-                      wageBadge={formatPinBadge(job)}
-                    />
-                  </div>
-                ))
+                visibleJobs.map((job, idx) => {
+                  const isSelected = selectedJobId === job.id || selectedJobId === job.slug;
+                  const isHovered = hoveredJobId === job.id || hoveredJobId === job.slug;
+                  const wageBadge = formatPinBadge(job);
+
+                  return (
+                    <div
+                      key={job.id}
+                      ref={(el) => {
+                        jobCardsRef.current[job.id] = el;
+                      }}
+                      className="stagger-in"
+                      style={{ animationDelay: `${Math.min(idx * 35, 300)}ms` }}
+                      onMouseEnter={() => setHoveredJobId(job.id)}
+                      onMouseLeave={() => setHoveredJobId(null)}
+                    >
+                      <JobCard
+                        job={job}
+                        isSelected={isSelected}
+                        isHovered={isHovered}
+                        wageBadge={wageBadge}
+                      />
+                    </div>
+                  );
+                })
               )}
             </div>
-          )}
+
+            {/* Sticky Map Column */}
+            <div className="hidden lg:block">
+              <div className="sticky top-20 h-[calc(100vh-110px)] min-h-[500px]">
+                <JobMap
+                  jobs={visibleJobs}
+                  selectedJobId={selectedJobId}
+                  hoveredJobId={hoveredJobId}
+                  onSelectJob={handleSelectJobFromMap}
+                  className="h-full w-full rounded-[20px] border border-black/[0.06] shadow-sm"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </>

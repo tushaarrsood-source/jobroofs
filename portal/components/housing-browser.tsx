@@ -47,28 +47,9 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
   const [selectedDistrict, setSelectedDistrict] = useState<string>('all');
   const [onlyAnmeldung, setOnlyAnmeldung] = useState(false);
   const [maxRent, setMaxRent] = useState<number | null>(null);
-  const [viewMode, setViewMode] = useState<'split' | 'map' | 'grid' | 'list'>('split');
   const [selectedListingId, setSelectedListingId] = useState<string | null>(null);
   const [hoveredListingId, setHoveredListingId] = useState<string | null>(null);
   const listingCardsRef = useRef<Record<string, HTMLDivElement | null>>({});
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const checkView = () => {
-      const params = new URLSearchParams(window.location.search);
-      const v = params.get('view');
-      if (v === 'map') {
-        setViewMode('map');
-      } else if (v === 'list') {
-        setViewMode('list');
-      } else if (v === 'grid') {
-        setViewMode('grid');
-      }
-    };
-    checkView();
-    window.addEventListener('popstate', checkView);
-    return () => window.removeEventListener('popstate', checkView);
-  }, []);
 
   const handleSelectListingFromMap = (id: string | null) => {
     setSelectedListingId(id);
@@ -186,21 +167,6 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
                   </button>
                 )}
               </div>
-
-              {/* Single icon on mobile to toggle view mode (saves space) */}
-              <button
-                type="button"
-                onClick={() => setViewMode(viewMode === 'map' ? 'split' : 'map')}
-                aria-label={viewMode === 'map' ? 'Zur Liste wechseln' : 'Zur Karte wechseln'}
-                className="md:hidden flex size-9 shrink-0 items-center justify-center rounded-xl bg-black/[0.04] text-[#1d1d1f] transition active:scale-95 cursor-pointer hover:bg-black/[0.08]"
-                title={viewMode === 'map' ? 'Liste' : 'Karte'}
-              >
-                {viewMode === 'map' ? (
-                  <List className="size-4 text-[#1d1d1f]" />
-                ) : (
-                  <MapIcon className="size-4 text-[#1d1d1f]" />
-                )}
-              </button>
             </div>
 
             {/* Filter Dropdowns: 2-column grid on mobile */}
@@ -245,39 +211,6 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
                   <option value="Steglitz">Steglitz</option>
                 </select>
               </div>
-            </div>
-
-            {/* Apple Segmented View Switcher: Desktop only */}
-            <div className="hidden md:flex items-center justify-center apple-segmented">
-              <button
-                type="button"
-                onClick={() => setViewMode('split')}
-                className={`apple-segmented-item ${viewMode === 'split' ? 'active' : ''}`}
-                title="Geteilte Ansicht"
-              >
-                <Layers className="size-3.5" />
-                <span>Split</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setViewMode('map')}
-                className={`apple-segmented-item ${viewMode === 'map' ? 'active' : ''}`}
-                title="Karten-Ansicht"
-              >
-                <MapIcon className="size-3.5" />
-                <span>Karte</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setViewMode('grid')}
-                className={`apple-segmented-item ${viewMode === 'grid' ? 'active' : ''}`}
-                title="Raster-Ansicht"
-              >
-                <LayoutGrid className="size-3.5" />
-                <span>Raster</span>
-              </button>
             </div>
           </div>
 
@@ -415,116 +348,12 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
         </div>
       </div>
 
-      {/* Listings & Map Section */}
+      {/* Listings & Map Section (Split List + Sticky Map on Desktop) */}
       <div className="mt-4">
-        {viewMode === 'map' ? (
-          /* Full Map View */
-          <div className="h-[740px] w-full rounded-2xl overflow-hidden border border-slate-200 shadow-sm">
-            <HousingMap
-              listings={filteredListings}
-              selectedListingId={selectedListingId}
-              hoveredListingId={hoveredListingId}
-              onSelectListing={handleSelectListingFromMap}
-              className="h-full w-full"
-            />
-          </div>
-        ) : viewMode === 'split' ? (
-          /* Split View (Cards on left + Sticky Map on right) */
-          <div className="grid gap-6 lg:grid-cols-[1fr_520px] xl:grid-cols-[1fr_600px]">
-            {/* Cards List */}
-            <div className="space-y-4">
-              {filteredListings.length === 0 ? (
-                <div className="rounded-[20px] border border-black/[0.06] bg-white p-12 text-center shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-                  <Home className="mx-auto size-8 text-[#86868b]" />
-                  <h3 className="mt-3 text-sm font-semibold text-[#1d1d1f]">
-                    Keine Inserate für deine Filtereinstellungen gefunden
-                  </h3>
-                  <p className="mt-1 text-xs text-[#86868b]">
-                    Versuche, den maximalen Mietpreis zu erhöhen oder die Bezirksauswahl zu erweitern.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={clearFilters}
-                    className="apple-btn-primary mt-4"
-                  >
-                    Filter zurücksetzen
-                  </button>
-                </div>
-              ) : (
-                filteredListings.map((listing, idx) => {
-                  const isSelected = selectedListingId === listing.id;
-                  const isHovered = hoveredListingId === listing.id;
-
-                  return (
-                    <div
-                      key={listing.id}
-                      ref={(el) => {
-                        listingCardsRef.current[listing.id] = el;
-                      }}
-                      className="stagger-in"
-                      style={{ animationDelay: `${Math.min(idx * 35, 300)}ms` }}
-                      onMouseEnter={() => setHoveredListingId(listing.id)}
-                      onMouseLeave={() => setHoveredListingId(null)}
-                    >
-                      <HousingCard
-                        listing={listing}
-                        isSelected={isSelected}
-                        isHovered={isHovered}
-                      />
-                    </div>
-                  );
-                })
-              )}
-            </div>
-
-            {/* Sticky Interactive Map Column */}
-            <div className="hidden lg:block">
-              <div className="sticky top-20 h-[calc(100vh-110px)] min-h-[520px]">
-                <HousingMap
-                  listings={filteredListings}
-                  selectedListingId={selectedListingId}
-                  hoveredListingId={hoveredListingId}
-                  onSelectListing={handleSelectListingFromMap}
-                  className="h-full w-full rounded-[20px] border border-black/[0.06] shadow-sm"
-                />
-              </div>
-            </div>
-          </div>
-        ) : viewMode === 'grid' ? (
-          /* Grid View */
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredListings.length === 0 ? (
-              <div className="col-span-full rounded-[20px] border border-black/[0.06] bg-white p-12 text-center shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-                <Home className="mx-auto size-8 text-[#86868b]" />
-                <h3 className="mt-3 text-sm font-semibold text-[#1d1d1f]">
-                  Keine Inserate für deine Filtereinstellungen gefunden
-                </h3>
-                <p className="mt-1 text-xs text-[#86868b]">
-                  Versuche, den maximalen Mietpreis zu erhöhen oder die Bezirksauswahl zu erweitern.
-                </p>
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="apple-btn-primary mt-4"
-                >
-                  Filter zurücksetzen
-                </button>
-              </div>
-            ) : (
-              filteredListings.map((listing, idx) => (
-                <div
-                  key={listing.id}
-                  className="stagger-in"
-                  style={{ animationDelay: `${Math.min(idx * 35, 300)}ms` }}
-                >
-                  <HousingCard listing={listing} />
-                </div>
-              ))
-            )}
-          </div>
-        ) : (
-          /* List View */
-          <div className="mx-auto max-w-4xl space-y-3">
+        {/* Split View (Cards on left + Sticky Map on right) */}
+        <div className="grid gap-6 lg:grid-cols-[1fr_520px] xl:grid-cols-[1fr_600px]">
+          {/* Cards List */}
+          <div className="space-y-4">
             {filteredListings.length === 0 ? (
               <div className="rounded-[20px] border border-black/[0.06] bg-white p-12 text-center shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
                 <Home className="mx-auto size-8 text-[#86868b]" />
@@ -543,12 +372,45 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
                 </button>
               </div>
             ) : (
-              filteredListings.map((listing) => (
-                <HousingCard key={listing.id} listing={listing} />
-              ))
+              filteredListings.map((listing, idx) => {
+                const isSelected = selectedListingId === listing.id;
+                const isHovered = hoveredListingId === listing.id;
+
+                return (
+                  <div
+                    key={listing.id}
+                    ref={(el) => {
+                      listingCardsRef.current[listing.id] = el;
+                    }}
+                    className="stagger-in"
+                    style={{ animationDelay: `${Math.min(idx * 35, 300)}ms` }}
+                    onMouseEnter={() => setHoveredListingId(listing.id)}
+                    onMouseLeave={() => setHoveredListingId(null)}
+                  >
+                    <HousingCard
+                      listing={listing}
+                      isSelected={isSelected}
+                      isHovered={isHovered}
+                    />
+                  </div>
+                );
+              })
             )}
           </div>
-        )}
+
+          {/* Sticky Interactive Map Column */}
+          <div className="hidden lg:block">
+            <div className="sticky top-20 h-[calc(100vh-110px)] min-h-[520px]">
+              <HousingMap
+                listings={filteredListings}
+                selectedListingId={selectedListingId}
+                hoveredListingId={hoveredListingId}
+                onSelectListing={handleSelectListingFromMap}
+                className="h-full w-full rounded-[20px] border border-black/[0.06] shadow-sm"
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Disclaimer */}

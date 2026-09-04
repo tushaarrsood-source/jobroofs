@@ -54,7 +54,7 @@ export function CategoryCarousel({
       <div className="mx-auto max-w-[1440px] px-5 md:px-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.025em] text-[#1d1d1f]">
               {effectiveTitle}
             </h2>
             <p className="mt-1 text-xs text-slate-500">
