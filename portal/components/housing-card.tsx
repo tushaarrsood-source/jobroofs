@@ -84,15 +84,15 @@ export function HousingCard({
       {/* Card Content */}
       <div className="flex flex-1 flex-col p-4 sm:p-5">
         {/* District & Location */}
-        <div className="flex items-center justify-between text-[13px] text-[#86868b]">
-          <span className="inline-flex items-center gap-1 font-medium text-[#1d1d1f]">
+        <div className="flex items-center justify-between gap-2 min-w-0 text-[13px] text-[#86868b]">
+          <span className="inline-flex items-center gap-1 font-medium text-[#1d1d1f] truncate min-w-0">
             <MapPin className="size-3.5 text-[#86868b] shrink-0" />
-            <span>{listing.district}</span>
+            <span className="truncate">{listing.district}</span>
             {listing.neighborhood ? (
-              <span className="text-[#86868b]">· {listing.neighborhood}</span>
+              <span className="text-[#86868b] truncate">· {listing.neighborhood}</span>
             ) : null}
           </span>
-          <span className="font-mono text-[12px] text-[#86868b]">PLZ {listing.postcode}</span>
+          <span className="font-mono text-[12px] text-[#86868b] shrink-0">PLZ {listing.postcode}</span>
         </div>
 
         {/* Title */}
@@ -122,7 +122,7 @@ export function HousingCard({
         </p>
 
         {/* Availability */}
-        <div className="mt-2 flex items-center gap-1.5 text-[12px] text-[#86868b]">
+        <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[12px] text-[#86868b]">
           <Calendar className="size-3.5 text-[#86868b] shrink-0" />
           <span>Frei ab <strong className="font-semibold text-[#1d1d1f]">{listing.moveInDate}</strong></span>
           {listing.moveOutDate ? (

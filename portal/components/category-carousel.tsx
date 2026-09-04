@@ -50,7 +50,7 @@ export function CategoryCarousel({
   };
 
   return (
-    <section id="niches" className="border-b border-zinc-200/80 bg-zinc-50/70 py-12 md:py-16">
+    <section id="niches" className="border-b border-zinc-200/80 bg-zinc-50/70 py-12 md:py-16 overflow-hidden">
       <div className="mx-auto max-w-[1440px] px-5 md:px-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -87,7 +87,7 @@ export function CategoryCarousel({
         {/* Horizontal Scroll Track */}
         <div
           ref={scrollRef}
-          className="mt-6 flex gap-3.5 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth scrollbar-none"
+          className="mt-6 flex gap-3.5 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth scrollbar-none overscroll-contain touch-pan-x"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {niches.map((niche) => {

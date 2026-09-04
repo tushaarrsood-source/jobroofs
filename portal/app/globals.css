@@ -157,6 +157,14 @@ body {
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    box-sizing: border-box;
+  }
+  html {
+    @apply font-sans;
+    max-width: 100%;
+    overflow-x: clip;
+    overscroll-behavior-x: none;
+    -webkit-text-size-adjust: 100%;
   }
   body {
     @apply bg-background text-foreground font-sans;
@@ -165,9 +173,11 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-  }
-  html {
-    @apply font-sans;
+    max-width: 100%;
+    overflow-x: clip;
+    overscroll-behavior-x: none;
+    position: relative;
+    width: 100%;
   }
 }
 

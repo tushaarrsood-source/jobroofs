@@ -43,7 +43,7 @@ export default async function Home() {
   const latestJobs = feeds.latest.length > 0 ? await enrich(feeds.latest) : previewJobs.slice(0, 6);
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-screen bg-background text-foreground overflow-x-clip w-full max-w-full">
       <WebSiteJsonLd />
       <SiteHeader />
       <JobBrowser initialJobs={initialJobs} />

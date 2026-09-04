@@ -251,7 +251,7 @@ export function JobBrowser({
               </div>
 
               {/* Quick Filter Chips: Apple Pill Style */}
-              <div className="mt-2 flex items-center gap-1.5 overflow-x-auto pt-1.5 pb-0.5 text-xs scrollbar-none border-t border-black/[0.04]">
+              <div className="mt-2 flex items-center gap-1.5 overflow-x-auto pt-1.5 pb-0.5 text-xs scrollbar-none border-t border-black/[0.04] overscroll-contain touch-pan-x">
                 <button
                   type="button"
                   onClick={() => {
@@ -421,9 +421,9 @@ export function JobBrowser({
           </div>
 
           {/* Split View (List + Sticky Map on Desktop) */}
-          <div className="grid gap-6 lg:grid-cols-[1fr_520px] xl:grid-cols-[1fr_620px]">
+          <div className="grid gap-6 lg:grid-cols-[1fr_520px] xl:grid-cols-[1fr_620px] min-w-0 w-full">
             {/* Job Cards Column */}
-            <div className="space-y-3">
+            <div className="space-y-3 min-w-0 w-full">
               {visibleJobs.length === 0 ? (
                 <div className="rounded-[20px] border border-black/[0.06] bg-white p-12 text-center shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
                   <p className="font-semibold text-base text-[#1d1d1f]">Keine Jobs für diese Filter gefunden</p>
@@ -441,7 +441,7 @@ export function JobBrowser({
                       ref={(el) => {
                         jobCardsRef.current[job.id] = el;
                       }}
-                      className="stagger-in"
+                      className="stagger-in min-w-0 w-full"
                       style={{ animationDelay: `${Math.min(idx * 35, 300)}ms` }}
                       onMouseEnter={() => setHoveredJobId(job.id)}
                       onMouseLeave={() => setHoveredJobId(null)}
@@ -477,6 +477,66 @@ export function JobBrowser({
   );
 }
 
+function formatEmploymentBadge(form: string, isDe: boolean): string {
+  if (!form) return '';
+  const lower = form.toLowerCase();
+  if (lower.includes('1-day') || lower.includes('tagesjob') || lower.includes('tages-schicht') || lower.includes('day shift')) {
+    return isDe ? 'Tagesschicht' : '1-Day Shift';
+  }
+  if (lower.includes('kurzfrist') || lower.includes('short-term') || lower.includes('aushilfe')) {
+    return isDe ? 'Kurzfristig' : 'Short-Term';
+  }
+  if (lower.includes('werkstudent') || lower.includes('working student')) {
+    return isDe ? 'Werkstudent' : 'Student';
+  }
+  if (lower.includes('teilzeit') || lower.includes('part-time')) {
+    return isDe ? 'Teilzeit' : 'Part-Time';
+  }
+  if (lower.includes('minijob')) {
+    return 'Minijob';
+  }
+  if (lower.includes('vollzeit') || lower.includes('full-time')) {
+    return isDe ? 'Vollzeit' : 'Full-Time';
+  }
+  const clean = form.split('/')[0].trim();
+  return clean.length > 16 ? clean.slice(0, 16) + '…' : clean;
+}
+
+function formatPayBadge(rawPay: string | undefined, isDe: boolean): { badge: string; note?: string } {
+  if (!rawPay || typeof rawPay !== 'string') {
+    return { badge: isDe ? 'Vergütung n. V.' : 'Pay TBD' };
+  }
+
+  const lower = rawPay.toLowerCase();
+  if (lower.includes('discussed') || lower.includes('vereinbarung')) {
+    return { badge: isDe ? 'n. V.' : 'TBD' };
+  }
+
+  const noteMatch = rawPay.match(/\(([^)]+)\)/);
+  const note = noteMatch ? noteMatch[1].trim() : undefined;
+  
+  let clean = rawPay.replace(/\([^)]+\)/g, '').trim();
+
+  if (lower.includes('hour') || lower.includes('std')) {
+    const numMatch = clean.match(/€?\s*(\d+(?:[.,]\d+)?)/);
+    if (numMatch) {
+      clean = isDe ? `${numMatch[1]} € / Std.` : `€${numMatch[1]} / hr`;
+    }
+  } else if (lower.includes('month') || lower.includes('monat')) {
+    const numMatch = clean.match(/€?\s*(\d+(?:[.,]\d+)?)/);
+    if (numMatch) {
+      clean = isDe ? `${numMatch[1]} € / Mo.` : `€${numMatch[1]} / mo.`;
+    }
+  } else if (lower.includes('shift') || lower.includes('schicht')) {
+    const numMatch = clean.match(/€?\s*(\d+(?:[.,]\d+)?)/);
+    if (numMatch) {
+      clean = isDe ? `${numMatch[1]} € / Schicht` : `€${numMatch[1]} / shift`;
+    }
+  }
+
+  return { badge: clean, note };
+}
+
 function JobCard({
   job,
   isSelected = false,
@@ -491,13 +551,8 @@ function JobCard({
   const { t, isDe } = useTranslation();
   const employerPosted = job.listingOrigin === 'employer_posted';
 
-  let payLabel = job.payText || job.compensation?.label || 'Nach Vereinbarung';
-  if (
-    payLabel.toLowerCase().includes('discussed') ||
-    payLabel.toLowerCase().includes('vereinbarung')
-  ) {
-    payLabel = t('toBeDiscussed');
-  }
+  const rawPay = job.payText || job.compensation?.label || wageBadge;
+  const { badge: payBadge, note: payNote } = formatPayBadge(rawPay, isDe);
 
   const hoursLabel = job.hoursLabel || job.hours?.label || t('flexibleHours');
   const scheduleSummary = job.scheduleSummary || job.schedule?.summary || t('flexibleShifts');
@@ -507,7 +562,7 @@ function JobCard({
   return (
     <Link
       href={`/jobs/${job.slug || job.id}`}
-      className={`group block overflow-hidden rounded-[20px] border bg-white p-4 sm:p-5 cursor-pointer transition-all duration-200 active:scale-[0.99] ${
+      className={`group block overflow-hidden rounded-[20px] border bg-white p-4 sm:p-5 cursor-pointer transition-all duration-200 active:scale-[0.99] w-full max-w-full ${
         isSelected
           ? 'border-transparent ring-2 ring-[#0071e3] shadow-md'
           : isHovered
@@ -515,65 +570,73 @@ function JobCard({
           : 'border-black/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:border-black/[0.12] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:-translate-y-[1px]'
       }`}
     >
-      <div className="flex items-start justify-between gap-2.5 sm:gap-3">
-        <div className="min-w-0 flex-1">
-          {/* Subtle Tags (Apple Restraint: Only show if featured or specific form, no badge clutter) */}
-          {(isFeatured || (job.employmentForms && job.employmentForms.length > 0)) && (
-            <div className="flex flex-wrap items-center gap-1.5 mb-2">
-              {isFeatured && (
-                <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10.5px] sm:text-[11px] font-semibold text-amber-900">
-                  Featured
-                </span>
-              )}
-              {job.employmentForms &&
-                job.employmentForms.slice(0, 2).map((form: string) => (
-                  <span
-                    key={form}
-                    className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[10.5px] sm:text-[11px] font-medium text-[#86868b]"
-                  >
-                    {form}
-                  </span>
-                ))}
-            </div>
-          )}
-
-          {/* Job Title (Apple SF Pro Style: Optical hierarchy with negative tracking) */}
-          <h3 className="text-[15.5px] sm:text-[17px] font-semibold text-[#1d1d1f] tracking-tight leading-snug group-hover:text-[#0071e3] transition-colors">
-            {job.title}
-          </h3>
-
-          {/* Company & District */}
-          <p className="mt-1 flex flex-wrap items-center gap-1.5 text-[12.5px] sm:text-[13px] text-[#86868b]">
-            <span className="font-medium text-[#1d1d1f]">{job.company}</span>
-            <span className="text-black/20">·</span>
-            <span className="inline-flex items-center gap-1 text-[#86868b]">
-              <MapPin className="size-3 text-[#86868b]" />
-              {districtText}
+      {/* Top Row: Category Tags on Left, Pay Badge on Right */}
+      <div className="flex items-center justify-between gap-2 min-w-0">
+        <div className="flex flex-wrap items-center gap-1.5 min-w-0">
+          {isFeatured && (
+            <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10.5px] sm:text-[11px] font-semibold text-amber-900 shrink-0">
+              Featured
             </span>
-          </p>
+          )}
+          {job.employmentForms &&
+            job.employmentForms.slice(0, 2).map((form: string) => {
+              const badgeText = formatEmploymentBadge(form, isDe);
+              if (!badgeText) return null;
+              return (
+                <span
+                  key={form}
+                  className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[10.5px] sm:text-[11px] font-medium text-[#86868b] shrink-0"
+                >
+                  {badgeText}
+                </span>
+              );
+            })}
         </div>
 
-        {/* Wage / Compensation Badge (Clean Apple Pill) */}
+        {/* Wage / Compensation Badge (Crisp font-mono pill) */}
         <div className="shrink-0">
-          <span className="inline-block rounded-full bg-black/[0.04] px-2.5 py-1 text-[12px] sm:text-[13px] font-semibold text-[#1d1d1f] font-mono tracking-tight whitespace-nowrap">
-            {payLabel}
+          <span className="inline-block rounded-full bg-black/[0.04] px-2.5 py-0.5 text-[11.5px] sm:text-[12.5px] font-semibold text-[#1d1d1f] font-mono tracking-tight whitespace-nowrap">
+            {payBadge}
           </span>
         </div>
       </div>
 
+      {/* Main Row: Full-width Title (Never squished) */}
+      <h3 className="mt-2.5 text-[15.5px] sm:text-[17px] font-semibold text-[#1d1d1f] tracking-tight leading-snug group-hover:text-[#0071e3] transition-colors break-words">
+        {job.title?.replace(/\uFFFD/g, 'é')}
+      </h3>
+
+      {/* Company & District: Truncated cleanly to eliminate stray hanging dots */}
+      <div className="mt-1 flex items-center gap-1.5 text-[12.5px] sm:text-[13px] text-[#86868b] min-w-0">
+        <span className="font-medium text-[#1d1d1f] truncate">
+          {job.company?.replace(/\uFFFD/g, 'é')}
+        </span>
+        <span className="text-black/20 shrink-0">·</span>
+        <span className="inline-flex items-center gap-1 text-[#86868b] shrink-0">
+          <MapPin className="size-3 text-[#86868b]" />
+          <span>{districtText}</span>
+        </span>
+      </div>
+
       {/* Metadata footer */}
-      <div className="mt-3 flex items-center justify-between border-t border-black/[0.04] pt-2.5 text-[11.5px] sm:text-[12px] text-[#86868b]">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1">
+      <div className="mt-3.5 flex items-center justify-between border-t border-black/[0.04] pt-2.5 text-[11.5px] sm:text-[12px] text-[#86868b]">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-1 shrink-0">
             <Clock3 className="size-3 text-[#86868b]" />
-            <span>{hoursLabel}</span>
+            <span className="truncate">{hoursLabel}</span>
           </div>
-          <div className="hidden sm:flex items-center gap-1">
-            <CalendarDays className="size-3 text-[#86868b]" />
-            <span>{scheduleSummary}</span>
-          </div>
+          {payNote ? (
+            <span className="hidden xs:inline text-[11px] text-[#86868b] italic truncate">
+              {payNote}
+            </span>
+          ) : (
+            <div className="hidden sm:flex items-center gap-1 truncate">
+              <CalendarDays className="size-3 text-[#86868b]" />
+              <span className="truncate">{scheduleSummary}</span>
+            </div>
+          )}
         </div>
-        <div className="inline-flex items-center gap-1 text-[12px] sm:text-[13px] font-medium text-[#0071e3] group-hover:translate-x-0.5 transition-transform">
+        <div className="inline-flex items-center gap-1 text-[12px] sm:text-[13px] font-medium text-[#0071e3] group-hover:translate-x-0.5 transition-transform shrink-0">
           <span>Details</span>
           <ArrowRight className="size-3.5" />
         </div>
@@ -621,10 +684,10 @@ export function LatestJobs({ jobs }: { jobs: any[] }) {
                   </span>
                 </div>
                 <h3 className="mt-2.5 text-[15px] font-semibold text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors line-clamp-2">
-                  {job.title}
+                  {job.title?.replace(/\uFFFD/g, 'é')}
                 </h3>
                 <p className="mt-1 text-[13px] text-[#86868b] line-clamp-1">
-                  {job.company}
+                  {job.company?.replace(/\uFFFD/g, 'é')}
                 </p>
               </div>
 
