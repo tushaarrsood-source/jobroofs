@@ -32,7 +32,7 @@ interface VerifyResponse {
 export function EmployerListingForm() {
   const { t, isDe } = useTranslation();
   const [applicationMethod, setApplicationMethod] = useState<'email' | 'external_link'>('email');
-  const [pricingPlan, setPricingPlan] = useState<'single' | 'annual'>('single');
+  const [pricingPlan, setPricingPlan] = useState<'standard' | 'premium'>('standard');
   const [selectedNiches, setSelectedNiches] = useState<string[]>([]);
   const [nicheError, setNicheError] = useState('');
   
@@ -528,46 +528,72 @@ export function EmployerListingForm() {
           </Field>
         </FormSection>
 
-        <FormSection number="05" title={isDe ? 'Veröffentlichung & Tarif' : 'Plan & Activation'}>
+        <FormSection number="05" title={isDe ? 'Laufzeit & Veröffentlichung' : 'Duration & Plan'}>
           <p className="text-sm text-muted-foreground">
             {isDe
-              ? 'Wähle dein Veröffentlichungsmodell vor der Bestätigung und Stripe-Aktivierung.'
-              : 'Choose your publishing plan before verification and Stripe activation.'}
+              ? 'Wähle deine Laufzeit: Standard (30 Tage) oder Premium Plus (volle 2 Monate mit Top-Platzierung).'
+              : 'Choose your listing duration: Standard (30 days) or Premium Plus (full 2 months with top placement).'}
           </p>
           <div className="grid gap-3 sm:grid-cols-2 mt-4">
             <button
               type="button"
-              onClick={() => setPricingPlan('single')}
+              onClick={() => setPricingPlan('standard')}
               className={`rounded-xl border p-4 text-left transition cursor-pointer ${
-                pricingPlan === 'single'
+                pricingPlan === 'standard'
                   ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600'
                   : 'border-foreground/15 bg-white hover:border-blue-300'
               }`}
             >
               <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-slate-900">{t('singleListingTitle')}</p>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">
+                    {isDe ? 'Standard (30 Tage)' : 'Standard (30 Days)'}
+                  </p>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    {isDe ? '30 Tage aktiv · Automatischer Stopp' : '30 days active · Auto deactivation'}
+                  </p>
+                </div>
                 <span className="rounded-md bg-blue-600/10 px-2 py-0.5 text-xs font-bold text-blue-700">
-                  {t('singleListingPrice')}
+                  29 €
                 </span>
               </div>
-              <p className="mt-1 text-xs text-muted-foreground">{t('singleListingDesc')}</p>
+              <ul className="mt-3 space-y-1 text-xs text-slate-600 border-t border-slate-100 pt-2.5">
+                <li>✓ {isDe ? '30 Tage Live auf JOBROOFS' : '30 days live on JOBROOFS'}</li>
+                <li>✓ {isDe ? '100% Direktkontakt ohne Provision' : '100% direct contact, no commission'}</li>
+                <li>✓ {isDe ? 'Karten- & Bezirkssuche' : 'Map & district placement'}</li>
+              </ul>
             </button>
+
             <button
               type="button"
-              onClick={() => setPricingPlan('annual')}
-              className={`rounded-xl border p-4 text-left transition cursor-pointer ${
-                pricingPlan === 'annual'
+              onClick={() => setPricingPlan('premium')}
+              className={`rounded-xl border p-4 text-left transition cursor-pointer relative ${
+                pricingPlan === 'premium'
                   ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600'
                   : 'border-foreground/15 bg-white hover:border-blue-300'
               }`}
             >
+              <span className="absolute -top-2.5 right-4 rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-bold text-slate-950 shadow-xs">
+                ⭐ {isDe ? 'Empfohlen' : 'Recommended'}
+              </span>
               <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-slate-900">{t('annualListingTitle')}</p>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">
+                    {isDe ? 'Premium Plus (60 Tage)' : 'Premium Plus (60 Days)'}
+                  </p>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    {isDe ? 'Volle 2 Monate · Top-Kiez-Reichweite' : 'Full 2 months · Top district visibility'}
+                  </p>
+                </div>
                 <span className="rounded-md bg-emerald-700/10 px-2 py-0.5 text-xs font-bold text-emerald-800">
-                  {t('annualListingPrice')}
+                  49 €
                 </span>
               </div>
-              <p className="mt-1 text-xs text-muted-foreground">{t('annualListingDesc')}</p>
+              <ul className="mt-3 space-y-1 text-xs text-slate-600 border-t border-slate-100 pt-2.5">
+                <li>✓ {isDe ? '60 Tage Live (2 Monate Laufzeit)' : '60 days live (full 2 months)'}</li>
+                <li>⭐ {isDe ? 'Ganz oben in den Suchergebnissen' : 'Top placement in search results'}</li>
+                <li>✓ {isDe ? 'Hervorgehobener Karten-Pin' : 'Prioritized interactive map pin'}</li>
+              </ul>
             </button>
           </div>
         </FormSection>
@@ -576,13 +602,13 @@ export function EmployerListingForm() {
           <div>
             <p className="font-semibold text-lg">{t('postSubmitBoxTitle')}</p>
             <p className="mt-1 text-sm text-slate-300">
-              {pricingPlan === 'annual'
+              {pricingPlan === 'premium'
                 ? (isDe
-                    ? 'Jahres-Flatrate (499 €) · Unbegrenzt Stellen schalten für 12 Monate'
-                    : 'Annual Unlimited (€499) · Unlimited job postings for 12 months')
+                    ? 'Premium Plus (49 €) · 60 Tage live (2 Monate) mit Top-Platzierung'
+                    : 'Premium Plus (€49) · 60 days live (2 months) with top placement')
                 : (isDe
-                    ? 'Einzelschaltung (29 €) · 30 Tage Laufzeit auf JOBROOFS'
-                    : 'Single Listing (€29) · 30 days active on JOBROOFS')}
+                    ? 'Standard (29 €) · 30 Tage live auf JOBROOFS'
+                    : 'Standard (€29) · 30 days active on JOBROOFS')}
             </p>
           </div>
           <Button
@@ -594,8 +620,8 @@ export function EmployerListingForm() {
             {submitStatus === 'submitting'
               ? t('submitting')
               : (isDe
-                  ? `Weiter zur Zahlung (${pricingPlan === 'annual' ? '499 €' : '29 €'})`
-                  : `Continue to Payment (${pricingPlan === 'annual' ? '€499' : '€29'})`)}
+                  ? `Weiter zur Zahlung (${pricingPlan === 'premium' ? '49 €' : '29 €'})`
+                  : `Continue to Payment (${pricingPlan === 'premium' ? '€49' : '€29'})`)}
           </Button>
         </div>
       </form>

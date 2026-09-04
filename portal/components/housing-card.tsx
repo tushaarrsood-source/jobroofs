@@ -49,9 +49,20 @@ export function HousingCard({
 
         {/* Top Badges */}
         <div className="absolute top-2.5 left-2.5 right-2.5 flex items-start justify-between gap-1 pointer-events-none">
-          <span className="rounded bg-slate-900/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-            {isDe ? typeInfo.de : typeInfo.en}
-          </span>
+          <div className="flex flex-wrap items-center gap-1">
+            <span className="rounded bg-slate-900/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+              {isDe ? typeInfo.de : typeInfo.en}
+            </span>
+            {listing.tier === 'premium' ? (
+              <span className="rounded bg-amber-400 px-2 py-0.5 text-[10px] font-bold text-slate-950 shadow-xs">
+                ⭐ Featured · 60 Tage
+              </span>
+            ) : (
+              <span className="rounded bg-slate-800/80 px-2 py-0.5 text-[10px] font-medium text-slate-200 backdrop-blur-xs">
+                30 Tage aktiv
+              </span>
+            )}
+          </div>
 
           {listing.anmeldungPossible ? (
             <span className="inline-flex items-center gap-1 rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-xs">

@@ -56,6 +56,7 @@ export interface HousingListing {
   publicationState: 'published' | 'draft' | 'expired' | 'suppressed';
   firstSeenAt: string;
   expiresAt: string;
+  tier?: 'standard' | 'premium';
   isDemo?: boolean;
 }
 

@@ -68,17 +68,17 @@ export function JobMap({
           minZoom: 9,
           maxZoom: 18,
           zoomControl: !miniMode,
+          attributionControl: false,
         });
 
-        // OpenStreetMap tiles (100% free, zero watermark) with optional CARTO key support
+        // Tiles with optional CARTO key support
         const cartoKey = process.env.NEXT_PUBLIC_CARTO_KEY;
         const tileUrl = cartoKey
           ? `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=${cartoKey}`
           : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
         L.tileLayer(tileUrl, {
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          attribution: '',
           maxZoom: 19,
         }).addTo(map);
 
@@ -233,12 +233,6 @@ export function JobMap({
             <MapPin className="size-3 text-emerald-700" />
             <span>{jobs.length} {jobs.length === 1 ? 'Job' : 'Jobs'} auf Karte</span>
           </div>
-        </div>
-      )}
-
-      {miniMode && (
-        <div className="absolute bottom-2 left-2 z-[500] rounded-md bg-white/90 px-2 py-0.5 text-[10px] font-semibold text-muted-foreground shadow backdrop-blur">
-          OpenStreetMap
         </div>
       )}
 

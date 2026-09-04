@@ -46,7 +46,7 @@ export default function PostChooserPage() {
 
                 <ul className="mt-4 space-y-2 text-xs text-slate-500">
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span> 30 Tage aktiv auf JOBROOFS & OpenStreetMap
+                    <span className="text-emerald-600 font-bold">✓</span> 30 Tage (29 €) oder 60 Tage (49 €) auf JOBROOFS Kiezkarte
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-emerald-600 font-bold">✓</span> Direkte Bewerbungen per E-Mail oder Link
@@ -60,9 +60,9 @@ export default function PostChooserPage() {
               <div className="mt-8 border-t border-slate-100 pt-5 flex items-center justify-between">
                 <div>
                   <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-700">
-                    30 Tage Laufzeit
+                    ab 29 € · 30 / 60 Tage
                   </span>
-                  <span className="block text-[10px] text-slate-400 mt-0.5">Keine automatische Verlängerung</span>
+                  <span className="block text-[10px] text-slate-400 mt-0.5">Kein Abo · Einmalzahlung</span>
                 </div>
                 <Link
                   href="/post-a-job"
@@ -89,7 +89,7 @@ export default function PostChooserPage() {
 
                 <ul className="mt-4 space-y-2 text-xs text-slate-500">
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span> 30 Tage aktiv · Geprüft gegen Fake-Profile
+                    <span className="text-emerald-600 font-bold">✓</span> 30 Tage (29 €) oder 60 Tage (49 €) · Kiezkarte & Liste
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-emerald-600 font-bold">✓</span> Anmeldung & Wohnungsgeberbestätigung Flag
@@ -103,9 +103,9 @@ export default function PostChooserPage() {
               <div className="mt-8 border-t border-slate-100 pt-5 flex items-center justify-between">
                 <div>
                   <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">
-                    30 Tage Laufzeit
+                    ab 29 € · 30 / 60 Tage
                   </span>
-                  <span className="block text-[10px] text-slate-400 mt-0.5">Keine automatische Verlängerung</span>
+                  <span className="block text-[10px] text-slate-400 mt-0.5">Kein Abo · Einmalzahlung</span>
                 </div>
                 <Link
                   href="/wohnen/list"

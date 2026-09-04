@@ -97,11 +97,14 @@ export async function POST(request: Request) {
     if (!hasActiveSubscription && stripeSecret) {
       // Create Stripe Checkout session (€29 single or €499 annual unlimited)
 
+      const isPremium = submission.pricing_plan === "premium";
       const isAnnual = submission.pricing_plan === "annual";
-      const unitAmount = isAnnual ? "49900" : "2900"; // €499.00 or €29.00
+      const unitAmount = isAnnual ? "49900" : isPremium ? "4900" : "2900"; // €499.00, €49.00, or €29.00
       const productName = isAnnual
-        ? "JOBROOFS Annual Unlimited & Top Listing Pass (1 Year)"
-        : "JOBROOFS Single Job Listing (30 Days)";
+        ? "JOBROOFS Annual Unlimited Pass (1 Year)"
+        : isPremium
+        ? "JOBROOFS Premium Job Listing (60 Days / 2 Months) - Top Placement"
+        : "JOBROOFS Standard Job Listing (30 Days)";
 
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
@@ -121,7 +124,7 @@ export async function POST(request: Request) {
             "line_items[0][quantity]": "1",
             "metadata[submissionId]": submissionId,
             "metadata[employerId]": submission.employer_id || "",
-            "metadata[pricingPlan]": isAnnual ? "annual" : "single",
+            "metadata[pricingPlan]": submission.pricing_plan || "standard",
             success_url: `${appUrl}/employer/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${appUrl}/employer/checkout-cancel`,
           }).toString(),

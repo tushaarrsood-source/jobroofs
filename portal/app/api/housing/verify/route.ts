@@ -49,6 +49,12 @@ export async function POST(request: Request) {
 
     if (stripeSecret) {
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      const payload = JSON.parse(submission.payload_json || "{}");
+      const isPremium = payload.tier === "premium";
+      const unitAmount = isPremium ? "4900" : "2900"; // €49.00 or €29.00
+      const productName = isPremium
+        ? "JOBROOFS Premium Housing Listing (60 Days / 2 Months) - Top Placement"
+        : "JOBROOFS Standard Housing Listing (30 Days)";
 
       const stripeResponse = await fetch(
         "https://api.stripe.com/v1/checkout/sessions",
@@ -61,11 +67,11 @@ export async function POST(request: Request) {
           body: new URLSearchParams({
             mode: "payment",
             "line_items[0][price_data][currency]": "EUR",
-            "line_items[0][price_data][product_data][name]":
-              "JOBROOFS Housing Listing — 30 Days (Wohnungsinserat)",
-            "line_items[0][price_data][unit_amount]": "2900", // €29.00
+            "line_items[0][price_data][product_data][name]": productName,
+            "line_items[0][price_data][unit_amount]": unitAmount,
             "line_items[0][quantity]": "1",
             "metadata[housingSubmissionId]": submissionId,
+            "metadata[tier]": isPremium ? "premium" : "standard",
             success_url: `${appUrl}/wohnen?posted=true`,
             cancel_url: `${appUrl}/wohnen/list?canceled=true`,
           }).toString(),

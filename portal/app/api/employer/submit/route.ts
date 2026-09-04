@@ -9,7 +9,7 @@ import {
 const submitSchema = z.object({
   payload: z.any(),
   submitterEmail: z.string().email(),
-  pricingPlan: z.enum(["single", "annual"]).default("single"),
+  pricingPlan: z.enum(["standard", "premium", "single", "annual"]).default("standard"),
 });
 
 export async function POST(request: Request) {

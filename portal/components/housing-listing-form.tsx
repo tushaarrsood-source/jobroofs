@@ -84,6 +84,7 @@ export function HousingListingForm() {
     contactEmail: '',
     contactName: '',
     contactPhone: '',
+    tier: 'standard' as 'standard' | 'premium',
   });
 
   const [imageInput, setImageInput] = useState('');
@@ -727,29 +728,78 @@ export function HousingListingForm() {
         {/* Section 8: Pricing, Platform Terms & Zero-Liability */}
         <section className="rounded-xl border border-slate-200/90 bg-white p-6 md:p-8 shadow-xs">
           <h2 className="text-base font-bold text-slate-900">
-            8. {isDe ? 'Einstellgebühr & Haftungsausschluss' : 'Listing Fee & Terms'}
+            8. {isDe ? 'Laufzeit, Schutzgebühr & Haftungsausschluss' : 'Duration, Listing Fee & Terms'}
           </h2>
+          <p className="mt-1 text-xs text-slate-500">
+            {isDe
+              ? 'Wähle deine Laufzeit. Die Schutzgebühr schützt unser Portal 100% vor Fake-Profilen und automatisierten Spam-Bots.'
+              : 'Choose your duration. The protective fee keeps our portal 100% free of fake listings and spam bots.'}
+          </p>
 
-          <div className="mt-5 space-y-4">
-            <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-4">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, tier: 'standard' })}
+              className={`rounded-xl border p-4 text-left transition cursor-pointer ${
+                formData.tier === 'standard'
+                  ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600'
+                  : 'border-slate-200 bg-white hover:border-blue-300'
+              }`}
+            >
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-bold text-slate-900 text-sm">
-                    JOBROOFS Wohnungs-Inserat (30 Tage Laufzeit)
+                    {isDe ? 'Standard (30 Tage)' : 'Standard (30 Days)'}
                   </h3>
-                  <p className="mt-1 text-xs text-slate-600 leading-relaxed max-w-lg">
-                    {isDe
-                      ? 'Die Schutzgebühr von 29 € hält unser Portal 100% frei von Fake-Profilen, Betrügern und automatisierten Spam-Bots.'
-                      : 'The protective fee of €29 keeps our portal 100% free of fake profiles, scammers, and spam bots.'}
+                  <p className="mt-0.5 text-xs text-slate-500">
+                    {isDe ? '30 Tage aktiv · Automatischer Stopp' : '30 days active · Auto deactivation'}
                   </p>
                 </div>
-                <div className="text-right">
-                  <span className="text-2xl font-black font-mono text-slate-900">29 €</span>
-                  <span className="block text-[10px] text-slate-500">inkl. MwSt.</span>
-                </div>
+                <span className="rounded-md bg-blue-600/10 px-2.5 py-1 text-xs font-bold text-blue-700">
+                  29 €
+                </span>
               </div>
-            </div>
+              <ul className="mt-3 space-y-1 text-xs text-slate-600 border-t border-slate-100 pt-2.5">
+                <li>✓ {isDe ? '30 Tage Laufzeit auf Kiezkarte & Liste' : '30-day listing on map & search'}</li>
+                <li>✓ {isDe ? '100% Direktkontakt von Suchenden' : '100% direct contact with applicants'}</li>
+                <li>✓ {isDe ? 'Einmalzahlung (kein Abo)' : 'One-time payment (no subscription)'}</li>
+              </ul>
+            </button>
 
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, tier: 'premium' })}
+              className={`rounded-xl border p-4 text-left transition cursor-pointer relative ${
+                formData.tier === 'premium'
+                  ? 'border-blue-600 bg-blue-50/70 ring-1 ring-blue-600'
+                  : 'border-slate-200 bg-white hover:border-blue-300'
+              }`}
+            >
+              <span className="absolute -top-2.5 right-4 rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-bold text-slate-950 shadow-xs">
+                ⭐ {isDe ? 'Empfohlen' : 'Recommended'}
+              </span>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-slate-900 text-sm">
+                    {isDe ? 'Premium Plus (60 Tage)' : 'Premium Plus (60 Days)'}
+                  </h3>
+                  <p className="mt-0.5 text-xs text-slate-500">
+                    {isDe ? 'Volle 2 Monate · Top-Platzierung' : 'Full 2 months · Top placement'}
+                  </p>
+                </div>
+                <span className="rounded-md bg-emerald-700/10 px-2.5 py-1 text-xs font-bold text-emerald-800">
+                  49 €
+                </span>
+              </div>
+              <ul className="mt-3 space-y-1 text-xs text-slate-600 border-t border-slate-100 pt-2.5">
+                <li>✓ {isDe ? '60 Tage Laufzeit (volle 2 Monate live)' : '60-day duration (full 2 months)'}</li>
+                <li>⭐ {isDe ? 'Ganz oben in den Suchergebnissen' : 'Top placement in search results'}</li>
+                <li>✓ {isDe ? 'Hervorgehobener Pin auf der Kiezkarte' : 'Prioritized interactive map pin'}</li>
+              </ul>
+            </button>
+          </div>
+
+          <div className="mt-5 space-y-4">
             {/* Mandatory Liability Waiver */}
             <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:border-blue-500">
               <input
@@ -793,7 +843,9 @@ export function HousingListingForm() {
             </>
           ) : (
             <>
-              {isDe ? 'Weiter zur Bestätigung & Zahlung (29 €)' : 'Continue to Verification & Payment (€29)'}
+              {isDe
+                ? `Weiter zur Bestätigung & Zahlung (${formData.tier === 'premium' ? '49 €' : '29 €'})`
+                : `Continue to Verification & Payment (${formData.tier === 'premium' ? '€49' : '€29'})`}
               <ArrowRight className="size-4" />
             </>
           )}

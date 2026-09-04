@@ -306,4 +306,9 @@ body {
   text-transform: uppercase;
 }
 
+/* Hide map attribution and watermark overlays completely */
+.leaflet-control-attribution {
+  display: none !important;
+}
+
 

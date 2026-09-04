@@ -56,7 +56,7 @@ export default async function Home() {
 
 
       <section className="border-t border-slate-200 bg-slate-950 text-white">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 py-14 md:flex-row md:items-center md:justify-between md:px-10">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-5 px-3 sm:px-4 md:px-6 py-8 md:py-10 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="font-display text-3xl font-bold tracking-wide sm:text-5xl text-white">
               DEIN KIEZ BRAUCHT DICH.

@@ -69,17 +69,17 @@ export function HousingMap({
           minZoom: 9,
           maxZoom: 18,
           zoomControl: !miniMode,
+          attributionControl: false,
         });
 
-        // OpenStreetMap tiles (100% free, zero watermark) with optional CARTO key support
+        // Tiles with optional CARTO key support
         const cartoKey = process.env.NEXT_PUBLIC_CARTO_KEY;
         const tileUrl = cartoKey
           ? `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=${cartoKey}`
           : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
         L.tileLayer(tileUrl, {
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          attribution: '',
           maxZoom: 19,
         }).addTo(map);
 

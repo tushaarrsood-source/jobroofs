@@ -60,7 +60,7 @@ export default async function LatestJobsPage() {
         initialJobs={initialJobs}
         filterOrigin="all"
         pageTitle="Latest Verified Berlin Jobs"
-        pageSubtitle="All freshly sourced and verified job opportunities across Berlin. Filter by category, shift type, hourly pay, or explore on the OpenStreetMap map."
+        pageSubtitle="All freshly sourced and verified job opportunities across Berlin. Filter by category, shift type, hourly pay, or explore on the interactive map."
         sectionTitle="All Latest Verified Listings"
         viewAllHref=""
       />
@@ -68,7 +68,7 @@ export default async function LatestJobsPage() {
       <CategoryCarousel title="Browse jobs by category across Berlin" eyebrow="Explore Industries" />
 
       <section className="border-t border-slate-200 bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950 text-white">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 py-12 md:flex-row md:items-center md:justify-between md:px-10">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-5 px-3 sm:px-4 md:px-6 py-8 md:py-10 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-xl font-bold tracking-tight md:text-2xl">
               Are you an employer hiring in Berlin?

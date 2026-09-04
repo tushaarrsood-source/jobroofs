@@ -5,7 +5,9 @@ export function convertHousingSubmissionToListing(
 ) {
   const payload = JSON.parse(submission.payloadJson);
   const now = new Date().toISOString();
-  const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  const tier = payload.tier === 'premium' ? 'premium' : 'standard';
+  const durationDays = tier === 'premium' ? 60 : 30;
+  const expiresAt = new Date(Date.now() + durationDays * 24 * 60 * 60 * 1000).toISOString();
 
   const kaltmiete = Number(payload.kaltmieteEur) || 0;
   const nebenkosten = Number(payload.nebenkostenEur) || 0;

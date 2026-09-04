@@ -24,6 +24,7 @@ import { housingTypeLabels } from '@/lib/domain/housing-types';
 import { HousingCard } from '@/components/housing-card';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { PlatformDisclaimer } from '@/components/platform-disclaimer';
+import { isListingExpired } from '@/lib/domain/entitlements';
 
 const HousingMap = dynamic(() => import('@/components/housing-map').then((mod) => mod.HousingMap), {
   ssr: false,
@@ -34,34 +35,18 @@ const HousingMap = dynamic(() => import('@/components/housing-map').then((mod) =
   ),
 });
 
-const BERLIN_DISTRICTS = [
-  'Mitte',
-  'Friedrichshain',
-  'Kreuzberg',
-  'Neukölln',
-  'Pankow',
-  'Prenzlauer Berg',
-  'Charlottenburg-Wilmersdorf',
-  'Tempelhof-Schöneberg',
-  'Lichtenberg',
-  'Treptow-Köpenick',
-  'Steglitz-Zehlendorf',
-  'Spandau',
-  'Reinickendorf',
-  'Wedding',
-  'Moabit',
-];
-
-export function HousingBrowser({
-  initialListings,
-}: {
+interface HousingBrowserProps {
   initialListings: HousingListing[];
-}) {
+}
+
+export function HousingBrowser({ initialListings }: HousingBrowserProps) {
   const { t, isDe } = useTranslation();
 
   const [query, setQuery] = useState('');
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedDistrict, setSelectedDistrict] = useState<string>('all');
+  const [onlyAnmeldung, setOnlyAnmeldung] = useState(false);
+  const [maxRent, setMaxRent] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'split' | 'map' | 'grid' | 'list'>('split');
   const [selectedListingId, setSelectedListingId] = useState<string | null>(null);
   const [hoveredListingId, setHoveredListingId] = useState<string | null>(null);
@@ -95,85 +80,101 @@ export function HousingBrowser({
     }
   };
 
-  // Filter listings
+  // Filter listings & sort premium on top
   const filteredListings = useMemo(() => {
-    return initialListings.filter((item) => {
-      // Search query
-      if (query.trim()) {
-        const q = query.toLowerCase();
-        const matchesTitle = item.title.toLowerCase().includes(q);
-        const matchesDistrict = item.district.toLowerCase().includes(q);
-        const matchesPostcode = item.postcode.includes(q);
-        const matchesKiez = item.neighborhood?.toLowerCase().includes(q);
-        const matchesDesc = item.description.toLowerCase().includes(q);
-        if (!matchesTitle && !matchesDistrict && !matchesPostcode && !matchesKiez && !matchesDesc) {
+    return initialListings
+      .filter((item) => {
+        // Expiration check: postings remain for max 30d (standard) or 60d (premium)
+        if (item.expiresAt && isListingExpired(item.expiresAt)) {
           return false;
         }
-      }
 
-      // Housing type
-      if (selectedType !== 'all' && item.listingType !== selectedType) {
-        return false;
-      }
+        // Search query
+        if (query.trim()) {
+          const q = query.toLowerCase();
+          const matchesTitle = item.title.toLowerCase().includes(q);
+          const matchesDistrict = item.district.toLowerCase().includes(q);
+          const matchesPostcode = item.postcode.includes(q);
+          const matchesKiez = item.neighborhood?.toLowerCase().includes(q);
+          const matchesDesc = item.description.toLowerCase().includes(q);
+          if (!matchesTitle && !matchesDistrict && !matchesPostcode && !matchesKiez && !matchesDesc) {
+            return false;
+          }
+        }
 
-      // District
-      if (selectedDistrict !== 'all' && !item.district.toLowerCase().includes(selectedDistrict.toLowerCase())) {
-        return false;
-      }
+        // Housing type
+        if (selectedType !== 'all' && item.listingType !== selectedType) {
+          return false;
+        }
 
-      return true;
-    });
-  }, [initialListings, query, selectedType, selectedDistrict]);
+        // District
+        if (selectedDistrict !== 'all' && !item.district.toLowerCase().includes(selectedDistrict.toLowerCase())) {
+          return false;
+        }
+
+        // Anmeldung filter
+        if (onlyAnmeldung && !item.anmeldungPossible) {
+          return false;
+        }
+
+        // Max rent filter
+        if (maxRent !== null && item.warmmieteEur > maxRent) {
+          return false;
+        }
+
+        return true;
+      })
+      .sort((a, b) => {
+        // Premium listings prioritized at the top
+        if (a.tier === 'premium' && b.tier !== 'premium') return -1;
+        if (b.tier === 'premium' && a.tier !== 'premium') return 1;
+        return 0;
+      });
+  }, [initialListings, query, selectedType, selectedDistrict, onlyAnmeldung, maxRent]);
 
   const hasActiveFilters =
     query !== '' ||
     selectedType !== 'all' ||
-    selectedDistrict !== 'all';
+    selectedDistrict !== 'all' ||
+    onlyAnmeldung ||
+    maxRent !== null;
 
   const clearFilters = () => {
     setQuery('');
     setSelectedType('all');
     setSelectedDistrict('all');
+    setOnlyAnmeldung(false);
+    setMaxRent(null);
   };
 
   return (
-    <div className="mx-auto max-w-[1440px] px-5 pt-6 pb-4 md:px-10 md:pt-8 md:pb-5">
-      {/* Editorial Header */}
-      <section className="border-b border-slate-200 pb-4">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+    <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-6 pt-3 pb-3 md:pt-4 md:pb-4">
+      {/* Editorial Header - Compact & Clean */}
+      <section className="border-b border-slate-200 pb-3">
+        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[0.98]">
-              {isDe ? (
-                <>
-                  WOHNUNGEN & WG-ZIMMER.
-                  <span className="text-blue-600 block mt-0.5">IN BERLIN.</span>
-                </>
-              ) : (
-                <>
-                  APARTMENTS & WG ROOMS.
-                  <span className="text-blue-600 block mt-0.5">IN BERLIN.</span>
-                </>
-              )}
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-950">
+              {isDe ? 'Wohnungen & WG-Zimmer in Berlin' : 'Apartments & WG Rooms in Berlin'}
             </h1>
-            <p className="mt-1.5 text-xs sm:text-sm text-slate-600 max-w-xl">
+            <p className="mt-0.5 text-xs text-slate-500">
               {isDe
-                ? 'Direkter Marktplatz von Nutzer zu Nutzer mit Angaben zur Anmeldung und Warmmiete.'
-                : 'Direct marketplace from user to user with Anmeldung details and warm rent breakdowns.'}
+                ? 'Direktkontakt mit Warmmiete, Kaution nach BGB und verbindlicher Angabe zur Anmeldung.'
+                : 'Direct contact with warm rent, legal deposit limits, and verified Anmeldung status.'}
             </p>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
             <Link
               href="/wohnen/list"
-              className="inline-flex h-9.5 items-center rounded-xl bg-blue-600 px-4 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
+              className="inline-flex h-9 items-center rounded-lg bg-blue-600 px-3.5 text-xs font-bold text-white shadow-xs transition hover:bg-blue-700"
             >
-              + {isDe ? 'Wohnung inserieren' : 'Post a room'}
+              + {isDe ? 'Inserieren (ab 29 €)' : 'Post a room (from €29)'}
             </Link>
           </div>
         </div>
 
         {/* High-Utility Compact Search & Controls Bar */}
-        <div className="mt-3.5 rounded-xl border border-slate-300/90 bg-white p-1.5 shadow-xs">
+        <div className="mt-2.5 rounded-lg border border-slate-200 bg-white p-1 shadow-2xs">
           <div className="flex flex-col gap-1.5 md:flex-row md:items-center">
             {/* Search input */}
             <div className="relative flex-1">
@@ -183,7 +184,7 @@ export function HousingBrowser({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={isDe ? 'Bezirk, Kiez, PLZ oder Stichwort...' : 'Search district, kiez or postcode...'}
-                className="h-9.5 w-full rounded-lg border border-slate-200 bg-slate-50/70 pr-8 pl-9 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                className="h-8.5 w-full rounded-md border border-slate-200 bg-slate-50/70 pr-8 pl-8.5 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
               />
               {query && (
                 <button
@@ -201,7 +202,7 @@ export function HousingBrowser({
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
-                className="h-9.5 w-full rounded-lg border border-slate-200 bg-slate-50/70 px-2.5 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                className="h-8.5 w-full rounded-md border border-slate-200 bg-slate-50/70 px-2 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
               >
                 <option value="all">{t('housingAllTypes')}</option>
                 {Object.entries(housingTypeLabels).map(([key, val]) => (
@@ -213,109 +214,205 @@ export function HousingBrowser({
             </div>
 
             {/* District dropdown */}
-            <div className="w-full md:w-48">
+            <div className="w-full md:w-44">
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="h-9.5 w-full rounded-lg border border-slate-200 bg-slate-50/70 px-2.5 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                className="h-8.5 w-full rounded-md border border-slate-200 bg-slate-50/70 px-2 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
               >
-                <option value="all">{t('housingAllDistricts')}</option>
-                {BERLIN_DISTRICTS.map((dist) => (
-                  <option key={dist} value={dist}>
-                    {dist}
-                  </option>
-                ))}
+                <option value="all">{isDe ? 'Alle Bezirke' : 'All districts'}</option>
+                <option value="Mitte">Mitte</option>
+                <option value="Friedrichshain">Friedrichshain</option>
+                <option value="Kreuzberg">Kreuzberg</option>
+                <option value="Neukölln">Neukölln</option>
+                <option value="Prenzlauer Berg">Prenzlauer Berg</option>
+                <option value="Charlottenburg">Charlottenburg</option>
+                <option value="Schöneberg">Schöneberg</option>
+                <option value="Wedding">Wedding</option>
+                <option value="Moabit">Moabit</option>
+                <option value="Pankow">Pankow</option>
+                <option value="Lichtenberg">Lichtenberg</option>
+                <option value="Treptow">Treptow</option>
+                <option value="Tempelhof">Tempelhof</option>
+                <option value="Steglitz">Steglitz</option>
               </select>
             </div>
 
-            {/* View Mode Switcher inline */}
-            <div className="flex w-full md:w-auto items-center justify-center gap-0.5 rounded-lg border border-slate-200 bg-slate-100/90 p-0.5 shrink-0">
+            {/* View Switcher */}
+            <div className="flex w-full md:w-auto items-center justify-center gap-0.5 rounded-md border border-slate-200 bg-slate-100/90 p-0.5 shrink-0">
               <button
                 type="button"
                 onClick={() => setViewMode('split')}
-                className={`flex flex-1 md:flex-none items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold transition cursor-pointer ${
+                className={`flex flex-1 md:flex-none items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
                   viewMode === 'split'
                     ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
-                title="Split-Ansicht (Liste + Karte)"
+                title="Geteilte Ansicht"
               >
-                <Layers className="size-3.5" />
+                <Layers className="size-3" />
                 <span>Split</span>
               </button>
-              <button
-                type="button"
-                onClick={() => setViewMode('list')}
-                className={`flex flex-1 md:flex-none items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold transition cursor-pointer ${
-                  viewMode === 'list'
-                    ? 'bg-blue-600 text-white shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-                title="Kompakte Liste"
-              >
-                <List className="size-3.5" />
-                <span>Liste</span>
-              </button>
+
               <button
                 type="button"
                 onClick={() => setViewMode('map')}
-                className={`flex flex-1 md:flex-none items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold transition cursor-pointer ${
+                className={`flex flex-1 md:flex-none items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
                   viewMode === 'map'
                     ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
-                title="Nur Karte"
+                title="Karten-Ansicht"
               >
-                <MapIcon className="size-3.5" />
+                <MapIcon className="size-3" />
                 <span>Karte</span>
               </button>
+
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
-                className={`flex flex-1 md:flex-none items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold transition cursor-pointer ${
+                className={`flex flex-1 md:flex-none items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
                   viewMode === 'grid'
                     ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
                 title="Raster-Ansicht"
               >
-                <LayoutGrid className="size-3.5" />
+                <LayoutGrid className="size-3" />
                 <span>Raster</span>
               </button>
             </div>
           </div>
 
-          {/* Reset Filters Pill (only visible when filters are active) */}
-          {hasActiveFilters && (
-            <div className="mt-1.5 pt-1.5 border-t border-slate-100 flex items-center justify-between text-xs px-1">
-              <span className="text-slate-500 font-medium">
-                {visibleListings.length} {isDe ? 'Wohnungen gefunden' : 'listings found'}
-              </span>
+          {/* Quick Filter Chips */}
+          <div className="mt-1.5 flex items-center gap-1.5 overflow-x-auto pt-1 pb-0.5 text-[11px] scrollbar-none border-t border-slate-100">
+            <button
+              type="button"
+              onClick={clearFilters}
+              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                !hasActiveFilters
+                  ? 'bg-blue-600 text-white font-semibold'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              {isDe ? 'Alle' : 'All'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedType(selectedType === 'wg_room' ? 'all' : 'wg_room')}
+              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                selectedType === 'wg_room'
+                  ? 'bg-blue-600 text-white font-semibold'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              WG-Zimmer
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedType(selectedType === 'entire_apartment' ? 'all' : 'entire_apartment')}
+              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                selectedType === 'entire_apartment'
+                  ? 'bg-blue-600 text-white font-semibold'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              1-Zimmer / Wohnung
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedType(selectedType === 'sublet' ? 'all' : 'sublet')}
+              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                selectedType === 'sublet'
+                  ? 'bg-blue-600 text-white font-semibold'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              Zwischenmiete
+            </button>
+            <button
+              type="button"
+              onClick={() => setOnlyAnmeldung(!onlyAnmeldung)}
+              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap flex items-center gap-1 ${
+                onlyAnmeldung
+                  ? 'bg-emerald-600 text-white font-semibold'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              <CheckCircle2 className="size-2.5" />
+              <span>Anmeldung ✓</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMaxRent(maxRent === 600 ? null : 600)}
+              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                maxRent === 600
+                  ? 'bg-blue-600 text-white font-semibold'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              &lt; 600 € warm
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedDistrict(selectedDistrict === 'Kreuzberg' ? 'all' : 'Kreuzberg')}
+              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                selectedDistrict === 'Kreuzberg'
+                  ? 'bg-blue-600 text-white font-semibold'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              Kreuzberg
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedDistrict(selectedDistrict === 'Neukölln' ? 'all' : 'Neukölln')}
+              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                selectedDistrict === 'Neukölln'
+                  ? 'bg-blue-600 text-white font-semibold'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              Neukölln
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedDistrict(selectedDistrict === 'Mitte' ? 'all' : 'Mitte')}
+              className={`rounded-full px-2.5 py-0.5 font-medium transition cursor-pointer whitespace-nowrap ${
+                selectedDistrict === 'Mitte'
+                  ? 'bg-blue-600 text-white font-semibold'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              Mitte
+            </button>
+
+            {hasActiveFilters && (
               <button
                 type="button"
                 onClick={clearFilters}
-                className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 font-semibold cursor-pointer"
+                className="ml-auto text-[11px] text-blue-600 hover:text-blue-800 font-semibold cursor-pointer whitespace-nowrap"
               >
-                ✕ {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
+                ✕ {isDe ? 'Zurücksetzen' : 'Reset'}
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </section>
 
       {/* Results Header */}
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
+      <div className="mt-3.5 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
         <p>
           <strong className="font-bold text-slate-900">{filteredListings.length}</strong>{' '}
           {isDe ? 'Wohnungen & WG-Zimmer in Berlin' : 'listings in Berlin'}
         </p>
 
-        <div className="flex items-center gap-3">
-          <span className="hidden sm:inline-flex items-center gap-1.5 rounded-md bg-slate-100 border border-slate-200 px-2.5 py-1 text-xs font-medium text-slate-700">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-md bg-slate-100 border border-slate-200 px-2 py-0.5 text-xs font-medium text-slate-700">
             <span className="size-1.5 rounded-full bg-emerald-600" />
-            OpenStreetMap aktiv
+            Live Kiez-Karte
           </span>
-          <span className="text-[11px] text-slate-400">
+          <span className="hidden sm:inline text-[11px] text-slate-400">
             Geprüft nach BGB § 551 (max. 3 Kaltmieten Kaution)
           </span>
         </div>

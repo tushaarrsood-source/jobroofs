@@ -18,8 +18,10 @@ export async function convertSubmissionToJob(
   const canonicalKey = `${companySlug}-${titleHash.substring(0, 10)}`;
 
   const now = new Date().toISOString();
+  const isPremium = submission.pricing_plan === 'premium' || payload.pricingPlan === 'premium' || payload.tier === 'premium';
+  const durationDays = isPremium ? 60 : 30;
   const expiresAt = new Date(
-    Date.now() + 30 * 24 * 60 * 60 * 1000,
+    Date.now() + durationDays * 24 * 60 * 60 * 1000,
   ).toISOString();
 
   // Normalize responsibilities & requirements (convert paragraphs/lists into clean verbatim pointers)
