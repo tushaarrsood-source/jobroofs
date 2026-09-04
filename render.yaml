@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: jobroofs
+    runtime: node
+    plan: free
+    buildCommand: npm --prefix portal install && npm --prefix portal run build
+    startCommand: npm --prefix portal run start
+    envVars:
+      - key: NODE_VERSION
+        value: 24.14.1
