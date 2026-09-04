@@ -94,10 +94,28 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
             )}
           </nav>
 
-          {/* Mobile Status Indicator (Futuristic Cyber Pill) */}
-          <div className="flex md:hidden items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-50/80 px-2 py-0.5 text-[10px] font-bold text-emerald-800 font-mono">
-            <span className="size-1.5 rounded-full bg-emerald-500 animate-ping" />
-            <span>BERLIN LIVE</span>
+          {/* Mobile Quick Category Switcher */}
+          <div className="flex md:hidden items-center gap-1">
+            <Link
+              href="/"
+              className={`rounded-md px-2.5 py-1 text-xs font-semibold transition ${
+                isJobsActive
+                  ? 'bg-slate-900 text-white'
+                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+              }`}
+            >
+              Jobs
+            </Link>
+            <Link
+              href="/wohnen"
+              className={`rounded-md px-2.5 py-1 text-xs font-semibold transition ${
+                isHousingActive
+                  ? 'bg-slate-900 text-white'
+                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+              }`}
+            >
+              {isDe ? 'Wohnen' : 'Housing'}
+            </Link>
           </div>
 
           <div className="border-l border-slate-200 pl-2 sm:pl-5">

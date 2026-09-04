@@ -28,8 +28,9 @@ export function HousingCard({
   const photoCount = listing.images?.length || 1;
 
   return (
-    <article
-      className={`group relative flex flex-col overflow-hidden rounded-xl border bg-white shadow-2xs transition duration-150 ${
+    <Link
+      href={`/wohnen/${listing.id}`}
+      className={`group relative flex flex-col overflow-hidden rounded-xl border bg-white shadow-2xs transition duration-150 cursor-pointer ${
         isSelected
           ? 'border-blue-600 ring-2 ring-blue-600/30 shadow-md'
           : isHovered
@@ -88,10 +89,7 @@ export function HousingCard({
 
         {/* Title */}
         <h3 className="mt-2 text-sm font-bold leading-snug tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
-          <Link href={`/wohnen/${listing.id}`} className="focus:outline-none">
-            <span className="absolute inset-0" aria-hidden="true" />
-            {listing.title}
-          </Link>
+          {listing.title}
         </h3>
 
         {/* Specs row */}
@@ -136,6 +134,6 @@ export function HousingCard({
           </div>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }

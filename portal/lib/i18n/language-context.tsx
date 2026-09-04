@@ -1,107 +1,83 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { useSyncExternalStore } from 'react';
 import { translations, type Locale, type TranslationKey } from './translations';
 
-interface LanguageContextType {
-  locale: Locale;
-  setLocale: (locale: Locale) => void;
-  toggleLocale: () => void;
-  t: (key: TranslationKey, params?: Record<string, string | number>) => string;
-  isDe: boolean;
-  isEn: boolean;
+let currentLocale: Locale = 'de';
+const listeners = new Set<() => void>();
+
+function getStoredLocale(): Locale {
+  if (typeof window === 'undefined') return 'de';
+  try {
+    const stored = (localStorage.getItem('jobroofs_locale') || localStorage.getItem('kiezjob_locale')) as Locale | null;
+    if (stored === 'de' || stored === 'en') return stored;
+    const browserLang = navigator.language?.toLowerCase() || '';
+    return browserLang.startsWith('en') ? 'en' : 'de';
+  } catch {
+    return 'de';
+  }
 }
 
-const LanguageContext = createContext<LanguageContextType | null>(null);
+if (typeof window !== 'undefined') {
+  currentLocale = getStoredLocale();
+}
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>('de');
-  const [mounted, setMounted] = useState(false);
+function subscribe(callback: () => void) {
+  listeners.add(callback);
+  return () => {
+    listeners.delete(callback);
+  };
+}
 
-  useEffect(() => {
-    setMounted(true);
-    try {
-      const stored = (localStorage.getItem('jobroofs_locale') ||
-        localStorage.getItem('kiezjob_locale')) as Locale | null;
-      if (stored === 'de' || stored === 'en') {
-        setLocaleState(stored);
-      } else {
-        // Check browser language preference if no manual choice saved
-        const browserLang = navigator.language?.toLowerCase() || '';
-        if (browserLang.startsWith('en')) {
-          setLocaleState('en');
-        } else {
-          setLocaleState('de');
-        }
-      }
-    } catch {
-      // Ignore localStorage errors in private mode
-    }
-  }, []);
+function getSnapshot(): Locale {
+  return currentLocale;
+}
 
-  const setLocale = (newLocale: Locale) => {
-    setLocaleState(newLocale);
+function getServerSnapshot(): Locale {
+  return 'de';
+}
+
+export function setLocale(newLocale: Locale) {
+  currentLocale = newLocale;
+  if (typeof window !== 'undefined') {
     try {
       localStorage.setItem('jobroofs_locale', newLocale);
       document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
     } catch {
-      // Ignore storage errors
+      // ignore
     }
-  };
+  }
+  listeners.forEach((listener) => listener());
+}
 
-  const toggleLocale = () => {
-    setLocale(locale === 'de' ? 'en' : 'de');
-  };
+export function toggleLocale() {
+  setLocale(currentLocale === 'de' ? 'en' : 'de');
+}
+
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
+}
+
+export function useTranslation() {
+  const locale = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const t = (key: TranslationKey, params?: Record<string, string | number>): string => {
     const dict = translations[locale] || translations.de;
     let text: string = dict[key] || translations.de[key] || String(key);
-
     if (params) {
       Object.entries(params).forEach(([paramKey, paramValue]) => {
         text = text.replace(new RegExp(`\\{${paramKey}\\}`, 'g'), String(paramValue));
       });
     }
-
     return text;
   };
 
-  return (
-    <LanguageContext.Provider
-      value={{
-        locale,
-        setLocale,
-        toggleLocale,
-        t,
-        isDe: locale === 'de',
-        isEn: locale === 'en',
-      }}
-    >
-      {children}
-    </LanguageContext.Provider>
-  );
-}
-
-export function useTranslation() {
-  const context = useContext(LanguageContext);
-  if (!context) {
-    // Fallback if rendered outside provider
-    return {
-      locale: 'de' as Locale,
-      setLocale: () => {},
-      toggleLocale: () => {},
-      t: (key: TranslationKey, params?: Record<string, string | number>) => {
-        let text: string = translations.de[key] || String(key);
-        if (params) {
-          Object.entries(params).forEach(([k, v]) => {
-            text = text.replace(new RegExp(`\\{${k}\\}`, 'g'), String(v));
-          });
-        }
-        return text;
-      },
-      isDe: true,
-      isEn: false,
-    };
-  }
-  return context;
+  return {
+    locale,
+    setLocale,
+    toggleLocale,
+    t,
+    isDe: locale === 'de',
+    isEn: locale === 'en',
+  };
 }

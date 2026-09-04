@@ -352,7 +352,6 @@ export function HousingBrowser({
                       }}
                       onMouseEnter={() => setHoveredListingId(listing.id)}
                       onMouseLeave={() => setHoveredListingId(null)}
-                      onClick={() => setSelectedListingId(listing.id)}
                     >
                       <HousingCard
                         listing={listing}

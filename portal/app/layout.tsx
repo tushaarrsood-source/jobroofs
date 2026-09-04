@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono, Oswald } from 'next/font/google';
 import { LanguageProvider } from '@/lib/i18n/language-context';
-import { PWAProvider } from '@/components/pwa-provider';
 import { MobileNavBar } from '@/components/mobile-nav-bar';
-import { PWAInstallBanner } from '@/components/pwa-install-banner';
 import './globals.css';
 
 const geistSans = Geist({
@@ -121,11 +119,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} antialiased selection:bg-blue-600 selection:text-white pb-20 md:pb-0`}
       >
         <LanguageProvider>
-          <PWAProvider>
-            {children}
-            <MobileNavBar />
-            <PWAInstallBanner />
-          </PWAProvider>
+          {children}
+          <MobileNavBar />
         </LanguageProvider>
       </body>
     </html>
