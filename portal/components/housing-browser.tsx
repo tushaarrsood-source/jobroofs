@@ -176,74 +176,94 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
         {/* High-Utility Compact Search & Controls Bar */}
         <div className="mt-2.5 rounded-lg border border-slate-200 bg-white p-1 shadow-2xs">
           <div className="flex flex-col gap-1.5 md:flex-row md:items-center">
-            {/* Search input */}
-            <div className="relative flex-1">
-              <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={isDe ? 'Bezirk, Kiez, PLZ oder Stichwort...' : 'Search district, kiez or postcode...'}
-                className="h-8.5 w-full rounded-md border border-slate-200 bg-slate-50/70 pr-8 pl-8.5 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
-              />
-              {query && (
-                <button
-                  type="button"
-                  onClick={() => setQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer text-xs"
+            {/* Search input + Mobile single toggle icon */}
+            <div className="flex items-center gap-1.5 flex-1 w-full">
+              <div className="relative flex-1">
+                <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder={isDe ? 'Bezirk, Kiez, PLZ oder Stichwort...' : 'Search district, kiez or postcode...'}
+                  className="h-8.5 w-full rounded-md border border-slate-200 bg-slate-50/70 pr-8 pl-8.5 text-xs text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                />
+                {query && (
+                  <button
+                    type="button"
+                    onClick={() => setQuery('')}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer text-xs"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              {/* Single icon on mobile to toggle view mode (saves space) */}
+              <button
+                type="button"
+                onClick={() => setViewMode(viewMode === 'map' ? 'split' : 'map')}
+                aria-label={viewMode === 'map' ? 'Zur Liste wechseln' : 'Zur Karte wechseln'}
+                className="md:hidden flex size-8.5 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-700 shadow-2xs transition active:scale-95 cursor-pointer hover:bg-slate-100"
+                title={viewMode === 'map' ? 'Liste' : 'Karte'}
+              >
+                {viewMode === 'map' ? (
+                  <List className="size-4 text-blue-600" />
+                ) : (
+                  <MapIcon className="size-4 text-blue-600" />
+                )}
+              </button>
+            </div>
+
+            {/* Filter Dropdowns: 2-column grid on mobile */}
+            <div className="grid grid-cols-2 gap-1.5 w-full md:flex md:w-auto">
+              {/* Type dropdown */}
+              <div className="w-full md:w-44">
+                <select
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
+                  className="h-8.5 w-full rounded-md border border-slate-200 bg-slate-50/70 px-2 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
                 >
-                  ✕
-                </button>
-              )}
+                  <option value="all">{t('housingAllTypes')}</option>
+                  {Object.entries(housingTypeLabels).map(([key, val]) => (
+                    <option key={key} value={key}>
+                      {isDe ? val.de : val.en}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* District dropdown */}
+              <div className="w-full md:w-44">
+                <select
+                  value={selectedDistrict}
+                  onChange={(e) => setSelectedDistrict(e.target.value)}
+                  className="h-8.5 w-full rounded-md border border-slate-200 bg-slate-50/70 px-2 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                >
+                  <option value="all">{isDe ? 'Alle Bezirke' : 'All districts'}</option>
+                  <option value="Mitte">Mitte</option>
+                  <option value="Friedrichshain">Friedrichshain</option>
+                  <option value="Kreuzberg">Kreuzberg</option>
+                  <option value="Neukölln">Neukölln</option>
+                  <option value="Prenzlauer Berg">Prenzlauer Berg</option>
+                  <option value="Charlottenburg">Charlottenburg</option>
+                  <option value="Schöneberg">Schöneberg</option>
+                  <option value="Wedding">Wedding</option>
+                  <option value="Moabit">Moabit</option>
+                  <option value="Pankow">Pankow</option>
+                  <option value="Lichtenberg">Lichtenberg</option>
+                  <option value="Treptow">Treptow</option>
+                  <option value="Tempelhof">Tempelhof</option>
+                  <option value="Steglitz">Steglitz</option>
+                </select>
+              </div>
             </div>
 
-            {/* Type dropdown */}
-            <div className="w-full md:w-44">
-              <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="h-8.5 w-full rounded-md border border-slate-200 bg-slate-50/70 px-2 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
-              >
-                <option value="all">{t('housingAllTypes')}</option>
-                {Object.entries(housingTypeLabels).map(([key, val]) => (
-                  <option key={key} value={key}>
-                    {isDe ? val.de : val.en}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* District dropdown */}
-            <div className="w-full md:w-44">
-              <select
-                value={selectedDistrict}
-                onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="h-8.5 w-full rounded-md border border-slate-200 bg-slate-50/70 px-2 text-xs text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
-              >
-                <option value="all">{isDe ? 'Alle Bezirke' : 'All districts'}</option>
-                <option value="Mitte">Mitte</option>
-                <option value="Friedrichshain">Friedrichshain</option>
-                <option value="Kreuzberg">Kreuzberg</option>
-                <option value="Neukölln">Neukölln</option>
-                <option value="Prenzlauer Berg">Prenzlauer Berg</option>
-                <option value="Charlottenburg">Charlottenburg</option>
-                <option value="Schöneberg">Schöneberg</option>
-                <option value="Wedding">Wedding</option>
-                <option value="Moabit">Moabit</option>
-                <option value="Pankow">Pankow</option>
-                <option value="Lichtenberg">Lichtenberg</option>
-                <option value="Treptow">Treptow</option>
-                <option value="Tempelhof">Tempelhof</option>
-                <option value="Steglitz">Steglitz</option>
-              </select>
-            </div>
-
-            {/* View Switcher */}
-            <div className="flex w-full md:w-auto items-center justify-center gap-0.5 rounded-md border border-slate-200 bg-slate-100/90 p-0.5 shrink-0">
+            {/* View Switcher: Desktop only */}
+            <div className="hidden md:flex items-center justify-center gap-0.5 rounded-md border border-slate-200 bg-slate-100/90 p-0.5 shrink-0">
               <button
                 type="button"
                 onClick={() => setViewMode('split')}
-                className={`flex flex-1 md:flex-none items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
+                className={`flex items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
                   viewMode === 'split'
                     ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
@@ -257,7 +277,7 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
               <button
                 type="button"
                 onClick={() => setViewMode('map')}
-                className={`flex flex-1 md:flex-none items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
+                className={`flex items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
                   viewMode === 'map'
                     ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
@@ -271,7 +291,7 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
-                className={`flex flex-1 md:flex-none items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
+                className={`flex items-center justify-center gap-1 rounded px-2 py-1 text-xs font-semibold transition cursor-pointer ${
                   viewMode === 'grid'
                     ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
@@ -407,7 +427,7 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
           {isDe ? 'Wohnungen & WG-Zimmer in Berlin' : 'listings in Berlin'}
         </p>
 
-        <div className="flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-md bg-slate-100 border border-slate-200 px-2 py-0.5 text-xs font-medium text-slate-700">
             <span className="size-1.5 rounded-full bg-emerald-600" />
             Live Kiez-Karte
