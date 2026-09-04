@@ -212,11 +212,11 @@ export function HousingBrowser({
             </div>
 
             {/* View Mode Switcher inline */}
-            <div className="flex items-center gap-0.5 rounded-lg border border-slate-200 bg-slate-100/90 p-0.5 shrink-0 self-end md:self-auto">
+            <div className="flex w-full md:w-auto items-center justify-center gap-0.5 rounded-lg border border-slate-200 bg-slate-100/90 p-0.5 shrink-0">
               <button
                 type="button"
                 onClick={() => setViewMode('split')}
-                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                className={`flex flex-1 md:flex-none items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold transition cursor-pointer ${
                   viewMode === 'split'
                     ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
@@ -224,12 +224,12 @@ export function HousingBrowser({
                 title="Split-Ansicht (Liste + Karte)"
               >
                 <Layers className="size-3.5" />
-                <span className="hidden sm:inline">Split</span>
+                <span>Split</span>
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode('list')}
-                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                className={`flex flex-1 md:flex-none items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold transition cursor-pointer ${
                   viewMode === 'list'
                     ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
@@ -242,7 +242,7 @@ export function HousingBrowser({
               <button
                 type="button"
                 onClick={() => setViewMode('map')}
-                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                className={`flex flex-1 md:flex-none items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold transition cursor-pointer ${
                   viewMode === 'map'
                     ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
@@ -255,7 +255,7 @@ export function HousingBrowser({
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
-                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold transition cursor-pointer ${
+                className={`flex flex-1 md:flex-none items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold transition cursor-pointer ${
                   viewMode === 'grid'
                     ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
@@ -263,7 +263,7 @@ export function HousingBrowser({
                 title="Raster-Ansicht"
               >
                 <LayoutGrid className="size-3.5" />
-                <span className="hidden sm:inline">Raster</span>
+                <span>Raster</span>
               </button>
             </div>
           </div>

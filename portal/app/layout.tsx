@@ -117,11 +117,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de">
-      <head>
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} antialiased selection:bg-blue-600 selection:text-white pb-20 md:pb-0`}
       >

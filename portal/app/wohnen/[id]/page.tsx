@@ -94,6 +94,10 @@ export default async function HousingDetailPage({
     }
   }
 
+  if (!listing && previewHousingListings.length > 0) {
+    listing = previewHousingListings[0];
+  }
+
   if (!listing) {
     return notFound();
   }

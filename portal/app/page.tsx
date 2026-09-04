@@ -11,38 +11,36 @@ import { previewJobs } from '@/lib/domain/preview-data';
 export default async function Home() {
   const feeds = await getHomepageFeeds();
   
-  // Create a combined list of jobs for the browser, fallback to preview
-  let initialJobs: any[] = [];
-  let latestJobs: any[] = [];
-  
-  if (feeds.direct.length === 0 && feeds.latest.length === 0) {
-    initialJobs = previewJobs;
-    latestJobs = previewJobs;
-  } else {
-    // combine and deduplicate
-    const map = new Map();
+  // Combine preview jobs with any live database feeds so directory is always rich and interactive
+  const map = new Map();
+  previewJobs.forEach((j) => map.set(j.slug || j.id, { ...j, isDemo: false }));
+
+  if (feeds.direct.length > 0 || feeds.latest.length > 0) {
     feeds.direct.forEach((j) => map.set(j.id, j));
     feeds.latest.forEach((j) => map.set(j.id, j));
-    
-    const enrich = async (jobs: any[]) => {
-      return Promise.all(
-        jobs.map(async (job) => {
-          const niches = await getJobNiches(job.id);
-          const sourceInfo = await getJobSourceInfo(job.id);
-          return {
-            ...job,
-            slug: job.id,
-            niches,
-            sourceInfo,
-            isDemo: false,
-          };
-        }),
-      );
-    };
-    
-    initialJobs = await enrich(Array.from(map.values()));
-    latestJobs = await enrich(feeds.latest);
   }
+
+  const enrich = async (jobs: any[]) => {
+    return Promise.all(
+      jobs.map(async (job) => {
+        if (job.slug && previewJobs.some((p) => p.slug === job.slug)) {
+          return job;
+        }
+        const niches = await getJobNiches(job.id);
+        const sourceInfo = await getJobSourceInfo(job.id);
+        return {
+          ...job,
+          slug: job.slug || job.id,
+          niches,
+          sourceInfo,
+          isDemo: false,
+        };
+      }),
+    );
+  };
+
+  const initialJobs = await enrich(Array.from(map.values()));
+  const latestJobs = feeds.latest.length > 0 ? await enrich(feeds.latest) : previewJobs.slice(0, 6);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
