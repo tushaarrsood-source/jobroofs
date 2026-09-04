@@ -1,7 +1,12 @@
-﻿# Settings for Firebase App Hosting
+# Settings for Firebase App Hosting
 runConfig:
   minInstances: 0
   maxInstances: 10
   concurrency: 80
   cpu: 1
   memoryMiB: 1024
+
+scripts:
+  buildCommand: npm run build
+  runCommand: npm run start
+
