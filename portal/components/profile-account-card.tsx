@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { User as UserIcon, LogOut, Cloud, CloudOff } from 'lucide-react';
+import { User as UserIcon, LogOut, Cloud, CloudOff, Crown } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { AuthModal } from '@/components/auth-modal';
 import { LanguageToggle } from '@/components/language-toggle';
+import { isMasterAccount } from '@/lib/domain/master-accounts';
 
 export function ProfileAccountCard() {
   const { isDe } = useTranslation();
@@ -34,7 +35,12 @@ export function ProfileAccountCard() {
                 <h1 className="text-xl font-bold tracking-tight text-[#1d1d1f] truncate">
                   {user?.displayName || (user ? user.email?.split('@')[0] : (isDe ? 'Mein Bereich' : 'My Account'))}
                 </h1>
-                {user ? (
+                {isMasterAccount(user?.email) ? (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 border border-amber-500/25 px-2.5 py-0.5 text-[11px] font-semibold text-amber-700">
+                    <Crown className="size-3 text-amber-600" />
+                    <span>Master Pro</span>
+                  </span>
+                ) : user ? (
                   <span className="inline-flex items-center gap-1 rounded-full bg-[#34c759]/10 px-2 py-0.5 text-[11px] font-medium text-[#248a3d]">
                     <Cloud className="size-3" />
                     <span>Cloud</span>
@@ -47,7 +53,9 @@ export function ProfileAccountCard() {
                 )}
               </div>
               <p className="text-xs text-[#86868b] mt-0.5 truncate">
-                {user?.email || (isDe ? 'Gast-Modus · Nicht angemeldet' : 'Guest mode · Not signed in')}
+                {isMasterAccount(user?.email)
+                  ? (isDe ? '👑 Master Account · Stripe-Bypass & Unlimited Pro aktiv' : '👑 Master Account · Stripe Bypass & Unlimited Pro Active')
+                  : user?.email || (isDe ? 'Gast-Modus · Nicht angemeldet' : 'Guest mode · Not signed in')}
               </p>
             </div>
           </div>

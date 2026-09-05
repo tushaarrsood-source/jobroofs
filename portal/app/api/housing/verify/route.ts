@@ -4,6 +4,7 @@ import { getD1 } from "@/db";
 import { validateHousingVerificationCode } from "@/lib/housing/verification-store";
 import { convertHousingSubmissionToListing } from "@/lib/housing/submission-to-listing";
 import { getStripePriceId } from "@/lib/stripe/products";
+import { isMasterAccount } from "@/lib/domain/master-accounts";
 
 const verifySchema = z.object({
   submissionId: z.string(),
@@ -47,8 +48,9 @@ export async function POST(request: Request) {
     }
 
     const stripeSecret = process.env.STRIPE_SECRET_KEY;
+    const isMaster = isMasterAccount(submission.submitter_email);
 
-    if (stripeSecret) {
+    if (!isMaster && stripeSecret) {
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
       const payload = JSON.parse(submission.payload_json || "{}");
       const tier = payload.tier === "premium" ? "premium" : "standard";

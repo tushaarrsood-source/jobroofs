@@ -12,8 +12,10 @@ import {
   signOut,
   deleteUser,
 } from 'firebase/auth';
-import { getFirebaseAuth } from './client';
+import { getFirebaseAuth, getFirebaseDb } from './client';
 import { deleteUserDataFromFirestore } from './firestore-service';
+import { doc, setDoc } from 'firebase/firestore';
+import { isMasterAccount } from '@/lib/domain/master-accounts';
 
 interface AuthContextType {
   user: User | null;
@@ -56,6 +58,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       (currentUser) => {
         setUser(currentUser);
         setLoading(false);
+
+        if (currentUser?.email && isMasterAccount(currentUser.email)) {
+          const db = getFirebaseDb();
+          if (db) {
+            setDoc(
+              doc(db, 'users', currentUser.uid),
+              {
+                userId: currentUser.uid,
+                email: currentUser.email,
+                role: 'master',
+                isMaster: true,
+                plan: 'annual_unlimited',
+                unlimitedPro: true,
+                bypassStripe: true,
+                subscriptionExpiresAt: '2099-12-31T23:59:59.999Z',
+              },
+              { merge: true }
+            ).catch(console.error);
+          }
+        }
       },
       (err) => {
         console.error('Firebase onAuthStateChanged error:', err);

@@ -5,6 +5,7 @@ import { validateVerificationCode } from "@/lib/employer/verification-store";
 import { runAutomatedFraudChecks } from "@/lib/employer/fraud-checks";
 import { convertSubmissionToJob } from "@/lib/employer/submission-to-job";
 import { getStripePriceId } from "@/lib/stripe/products";
+import { isMasterAccount } from "@/lib/domain/master-accounts";
 
 const verifySchema = z.object({
   submissionId: z.string(),
@@ -76,9 +77,9 @@ export async function POST(request: Request) {
       });
     }
 
-    // Check if employer has an active annual subscription pass
-    let hasActiveSubscription = false;
-    if (submission.employer_id) {
+    // Check if employer has an active annual subscription pass OR is a master account
+    let hasActiveSubscription = isMasterAccount(submission.submitter_email);
+    if (!hasActiveSubscription && submission.employer_id) {
       const employer = await d1
         .prepare(`SELECT subscription_plan, subscription_expires_at FROM employers WHERE id = ?`)
         .bind(submission.employer_id)
