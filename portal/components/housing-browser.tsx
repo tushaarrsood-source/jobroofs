@@ -376,21 +376,44 @@ export function HousingBrowser({ initialListings }: HousingBrowserProps) {
           {/* Cards List */}
           <div className="space-y-4">
             {filteredListings.length === 0 ? (
-              <div className="rounded-[20px] border border-black/[0.06] bg-white p-12 text-center shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+              <div className="rounded-[20px] border border-black/[0.06] bg-white p-10 md:p-14 text-center shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
                 <Home className="mx-auto size-8 text-[#86868b]" />
-                <h3 className="mt-3 text-sm font-semibold text-[#1d1d1f]">
-                  Keine Inserate für deine Filtereinstellungen gefunden
+                <h3 className="mt-3 text-base md:text-lg font-semibold text-[#1d1d1f]">
+                  {hasActiveFilters
+                    ? isDe
+                      ? 'Keine Inserate für deine Filtereinstellungen gefunden'
+                      : 'No listings found for your filters'
+                    : isDe
+                    ? 'Noch keine Wohnungsangebote aktiv'
+                    : 'No active housing listings yet'}
                 </h3>
-                <p className="mt-1 text-xs text-[#86868b]">
-                  Versuche, den maximalen Mietpreis zu erhöhen oder die Bezirksauswahl zu erweitern.
+                <p className="mt-1.5 text-xs text-[#86868b] max-w-sm mx-auto leading-relaxed">
+                  {hasActiveFilters
+                    ? isDe
+                      ? 'Versuche, den maximalen Mietpreis zu erhöhen oder die Bezirksauswahl zu erweitern.'
+                      : 'Try increasing the maximum rent or expanding your district selection.'
+                    : isDe
+                    ? 'Sei der Erste und inseriere jetzt dein WG-Zimmer, deine Zwischenmiete oder Wohnung in Berlin!'
+                    : 'Be the first to list your WG room, sublet or apartment in Berlin!'}
                 </p>
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="apple-btn-primary mt-4"
-                >
-                  Filter zurücksetzen
-                </button>
+                <div className="mt-5 flex items-center justify-center gap-3">
+                  {hasActiveFilters ? (
+                    <button
+                      type="button"
+                      onClick={clearFilters}
+                      className="apple-btn-secondary !h-9 !px-4 !text-xs cursor-pointer"
+                    >
+                      {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
+                    </button>
+                  ) : (
+                    <Link
+                      href="/wohnen/list"
+                      className="apple-btn-primary !h-9 !px-4 !text-xs inline-flex"
+                    >
+                      <span>+ {isDe ? 'Wohnung inserieren' : 'List Housing'}</span>
+                    </Link>
+                  )}
+                </div>
               </div>
             ) : (
               filteredListings.map((listing, idx) => {

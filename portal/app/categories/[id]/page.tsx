@@ -134,13 +134,21 @@ export default async function CategoryPage({
                 ))}
               </div>
             ) : (
-              <div className="rounded-xl border border-dashed border-zinc-300 bg-white p-10 text-center">
-                <p className="font-bold text-sm text-zinc-900">
+              <div className="rounded-xl border border-dashed border-zinc-300 bg-white p-10 md:p-14 text-center">
+                <p className="font-bold text-sm md:text-base text-zinc-900">
                   Noch keine Angebote in dieser Kategorie.
                 </p>
-                <p className="mt-1 text-xs text-zinc-500">
-                  Sobald neue Inserate geprüft sind, erscheinen sie hier.
+                <p className="mt-1 text-xs text-zinc-500 max-w-sm mx-auto">
+                  Sobald neue Inserate geprüft sind, erscheinen sie hier. Sei der Erste und inseriere eine Stelle!
                 </p>
+                <div className="mt-5">
+                  <Link
+                    href="/post-a-job"
+                    className="apple-btn-primary inline-flex !h-9 !px-4 !text-xs"
+                  >
+                    <span>+ Job in dieser Kategorie inserieren</span>
+                  </Link>
+                </div>
               </div>
             )}
           </div>

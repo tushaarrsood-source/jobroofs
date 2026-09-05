@@ -431,9 +431,43 @@ export function JobBrowser({
             {/* Job Cards Column */}
             <div className="space-y-3 min-w-0 w-full">
               {visibleJobs.length === 0 ? (
-                <div className="rounded-[20px] border border-black/[0.06] bg-white p-12 text-center shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-                  <p className="font-semibold text-base text-[#1d1d1f]">Keine Jobs für diese Filter gefunden</p>
-                  <p className="mt-1 text-xs text-[#86868b]">Passe deine Suchbegriffe oder Bezirksauswahl an.</p>
+                <div className="rounded-[20px] border border-black/[0.06] bg-white p-10 md:p-14 text-center shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+                  <p className="font-semibold text-base md:text-lg text-[#1d1d1f]">
+                    {hasActiveFilters
+                      ? isDe
+                        ? 'Keine Jobs für diese Filter gefunden'
+                        : 'No jobs found for these filters'
+                      : isDe
+                      ? 'Noch keine Stellenanzeigen aktiv'
+                      : 'No active job postings yet'}
+                  </p>
+                  <p className="mt-1.5 text-xs text-[#86868b] max-w-sm mx-auto leading-relaxed">
+                    {hasActiveFilters
+                      ? isDe
+                        ? 'Passe deine Suchbegriffe oder Bezirksauswahl an oder setze die Filter zurück.'
+                        : 'Adjust your search terms or district filters.'
+                      : isDe
+                      ? 'Sei der Erste und inseriere jetzt ein Angebot für deinen Berliner Kiez!'
+                      : 'Be the first to post a job for your Berlin neighborhood!'}
+                  </p>
+                  <div className="mt-5 flex items-center justify-center gap-3">
+                    {hasActiveFilters ? (
+                      <button
+                        type="button"
+                        onClick={clearFilters}
+                        className="apple-btn-secondary !h-9 !px-4 !text-xs cursor-pointer"
+                      >
+                        {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
+                      </button>
+                    ) : (
+                      <Link
+                        href="/post-a-job"
+                        className="apple-btn-primary !h-9 !px-4 !text-xs inline-flex"
+                      >
+                        <span>+ {isDe ? 'Job inserieren' : 'Post a Job'}</span>
+                      </Link>
+                    )}
+                  </div>
                 </div>
               ) : (
                 visibleJobs.map((job, idx) => {
