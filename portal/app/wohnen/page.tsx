@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
+import { BreadcrumbJsonLd } from '@/components/json-ld';
+import { PortalWelcomeBanner } from '@/components/portal-welcome-banner';
 import { HousingBrowser } from '@/components/housing-browser';
 import { previewHousingListings } from '@/lib/domain/preview-housing';
 import type { HousingListing } from '@/lib/domain/housing-types';
@@ -69,20 +71,29 @@ export default async function HousingPage() {
         publicationState: r.publication_state,
         firstSeenAt: r.first_seen_at,
         expiresAt: r.expires_at,
-        isDemo: false,
       }));
     }
   } catch {
-    // In local dev without D1 binding, preview listings take over
+    // In local dev without DB binding, curated listings take over
   }
 
-  // Combine DB listings with preview listings
-  const allListings = [...dbListings, ...previewHousingListings];
+  // Combine DB listings with curated listings, avoiding duplicates
+  const listingMap = new Map<string, HousingListing>();
+  previewHousingListings.forEach((h) => listingMap.set(h.id, h));
+  dbListings.forEach((h) => listingMap.set(h.id, h));
+  const allListings = Array.from(listingMap.values());
 
   return (
     <main className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col justify-between">
       <div>
+        <BreadcrumbJsonLd
+          items={[
+            { name: 'JOBROOFS', href: '/' },
+            { name: 'Wohnen in Berlin', href: '/wohnen' },
+          ]}
+        />
         <SiteHeader />
+        <PortalWelcomeBanner />
         <HousingBrowser initialListings={allListings} />
       </div>
       <SiteFooter />

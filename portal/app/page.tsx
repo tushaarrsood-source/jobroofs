@@ -4,16 +4,17 @@ import { JobBrowser, LatestJobs } from '@/components/job-browser';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { CategoryCarousel } from '@/components/category-carousel';
-import { WebSiteJsonLd } from '@/components/json-ld';
+import { WebSiteJsonLd, LocalBusinessJsonLd } from '@/components/json-ld';
+import { PortalWelcomeBanner } from '@/components/portal-welcome-banner';
 import { getHomepageFeeds, getJobNiches, getJobSourceInfo } from '@/lib/jobs/feeds';
 import { previewJobs } from '@/lib/domain/preview-data';
 
 export default async function Home() {
   const feeds = await getHomepageFeeds();
   
-  // Combine preview jobs with any live database feeds so directory is always rich and interactive
+  // Combine curated jobs with any live database feeds so directory is always rich and interactive
   const map = new Map();
-  previewJobs.forEach((j) => map.set(j.slug || j.id, { ...j, isDemo: false }));
+  previewJobs.forEach((j) => map.set(j.slug || j.id, { ...j }));
 
   if (feeds.direct.length > 0 || feeds.latest.length > 0) {
     feeds.direct.forEach((j) => map.set(j.id, j));
@@ -33,7 +34,6 @@ export default async function Home() {
           slug: job.slug || job.id,
           niches,
           sourceInfo,
-          isDemo: false,
         };
       }),
     );
@@ -45,7 +45,9 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground overflow-x-clip w-full max-w-full">
       <WebSiteJsonLd />
+      <LocalBusinessJsonLd />
       <SiteHeader />
+      <PortalWelcomeBanner />
       <JobBrowser initialJobs={initialJobs} />
 
       {/* Horizontal Scroll Category Carousel */}

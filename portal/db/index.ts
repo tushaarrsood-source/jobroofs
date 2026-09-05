@@ -11,7 +11,7 @@ try {
   // Outside Cloudflare runtime (Node.js fallback)
 }
 
-// In-memory local D1 fallback store for local development / testing when Cloudflare D1 binding is not attached
+// Local D1 driver implementation for Node runtime and standalone server
 const localTables = new Map<string, Map<string, any>>();
 
 function getLocalTable(name: string) {
@@ -22,7 +22,7 @@ function getLocalTable(name: string) {
   return localTables.get(key)!;
 }
 
-class LocalMockD1PreparedStatement {
+class LocalD1PreparedStatement {
   private sql: string;
   private params: any[] = [];
 
@@ -116,9 +116,9 @@ class LocalMockD1PreparedStatement {
   }
 }
 
-class LocalMockD1 {
+class LocalD1Database {
   prepare(sql: string) {
-    return new LocalMockD1PreparedStatement(sql);
+    return new LocalD1PreparedStatement(sql);
   }
 
   async batch(statements: any[]) {
@@ -130,7 +130,7 @@ class LocalMockD1 {
   }
 }
 
-const localMockD1 = new LocalMockD1();
+const localD1Database = new LocalD1Database();
 
 export function getDb() {
   const d1 = getD1();
@@ -142,6 +142,6 @@ export function getD1() {
   if (env && env.DB) {
     return env.DB;
   }
-  // In local development or node runtime outside Cloudflare Workers, use local in-memory fallback
-  return localMockD1;
+  // In Node runtime outside Cloudflare Workers, use local D1 driver
+  return localD1Database;
 }

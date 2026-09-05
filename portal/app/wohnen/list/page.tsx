@@ -3,6 +3,7 @@ import Link from '@/components/ui/link';
 import { ArrowLeft, ShieldCheck } from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
+import { BreadcrumbJsonLd } from '@/components/json-ld';
 import { HousingListingForm } from '@/components/housing-listing-form';
 
 export const metadata = {
@@ -18,6 +19,13 @@ export default function HousingListPage() {
   return (
     <main className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col justify-between">
       <div>
+        <BreadcrumbJsonLd
+          items={[
+            { name: 'JOBROOFS', href: '/' },
+            { name: 'Wohnen & Zimmer', href: '/wohnen' },
+            { name: 'Inserieren', href: '/wohnen/list' },
+          ]}
+        />
         <SiteHeader />
 
         <div className="mx-auto max-w-4xl px-5 py-8 md:px-10 md:py-12">

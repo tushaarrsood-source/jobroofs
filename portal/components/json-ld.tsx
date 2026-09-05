@@ -216,3 +216,146 @@ export function BreadcrumbJsonLd({ items }: { items: BreadcrumbItem[] }) {
     />
   );
 }
+
+/* ── Housing / Apartment (Accommodation) ───────────────────────── */
+
+interface HousingJsonLdProps {
+  listing: {
+    id: string;
+    title: string;
+    listingType?: string;
+    district?: string;
+    postcode?: string;
+    streetAddress?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+    kaltmieteEur?: number;
+    nebenkostenEur?: number;
+    warmmieteEur: number;
+    roomSqm: number;
+    totalRooms: number;
+    furnished?: string;
+    anmeldungPossible?: boolean;
+    description?: string;
+    images?: string[];
+    firstSeenAt?: string;
+  };
+}
+
+export function HousingJsonLd({ listing }: HousingJsonLdProps) {
+  const schemaType = listing.listingType === 'wg_room' ? 'Room' : 'Apartment';
+
+  const amenityFeature = [];
+  if (listing.anmeldungPossible) {
+    amenityFeature.push({
+      '@type': 'LocationFeatureSpecification',
+      name: 'Anmeldung Possible',
+      value: true,
+    });
+  }
+  if (listing.furnished) {
+    amenityFeature.push({
+      '@type': 'LocationFeatureSpecification',
+      name: 'Furnishing Status',
+      value: listing.furnished,
+    });
+  }
+
+  const data: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': schemaType,
+    name: listing.title,
+    description:
+      listing.description ||
+      `${listing.title} in ${listing.district || 'Berlin'}. ${listing.roomSqm} m², ${listing.warmmieteEur} € warm.`,
+    url: `https://jobroofs.com/wohnen/${listing.id}`,
+    numberOfRooms: listing.totalRooms || 1,
+    floorSize: {
+      '@type': 'QuantitativeValue',
+      value: listing.roomSqm,
+      unitCode: 'MTK',
+    },
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Berlin',
+      addressRegion: 'Berlin',
+      postalCode: listing.postcode || '10115',
+      streetAddress: listing.streetAddress || '',
+      addressCountry: 'DE',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: listing.latitude || 52.5200,
+      longitude: listing.longitude || 13.4050,
+    },
+    amenityFeature,
+    offers: {
+      '@type': 'Offer',
+      price: listing.warmmieteEur,
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/InStock',
+      validFrom: listing.firstSeenAt || new Date().toISOString(),
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: listing.warmmieteEur,
+        priceCurrency: 'EUR',
+        unitText: 'MONTH',
+      },
+    },
+  };
+
+  if (listing.images && listing.images.length > 0) {
+    data.image = listing.images;
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
+/* ── LocalBusiness / EmploymentAgency (Berlin Entity Graph) ────── */
+
+export function LocalBusinessJsonLd() {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'EmploymentAgency',
+    name: 'JOBROOFS Berlin',
+    alternateName: 'JOBROOFS',
+    url: 'https://jobroofs.com',
+    logo: 'https://jobroofs.com/apple-touch-icon.png',
+    description:
+      "Berlin's premier marketplace for flexible work, minijobs, student gigs, and verified neighborhood rooms across all 12 districts.",
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Berlin',
+      addressRegion: 'Berlin',
+      postalCode: '10115',
+      addressCountry: 'DE',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 52.5200,
+      longitude: 13.4050,
+    },
+    areaServed: {
+      '@type': 'City',
+      name: 'Berlin',
+    },
+    priceRange: '€€',
+    sameAs: [
+      'https://twitter.com/jobroofs',
+      'https://www.linkedin.com/company/jobroofs',
+      'https://www.instagram.com/jobroofs.berlin',
+    ],
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}

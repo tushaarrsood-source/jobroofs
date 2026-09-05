@@ -82,11 +82,6 @@ export function JobDetailContent({ job }: { job: any }) {
                   {form}
                 </span>
               ))}
-              {job.isDemo ? (
-                <span className="rounded bg-amber-50 border border-amber-200 px-2 py-0.5 text-[10px] font-semibold text-amber-800">
-                  {t('sampleListing')}
-                </span>
-              ) : null}
             </div>
             <h1 className="mt-4 text-3xl font-bold tracking-tight text-zinc-950 md:text-5xl">
               {job.title}

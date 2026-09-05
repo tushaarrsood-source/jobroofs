@@ -60,77 +60,63 @@ export default async function JobDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  let job: any = previewJobs.find((item) => item.slug === slug || item.id === slug);
+  let job: any = null;
 
-  if (!job) {
-    const dbJob = await getJobById(slug);
-    if (dbJob) {
-      const niches = await getJobNiches(slug);
-      const sourceInfo = await getJobSourceInfo(slug);
-      job = {
-        isDemo: false,
-        id: dbJob.id,
-        slug: dbJob.id,
-        title: dbJob.title,
-        company: dbJob.company,
-        district: dbJob.district || 'Berlin',
-        postcode: dbJob.postcode || '',
-        industryId: niches.length > 0 ? niches[0].nicheId : 'Unknown',
-        roleFamilyId: dbJob.roleFamilyId || 'Unknown',
-        employmentForms: dbJob.employmentFormsJson ? JSON.parse(dbJob.employmentFormsJson) : ['Minijob'],
-        language: dbJob.languageSignal || 'not_stated',
-        listingOrigin: dbJob.listingOrigin,
-        compensation: {
-          label: dbJob.payText || '603 € / Monat',
-          amountMin: null,
-          amountMax: null,
-          currency: 'EUR',
-          rateInterval: 'hour',
-          payoutCadence: 'monthly',
-          grossNet: 'gross',
-          extras: null,
-        },
-        hours: {
-          label: dbJob.hoursLabel || 'Flexible Arbeitszeiten',
-          minimum: 10,
-          maximum: 20,
-          period: 'week',
-        },
-        schedule: {
-          summary: dbJob.scheduleSummary || 'Flexible Schichten',
-          workDays: [],
-          timeWindows: [],
-          startDate: null,
-          endDate: null,
-        },
-        workplace: { type: 'on_site', address: dbJob.district ? `${dbJob.district}, Berlin` : 'Berlin' },
-        responsibilities: ['Zuverlässige Unterstützung im Tagesgeschäft', 'Teamfähige und saubere Arbeitsweise'],
-        requirements: ['Pünktlichkeit & Zuverlässigkeit', 'Gute Deutsch- oder Englischkenntnisse'],
-        contact: { method: 'email', value: 'bewerbung@jobroofs.com', instructions: 'Sende eine kurze Nachricht über die Plattform.' },
-        firstSeenAt: dbJob.firstSeenAt,
-        lastVerifiedAt: dbJob.lastVerifiedAt,
-        sourceInfo,
-      };
-    }
-  }
-
-  // Graceful fallback: If job is still not found, fallback to first preview job
-  if (!job && previewJobs.length > 0) {
-    job = previewJobs[0];
+  const dbJob = await getJobById(slug);
+  if (dbJob) {
+    const niches = await getJobNiches(slug);
+    const sourceInfo = await getJobSourceInfo(slug);
+    job = {
+      id: dbJob.id,
+      slug: dbJob.id,
+      title: dbJob.title,
+      company: dbJob.company,
+      district: dbJob.district || 'Berlin',
+      postcode: dbJob.postcode || '',
+      industryId: niches.length > 0 ? niches[0].nicheId : 'Unknown',
+      roleFamilyId: dbJob.roleFamilyId || 'Unknown',
+      employmentForms: dbJob.employmentFormsJson ? JSON.parse(dbJob.employmentFormsJson) : ['Minijob'],
+      language: dbJob.languageSignal || 'not_stated',
+      listingOrigin: dbJob.listingOrigin,
+      compensation: {
+        label: dbJob.payText || 'Tarif / VB',
+        amountMin: null,
+        amountMax: null,
+        currency: 'EUR',
+        rateInterval: 'hour',
+        payoutCadence: 'monthly',
+        grossNet: 'gross',
+        extras: null,
+      },
+      hours: {
+        label: dbJob.hoursLabel || 'Flexible Arbeitszeiten',
+        minimum: 10,
+        maximum: 20,
+        period: 'week',
+      },
+      schedule: {
+        summary: dbJob.scheduleSummary || 'Flexible Schichten',
+        workDays: [],
+        timeWindows: [],
+        startDate: null,
+        endDate: null,
+      },
+      workplace: { type: 'on_site', address: dbJob.district ? `${dbJob.district}, Berlin` : 'Berlin' },
+      responsibilities: ['Zuverlässige Unterstützung im Tagesgeschäft', 'Teamfähige und saubere Arbeitsweise'],
+      requirements: ['Pünktlichkeit & Zuverlässigkeit', 'Gute Deutsch- oder Englischkenntnisse'],
+      contact: { method: 'email', value: 'bewerbung@jobroofs.com', instructions: 'Sende eine kurze Nachricht über die Plattform.' },
+      firstSeenAt: dbJob.firstSeenAt,
+      lastVerifiedAt: dbJob.lastVerifiedAt,
+      sourceInfo,
+    };
   }
 
   if (!job) {
-    return (
-      <main className="min-h-screen bg-[#fafafa]">
-        <SiteHeader />
-        <div className="mx-auto max-w-3xl px-5 py-24 text-center">
-          <h1 className="text-3xl font-semibold">Job nicht gefunden</h1>
-          <Link href="/" className="mt-5 inline-block text-blue-600 underline">
-            Zurück zur Übersicht
-          </Link>
-        </div>
-      </main>
-    );
+    job = previewJobs.find((item) => item.slug === slug || item.id === slug);
+  }
+
+  if (!job) {
+    return notFound();
   }
 
   return (

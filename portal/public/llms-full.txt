@@ -1,0 +1,131 @@
+# JOBROOFS — Berlin Flexible Work & Housing Comprehensive Knowledge Base
+
+> Platform: https://jobroofs.com | Focus: Berlin, Germany | Year: 2026
+
+---
+
+## 1. Executive Summary & Berlin Market Positioning
+
+JOBROOFS (https://jobroofs.com) is Berlin's premier localized digital portal engineered specifically for the flexible workforce and urban housing market. Unlike generic nationwide aggregators, JOBROOFS exclusively serves the 12 administrative districts (Bezirke) of Berlin.
+
+The platform provides a dual marketplace:
+1. **Flexible Jobs**: Minijobs (€603/month limit under Germany's 2026 statutory framework), Teilzeit (part-time), Werkstudent (working student positions), seasonal contracts, and shift-based gigs with hourly wages starting from Germany's statutory minimum wage (€13.90/h) up to €25+/h.
+2. **Neighborhood Housing**: Verified WG-Zimmer (flatshare rooms), Zwischenmiete (temporary sublets), whole apartments, and Nachmieter (lease takeovers) with strict anti-scam safeguards, upfront Kaution (deposit) disclosures, and clear Anmeldung status indicators.
+
+---
+
+## 2. Statutory Framework for Flexible Work in Berlin (2026)
+
+### Minijob (Geringfügige Beschäftigung)
+- **Monthly Cap**: €603 per month (dynamically indexed to the statutory minimum wage).
+- **Statutory Minimum Wage (Mindestlohn)**: €13.90 gross per hour across Germany.
+- **Hours Allowed**: Up to ~43.3 hours per month at the statutory minimum wage without triggering regular social security.
+- **Taxation & Social Contributions**: Tax-free for employees under flat-rate 2% Pauschalsteuer covered by employers. Employees are exempt from compulsory health and unemployment contributions, with an opt-out option for pension contributions.
+
+### Working Student Status (Werkstudentenprivileg)
+- Applicable to enrolled students at Berlin universities (FU Berlin, HU Berlin, TU Berlin, UdK, HTW, HWR, Beuth, etc.).
+- Permitted to work up to 20 hours per week during term time, and up to 40 hours per week during semester breaks (vorlesungsfreie Zeit).
+- Exemption from unemployment, health, and nursing care social insurance deductions; only statutory pension insurance contributions (~9.3%) apply.
+
+### Short-Term Employment (Kurzfristige Beschäftigung)
+- Limited to 70 working days or 3 calendar months per year.
+- Exempt from social security contributions regardless of remuneration, provided the employment is non-occupational (nicht berufsmäßig). Popular for Berlin summer festivals, events, and trade fairs.
+
+---
+
+## 3. Berlin Housing Guide & Legal Compliance
+
+### Anmeldung & Wohnungsgeberbestätigung (§ 19 BMG)
+Under § 19 of the German Federal Registration Act (Bundesmeldegesetz - BMG), every tenant moving into a residence in Berlin is legally mandated to register with the citizens' office (Bürgeramt) within 14 calendar days.
+- **Landlord Confirmation**: The housing provider must issue a signed Wohnungsgeberbestätigung.
+- **Critical Importance**: The official registration confirmation (Meldebestätigung) is mandatory for obtaining a German Tax ID (Steueridentifikationsnummer), opening European bank accounts, and signing formal employment contracts.
+- **JOBROOFS Transparency**: All housing listings on JOBROOFS explicitly state whether an Anmeldung is legally possible.
+
+### Subletting (Untervermietung) & Misuse Prohibition (Zweckentfremdung)
+- **§ 553 BGB (German Civil Code)**: Tenants with a legitimate interest have a statutory right to request permission from their landlord for partial subletting.
+- **Berlin Housing Misuse Prohibition (Zweckentfremdungsverbot-Gesetz)**: Prohibits unpermitted conversion of residential living space into short-term vacation rentals. JOBROOFS permits only bona fide residential sublets, WG rooms, and lease takeovers.
+
+### Rental Deposit (Mietkaution gem. § 551 BGB)
+- Maximum legal security deposit: 3 net cold months (Kaltmieten).
+- Tenants are legally entitled to pay the deposit in three equal monthly installments.
+- Deposits must be held in an insolvency-protected, interest-bearing escrow account (Mietkautionskonto).
+
+---
+
+## 4. Berlin District Guide (12 Bezirke)
+
+1. **Mitte (10115, 10117, 10119, 10178, 10179, 10557)**: Berlin's political and startup core. High concentration of boutique cafes, hotel front desks, tech offices, and galleries.
+2. **Friedrichshain-Kreuzberg (10243, 10245, 10247, 10249, 10961, 10963, 10965, 10967, 10969, 10997, 10999)**: The cultural and nightlife hub (RAW-Gelände, Boxhagener Platz, Bergmannkiez). Endless gastronomy, barista, event, and creative opportunities.
+3. **Pankow / Prenzlauer Berg (10405, 10407, 10409, 10435, 10437, 10439, 13187, 13189)**: Bustling culinary scene, specialty roasteries, Kulturbrauerei, and family-friendly residential quarters.
+4. **Neukölln (12043, 12045, 12047, 12049, 12051, 12053, 12055, 12057, 12059)**: High-energy district with international bars, art spaces, and independent shops along Weserstraße and Karl-Marx-Straße.
+5. **Charlottenburg-Wilmersdorf (10585, 10587, 10589, 10623, 10625, 10627, 10629, 10707, 10709, 10711)**: Western commercial center, Kurfürstendamm retail, Kantstraße gastronomy, and TU Berlin student community.
+6. **Tempelhof-Schöneberg (10777, 10779, 10781, 10783, 10823, 10825, 10827, 10829, 12099, 12101)**: Iconic Tempelhofer Feld, Akazienkiez village vibes, diverse community hospitality.
+7. **Treptow-Köpenick (12435, 12437, 12439, 12459, 12489, 12555)**: Tech and innovation hub at WISTA Adlershof, water recreation, HTW Berlin university campus.
+8. **Lichtenberg (10315, 10317, 10318, 10319, 10365, 10367, 10369)**: Rapidly growing hub with affordable residential neighborhoods, Dong Xuan Center, and quick connections to Ostkreuz.
+9. **Spandau (13581, 13583, 13585, 13587, 13589, 13591, 13593, 13595, 13597, 13599)**: Historic citadel town, logistics and fulfillment centers, industrial craftsmanship.
+10. **Steglitz-Zehlendorf (12161, 12163, 12165, 12167, 12169, 14163, 14165, 14167, 14169, 14195)**: University quarter surrounding Freie Universität Berlin (FU), Schloßstraße retail boulevard.
+11. **Reinickendorf (13403, 13405, 13407, 13409, 13435, 13437, 13439, 13465, 13467, 13469)**: Green northern district with light manufacturing and logistics.
+12. **Marzahn-Hellersdorf (12619, 12621, 12623, 12627, 12629, 12679, 12681, 12683, 12685, 12687, 12689)**: Open parks (Gärten der Welt), affordable housing opportunities, and healthcare centers.
+
+---
+
+## 5. JobRoofs Industry Sectors (30 Niche Categories)
+
+1. Gastronomy & Cafés (https://jobroofs.com/categories/gastronomy)
+2. Hotels & Accommodation (https://jobroofs.com/categories/hotels)
+3. Events & Venues (https://jobroofs.com/categories/events)
+4. Retail & Shops (https://jobroofs.com/categories/retail)
+5. Supermarkets & Food Retail (https://jobroofs.com/categories/food-retail)
+6. Warehousing & Fulfilment (https://jobroofs.com/categories/warehousing)
+7. Logistics & Delivery (https://jobroofs.com/categories/logistics)
+8. Cleaning & Facilities (https://jobroofs.com/categories/cleaning)
+9. Office & Administration (https://jobroofs.com/categories/office-admin)
+10. Customer Support (https://jobroofs.com/categories/customer-support)
+11. Sales & Promotion (https://jobroofs.com/categories/sales-promotion)
+12. Tourism & Visitor Services (https://jobroofs.com/categories/tourism)
+13. Culture, Museums & Theatres (https://jobroofs.com/categories/culture)
+14. Nightlife & Clubs (https://jobroofs.com/categories/nightlife)
+15. Sports, Fitness & Recreation (https://jobroofs.com/categories/sports-fitness)
+16. Childcare & Education (https://jobroofs.com/categories/childcare-education)
+17. Healthcare Support (https://jobroofs.com/categories/healthcare-support)
+18. Elder Care & Social Services (https://jobroofs.com/categories/elder-care)
+19. Security & Crowd Services (https://jobroofs.com/categories/security)
+20. Construction & Trades (https://jobroofs.com/categories/construction-trades)
+21. Manufacturing & Production (https://jobroofs.com/categories/manufacturing)
+22. Moving & Transport Help (https://jobroofs.com/categories/moving-transport)
+23. Universities & Research (https://jobroofs.com/categories/universities-research)
+24. NGOs & Associations (https://jobroofs.com/categories/ngo-associations)
+25. Media & Creative (https://jobroofs.com/categories/media-creative)
+26. Beauty & Wellness (https://jobroofs.com/categories/beauty-wellness)
+27. Pet Care (https://jobroofs.com/categories/pet-care)
+28. Gardening & Outdoor (https://jobroofs.com/categories/gardening-outdoor)
+29. Seasonal & Markets (https://jobroofs.com/categories/seasonal-markets)
+30. Local Services (https://jobroofs.com/categories/local-services)
+
+---
+
+## 6. Pricing & Employer Services
+
+- **Free for Seekers**: Job seekers and room seekers pay €0. No registration fee, no paywalls.
+- **Standard Job Listing**: €29 (30 days active on map, category, and search).
+- **Premium Job Listing**: €49 (60 days active, top placement, highlighted badge).
+- **Standard Housing Listing**: €29 (30 days active).
+- **Premium Housing Listing**: €49 (60 days active, featured tag).
+- **Annual Employer Pass**: €499/year (Unlimited job postings, priority indexing, verified badge).
+
+---
+
+## 7. Direct Technical Endpoints
+
+- Main Portal: https://jobroofs.com
+- Housing Market: https://jobroofs.com/wohnen
+- Interactive Map: https://jobroofs.com/karte
+- Direct Employers: https://jobroofs.com/direct-employers
+- Latest Jobs: https://jobroofs.com/latest-jobs
+- Post Job: https://jobroofs.com/post-a-job
+- Pricing: https://jobroofs.com/pricing
+- Sitemap Index: https://jobroofs.com/sitemap.xml
+- Robots Policy: https://jobroofs.com/robots.txt
+- LLM Overview: https://jobroofs.com/llms.txt
+- Full LLM Knowledge Base: https://jobroofs.com/llms-full.txt
+

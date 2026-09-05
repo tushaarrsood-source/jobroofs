@@ -51,10 +51,17 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: 'JOBROOFS',
     locale: 'de_DE',
+    alternateLocale: ['en_US'],
     url: 'https://jobroofs.com',
     title: 'JOBROOFS — Berlin Portal for Flexible Jobs & Neighborhood Housing',
     description:
       'Direct marketplace for flexible work, minijobs, WG rooms and apartments across Berlin.',
+  },
+  other: {
+    'geo.region': 'DE-BE',
+    'geo.placename': 'Berlin',
+    'geo.position': '52.5200;13.4050',
+    ICBM: '52.5200, 13.4050',
   },
   twitter: {
     card: 'summary_large_image',

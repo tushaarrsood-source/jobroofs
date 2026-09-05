@@ -4,6 +4,7 @@ import { ArrowRight, Clock } from 'lucide-react';
 import { JobBrowser } from '@/components/job-browser';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
+import { BreadcrumbJsonLd } from '@/components/json-ld';
 import { CategoryCarousel } from '@/components/category-carousel';
 import { getAllLatestJobs, getJobNiches, getJobSourceInfo } from '@/lib/jobs/feeds';
 import { previewJobs } from '@/lib/domain/preview-data';
@@ -40,7 +41,6 @@ export default async function LatestJobsPage() {
           slug: job.id,
           niches,
           sourceInfo,
-          isDemo: false,
         };
       }),
     );
@@ -48,6 +48,12 @@ export default async function LatestJobsPage() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'JOBROOFS', href: '/' },
+          { name: 'Latest Verified Jobs in Berlin', href: '/latest-jobs' },
+        ]}
+      />
       <SiteHeader />
 
       <div className="border-b border-foreground/15 bg-[#e8f6ed] py-2.5 text-center text-xs font-semibold text-[#245e3c]">

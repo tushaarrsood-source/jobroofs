@@ -49,16 +49,17 @@ All 12 Berlin districts (Bezirke): Mitte, Friedrichshain-Kreuzberg, Pankow (Pren
 
 ## Key Features
 
-- Interactive OpenStreetMap with wage & rent pin badges
+- Interactive OpenStreetMap with live wage & rent pin badges across Berlin
 - Direct Google Maps navigation from job and housing listings
-- Automatic verbatim text formatting for descriptions
-- Transparent hourly/shift/monthly wage display
-- Direct employer and host contact (1-click)
-- Free for job and room seekers, always
+- Instant 1-click apply & direct host/employer contact
+- Verified employer profiles and verified room listings
+- Free for job seekers and room seekers, always
+- Full LLM knowledge base available at: https://jobroofs.com/llms-full.txt
 
-## Pricing
+## Pricing (Employers & Landlords)
 
-- Single Job Listing: €29 (30 days active)
-- Single Housing Listing: €29 (30 days active)
-- Annual Unlimited & Top Listing: €499/year
+- Standard Listing (Job or Housing): €29 (30 days active)
+- Premium Listing (Job or Housing): €49 (60 days active, top placement & badge)
+- Annual Unlimited Employer Pass: €499/year (Unlimited postings, featured company profile)
+
 

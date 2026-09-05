@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
+import { BreadcrumbJsonLd } from '@/components/json-ld';
 import { KiezMapPage } from '@/components/kiez-map-page';
 import { getHomepageFeeds, getJobNiches, getJobSourceInfo } from '@/lib/jobs/feeds';
 import { previewJobs } from '@/lib/domain/preview-data';
@@ -25,7 +26,7 @@ export default async function MapRoutePage() {
   // 1. Fetch & enrich jobs
   const feeds = await getHomepageFeeds();
   const jobMap = new Map();
-  previewJobs.forEach((j) => jobMap.set(j.slug || j.id, { ...j, isDemo: false }));
+  previewJobs.forEach((j) => jobMap.set(j.slug || j.id, { ...j }));
 
   if (feeds.direct.length > 0 || feeds.latest.length > 0) {
     feeds.direct.forEach((j) => jobMap.set(j.id, j));
@@ -45,7 +46,6 @@ export default async function MapRoutePage() {
           slug: job.slug || job.id,
           niches,
           sourceInfo,
-          isDemo: false,
         };
       }),
     );
@@ -100,16 +100,24 @@ export default async function MapRoutePage() {
         publicationState: r.publication_state,
         firstSeenAt: r.first_seen_at,
         expiresAt: r.expires_at,
-        isDemo: false,
       }));
     }
   } catch {}
 
-  const allHousing = [...dbListings, ...previewHousingListings];
+  const housingMap = new Map<string, any>();
+  previewHousingListings.forEach((h) => housingMap.set(h.id, h));
+  dbListings.forEach((h) => housingMap.set(h.id, h));
+  const allHousing = Array.from(housingMap.values());
 
   return (
     <main className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col justify-between">
       <div>
+        <BreadcrumbJsonLd
+          items={[
+            { name: 'JOBROOFS', href: '/' },
+            { name: 'Kiez-Karte Berlin', href: '/karte' },
+          ]}
+        />
         <SiteHeader />
         <KiezMapPage initialJobs={allJobs} initialHousing={allHousing} />
       </div>

@@ -110,6 +110,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/pricing" className="hover:text-blue-600 transition-colors">
+                  {isDe ? 'Preise & Tarife' : 'Pricing & Plans'}
+                </Link>
+              </li>
+              <li>
                 <Link href="/post-a-job" className="hover:text-blue-600 transition-colors">
                   {isDe ? 'Job inserieren' : 'Post a Job'}
                 </Link>

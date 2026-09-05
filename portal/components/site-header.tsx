@@ -147,10 +147,12 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
             <button
               type="button"
               onClick={() => setAuthOpen(true)}
-              className="inline-flex items-center gap-1 rounded-full border border-black/[0.08] bg-white px-2.5 sm:px-3 py-1 text-[12px] font-medium text-[#1d1d1f] hover:bg-black/[0.04] transition active:scale-[0.96] cursor-pointer shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#0071e3]/10 border border-[#0071e3]/30 px-3 sm:px-3.5 py-1 text-xs font-semibold text-[#0071e3] hover:bg-[#0071e3] hover:text-white transition-all duration-150 active:scale-[0.96] cursor-pointer shadow-2xs group"
+              title={isDe ? 'Jetzt kostenlos anmelden oder registrieren' : 'Sign in or sign up free'}
             >
-              <UserIcon className="size-3 text-[#86868b]" />
-              <span>{isDe ? 'Anmelden' : 'Sign in'}</span>
+              <UserIcon className="size-3.5 text-[#0071e3] group-hover:text-white transition-colors" />
+              <span className="hidden sm:inline">{isDe ? 'Anmelden / Registrieren' : 'Sign in / Sign up'}</span>
+              <span className="sm:hidden">{isDe ? 'Anmelden' : 'Sign in'}</span>
             </button>
           )}
 

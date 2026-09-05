@@ -78,8 +78,8 @@ export type PreviewJob = {
   sourceKind: SourceKind;
   sourceName: string;
   sourceUrl: string;
+  summary?: string;
   tags: string[];
-  summary: string;
   evidenceNotes: string[];
-  isDemo: true;
+  isDemo?: boolean;
 };

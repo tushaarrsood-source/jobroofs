@@ -105,8 +105,10 @@ export function JobBrowser({
         // Filter origin check if specified
         if (filterOrigin !== 'all' && job.listingOrigin !== filterOrigin) return false;
 
-        const isDemo = job.isDemo !== false;
-        const jobNiches = isDemo ? [job.industryId] : job.niches?.map((n: any) => n.nicheId) || [];
+        const jobNiches = [
+          ...(job.industryId ? [job.industryId] : []),
+          ...(job.niches?.map((n: any) => n.nicheId) || []),
+        ];
         const matchesIndustry = industry === 'all' || jobNiches.includes(industry);
 
         // District filter
@@ -114,7 +116,7 @@ export function JobBrowser({
           district === 'all' ||
           (job.district && job.district.toLowerCase().includes(district.toLowerCase()));
 
-        const jobEmployment = isDemo
+        const jobEmployment = Array.isArray(job.employmentForms)
           ? job.employmentForms
           : job.employmentFormsJson
           ? JSON.parse(job.employmentFormsJson)
@@ -123,9 +125,11 @@ export function JobBrowser({
           employment === 'all' ||
           jobEmployment.some((form: string) => form.toLowerCase().includes(employment));
 
-        const jobPayInterval = isDemo
-          ? job.compensation?.rateInterval
-          : job.compensationRateInterval || 'not_stated';
+        const jobPayInterval =
+          job.compensation?.rateInterval ||
+          job.compensationRateInterval ||
+          job.rateInterval ||
+          'not_stated';
         const matchesPay = payInterval === 'all' || jobPayInterval === payInterval;
 
         const haystack = [
@@ -133,9 +137,11 @@ export function JobBrowser({
           job.company,
           job.district,
           job.postcode,
-          isDemo ? getIndustry(job.industryId)?.label : job.niches?.map((n: any) => n.label).join(' '),
-          ...(isDemo ? job.tags || [] : []),
+          job.industryId ? getIndustry(job.industryId)?.label : '',
+          ...(job.niches?.map((n: any) => n.label) || []),
+          ...(job.tags || []),
         ]
+          .filter(Boolean)
           .join(' ')
           .toLowerCase();
 

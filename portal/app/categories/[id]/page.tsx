@@ -44,8 +44,8 @@ export default async function CategoryPage({
   const niche = getIndustry(id);
 
   const feedsJobs = await getCategoryJobs(id);
-  const isDemo = feedsJobs.length === 0;
-  const categoryJobs = isDemo ? previewJobs.filter((job) => job.industryId === id) : feedsJobs;
+  const curatedJobs = previewJobs.filter((job) => job.industryId === id);
+  const categoryJobs = feedsJobs.length > 0 ? feedsJobs : curatedJobs;
 
   if (!niche)
     return (
@@ -101,7 +101,7 @@ export default async function CategoryPage({
             <div className="mb-5 flex items-center justify-between">
               <h2 className="text-lg font-bold text-zinc-950">Verfügbare Stellen</h2>
               <span className="text-xs text-zinc-500">
-                {categoryJobs.length} {isDemo ? 'Vorschau-' : ''}Angebote
+                {categoryJobs.length} {categoryJobs.length === 1 ? 'Angebot' : 'Angebote'}
               </span>
             </div>
 
@@ -126,9 +126,9 @@ export default async function CategoryPage({
                         {job.company}
                       </p>
                     </div>
-                    <Fact icon={Euro} value={isDemo ? job.compensation.label : (job.payText || 'Not stated')} />
-                    <Fact icon={Clock3} value={isDemo ? job.hours.label : (job.hoursLabel || 'Not stated')} />
-                    <Fact icon={MapPin} value={`${job.district}, Berlin`} />
+                    <Fact icon={Euro} value={job.compensation?.label || job.payText || 'Tarif / VB'} />
+                    <Fact icon={Clock3} value={job.hours?.label || job.hoursLabel || 'Flexibel'} />
+                    <Fact icon={MapPin} value={`${job.district || 'Berlin'}, Berlin`} />
                     <ArrowRight className="size-4 text-zinc-400 transition group-hover:translate-x-1 group-hover:text-zinc-950" />
                   </Link>
                 ))}

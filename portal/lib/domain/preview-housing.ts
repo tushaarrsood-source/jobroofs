@@ -42,7 +42,6 @@ export const previewHousingListings: HousingListing[] = [
     publicationState: 'published',
     firstSeenAt: '2026-09-02T10:00:00Z',
     expiresAt: '2026-10-02T10:00:00Z',
-    isDemo: true,
   },
   {
     id: 'housing-xberg-studio-wrangel',
@@ -84,7 +83,6 @@ export const previewHousingListings: HousingListing[] = [
     publicationState: 'published',
     firstSeenAt: '2026-09-02T14:00:00Z',
     expiresAt: '2026-10-02T14:00:00Z',
-    isDemo: true,
   },
   {
     id: 'housing-neukoelln-reuterkiez',
@@ -126,7 +124,6 @@ export const previewHousingListings: HousingListing[] = [
     publicationState: 'published',
     firstSeenAt: '2026-09-01T16:00:00Z',
     expiresAt: '2026-10-01T16:00:00Z',
-    isDemo: true,
   },
   {
     id: 'housing-mitte-torstrasse-nachmieter',
@@ -169,7 +166,6 @@ export const previewHousingListings: HousingListing[] = [
     publicationState: 'published',
     firstSeenAt: '2026-09-02T18:00:00Z',
     expiresAt: '2026-10-02T18:00:00Z',
-    isDemo: true,
   },
   {
     id: 'housing-pberg-helmholtzkiez',
@@ -211,7 +207,6 @@ export const previewHousingListings: HousingListing[] = [
     publicationState: 'published',
     firstSeenAt: '2026-09-03T09:00:00Z',
     expiresAt: '2026-10-03T09:00:00Z',
-    isDemo: true,
   },
   {
     id: 'housing-wedding-sprengelkiez-student',
@@ -253,7 +248,6 @@ export const previewHousingListings: HousingListing[] = [
     publicationState: 'published',
     firstSeenAt: '2026-09-03T11:00:00Z',
     expiresAt: '2026-10-03T11:00:00Z',
-    isDemo: true,
   },
   {
     id: 'housing-schoeneberg-exchange',
@@ -295,6 +289,5 @@ export const previewHousingListings: HousingListing[] = [
     publicationState: 'published',
     firstSeenAt: '2026-09-03T12:00:00Z',
     expiresAt: '2026-10-03T12:00:00Z',
-    isDemo: true,
   },
 ];

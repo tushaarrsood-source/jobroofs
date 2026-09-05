@@ -4,6 +4,7 @@ import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { JobBrowser } from '@/components/job-browser';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
+import { BreadcrumbJsonLd } from '@/components/json-ld';
 import { CategoryCarousel } from '@/components/category-carousel';
 import { getAllDirectJobs, getJobNiches, getJobSourceInfo } from '@/lib/jobs/feeds';
 import { previewJobs } from '@/lib/domain/preview-data';
@@ -40,7 +41,6 @@ export default async function DirectEmployersPage() {
           slug: job.id,
           niches,
           sourceInfo,
-          isDemo: false,
         };
       }),
     );
@@ -48,6 +48,12 @@ export default async function DirectEmployersPage() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'JOBROOFS', href: '/' },
+          { name: 'Direct from Employers in Berlin', href: '/direct-employers' },
+        ]}
+      />
       <SiteHeader />
 
       <div className="border-b border-blue-100 bg-blue-50/70 py-2.5 text-center text-xs font-semibold text-blue-700">
