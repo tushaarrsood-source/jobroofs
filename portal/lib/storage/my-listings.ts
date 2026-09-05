@@ -1,5 +1,7 @@
 'use client';
 
+import { getUserListingsFromFirestore, updateListingStatusInFirestore, deleteListingFromFirestore } from '../firebase/firestore-service';
+
 export interface UserListing {
   id: string;
   type: 'job' | 'housing';
@@ -29,6 +31,21 @@ export function getMyListings(): UserListing[] {
   }
 }
 
+export async function syncUserListingsWithCloud(userId: string): Promise<UserListing[]> {
+  if (typeof window === 'undefined' || !userId) return getMyListings();
+  try {
+    const cloudListings = await getUserListingsFromFirestore(userId);
+    if (cloudListings && cloudListings.length > 0) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudListings));
+      window.dispatchEvent(new Event('jobroofs_listings_updated'));
+      return cloudListings;
+    }
+  } catch (err) {
+    console.warn('Could not sync with Firestore, using local listings:', err);
+  }
+  return getMyListings();
+}
+
 export function saveMyListing(listing: UserListing): void {
   if (typeof window === 'undefined') return;
   try {
@@ -42,15 +59,20 @@ export function saveMyListing(listing: UserListing): void {
   }
 }
 
-export function removeMyListing(id: string): void {
+export async function removeMyListing(id: string, type?: 'job' | 'housing'): Promise<void> {
   if (typeof window === 'undefined') return;
   try {
     const current = getMyListings();
+    const target = current.find((l) => l.id === id);
+    const targetType = type || target?.type;
+    if (targetType) {
+      await deleteListingFromFirestore(targetType, id);
+    }
     const updated = current.filter((l) => l.id !== id);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     window.dispatchEvent(new Event('jobroofs_listings_updated'));
   } catch (err) {
-    console.error('Failed to remove listing from localStorage', err);
+    console.error('Failed to remove listing', err);
   }
 }
 

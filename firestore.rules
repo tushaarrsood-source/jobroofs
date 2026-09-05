@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // User profiles: strictly private to the authenticated owner
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Jobs collection
+    match /jobs/{jobId} {
+      // Public can read active/published listings
+      allow read: if resource.data.status in ['active', 'published'] 
+                  || (isAuthenticated() && resource.data.userId == request.auth.uid);
+
+      // Authenticated users can create listings where they set themselves as the owner
+      allow create: if isAuthenticated() 
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.title is string 
+                    && request.resource.data.title.size() > 2
+                    && request.resource.data.title.size() <= 150;
+
+      // Only owner can update or delete
+      allow update: if isAuthenticated() 
+                    && resource.data.userId == request.auth.uid
+                    && request.resource.data.userId == resource.data.userId;
+
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // Housing Listings collection
+    match /housing_listings/{listingId} {
+      // Public can read active/published housing listings
+      allow read: if resource.data.status in ['active', 'published'] 
+                  || (isAuthenticated() && resource.data.userId == request.auth.uid);
+
+      // Authenticated users can create housing listings where they are the owner
+      allow create: if isAuthenticated() 
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.title is string 
+                    && request.resource.data.title.size() > 2
+                    && request.resource.data.title.size() <= 150;
+
+      // Only owner can update or delete
+      allow update: if isAuthenticated() 
+                    && resource.data.userId == request.auth.uid
+                    && request.resource.data.userId == resource.data.userId;
+
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+  }
+}

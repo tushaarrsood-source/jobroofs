@@ -1,9 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from '@/components/ui/link';
-import { User, Globe, Briefcase, Home, PlusCircle, HelpCircle, Shield, X, ChevronRight } from 'lucide-react';
+import { User, Globe, Briefcase, Home, PlusCircle, HelpCircle, Shield, X, ChevronRight, LogOut } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
+import { useAuth } from '@/lib/firebase/auth-context';
+import { AuthModal } from '@/components/auth-modal';
 
 interface ProfileDrawerProps {
   isOpen: boolean;
@@ -12,6 +14,8 @@ interface ProfileDrawerProps {
 
 export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
   const { isDe, locale, toggleLocale } = useTranslation();
+  const { user, signOutUser } = useAuth();
+  const [authOpen, setAuthOpen] = useState(false);
 
   if (!isOpen) return null;
 
@@ -29,17 +33,21 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-slate-300" />
 
         {/* Header */}
-        <div className="mb-5 flex items-center justify-between border-b border-slate-100 pb-3">
-          <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-full bg-slate-100 text-slate-700">
-              <User className="size-5" />
-            </div>
-            <div>
-              <h3 className="text-base font-semibold tracking-[-0.015em] text-[#1d1d1f]">
-                {isDe ? 'Mein Bereich' : 'My Account'}
+        <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="flex items-center gap-3 min-w-0">
+            {user?.photoURL ? (
+              <img src={user.photoURL} alt="" className="size-10 rounded-full object-cover shrink-0" />
+            ) : (
+              <div className="flex size-10 items-center justify-center rounded-full bg-slate-100 text-slate-700 shrink-0">
+                <User className="size-5" />
+              </div>
+            )}
+            <div className="min-w-0">
+              <h3 className="text-base font-semibold tracking-[-0.015em] text-[#1d1d1f] truncate">
+                {user?.displayName || (isDe ? 'Mein Bereich' : 'My Account')}
               </h3>
-              <p className="text-xs text-slate-500">
-                JOBROOFS · Berlin
+              <p className="text-xs text-slate-500 truncate">
+                {user?.email || 'JOBROOFS · Berlin'}
               </p>
             </div>
           </div>
@@ -47,11 +55,38 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
             type="button"
             onClick={onClose}
             aria-label="Schließen"
-            className="flex size-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.92] cursor-pointer"
+            className="flex size-8 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.92] cursor-pointer shrink-0"
           >
             <X className="size-5" />
           </button>
         </div>
+
+        {/* Auth CTA / Status */}
+        {user ? (
+          <div className="mb-4 flex items-center justify-between rounded-xl bg-slate-50 p-2.5 px-3">
+            <span className="text-xs text-slate-600 font-medium truncate">
+              {user.email}
+            </span>
+            <button
+              type="button"
+              onClick={() => signOutUser()}
+              className="inline-flex items-center gap-1 text-xs font-semibold text-red-600 hover:text-red-700 cursor-pointer shrink-0 ml-2"
+            >
+              <LogOut className="size-3.5" />
+              <span>{isDe ? 'Abmelden' : 'Sign out'}</span>
+            </button>
+          </div>
+        ) : (
+          <div className="mb-4">
+            <button
+              type="button"
+              onClick={() => setAuthOpen(true)}
+              className="apple-btn-primary w-full !h-10 !text-xs font-semibold cursor-pointer"
+            >
+              <span>{isDe ? 'Anmelden / Registrieren' : 'Sign in / Register'}</span>
+            </button>
+          </div>
+        )}
 
         {/* Menu Options */}
         <div className="divide-y divide-slate-100 text-sm">
@@ -145,6 +180,8 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
         {/* iPhone bottom spacing */}
         <div className="h-4" />
       </div>
+
+      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </div>
   );
 }

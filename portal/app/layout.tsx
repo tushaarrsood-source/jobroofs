@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
+import { AuthProvider } from '@/lib/firebase/auth-context';
 import { LanguageProvider } from '@/lib/i18n/language-context';
 import { MobileNavBar } from '@/components/mobile-nav-bar';
 import './globals.css';
@@ -108,10 +109,12 @@ export default function RootLayout({
       <body
         className={`${inter.variable} antialiased selection:bg-[#0071e3] selection:text-white pb-24 md:pb-0 font-sans`}
       >
-        <LanguageProvider>
-          {children}
-          <MobileNavBar />
-        </LanguageProvider>
+        <AuthProvider>
+          <LanguageProvider>
+            {children}
+            <MobileNavBar />
+          </LanguageProvider>
+        </AuthProvider>
       </body>
     </html>
   );

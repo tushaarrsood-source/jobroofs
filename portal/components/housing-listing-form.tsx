@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import {
@@ -15,10 +15,14 @@ import {
   Image as ImageIcon,
   Calendar,
   MapPin,
+  UploadCloud,
 } from 'lucide-react';
 import { housingTypeLabels, type HousingListingType } from '@/lib/domain/housing-types';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { saveMyListing } from '@/lib/storage/my-listings';
+import { useAuth } from '@/lib/firebase/auth-context';
+import { uploadListingImage } from '@/lib/firebase/storage-service';
+import { createHousingInFirestore } from '@/lib/firebase/firestore-service';
 
 const HousingMap = dynamic(() => import('@/components/housing-map').then((mod) => mod.HousingMap), {
   ssr: false,
@@ -50,9 +54,12 @@ const BERLIN_DISTRICTS = [
 export function HousingListingForm() {
   const { isDe } = useTranslation();
   const router = useRouter();
+  const { user } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -189,6 +196,30 @@ export function HousingListingForm() {
     }));
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setUploadingImage(true);
+    setUploadError(null);
+
+    try {
+      const file = files[0];
+      const listingTempId = `housing-${Date.now()}`;
+      const url = await uploadListingImage(file, 'housing', listingTempId);
+      if (url) {
+        setFormData((prev) => ({
+          ...prev,
+          images: [...prev.images, url],
+        }));
+      }
+    } catch (err: any) {
+      setUploadError(err.message || 'Upload fehlgeschlagen');
+    } finally {
+      setUploadingImage(false);
+      e.target.value = '';
+    }
+  };
+
   // Submit Handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -265,6 +296,37 @@ export function HousingListingForm() {
           pricePaidEur: formData.tier === 'premium' ? 49 : 29,
         });
       } catch {}
+
+      if (user) {
+        createHousingInFirestore(
+          {
+            userId: user.uid,
+            title: formData.title || 'Wohnung / WG-Zimmer',
+            district: formData.district,
+            neighborhood: formData.neighborhood,
+            postcode: formData.postcode,
+            address: formData.streetAddress,
+            listingType: formData.listingType,
+            warmmieteEur: formData.warmmieteEur,
+            kaltmieteEur: formData.kaltmieteEur,
+            nebenkostenEur: formData.nebenkostenEur,
+            kautionEur: formData.kautionEur,
+            roomSqm: formData.roomSqm,
+            totalRooms: formData.totalRooms,
+            furnished: formData.furnished,
+            anmeldungPossible: formData.anmeldungPossible,
+            moveInDate: formData.moveInDate,
+            moveOutDate: formData.moveOutDate,
+            images: formData.images,
+            description: formData.description,
+            contactEmail: formData.contactEmail || user.email || '',
+            contactPhone: formData.contactPhone,
+            status: 'published',
+            tier: formData.tier,
+          },
+          listingId,
+        ).catch((err) => console.warn('Firestore housing creation:', err));
+      }
 
       if (data.checkoutUrl) {
         window.location.href = data.checkoutUrl;
@@ -652,9 +714,39 @@ export function HousingListingForm() {
           </h2>
 
           <div className="mt-5 space-y-4">
+            {/* Direct Image Upload to Firebase Storage */}
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                {isDe ? 'Bilder hochladen (JPG, PNG, WebP — max. 5 MB)' : 'Upload Photos (JPG, PNG, WebP — max. 5 MB)'}
+              </label>
+              <label className="flex cursor-pointer items-center justify-center gap-2.5 rounded-xl border border-dashed border-slate-300 bg-slate-50/70 p-4 text-xs font-semibold text-slate-700 hover:border-blue-500 hover:bg-blue-50/50 transition">
+                {uploadingImage ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin text-blue-600" />
+                    <span>{isDe ? 'Wird hochgeladen...' : 'Uploading...'}</span>
+                  </>
+                ) : (
+                  <>
+                    <UploadCloud className="size-5 text-blue-600" />
+                    <span>{isDe ? 'Foto vom Gerät auswählen & hochladen' : 'Choose photo from device to upload'}</span>
+                  </>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled={uploadingImage}
+                  onChange={handleFileUpload}
+                  className="sr-only"
+                />
+              </label>
+              {uploadError && (
+                <p className="mt-1.5 text-xs text-red-600">{uploadError}</p>
+              )}
+            </div>
+
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
-                {isDe ? 'Foto-URL hinzufügen (z.B. Unsplash, Imgur, Cloud)' : 'Add Photo URL'}
+                {isDe ? 'Oder Foto-URL manuell hinzufügen' : 'Or add Photo URL manually'}
               </label>
               <div className="mt-1.5 flex gap-2">
                 <input

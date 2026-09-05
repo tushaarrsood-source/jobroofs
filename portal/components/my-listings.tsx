@@ -2,21 +2,34 @@
 
 import { useEffect, useState } from 'react';
 import Link from '@/components/ui/link';
-import { Briefcase, Home, Plus, ExternalLink, Trash2, CheckCircle2, Clock, Sparkles } from 'lucide-react';
-import { getMyListings, removeMyListing, seedDemoListingsIfEmpty, UserListing } from '@/lib/storage/my-listings';
+import { Briefcase, Home, Plus, ExternalLink, Trash2, CheckCircle2, Clock, Sparkles, Cloud, CloudOff } from 'lucide-react';
+import { getMyListings, removeMyListing, seedDemoListingsIfEmpty, syncUserListingsWithCloud, UserListing } from '@/lib/storage/my-listings';
 import { useTranslation } from '@/lib/i18n/language-context';
+import { useAuth } from '@/lib/firebase/auth-context';
+import { AuthModal } from '@/components/auth-modal';
 
 export function MyListings() {
   const { isDe } = useTranslation();
+  const { user } = useAuth();
   const [listings, setListings] = useState<UserListing[]>([]);
   const [filter, setFilter] = useState<'all' | 'job' | 'housing'>('all');
   const [mounted, setMounted] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    // Seed demo if user currently has no listings
-    const current = seedDemoListingsIfEmpty();
-    setListings(current);
+
+    const loadListings = async () => {
+      if (user?.uid) {
+        const cloud = await syncUserListingsWithCloud(user.uid);
+        setListings(cloud);
+      } else {
+        const current = seedDemoListingsIfEmpty();
+        setListings(current);
+      }
+    };
+
+    loadListings();
 
     const handleUpdate = () => {
       setListings(getMyListings());
@@ -24,7 +37,7 @@ export function MyListings() {
 
     window.addEventListener('jobroofs_listings_updated', handleUpdate);
     return () => window.removeEventListener('jobroofs_listings_updated', handleUpdate);
-  }, []);
+  }, [user]);
 
   const filteredListings = listings.filter((item) => {
     if (filter === 'all') return true;
@@ -42,12 +55,31 @@ export function MyListings() {
       {/* Header with Title and Filter Tabs */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-4">
         <div>
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <span>{isDe ? 'Meine Inserate' : 'My Listings'}</span>
-            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600 font-mono">
-              {mounted ? listings.length : '...'}
-            </span>
-          </h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span>{isDe ? 'Meine Inserate' : 'My Listings'}</span>
+              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600 font-mono">
+                {mounted ? listings.length : '...'}
+              </span>
+            </h2>
+            {mounted && (
+              user ? (
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10.5px] font-medium text-emerald-700 border border-emerald-200/60">
+                  <Cloud className="size-3" />
+                  <span className="hidden sm:inline">Cloud Sync</span>
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setAuthOpen(true)}
+                  className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-[10.5px] font-medium text-blue-700 hover:bg-blue-100 transition cursor-pointer"
+                >
+                  <CloudOff className="size-3" />
+                  <span>{isDe ? 'Anmelden' : 'Sign in'}</span>
+                </button>
+              )
+            )}
+          </div>
           <p className="text-xs text-slate-500 mt-0.5">
             {isDe
               ? 'Verwalte deine veröffentlichten Jobs und Wohnungsanzeigen'
@@ -197,7 +229,7 @@ export function MyListings() {
                       type="button"
                       onClick={() => {
                         if (confirm(isDe ? 'Inserat wirklich aus der Ansicht entfernen?' : 'Remove this listing?')) {
-                          removeMyListing(listing.id);
+                          removeMyListing(listing.id, listing.type);
                         }
                       }}
                       className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer"
@@ -221,6 +253,8 @@ export function MyListings() {
           })
         )}
       </div>
+
+      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </div>
   );
 }

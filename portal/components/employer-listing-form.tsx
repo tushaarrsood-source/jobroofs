@@ -13,6 +13,8 @@ import { industryNiches } from '@/lib/domain/taxonomy';
 import { formatVerbatimPointers } from '@/lib/domain/text-format';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { saveMyListing } from '@/lib/storage/my-listings';
+import { useAuth } from '@/lib/firebase/auth-context';
+import { createJobInFirestore } from '@/lib/firebase/firestore-service';
 import Link from '@/components/ui/link';
 
 interface SubmitResponse {
@@ -32,6 +34,7 @@ interface VerifyResponse {
 
 export function EmployerListingForm() {
   const { t, isDe } = useTranslation();
+  const { user } = useAuth();
   const [applicationMethod, setApplicationMethod] = useState<'email' | 'external_link'>('email');
   const [pricingPlan, setPricingPlan] = useState<'standard' | 'premium'>('standard');
   const [selectedNiches, setSelectedNiches] = useState<string[]>([]);
@@ -183,6 +186,28 @@ export function EmployerListingForm() {
             linkUrl: `/jobs/${slug}`,
             pricePaidEur: pricingPlan === 'premium' ? 49 : 29,
           });
+
+          if (user) {
+            createJobInFirestore(
+              {
+                userId: user.uid,
+                title: (submittedSnapshot?.title as string) || 'Neues Job-Inserat',
+                company: (submittedSnapshot?.company as string) || 'Arbeitgeber',
+                district: (submittedSnapshot?.district as string) || 'Berlin',
+                postcode: (submittedSnapshot?.postcode as string) || '',
+                description: (submittedSnapshot?.description as string) || '',
+                requirements: (submittedSnapshot?.requirements as string) || '',
+                payText: (submittedSnapshot?.payText as string) || 'Vergütung n.V.',
+                hoursLabel: (submittedSnapshot?.hoursLabel as string) || 'Flexible Arbeitszeiten',
+                scheduleSummary: (submittedSnapshot?.scheduleSummary as string) || '',
+                employmentForms: selectedNiches,
+                contactEmail: (submittedSnapshot?.contactEmail as string) || user.email || '',
+                status: 'published',
+                tier: pricingPlan,
+              },
+              slug,
+            ).catch((err) => console.warn('Firestore job creation:', err));
+          }
         } catch {}
       } else if (result.status === 'needs_review') {
         setSubmitStatus('needs_review');
