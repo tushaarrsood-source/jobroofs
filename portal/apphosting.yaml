@@ -10,3 +10,14 @@ scripts:
   buildCommand: npm run build
   runCommand: npm run start
 
+env:
+  - variable: NODE_ENV
+    value: production
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: jobroofs-321c7
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: jobroofs-321c7.firebaseapp.com
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: jobroofs-321c7.firebasestorage.app
+
+
