@@ -1,6 +1,6 @@
 /**
  * Firebase Configuration & Initialization Layer for JOBROOFS
- * Uses production configuration for project 'jobroofs'
+ * Uses production configuration for project 'jobroofs-321c7'
  */
 
 export interface FirebaseConfig {
@@ -14,13 +14,13 @@ export interface FirebaseConfig {
 }
 
 export const DEFAULT_FIREBASE_CONFIG: FirebaseConfig = {
-  apiKey: 'AIzaSyDk9N-oCOV4p94G3Kf5bSDJ8wCQL_EOO3A',
-  authDomain: 'jobroofs.firebaseapp.com',
-  projectId: 'jobroofs',
-  storageBucket: 'jobroofs.firebasestorage.app',
-  messagingSenderId: '641516566892',
-  appId: '1:641516566892:web:1133140f6a0b99bb121b49',
-  measurementId: 'G-07SCW673KM',
+  apiKey: 'AIzaSyBN68Y6_n-xxFIB74OuvEtp0lFhPhY9gGI',
+  authDomain: 'jobroofs-321c7.firebaseapp.com',
+  projectId: 'jobroofs-321c7',
+  storageBucket: 'jobroofs-321c7.firebasestorage.app',
+  messagingSenderId: '960773392367',
+  appId: '1:960773392367:web:c7cb340bf0b0964cbc981a',
+  measurementId: 'G-HQ5MDN7Z6P',
 };
 
 export function getFirebaseConfig(): FirebaseConfig {
