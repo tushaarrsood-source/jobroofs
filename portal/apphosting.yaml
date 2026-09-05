@@ -13,6 +13,8 @@ scripts:
 env:
   - variable: NODE_ENV
     value: production
+    availability:
+      - RUNTIME
   - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
     value: jobroofs-321c7
   - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
