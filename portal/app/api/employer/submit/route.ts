@@ -5,6 +5,7 @@ import {
   generateVerificationCode,
   storeVerificationCode,
 } from "@/lib/employer/verification-store";
+import { sendJobVerificationEmail } from "@/lib/email/resend";
 
 const submitSchema = z.object({
   payload: z.any(),
@@ -77,7 +78,14 @@ export async function POST(request: Request) {
     const code = generateVerificationCode();
     await storeVerificationCode(submissionId, code);
 
-    // Log code to console
+    // Send verification email via Resend (or fallback to dev log)
+    await sendJobVerificationEmail({
+      to: submitterEmail,
+      code,
+      jobTitle: payload.title || payload.jobTitle,
+      companyName: payload.company || payload.companyName,
+    });
+
     console.log(`Verification code for submission ${submissionId}: ${code}`);
 
     return NextResponse.json({ submissionId, requiresVerification: true });

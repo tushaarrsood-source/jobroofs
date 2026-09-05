@@ -6,6 +6,7 @@ import {
   generateVerificationCode,
   storeHousingVerificationCode,
 } from "@/lib/housing/verification-store";
+import { sendHousingVerificationEmail } from "@/lib/email/resend";
 
 const housingSubmitSchema = z.object({
   payload: z.object({
@@ -98,6 +99,14 @@ export async function POST(request: Request) {
 
     const code = generateVerificationCode();
     await storeHousingVerificationCode(submissionId, code);
+
+    // Send verification email via Resend (or fallback to dev log)
+    await sendHousingVerificationEmail({
+      to: submitterEmail,
+      code,
+      listingTitle: payload.title,
+      district: payload.district,
+    });
 
     console.log(`Verification code for housing submission ${submissionId}: ${code}`);
 
