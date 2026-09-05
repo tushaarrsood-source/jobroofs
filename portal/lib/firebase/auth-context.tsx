@@ -10,8 +10,10 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
   signOut,
+  deleteUser,
 } from 'firebase/auth';
 import { getFirebaseAuth } from './client';
+import { deleteUserDataFromFirestore } from './firestore-service';
 
 interface AuthContextType {
   user: User | null;
@@ -21,6 +23,7 @@ interface AuthContextType {
   signInWithEmail: (email: string, pass: string) => Promise<User | null>;
   signUpWithEmail: (email: string, pass: string, name?: string) => Promise<User | null>;
   signOutUser: () => Promise<void>;
+  deleteAccount: () => Promise<void>;
   clearError: () => void;
 }
 
@@ -32,6 +35,7 @@ const AuthContext = createContext<AuthContextType>({
   signInWithEmail: async () => null,
   signUpWithEmail: async () => null,
   signOutUser: async () => {},
+  deleteAccount: async () => {},
   clearError: () => {},
 });
 
@@ -133,6 +137,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   };
 
+  const deleteAccount = async (): Promise<void> => {
+    setError(null);
+    const auth = getFirebaseAuth();
+    if (!auth || !auth.currentUser) {
+      throw new Error('Kein angemeldeter Benutzer gefunden.');
+    }
+
+    const currentUser = auth.currentUser;
+    const uid = currentUser.uid;
+
+    try {
+      // 1. Delete user data from Firestore while still authenticated
+      await deleteUserDataFromFirestore(uid);
+
+      // 2. Delete user account from Firebase Auth
+      await deleteUser(currentUser);
+
+      // 3. Clear local listings and dispatch update
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.removeItem('jobroofs_my_listings');
+          window.dispatchEvent(new Event('jobroofs_listings_updated'));
+        } catch {}
+      }
+
+      setUser(null);
+    } catch (err: any) {
+      console.error('Account deletion error:', err);
+      if (err.code === 'auth/requires-recent-login') {
+        setError(
+          'Aus Sicherheitsgründen musst du dich erneut anmelden, bevor dein Konto gelöscht werden kann.',
+        );
+      } else {
+        setError(err.message || 'Konto konnte nicht gelöscht werden.');
+      }
+      throw err;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -143,6 +186,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signInWithEmail,
         signUpWithEmail,
         signOutUser,
+        deleteAccount,
         clearError,
       }}
     >

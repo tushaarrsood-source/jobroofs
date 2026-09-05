@@ -251,3 +251,40 @@ export async function deleteListingFromFirestore(type: 'job' | 'housing', id: st
     return false;
   }
 }
+
+/**
+ * GDPR / DSGVO Right to erasure (Art. 17 DSGVO)
+ * Completely deletes all user-associated documents from Firestore:
+ * 1. User profile in /users/{userId}
+ * 2. All job postings created by this user
+ * 3. All housing listings created by this user
+ */
+export async function deleteUserDataFromFirestore(userId: string): Promise<boolean> {
+  const db = getFirebaseDb();
+  if (!db) return false;
+
+  try {
+    // 1. Delete user profile document
+    const userDocRef = doc(db, 'users', userId);
+    await deleteDoc(userDocRef).catch(() => {});
+
+    // 2. Query and delete user jobs
+    const jobsQuery = query(collection(db, 'jobs'), where('userId', '==', userId));
+    const jobsSnapshot = await getDocs(jobsQuery);
+    for (const jobDoc of jobsSnapshot.docs) {
+      await deleteDoc(jobDoc.ref).catch(() => {});
+    }
+
+    // 3. Query and delete user housing listings
+    const housingQuery = query(collection(db, 'housing_listings'), where('userId', '==', userId));
+    const housingSnapshot = await getDocs(housingQuery);
+    for (const housingDoc of housingSnapshot.docs) {
+      await deleteDoc(housingDoc.ref).catch(() => {});
+    }
+
+    return true;
+  } catch (err) {
+    console.error('Error deleting user data from Firestore:', err);
+    return false;
+  }
+}

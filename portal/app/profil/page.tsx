@@ -3,7 +3,7 @@ import Link from '@/components/ui/link';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { User, Globe, Briefcase, Home, HelpCircle, Shield, ChevronRight, ArrowRight } from 'lucide-react';
-import { LanguageToggle } from '@/components/language-toggle';
+import { ProfileAccountCard } from '@/components/profile-account-card';
 import { MyListings } from '@/components/my-listings';
 
 export const metadata: Metadata = {
@@ -18,31 +18,8 @@ export default function ProfilePage() {
         <SiteHeader />
         
         <div className="mx-auto max-w-2xl px-4 sm:px-6 py-6 sm:py-10 space-y-6">
-          {/* User card */}
-          <div className="rounded-[20px] border border-black/[0.06] bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-            <div className="flex items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-full bg-black/[0.04] text-[#1d1d1f]">
-                <User className="size-7" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold tracking-tight text-[#1d1d1f]">
-                  Mein Bereich
-                </h1>
-                <p className="text-xs text-[#86868b] mt-0.5">
-                  JOBROOFS · Berlin Direkt-Marktplatz
-                </p>
-              </div>
-            </div>
-
-            {/* Language toggle row */}
-            <div className="mt-6 flex items-center justify-between border-t border-black/[0.04] pt-4">
-              <div className="flex items-center gap-2 text-sm text-[#1d1d1f] font-medium">
-                <Globe className="size-4 text-[#86868b]" />
-                <span>Sprache / Language</span>
-              </div>
-              <LanguageToggle />
-            </div>
-          </div>
+          {/* User Account & Privacy (DSGVO) Card */}
+          <ProfileAccountCard />
 
           {/* User's Listings Section */}
           <MyListings />

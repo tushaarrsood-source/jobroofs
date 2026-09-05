@@ -115,45 +115,46 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
             >
               <span>+ {isDe ? 'Inserieren' : 'Post'}</span>
             </Link>
-
-            {/* Auth Button */}
-            {user ? (
-              <div className="hidden sm:flex items-center gap-1.5 pl-1">
-                <Link
-                  href="/profil"
-                  className="inline-flex items-center gap-1.5 rounded-full bg-black/[0.04] px-2.5 py-1 text-xs font-medium text-[#1d1d1f] hover:bg-black/[0.08] transition"
-                  title={user.email || undefined}
-                >
-                  {user.photoURL ? (
-                    <img src={user.photoURL} alt="" className="size-4 rounded-full object-cover" />
-                  ) : (
-                    <UserIcon className="size-3 text-[#86868b]" />
-                  )}
-                  <span className="truncate max-w-[90px]">
-                    {user.displayName || user.email?.split('@')[0] || (isDe ? 'Konto' : 'Account')}
-                  </span>
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => signOutUser()}
-                  className="grid size-7 place-items-center rounded-full text-[#86868b] hover:bg-black/[0.06] hover:text-[#1d1d1f] transition cursor-pointer"
-                  title={isDe ? 'Abmelden' : 'Sign out'}
-                >
-                  <LogOut className="size-3" />
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setAuthOpen(true)}
-                className="hidden sm:inline-flex items-center gap-1 rounded-full border border-black/[0.08] bg-white px-3 py-1 text-xs font-medium text-[#1d1d1f] hover:bg-black/[0.03] transition cursor-pointer ml-1"
-              >
-                <span>{isDe ? 'Anmelden' : 'Sign in'}</span>
-              </button>
-            )}
           </nav>
 
-          <div className="md:border-l md:border-black/[0.08] md:pl-3">
+          {/* Auth Button (Visible on both Mobile & Desktop at top of screen) */}
+          {user ? (
+            <div className="flex items-center gap-1">
+              <Link
+                href="/profil"
+                className="inline-flex items-center gap-1.5 rounded-full bg-black/[0.04] px-2.5 py-1 text-xs font-medium text-[#1d1d1f] hover:bg-black/[0.08] transition active:scale-[0.96]"
+                title={user.email || undefined}
+              >
+                {user.photoURL ? (
+                  <img src={user.photoURL} alt="" className="size-4.5 rounded-full object-cover" />
+                ) : (
+                  <UserIcon className="size-3.5 text-[#0071e3]" />
+                )}
+                <span className="truncate max-w-[70px] sm:max-w-[110px] text-[12px]">
+                  {user.displayName?.split(' ')[0] || user.email?.split('@')[0] || (isDe ? 'Konto' : 'Account')}
+                </span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => signOutUser()}
+                className="grid size-7 place-items-center rounded-full text-[#86868b] hover:bg-black/[0.06] hover:text-[#1d1d1f] transition cursor-pointer"
+                title={isDe ? 'Abmelden' : 'Sign out'}
+              >
+                <LogOut className="size-3" />
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setAuthOpen(true)}
+              className="inline-flex items-center gap-1 rounded-full border border-black/[0.08] bg-white px-2.5 sm:px-3 py-1 text-[12px] font-medium text-[#1d1d1f] hover:bg-black/[0.04] transition active:scale-[0.96] cursor-pointer shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
+            >
+              <UserIcon className="size-3 text-[#86868b]" />
+              <span>{isDe ? 'Anmelden' : 'Sign in'}</span>
+            </button>
+          )}
+
+          <div className="border-l border-black/[0.08] pl-2 sm:pl-3">
             <LanguageToggle />
           </div>
         </div>
