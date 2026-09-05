@@ -115,7 +115,7 @@ export async function GET(request: Request) {
         .bind(housingSubmissionId)
         .first<{
           id: string;
-          landlord_id: string | null;
+          submitter_email: string;
           payload_json: string;
           payment_status: string;
         }>();
@@ -128,10 +128,11 @@ export async function GET(request: Request) {
           .bind(housingSubmissionId)
           .run();
 
-        const listing = await convertHousingSubmissionToListing(
-          { ...submission, payloadJson: submission.payload_json },
-          submission.landlord_id || crypto.randomUUID(),
-        );
+        const listing = convertHousingSubmissionToListing({
+          id: submission.id,
+          payloadJson: submission.payload_json,
+          submitterEmail: submission.submitter_email || 'anonym@jobroofs.com',
+        });
 
         const listingCols = Object.keys(listing).map((k) =>
           k.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`),

@@ -4,6 +4,7 @@ import { getD1 } from "@/db";
 import { validateVerificationCode } from "@/lib/employer/verification-store";
 import { runAutomatedFraudChecks } from "@/lib/employer/fraud-checks";
 import { convertSubmissionToJob } from "@/lib/employer/submission-to-job";
+import { getStripePriceId } from "@/lib/stripe/products";
 
 const verifySchema = z.object({
   submissionId: z.string(),
@@ -95,18 +96,28 @@ export async function POST(request: Request) {
     const stripeSecret = process.env.STRIPE_SECRET_KEY;
 
     if (!hasActiveSubscription && stripeSecret) {
-      // Create Stripe Checkout session (€29 single or €499 annual unlimited)
+      // Create Stripe Checkout session with official synced Price ID (€29, €49, or €499)
+      const plan = submission.pricing_plan === "annual" 
+        ? "annual" 
+        : submission.pricing_plan === "premium" 
+        ? "premium" 
+        : "standard";
 
-      const isPremium = submission.pricing_plan === "premium";
-      const isAnnual = submission.pricing_plan === "annual";
-      const unitAmount = isAnnual ? "49900" : isPremium ? "4900" : "2900"; // €499.00, €49.00, or €29.00
-      const productName = isAnnual
-        ? "JOBROOFS Annual Unlimited Pass (1 Year)"
-        : isPremium
-        ? "JOBROOFS Premium Job Listing (60 Days / 2 Months) - Top Placement"
-        : "JOBROOFS Standard Job Listing (30 Days)";
-
+      const priceId = getStripePriceId("job", plan);
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+      const sessionBody = new URLSearchParams({
+        mode: "payment",
+        "line_items[0][price]": priceId,
+        "line_items[0][quantity]": "1",
+        "metadata[submissionId]": submissionId,
+        "metadata[employerId]": submission.employer_id || "",
+        "metadata[pricingPlan]": plan,
+        "metadata[service]": "jobroofs",
+        "metadata[type]": "job",
+        success_url: `${appUrl}/employer/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${appUrl}/employer/checkout-cancel`,
+      });
 
       const stripeResponse = await fetch(
         "https://api.stripe.com/v1/checkout/sessions",
@@ -116,18 +127,7 @@ export async function POST(request: Request) {
             Authorization: `Basic ${btoa(stripeSecret + ":")}`,
             "Content-Type": "application/x-www-form-urlencoded",
           },
-          body: new URLSearchParams({
-            mode: "payment",
-            "line_items[0][price_data][currency]": "EUR",
-            "line_items[0][price_data][product_data][name]": productName,
-            "line_items[0][price_data][unit_amount]": unitAmount,
-            "line_items[0][quantity]": "1",
-            "metadata[submissionId]": submissionId,
-            "metadata[employerId]": submission.employer_id || "",
-            "metadata[pricingPlan]": submission.pricing_plan || "standard",
-            success_url: `${appUrl}/employer/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${appUrl}/employer/checkout-cancel`,
-          }).toString(),
+          body: sessionBody.toString(),
         },
       );
 

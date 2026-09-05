@@ -1,0 +1,65 @@
+{
+  "jobroofs_job_standard": {
+    "productId": "prod_VCffo1Py7lk2NR",
+    "priceId": "price_1UCGK2F7VAvjOqD84KdVxCxS",
+    "name": "JOBROOFS Standard Job Listing (30 Days)",
+    "amountEur": 29,
+    "metadata": {
+      "service": "jobroofs",
+      "type": "job",
+      "tier": "standard",
+      "duration_days": "30"
+    }
+  },
+  "jobroofs_job_premium": {
+    "productId": "prod_VCff7DCJ3Zbkzg",
+    "priceId": "price_1UCGK3F7VAvjOqD8cRlRnKUI",
+    "name": "JOBROOFS Premium Job Listing (60 Days) - Top Placement",
+    "amountEur": 49,
+    "metadata": {
+      "service": "jobroofs",
+      "type": "job",
+      "tier": "premium",
+      "duration_days": "60",
+      "featured": "true"
+    }
+  },
+  "jobroofs_job_annual": {
+    "productId": "prod_VCffx7I2DfpHKB",
+    "priceId": "price_1UCGK3F7VAvjOqD8FhbL2rcL",
+    "name": "JOBROOFS Annual Unlimited Employer Pass (1 Year)",
+    "amountEur": 499,
+    "metadata": {
+      "service": "jobroofs",
+      "type": "job",
+      "tier": "annual",
+      "duration_days": "365",
+      "unlimited": "true"
+    }
+  },
+  "jobroofs_housing_standard": {
+    "productId": "prod_VCff0sPu3FYv0R",
+    "priceId": "price_1UCGK4F7VAvjOqD82XRMVmoE",
+    "name": "JOBROOFS Standard Housing Listing (30 Days)",
+    "amountEur": 29,
+    "metadata": {
+      "service": "jobroofs",
+      "type": "housing",
+      "tier": "standard",
+      "duration_days": "30"
+    }
+  },
+  "jobroofs_housing_premium": {
+    "productId": "prod_VCffICtAOoMBog",
+    "priceId": "price_1UCGK4F7VAvjOqD87JSh3m3v",
+    "name": "JOBROOFS Premium Housing Listing (60 Days) - Top Placement",
+    "amountEur": 49,
+    "metadata": {
+      "service": "jobroofs",
+      "type": "housing",
+      "tier": "premium",
+      "duration_days": "60",
+      "featured": "true"
+    }
+  }
+}

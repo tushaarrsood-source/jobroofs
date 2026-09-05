@@ -113,7 +113,7 @@ export async function POST(request: Request) {
 
           await d1
             .prepare(
-              `INSERT INTO jobs (${jobCols.join(", ")}) VALUES (${placeholders})`,
+              `INSERT OR IGNORE INTO jobs (${jobCols.join(", ")}) VALUES (${placeholders})`,
             )
             .bind(...jobVals)
             .run();
@@ -123,7 +123,7 @@ export async function POST(request: Request) {
               const isPrimary = i === 0 ? 1 : 0;
               await d1
                 .prepare(
-                  `INSERT INTO job_niches (job_id, niche_id, is_primary, evidence) VALUES (?, ?, ?, ?)`,
+                  `INSERT OR IGNORE INTO job_niches (job_id, niche_id, is_primary, evidence) VALUES (?, ?, ?, ?)`,
                 )
                 .bind(job.id, nicheIds[i], isPrimary, "Employer selected")
                 .run();
@@ -163,7 +163,7 @@ export async function POST(request: Request) {
 
           await d1
             .prepare(
-              `INSERT INTO housing_listings (${cols.join(", ")}) VALUES (${placeholders})`,
+              `INSERT OR IGNORE INTO housing_listings (${cols.join(", ")}) VALUES (${placeholders})`,
             )
             .bind(...vals)
             .run();
