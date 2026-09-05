@@ -2,14 +2,22 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
-import { CheckCircle2, ArrowRight, LayoutDashboard, Sparkles } from 'lucide-react';
+import { Suspense, useEffect, useState } from 'react';
+import { CheckCircle2, ArrowRight, LayoutDashboard, Sparkles, Loader2 } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
 
 function CheckoutSuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
   const { isDe } = useTranslation();
+  const [verifying, setVerifying] = useState(Boolean(sessionId));
+
+  useEffect(() => {
+    if (!sessionId) return;
+    fetch(`/api/employer/verify-session?session_id=${encodeURIComponent(sessionId)}`)
+      .catch((err) => console.error('Verification ping error:', err))
+      .finally(() => setVerifying(false));
+  }, [sessionId]);
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-16">
