@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { AuthProvider } from '@/lib/firebase/auth-context';
 import { LanguageProvider } from '@/lib/i18n/language-context';
 import { MobileNavBar } from '@/components/mobile-nav-bar';
+import { CookieBanner } from '@/components/cookie-banner';
 import './globals.css';
 
 const inter = Inter({
@@ -119,6 +120,7 @@ export default function RootLayout({
         <AuthProvider>
           <LanguageProvider>
             {children}
+            <CookieBanner />
             <MobileNavBar />
           </LanguageProvider>
         </AuthProvider>

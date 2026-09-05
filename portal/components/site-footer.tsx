@@ -5,6 +5,7 @@ import { useTranslation } from '@/lib/i18n/language-context';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { DeleteAccountModal } from '@/components/delete-account-modal';
 import { AuthModal } from '@/components/auth-modal';
+import { openCookieSettings } from '@/components/cookie-banner';
 
 export function SiteFooter() {
   const { isDe } = useTranslation();
@@ -147,6 +148,15 @@ export function SiteFooter() {
                 <Link href="/disclaimer" className="hover:text-blue-600 transition-colors">
                   {isDe ? 'Haftungsausschluss' : 'Disclaimer'}
                 </Link>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={openCookieSettings}
+                  className="text-left text-slate-500 hover:text-blue-600 transition-colors text-xs cursor-pointer"
+                >
+                  {isDe ? 'Cookie-Einstellungen' : 'Cookie Settings'}
+                </button>
               </li>
               {user && (
                 <li>
