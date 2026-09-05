@@ -72,7 +72,7 @@ interface JobBrowserProps {
 
 export function JobBrowser({
   initialJobs = previewJobs,
-  filterOrigin = 'employer_posted',
+  filterOrigin = 'all',
   pageTitle,
   pageSubtitle,
   sectionTitle,

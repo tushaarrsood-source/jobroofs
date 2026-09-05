@@ -1,6 +1,7 @@
-﻿import type { PreviewJob } from './types';
+import type { PreviewJob } from './types';
+import { ALL_SOURCED_JOBS } from '@/lib/sources/sourced-jobs';
 
-export const previewJobs: PreviewJob[] = [];
+export const previewJobs: PreviewJob[] = ALL_SOURCED_JOBS;
 
 export const previewSources = [
   {

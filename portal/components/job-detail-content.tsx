@@ -1,6 +1,7 @@
 'use client';
 
 import Link from '@/components/ui/link';
+import { useState } from 'react';
 import {
   ArrowLeft,
   BriefcaseBusiness,
@@ -10,10 +11,14 @@ import {
   Euro,
   ExternalLink,
   Languages,
+  Lock,
   Mail,
   MapPin,
   Navigation,
+  ShieldCheck,
 } from 'lucide-react';
+import { useAuth } from '@/lib/firebase/auth-context';
+import { AuthModal } from '@/components/auth-modal';
 import { getGoogleMapsUrl } from '@/lib/domain/berlin-geo';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { PlatformDisclaimer } from '@/components/platform-disclaimer';
@@ -30,7 +35,32 @@ const JobMap = dynamic(() => import('@/components/job-map').then((mod) => mod.Jo
 
 export function JobDetailContent({ job }: { job: any }) {
   const { t, isDe } = useTranslation();
+  const { user } = useAuth();
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [pendingTarget, setPendingTarget] = useState<string | null>(null);
+
   const employerPosted = job.listingOrigin === 'employer_posted';
+
+  const handleApplyClick = (e: React.MouseEvent, targetUrl: string) => {
+    if (!user) {
+      e.preventDefault();
+      setPendingTarget(targetUrl);
+      setAuthModalOpen(true);
+      return;
+    }
+  };
+
+  const handleAuthSuccess = () => {
+    setAuthModalOpen(false);
+    if (pendingTarget) {
+      if (pendingTarget.startsWith('mailto:')) {
+        window.location.href = pendingTarget;
+      } else {
+        window.open(pendingTarget, '_blank', 'noopener,noreferrer');
+      }
+      setPendingTarget(null);
+    }
+  };
 
   const language =
     job.language === 'english_explicit'
@@ -174,19 +204,43 @@ export function JobDetailContent({ job }: { job: any }) {
           <section className="rounded-xl border border-zinc-200 bg-white p-5 shadow-2xs">
             <h2 className="text-base font-bold text-zinc-950">{t('howToApply')}</h2>
 
-            {job.application.method === 'url' && job.application.url ? (
+            {(job.application.method === 'url' || job.application.method === 'external_link' || !!job.application.url) && job.application.url ? (
               <div className="mt-4 space-y-2.5">
                 <p className="text-xs text-zinc-500">
                   {t('applyByWebsitePrompt')}
                 </p>
-                <a
-                  href={job.application.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-tactile flex h-10 w-full items-center justify-center gap-1.5 rounded-lg bg-zinc-950 px-4 text-xs font-semibold text-white transition hover:bg-black cursor-pointer"
-                >
-                  <span>{t('openEmployerWebsite')}</span>
-                </a>
+                {user ? (
+                  <>
+                    <div className="flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2.5 py-1.5 text-[11px] font-medium text-emerald-800 border border-emerald-200">
+                      <ShieldCheck className="size-3.5 shrink-0 text-emerald-600" />
+                      <span>{isDe ? `Angemeldet (${user.email}) · Weiterleitung aktiv` : `Signed in (${user.email}) · Direct redirect active`}</span>
+                    </div>
+                    <a
+                      href={job.application.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-tactile flex h-10 w-full items-center justify-center gap-1.5 rounded-lg bg-zinc-950 px-4 text-xs font-semibold text-white transition hover:bg-black cursor-pointer"
+                    >
+                      <span>{t('openEmployerWebsite')}</span>
+                      <ExternalLink className="size-3.5 opacity-80" />
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1.5 text-[11px] font-medium text-amber-800 border border-amber-200">
+                      <Lock className="size-3.5 shrink-0 text-amber-600" />
+                      <span>{isDe ? 'Kostenlose Anmeldung erforderlich zum Bewerben' : 'Free sign in required to apply directly'}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => handleApplyClick(e, job.application.url)}
+                      className="btn-tactile flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-zinc-950 px-4 text-xs font-semibold text-white transition hover:bg-black cursor-pointer shadow-sm"
+                    >
+                      <Lock className="size-3.5" />
+                      <span>{isDe ? 'Anmelden & zum Angebot weiterleiten' : 'Sign in & visit employer posting'}</span>
+                    </button>
+                  </>
+                )}
               </div>
             ) : null}
 
@@ -195,15 +249,40 @@ export function JobDetailContent({ job }: { job: any }) {
                 <p className="text-xs text-zinc-500">
                   {t('applyByEmailPrompt')}
                 </p>
-                <a
-                  href={`mailto:${job.application.email}?subject=${encodeURIComponent(
-                    `Application: ${job.title} via JOBROOFS`,
-                  )}`}
-                  className="btn-tactile flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-zinc-950 px-4 text-xs font-semibold text-white transition hover:bg-black cursor-pointer"
-                >
-                  <Mail className="size-3.5" />
-                  <span>{t('sendEmailApplication')}</span>
-                </a>
+                {user ? (
+                  <>
+                    <div className="flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2.5 py-1.5 text-[11px] font-medium text-emerald-800 border border-emerald-200">
+                      <ShieldCheck className="size-3.5 shrink-0 text-emerald-600" />
+                      <span>{isDe ? `Angemeldet (${user.email}) · Bewerbung aktiv` : `Signed in (${user.email}) · Application active`}</span>
+                    </div>
+                    <a
+                      href={`mailto:${job.application.email}?subject=${encodeURIComponent(
+                        `Application: ${job.title} via JOBROOFS`,
+                      )}`}
+                      className="btn-tactile flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-zinc-950 px-4 text-xs font-semibold text-white transition hover:bg-black cursor-pointer"
+                    >
+                      <Mail className="size-3.5" />
+                      <span>{t('sendEmailApplication')}</span>
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1.5 text-[11px] font-medium text-amber-800 border border-amber-200">
+                      <Lock className="size-3.5 shrink-0 text-amber-600" />
+                      <span>{isDe ? 'Kostenlose Anmeldung erforderlich für E-Mail-Bewerbung' : 'Free sign in required to apply via email'}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => handleApplyClick(e, `mailto:${job.application.email}?subject=${encodeURIComponent(
+                        `Application: ${job.title} via JOBROOFS`,
+                      )}`)}
+                      className="btn-tactile flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-zinc-950 px-4 text-xs font-semibold text-white transition hover:bg-black cursor-pointer shadow-sm"
+                    >
+                      <Lock className="size-3.5" />
+                      <span>{isDe ? 'Anmelden & E-Mail-Bewerbung öffnen' : 'Sign in & apply via email'}</span>
+                    </button>
+                  </>
+                )}
               </div>
             ) : null}
 
@@ -293,6 +372,12 @@ export function JobDetailContent({ job }: { job: any }) {
       <div className="mt-8">
         <PlatformDisclaimer type="jobs" />
       </div>
+
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onSuccess={handleAuthSuccess}
+      />
     </div>
   );
 }
