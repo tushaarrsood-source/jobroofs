@@ -1,18 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { User as UserIcon, LogOut, Trash2, ShieldCheck, Cloud, CloudOff, ArrowRight } from 'lucide-react';
+import { User as UserIcon, LogOut, Cloud, CloudOff } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { AuthModal } from '@/components/auth-modal';
-import { DeleteAccountModal } from '@/components/delete-account-modal';
 import { LanguageToggle } from '@/components/language-toggle';
 
 export function ProfileAccountCard() {
   const { isDe } = useTranslation();
   const { user, signOutUser } = useAuth();
   const [authOpen, setAuthOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   return (
     <>
@@ -86,42 +84,7 @@ export function ProfileAccountCard() {
         </div>
       </div>
 
-      {/* 2. GDPR Privacy & Account Deletion Card */}
-      {user && (
-        <div className="rounded-[20px] border border-black/[0.06] bg-white p-5 sm:p-6 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-          <div className="flex items-start justify-between gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="size-4 text-[#34c759]" />
-                <h3 className="text-sm font-semibold text-[#1d1d1f]">
-                  {isDe ? 'Datenschutz & Konto-Löschung' : 'Privacy & Account Deletion'}
-                </h3>
-              </div>
-              <p className="text-xs text-[#6e6e73] leading-relaxed">
-                {isDe
-                  ? 'Gemäß Art. 17 DSGVO hast du das Recht auf vollständige Löschung deiner personenbezogenen Daten und aller erstellten Inserate.'
-                  : 'Under Art. 17 GDPR, you have the right to permanent erasure of your personal data and all created listings.'}
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setDeleteModalOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50/60 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100/70 transition active:scale-[0.96] cursor-pointer shrink-0"
-            >
-              <Trash2 className="size-3.5" />
-              <span>{isDe ? 'Konto löschen' : 'Delete account'}</span>
-            </button>
-          </div>
-        </div>
-      )}
-
       <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
-      <DeleteAccountModal
-        isOpen={deleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-        onRequiresReauth={() => setAuthOpen(true)}
-      />
     </>
   );
 }

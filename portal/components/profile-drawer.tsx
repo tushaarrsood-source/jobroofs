@@ -2,11 +2,10 @@
 
 import React, { useState } from 'react';
 import Link from '@/components/ui/link';
-import { User, Globe, Briefcase, Home, PlusCircle, HelpCircle, Shield, X, ChevronRight, LogOut, Trash2 } from 'lucide-react';
+import { User, Globe, Briefcase, Home, PlusCircle, HelpCircle, Shield, X, ChevronRight, LogOut } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { AuthModal } from '@/components/auth-modal';
-import { DeleteAccountModal } from '@/components/delete-account-modal';
 
 interface ProfileDrawerProps {
   isOpen: boolean;
@@ -17,7 +16,6 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
   const { isDe, locale, toggleLocale } = useTranslation();
   const { user, signOutUser } = useAuth();
   const [authOpen, setAuthOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   if (!isOpen) return null;
 
@@ -172,23 +170,6 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
             </div>
             <ChevronRight className="size-4 text-slate-400" />
           </Link>
-
-          {/* GDPR Account Deletion (Apple App Store & DSGVO Article 17 Compliant) */}
-          {user && (
-            <button
-              type="button"
-              onClick={() => setDeleteModalOpen(true)}
-              className="flex w-full items-center justify-between py-3 text-red-600 hover:text-red-700 transition-[color,transform] duration-150 active:scale-[0.98] cursor-pointer"
-            >
-              <div className="flex items-center gap-2.5">
-                <Trash2 className="size-4 text-red-500" />
-                <span className="font-medium text-xs">
-                  {isDe ? 'Konto & Daten löschen (Art. 17 DSGVO)' : 'Delete Account & Data (GDPR)'}
-                </span>
-              </div>
-              <ChevronRight className="size-4 text-red-300" />
-            </button>
-          )}
         </div>
 
         {/* Footer info */}
@@ -201,12 +182,6 @@ export function ProfileDrawer({ isOpen, onClose }: ProfileDrawerProps) {
       </div>
 
       <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
-      <DeleteAccountModal
-        isOpen={deleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-        onSuccess={() => onClose()}
-        onRequiresReauth={() => setAuthOpen(true)}
-      />
     </div>
   );
 }

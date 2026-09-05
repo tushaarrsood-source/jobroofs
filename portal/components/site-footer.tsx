@@ -1,10 +1,16 @@
 'use client';
-
+import { useState } from 'react';
 import Link from '@/components/ui/link';
 import { useTranslation } from '@/lib/i18n/language-context';
+import { useAuth } from '@/lib/firebase/auth-context';
+import { DeleteAccountModal } from '@/components/delete-account-modal';
+import { AuthModal } from '@/components/auth-modal';
 
 export function SiteFooter() {
   const { isDe } = useTranslation();
+  const { user } = useAuth();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
 
   return (
     <footer className="border-t border-slate-200 bg-white text-slate-600">
@@ -142,6 +148,17 @@ export function SiteFooter() {
                   {isDe ? 'Haftungsausschluss' : 'Disclaimer'}
                 </Link>
               </li>
+              {user && (
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setDeleteModalOpen(true)}
+                    className="text-left text-slate-400 hover:text-red-500 transition-colors text-xs cursor-pointer"
+                  >
+                    {isDe ? 'Konto löschen' : 'Delete account'}
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
         </div>
@@ -156,6 +173,17 @@ export function SiteFooter() {
           </p>
         </div>
       </div>
+
+      {user && (
+        <>
+          <DeleteAccountModal
+            isOpen={deleteModalOpen}
+            onClose={() => setDeleteModalOpen(false)}
+            onRequiresReauth={() => setAuthOpen(true)}
+          />
+          <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
+        </>
+      )}
     </footer>
   );
 }
