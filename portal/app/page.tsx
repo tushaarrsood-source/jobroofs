@@ -14,38 +14,58 @@ export default async function Home() {
   const feeds = await getHomepageFeeds();
   
   // Combine curated jobs with any live database feeds so directory is always rich and interactive
-  const map = new Map();
-  previewJobs.forEach((j) => {
+  const map = new Map<string, any>();
+  for (const j of previewJobs) {
     if (!isJobSuppressed(j.id) && (!j.slug || !isJobSuppressed(j.slug))) {
-      map.set(j.slug || j.id, { ...j });
+      map.set(j.slug || j.id, j);
     }
-  });
-
-  if (feeds.direct.length > 0 || feeds.latest.length > 0) {
-    feeds.direct.forEach((j) => map.set(j.id, j));
-    feeds.latest.forEach((j) => map.set(j.id, j));
   }
 
-  const enrich = async (jobs: any[]) => {
-    return Promise.all(
-      jobs.map(async (job) => {
-        if (job.slug && previewJobs.some((p) => p.slug === job.slug)) {
-          return job;
-        }
-        const niches = await getJobNiches(job.id);
-        const sourceInfo = await getJobSourceInfo(job.id);
-        return {
-          ...job,
-          slug: job.slug || job.id,
-          niches,
-          sourceInfo,
-        };
-      }),
-    );
-  };
+  // Only enrich database feeds if D1 returns live rows
+  if (feeds.direct.length > 0 || feeds.latest.length > 0) {
+    const enrichFeed = async (jobs: any[]) => {
+      return Promise.all(
+        jobs.map(async (job) => {
+          const niches = await getJobNiches(job.id);
+          const sourceInfo = await getJobSourceInfo(job.id);
+          return {
+            ...job,
+            slug: job.slug || job.id,
+            niches,
+            sourceInfo,
+          };
+        }),
+      );
+    };
+    const [enrichedDirect, enrichedLatest] = await Promise.all([
+      enrichFeed(feeds.direct),
+      enrichFeed(feeds.latest),
+    ]);
+    enrichedDirect.forEach((j) => map.set(j.id, j));
+    enrichedLatest.forEach((j) => map.set(j.id, j));
+  }
 
-  const initialJobs = await enrich(Array.from(map.values()));
-  const latestJobs = feeds.latest.length > 0 ? await enrich(feeds.latest) : previewJobs.slice(0, 6);
+  const initialJobs = Array.from(map.values()).map((job) => ({
+    id: job.id,
+    slug: job.slug || job.id,
+    title: job.title,
+    company: job.company,
+    district: job.district,
+    postcode: job.postcode,
+    industryId: job.industryId,
+    employmentForms: job.employmentForms,
+    compensation: job.compensation,
+    hours: job.hours,
+    hoursLabel: job.hoursLabel || job.hours?.label,
+    schedule: job.schedule,
+    scheduleSummary: job.scheduleSummary || job.schedule?.summary,
+    tier: job.tier,
+    isFeatured: job.isFeatured,
+    listingOrigin: job.listingOrigin,
+    tags: job.tags,
+    payText: job.payText,
+  }));
+  const latestJobs = feeds.latest.length > 0 ? feeds.latest : initialJobs.slice(0, 6);
 
   return (
     <main className="min-h-screen bg-background text-foreground overflow-x-clip w-full max-w-full">

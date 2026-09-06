@@ -89,7 +89,13 @@ export function JobBrowser({
   const [payInterval, setPayInterval] = useState('all');
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
   const [hoveredJobId, setHoveredJobId] = useState<string | null>(null);
+  const [displayLimit, setDisplayLimit] = useState(25);
   const jobCardsRef = useRef<Record<string, HTMLDivElement | null>>({});
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setDisplayLimit(25);
+  }, [query, industry, district, employment, payInterval]);
 
   const effectivePageTitle = pageTitle || t('heroTitle');
   const effectivePageSubtitle = pageSubtitle || t('heroSubtitle');
@@ -165,6 +171,14 @@ export function JobBrowser({
         return 0;
       });
   }, [district, employment, filterOrigin, industry, payInterval, query, initialJobs]);
+
+  const paginatedJobs = useMemo(() => {
+    return visibleJobs.slice(0, displayLimit);
+  }, [visibleJobs, displayLimit]);
+
+  const mapJobs = useMemo(() => {
+    return visibleJobs.slice(0, 50);
+  }, [visibleJobs]);
 
   const handleSelectJobFromMap = (jobId: string | null) => {
     setSelectedJobId(jobId);
@@ -410,6 +424,11 @@ export function JobBrowser({
               <h2 className="text-lg font-bold tracking-tight text-slate-950">{effectiveSectionTitle}</h2>
               <p className="text-xs text-zinc-500">
                 {visibleJobs.length} {t('jobsFound')}
+                {visibleJobs.length > displayLimit ? (
+                  <span className="font-mono text-[11px] text-zinc-400 ml-1.5">
+                    ({isDe ? `Zeige 1–${Math.min(displayLimit, visibleJobs.length)}` : `Showing 1–${Math.min(displayLimit, visibleJobs.length)}`})
+                  </span>
+                ) : null}
               </p>
             </div>
 
@@ -474,31 +493,49 @@ export function JobBrowser({
                   </div>
                 </div>
               ) : (
-                visibleJobs.map((job, idx) => {
-                  const isSelected = selectedJobId === job.id || selectedJobId === job.slug;
-                  const isHovered = hoveredJobId === job.id || hoveredJobId === job.slug;
-                  const wageBadge = formatPinBadge(job);
+                <>
+                  {paginatedJobs.map((job, idx) => {
+                    const isSelected = selectedJobId === job.id || selectedJobId === job.slug;
+                    const isHovered = hoveredJobId === job.id || hoveredJobId === job.slug;
+                    const wageBadge = formatPinBadge(job);
 
-                  return (
-                    <div
-                      key={job.id}
-                      ref={(el) => {
-                        jobCardsRef.current[job.id] = el;
-                      }}
-                      className="stagger-in min-w-0 w-full"
-                      style={{ animationDelay: `${Math.min(idx * 35, 300)}ms` }}
-                      onMouseEnter={() => setHoveredJobId(job.id)}
-                      onMouseLeave={() => setHoveredJobId(null)}
-                    >
-                      <JobCard
-                        job={job}
-                        isSelected={isSelected}
-                        isHovered={isHovered}
-                        wageBadge={wageBadge}
-                      />
+                    return (
+                      <div
+                        key={job.id}
+                        ref={(el) => {
+                          jobCardsRef.current[job.id] = el;
+                        }}
+                        className="stagger-in min-w-0 w-full"
+                        style={{ animationDelay: `${Math.min(idx * 35, 300)}ms` }}
+                        onMouseEnter={() => setHoveredJobId(job.id)}
+                        onMouseLeave={() => setHoveredJobId(null)}
+                      >
+                        <JobCard
+                          job={job}
+                          isSelected={isSelected}
+                          isHovered={isHovered}
+                          wageBadge={wageBadge}
+                        />
+                      </div>
+                    );
+                  })}
+
+                  {displayLimit < visibleJobs.length && (
+                    <div className="pt-4 pb-2 text-center">
+                      <button
+                        type="button"
+                        onClick={() => setDisplayLimit((prev) => prev + 25)}
+                        className="apple-btn-secondary !h-10 !px-6 !text-xs sm:!text-sm cursor-pointer shadow-xs inline-flex items-center gap-2"
+                      >
+                        <span>
+                          {isDe
+                            ? `Weitere 25 Stellen anzeigen (${visibleJobs.length - displayLimit} verbleibend)`
+                            : `Show 25 more jobs (${visibleJobs.length - displayLimit} remaining)`}
+                        </span>
+                      </button>
                     </div>
-                  );
-                })
+                  )}
+                </>
               )}
             </div>
 
@@ -506,7 +543,7 @@ export function JobBrowser({
             <div className="hidden lg:block">
               <div className="sticky top-20 h-[calc(100vh-110px)] min-h-[500px]">
                 <JobMap
-                  jobs={visibleJobs}
+                  jobs={mapJobs}
                   selectedJobId={selectedJobId}
                   hoveredJobId={hoveredJobId}
                   onSelectJob={handleSelectJobFromMap}
