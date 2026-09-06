@@ -24,6 +24,7 @@ import dynamic from 'next/dynamic';
 import { formatPinBadge, getGoogleMapsUrl } from '@/lib/domain/berlin-geo';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { isListingExpired } from '@/lib/domain/entitlements';
+import { isJobSuppressed } from '@/lib/sources/suppression-store';
 
 const JobMap = dynamic(() => import('@/components/job-map').then((mod) => mod.JobMap), {
   ssr: false,
@@ -101,6 +102,9 @@ export function JobBrowser({
       .filter((job) => {
         // Expiration check: standard (30d) vs premium (60d)
         if (job.expiresAt && isListingExpired(job.expiresAt)) return false;
+
+        // Suppression / deletion check
+        if (isJobSuppressed(job.id) || (job.slug && isJobSuppressed(job.slug))) return false;
 
         // Filter origin check if specified
         if (filterOrigin !== 'all' && job.listingOrigin !== filterOrigin) return false;

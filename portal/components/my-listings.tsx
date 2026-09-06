@@ -227,16 +227,17 @@ export function MyListings() {
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
-                      onClick={() => {
-                        if (confirm(isDe ? 'Inserat wirklich aus der Ansicht entfernen?' : 'Remove this listing?')) {
-                          removeMyListing(listing.id, listing.type);
+                      onClick={async () => {
+                        if (confirm(isDe ? 'Inserat wirklich unwiderruflich löschen?' : 'Permanently delete this listing?')) {
+                          await removeMyListing(listing.id, listing.type);
+                          setListings((prev) => prev.filter((l) => l.id !== listing.id));
                         }
                       }}
                       className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer"
-                      title="Aus Liste entfernen"
+                      title={isDe ? 'Inserat löschen' : 'Delete listing'}
                     >
                       <Trash2 className="size-3.5" />
-                      <span className="hidden sm:inline">{isDe ? 'Entfernen' : 'Remove'}</span>
+                      <span className="hidden sm:inline">{isDe ? 'Löschen' : 'Delete'}</span>
                     </button>
 
                     <Link

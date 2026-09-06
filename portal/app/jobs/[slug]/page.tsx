@@ -8,6 +8,7 @@ import { getJobById, getJobNiches, getJobSourceInfo } from '@/lib/jobs/feeds';
 import { notFound } from 'next/navigation';
 import { getIndustry } from '@/lib/domain/taxonomy';
 import { JobDetailContent } from '@/components/job-detail-content';
+import { isJobSuppressed } from '@/lib/sources/suppression-store';
 
 // Dynamic SEO metadata for each job listing
 export async function generateMetadata({
@@ -16,6 +17,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  if (isJobSuppressed(slug)) return { title: 'Job Not Found' };
   const job = previewJobs.find((item) => item.slug === slug);
 
   if (job) {
@@ -60,6 +62,9 @@ export default async function JobDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  if (isJobSuppressed(slug)) {
+    return notFound();
+  }
   let job: any = null;
 
   const dbJob = await getJobById(slug);

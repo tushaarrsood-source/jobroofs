@@ -35,7 +35,7 @@ export async function syncUserListingsWithCloud(userId: string): Promise<UserLis
   if (typeof window === 'undefined' || !userId) return getMyListings();
   try {
     const cloudListings = await getUserListingsFromFirestore(userId);
-    if (cloudListings && cloudListings.length > 0) {
+    if (cloudListings !== null && cloudListings !== undefined) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudListings));
       window.dispatchEvent(new Event('jobroofs_listings_updated'));
       return cloudListings;
@@ -65,7 +65,7 @@ export async function removeMyListing(id: string, type?: 'job' | 'housing'): Pro
     const current = getMyListings();
     const target = current.find((l) => l.id === id);
     const targetType = type || target?.type;
-    if (targetType) {
+    if (targetType && !id.startsWith('demo-')) {
       await deleteListingFromFirestore(targetType, id);
     }
     const updated = current.filter((l) => l.id !== id);
@@ -76,45 +76,15 @@ export async function removeMyListing(id: string, type?: 'job' | 'housing'): Pro
   }
 }
 
-export function seedDemoListingsIfEmpty(): UserListing[] {
-  if (typeof window === 'undefined') return [];
-  const existing = getMyListings();
-  if (existing.length > 0) return existing;
-
-  const demoListings: UserListing[] = [
-    {
-      id: 'demo-job-1',
-      type: 'job',
-      title: 'Barista & Servicekraft (m/w/d)',
-      subtitle: 'Café Morgenstern · Prenzlauer Berg',
-      badgeLabel: '15,50 €/h',
-      tier: 'standard',
-      tierLabel: 'Standard (30 Tage)',
-      status: 'active',
-      postedAt: new Date(Date.now() - 3 * 86400000).toISOString(),
-      expiresAt: new Date(Date.now() + 27 * 86400000).toISOString(),
-      linkUrl: '/jobs/barista-servicekraft-prenzlauer-berg',
-      pricePaidEur: 29,
-    },
-    {
-      id: 'demo-housing-1',
-      type: 'housing',
-      title: 'Helles WG-Zimmer am Boxhagener Platz',
-      subtitle: 'Friedrichshain · 18 m²',
-      badgeLabel: '520 €',
-      tier: 'premium',
-      tierLabel: '⭐ Premium Plus (60 Tage)',
-      status: 'active',
-      postedAt: new Date(Date.now() - 5 * 86400000).toISOString(),
-      expiresAt: new Date(Date.now() + 55 * 86400000).toISOString(),
-      linkUrl: '/wohnen',
-      pricePaidEur: 49,
-    },
-  ];
-
+export function clearAllMyListings(): void {
+  if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(demoListings));
+    localStorage.removeItem(STORAGE_KEY);
     window.dispatchEvent(new Event('jobroofs_listings_updated'));
   } catch {}
-  return demoListings;
+}
+
+export function seedDemoListingsIfEmpty(): UserListing[] {
+  // Never reseed artificial listings; return current storage cleanly
+  return getMyListings();
 }

@@ -7,6 +7,7 @@ import { BreadcrumbJsonLd } from '@/components/json-ld';
 import { previewJobs } from '@/lib/domain/preview-data';
 import { getIndustry, industryNiches } from '@/lib/domain/taxonomy';
 import { getCategoryJobs } from '@/lib/jobs/feeds';
+import { isJobSuppressed } from '@/lib/sources/suppression-store';
 
 export function generateStaticParams() {
   return industryNiches.map((niche) => ({ id: niche.id }));
@@ -44,7 +45,12 @@ export default async function CategoryPage({
   const niche = getIndustry(id);
 
   const feedsJobs = await getCategoryJobs(id);
-  const curatedJobs = previewJobs.filter((job) => job.industryId === id);
+  const curatedJobs = previewJobs.filter(
+    (job) =>
+      job.industryId === id &&
+      !isJobSuppressed(job.id) &&
+      (!job.slug || !isJobSuppressed(job.slug)),
+  );
   const categoryJobs = feedsJobs.length > 0 ? feedsJobs : curatedJobs;
 
   if (!niche)

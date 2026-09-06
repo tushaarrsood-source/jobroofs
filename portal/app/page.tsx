@@ -8,13 +8,18 @@ import { WebSiteJsonLd, LocalBusinessJsonLd } from '@/components/json-ld';
 import { PortalWelcomeBanner } from '@/components/portal-welcome-banner';
 import { getHomepageFeeds, getJobNiches, getJobSourceInfo } from '@/lib/jobs/feeds';
 import { previewJobs } from '@/lib/domain/preview-data';
+import { isJobSuppressed } from '@/lib/sources/suppression-store';
 
 export default async function Home() {
   const feeds = await getHomepageFeeds();
   
   // Combine curated jobs with any live database feeds so directory is always rich and interactive
   const map = new Map();
-  previewJobs.forEach((j) => map.set(j.slug || j.id, { ...j }));
+  previewJobs.forEach((j) => {
+    if (!isJobSuppressed(j.id) && (!j.slug || !isJobSuppressed(j.slug))) {
+      map.set(j.slug || j.id, { ...j });
+    }
+  });
 
   if (feeds.direct.length > 0 || feeds.latest.length > 0) {
     feeds.direct.forEach((j) => map.set(j.id, j));

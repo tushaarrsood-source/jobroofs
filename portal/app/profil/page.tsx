@@ -63,6 +63,25 @@ export default function ProfilePage() {
                 <ChevronRight className="size-4 text-[#86868b]" />
               </Link>
 
+              <Link
+                href="/control"
+                className="flex items-center justify-between p-4.5 text-sm font-medium text-[#1d1d1f] hover:bg-black/[0.02] transition-colors active:scale-[0.99] cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex size-10 items-center justify-center rounded-2xl bg-black/[0.04] text-[#1d1d1f]">
+                    <Briefcase className="size-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <div className="text-[#1d1d1f] font-semibold flex items-center gap-2">
+                      <span>Source Control & Dashboard</span>
+                      <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200 font-mono">1.600 Stellen</span>
+                    </div>
+                    <div className="text-xs text-[#86868b] font-normal">Alle 1.600 Berliner Stellen & Quellen einsehen & löschen</div>
+                  </div>
+                </div>
+                <ChevronRight className="size-4 text-[#86868b]" />
+              </Link>
+
               <a
                 href="mailto:kontakt@jobroofs.com"
                 className="flex items-center justify-between p-4 text-sm font-medium text-slate-800 hover:bg-slate-50 transition-[background-color,transform] duration-150 active:scale-[0.99] cursor-pointer"
