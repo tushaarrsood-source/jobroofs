@@ -1,41 +1,30 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect, useCallback, useTransition } from 'react';
 import Link from '@/components/ui/link';
 import {
   Briefcase,
   Building2,
   CheckCircle2,
   ExternalLink,
-  Filter,
   Layers,
   MapPin,
-  RefreshCw,
   Search,
-  ShieldCheck,
   Trash2,
   Undo2,
   AlertCircle,
-  Clock,
-  Sparkles,
   ChevronLeft,
   ChevronRight,
+  RefreshCw,
 } from 'lucide-react';
 import { industryNiches } from '@/lib/domain/taxonomy';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { isMasterAccount } from '@/lib/domain/master-accounts';
-import { isJobSuppressed, suppressJob, unsuppressJob, getSuppressedJobs } from '@/lib/sources/suppression-store';
 
-interface ControlDashboardContentProps {
-  initialJobs: any[];
-  initialSources: any[];
-}
-
-export function ControlDashboardContent({
-  initialJobs,
-  initialSources,
-}: ControlDashboardContentProps) {
+export function ControlDashboardContent() {
   const { user } = useAuth();
+  const isMaster = user?.email ? isMasterAccount(user.email) : false;
+
   const [activeTab, setActiveTab] = useState<'jobs' | 'sources' | 'deleted'>('jobs');
   const [query, setQuery] = useState('');
   const [selectedNiche, setSelectedNiche] = useState('all');
@@ -43,75 +32,92 @@ export function ControlDashboardContent({
   const [page, setPage] = useState(1);
   const pageSize = 25;
 
-  const [suppressedIds, setSuppressedIds] = useState<string[]>([]);
+  const [jobs, setJobs] = useState<any[]>([]);
+  const [sources, setSources] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalActive, setTotalActive] = useState(1600);
+  const [totalDeleted, setTotalDeleted] = useState(0);
+  const [totalSources, setTotalSources] = useState(1600);
+
+  const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [actionNotice, setActionNotice] = useState<string | null>(null);
 
-  // Sync suppressed jobs on mount
+  // Common Berlin districts for selector
+  const districts = [
+    'Charlottenburg',
+    'Friedrichshain',
+    'Kreuzberg',
+    'Lichtenberg',
+    'Mitte',
+    'Moabit',
+    'Neukölln',
+    'Pankow',
+    'Prenzlauer Berg',
+    'Reinickendorf',
+    'Schöneberg',
+    'Spandau',
+    'Steglitz',
+    'Tempelhof',
+    'Tiergarten',
+    'Treptow',
+    'Wedding',
+    'Wilmersdorf',
+    'Zehlendorf',
+  ];
+
+  // Fetch jobs or sources from API
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    try {
+      if (activeTab === 'sources') {
+        const params = new URLSearchParams({
+          page: String(page),
+          limit: String(pageSize),
+          q: query,
+          niche: selectedNiche,
+          district: selectedDistrict,
+        });
+        const res = await fetch(`/api/admin/sources?${params.toString()}`);
+        if (res.ok) {
+          const data = await res.json();
+          setSources(data.sources || []);
+          setTotal(data.total || 0);
+          setTotalPages(data.totalPages || 1);
+          if (data.totalSources) setTotalSources(data.totalSources);
+        }
+      } else {
+        const params = new URLSearchParams({
+          page: String(page),
+          limit: String(pageSize),
+          q: query,
+          niche: selectedNiche,
+          district: selectedDistrict,
+          tab: activeTab === 'deleted' ? 'deleted' : 'active',
+        });
+        const res = await fetch(`/api/admin/jobs?${params.toString()}`);
+        if (res.ok) {
+          const data = await res.json();
+          setJobs(data.jobs || []);
+          setTotal(data.total || 0);
+          setTotalPages(data.totalPages || 1);
+          if (typeof data.totalActive === 'number') setTotalActive(data.totalActive);
+          if (typeof data.totalDeleted === 'number') setTotalDeleted(data.totalDeleted);
+        }
+      }
+    } catch (err) {
+      console.error('Error loading dashboard data:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [activeTab, page, query, selectedNiche, selectedDistrict]);
+
   useEffect(() => {
-    setSuppressedIds(getSuppressedJobs());
-    const handleUpdate = () => {
-      setSuppressedIds(getSuppressedJobs());
-    };
-    window.addEventListener('jobroofs_jobs_suppressed', handleUpdate);
-    return () => window.removeEventListener('jobroofs_jobs_suppressed', handleUpdate);
-  }, []);
+    loadData();
+  }, [loadData]);
 
-  const isMaster = user?.email ? isMasterAccount(user.email) : false;
-
-  // Active (non-deleted) jobs
-  const liveJobs = useMemo(() => {
-    const suppressedSet = new Set(suppressedIds);
-    return initialJobs.filter((job) => !suppressedSet.has(job.id) && !suppressedSet.has(job.slug));
-  }, [initialJobs, suppressedIds]);
-
-  // Deleted / suppressed jobs
-  const deletedJobs = useMemo(() => {
-    const suppressedSet = new Set(suppressedIds);
-    return initialJobs.filter((job) => suppressedSet.has(job.id) || suppressedSet.has(job.slug));
-  }, [initialJobs, suppressedIds]);
-
-  // Filtered jobs for display
-  const filteredJobs = useMemo(() => {
-    const targetList = activeTab === 'deleted' ? deletedJobs : liveJobs;
-    const q = query.trim().toLowerCase();
-
-    return targetList.filter((job) => {
-      if (selectedNiche !== 'all' && job.industryId !== selectedNiche) return false;
-      if (selectedDistrict !== 'all' && !job.district.toLowerCase().includes(selectedDistrict.toLowerCase())) return false;
-      if (q) {
-        const titleMatch = job.title.toLowerCase().includes(q);
-        const companyMatch = job.company.toLowerCase().includes(q);
-        const districtMatch = job.district.toLowerCase().includes(q);
-        return titleMatch || companyMatch || districtMatch;
-      }
-      return true;
-    });
-  }, [liveJobs, deletedJobs, activeTab, query, selectedNiche, selectedDistrict]);
-
-  // Filtered sources for display
-  const filteredSources = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return initialSources.filter((source) => {
-      if (selectedNiche !== 'all' && source.nicheId !== selectedNiche) return false;
-      if (selectedDistrict !== 'all' && !source.district.toLowerCase().includes(selectedDistrict.toLowerCase())) return false;
-      if (q) {
-        const nameMatch = source.name.toLowerCase().includes(q);
-        const districtMatch = source.district.toLowerCase().includes(q);
-        const descMatch = source.description.toLowerCase().includes(q);
-        return nameMatch || districtMatch || descMatch;
-      }
-      return true;
-    });
-  }, [initialSources, query, selectedNiche, selectedDistrict]);
-
-  // Pagination
-  const totalPages = Math.max(1, Math.ceil((activeTab === 'sources' ? filteredSources.length : filteredJobs.length) / pageSize));
-  const currentPage = Math.min(page, totalPages);
-  const pagedJobs = filteredJobs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-  const pagedSources = filteredSources.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-
-  // Delete / Suppress Job handler
+  // Delete Job handler
   const handleDeleteJob = async (job: any) => {
     if (!confirm(`Möchtest du das Inserat "${job.title}" (${job.company}) wirklich aus dem Portal löschen?`)) {
       return;
@@ -119,13 +125,7 @@ export function ControlDashboardContent({
 
     setDeletingId(job.id);
     try {
-      // Local suppression
-      suppressJob(job.id);
-      suppressJob(job.slug);
-      setSuppressedIds((prev) => [...prev, job.id, job.slug]);
-
-      // Server API suppression
-      await fetch('/api/admin/delete-job', {
+      const res = await fetch('/api/admin/delete-job', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -133,10 +133,16 @@ export function ControlDashboardContent({
           email: user?.email || 'tushaarrsood@gmail.com',
           action: 'delete',
         }),
-      }).catch(() => {});
+      });
 
-      setActionNotice(`Inserat "${job.title}" wurde erfolgreich aus dem Portal gelöscht.`);
-      setTimeout(() => setActionNotice(null), 4500);
+      if (res.ok) {
+        setActionNotice(`Inserat "${job.title}" wurde erfolgreich aus dem Portal gelöscht.`);
+        setTimeout(() => setActionNotice(null), 4500);
+        loadData();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        alert(err.error || 'Fehler beim Löschen');
+      }
     } catch (err: any) {
       alert('Fehler beim Löschen: ' + err.message);
     } finally {
@@ -147,11 +153,7 @@ export function ControlDashboardContent({
   // Restore Job handler
   const handleRestoreJob = async (job: any) => {
     try {
-      unsuppressJob(job.id);
-      unsuppressJob(job.slug);
-      setSuppressedIds((prev) => prev.filter((id) => id !== job.id && id !== job.slug));
-
-      await fetch('/api/admin/delete-job', {
+      const res = await fetch('/api/admin/delete-job', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -159,23 +161,20 @@ export function ControlDashboardContent({
           email: user?.email || 'tushaarrsood@gmail.com',
           action: 'restore',
         }),
-      }).catch(() => {});
+      });
 
-      setActionNotice(`Inserat "${job.title}" wurde wiederhergestellt und ist wieder live.`);
-      setTimeout(() => setActionNotice(null), 4500);
+      if (res.ok) {
+        setActionNotice(`Inserat "${job.title}" wurde wiederhergestellt und ist wieder live.`);
+        setTimeout(() => setActionNotice(null), 4500);
+        loadData();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        alert(err.error || 'Fehler beim Wiederherstellen');
+      }
     } catch (err: any) {
       alert('Fehler beim Wiederherstellen: ' + err.message);
     }
   };
-
-  // Unique districts for filter
-  const districts = useMemo(() => {
-    const set = new Set<string>();
-    initialJobs.forEach((j) => {
-      if (j.district) set.add(j.district);
-    });
-    return Array.from(set).sort();
-  }, [initialJobs]);
 
   return (
     <div className="mx-auto max-w-[1440px] px-4 sm:px-6 py-6 sm:py-10 space-y-6">
@@ -187,9 +186,13 @@ export function ControlDashboardContent({
               System Dashboard · Berlin Live
             </span>
             {user ? (
-              <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold font-mono ${
-                isMaster ? 'bg-amber-500/10 text-amber-900 border border-amber-300/40' : 'bg-black/[0.04] text-[#1d1d1f]'
-              }`}>
+              <span
+                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold font-mono ${
+                  isMaster
+                    ? 'bg-amber-500/10 text-amber-900 border border-amber-300/40'
+                    : 'bg-black/[0.04] text-[#1d1d1f]'
+                }`}
+              >
                 {isMaster ? '👑 Master Admin' : user.email}
               </span>
             ) : null}
@@ -212,7 +215,7 @@ export function ControlDashboardContent({
           </Link>
           <div className="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">
             <span className="size-2 rounded-full bg-emerald-600 animate-pulse" />
-            <span>1.600 Stellen Online</span>
+            <span>{totalActive} Stellen Online</span>
           </div>
         </div>
       </div>
@@ -242,7 +245,7 @@ export function ControlDashboardContent({
             <Briefcase className="size-4 text-blue-600" />
           </div>
           <p className="mt-3 text-3xl font-bold font-mono tracking-tight text-[#1d1d1f]">
-            {liveJobs.length.toLocaleString('de-DE')}
+            {totalActive.toLocaleString('de-DE')}
           </p>
           <p className="mt-1 text-xs text-emerald-600 font-medium">
             100% verifiziert & direkt bewerbbar
@@ -255,7 +258,7 @@ export function ControlDashboardContent({
             <Building2 className="size-4 text-emerald-600" />
           </div>
           <p className="mt-3 text-3xl font-bold font-mono tracking-tight text-[#1d1d1f]">
-            {initialSources.length.toLocaleString('de-DE')}
+            {totalSources.toLocaleString('de-DE')}
           </p>
           <p className="mt-1 text-xs text-[#86868b]">
             Direkte Berliner Betriebe (50 je Sparte)
@@ -281,10 +284,10 @@ export function ControlDashboardContent({
             <Trash2 className="size-4 text-amber-600" />
           </div>
           <p className="mt-3 text-3xl font-bold font-mono tracking-tight text-[#1d1d1f]">
-            {deletedJobs.length}
+            {totalDeleted}
           </p>
           <p className="mt-1 text-xs text-[#86868b]">
-            {deletedJobs.length === 0 ? 'Keine Inserate unterdrückt' : 'Im Papierkorb (wiederherstellbar)'}
+            {totalDeleted === 0 ? 'Keine Inserate unterdrückt' : 'Im Papierkorb (wiederherstellbar)'}
           </p>
         </div>
       </div>
@@ -300,7 +303,7 @@ export function ControlDashboardContent({
               : 'text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.04]'
           }`}
         >
-          Extrahiertes Stellenangebot ({liveJobs.length})
+          Extrahiertes Stellenangebot ({totalActive})
         </button>
 
         <button
@@ -312,7 +315,7 @@ export function ControlDashboardContent({
               : 'text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.04]'
           }`}
         >
-          Quellen-Verzeichnis ({initialSources.length})
+          Quellen-Verzeichnis ({totalSources})
         </button>
 
         <button
@@ -324,7 +327,7 @@ export function ControlDashboardContent({
               : 'text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.04]'
           }`}
         >
-          Papierkorb ({deletedJobs.length})
+          Papierkorb ({totalDeleted})
         </button>
       </div>
 
@@ -401,14 +404,19 @@ export function ControlDashboardContent({
         <div className="overflow-hidden rounded-[20px] border border-black/[0.06] bg-white shadow-xs">
           <div className="p-4 border-b border-black/[0.04] flex items-center justify-between text-xs text-[#86868b]">
             <span className="font-semibold text-[#1d1d1f]">
-              {activeTab === 'deleted' ? 'Gelöschte / Unterdrückte Inserate' : 'Aktive extrahierte Inserate'} ({filteredJobs.length})
+              {activeTab === 'deleted' ? 'Gelöschte / Unterdrückte Inserate' : 'Aktive extrahierte Inserate'} ({total})
             </span>
             <span>
-              Seite {currentPage} von {totalPages}
+              Seite {page} von {totalPages}
             </span>
           </div>
 
-          {filteredJobs.length === 0 ? (
+          {loading ? (
+            <div className="p-12 text-center text-[#86868b] flex items-center justify-center gap-2">
+              <RefreshCw className="size-4 animate-spin text-blue-600" />
+              <span className="text-xs">Lädt Stellenangebote...</span>
+            </div>
+          ) : jobs.length === 0 ? (
             <div className="p-12 text-center text-[#86868b] space-y-2">
               <AlertCircle className="size-8 mx-auto text-[#86868b]/60" />
               <p className="font-semibold text-sm text-[#1d1d1f]">
@@ -436,7 +444,7 @@ export function ControlDashboardContent({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-black/[0.04]">
-                  {pagedJobs.map((job) => {
+                  {jobs.map((job) => {
                     const isDeleting = deletingId === job.id;
                     return (
                       <tr key={job.id} className="hover:bg-black/[0.015] transition-colors">
@@ -471,7 +479,7 @@ export function ControlDashboardContent({
 
                         <td className="py-3.5 px-4">
                           <a
-                            href={job.application?.url || '#'}
+                            href={job.application?.url || job.sourceUrl || '#'}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1 text-blue-600 hover:underline text-[11px]"
@@ -518,7 +526,7 @@ export function ControlDashboardContent({
             <div className="p-4 border-t border-black/[0.04] flex items-center justify-between">
               <button
                 type="button"
-                disabled={currentPage <= 1}
+                disabled={page <= 1 || loading}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 className="inline-flex items-center gap-1 rounded-lg border border-black/[0.08] px-3 py-1 text-xs font-semibold disabled:opacity-40 cursor-pointer"
               >
@@ -526,12 +534,12 @@ export function ControlDashboardContent({
               </button>
 
               <span className="text-xs text-[#86868b]">
-                Seite {currentPage} von {totalPages}
+                Seite {page} von {totalPages}
               </span>
 
               <button
                 type="button"
-                disabled={currentPage >= totalPages}
+                disabled={page >= totalPages || loading}
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 className="inline-flex items-center gap-1 rounded-lg border border-black/[0.08] px-3 py-1 text-xs font-semibold disabled:opacity-40 cursor-pointer"
               >
@@ -545,74 +553,81 @@ export function ControlDashboardContent({
         <div className="overflow-hidden rounded-[20px] border border-black/[0.06] bg-white shadow-xs">
           <div className="p-4 border-b border-black/[0.04] flex items-center justify-between text-xs text-[#86868b]">
             <span className="font-semibold text-[#1d1d1f]">
-              Verifizierte Berliner Arbeitgeber & Quellen ({filteredSources.length})
+              Verifizierte Berliner Arbeitgeber & Quellen ({total})
             </span>
             <span>
-              Seite {currentPage} von {totalPages}
+              Seite {page} von {totalPages}
             </span>
           </div>
 
-          <div className="divide-y divide-black/[0.04] overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-black/[0.02] text-[10.5px] uppercase font-mono tracking-wider text-[#86868b]">
-                <tr>
-                  <th className="py-3 px-4">Betrieb / Organisation</th>
-                  <th className="py-3 px-4">Kategorie</th>
-                  <th className="py-3 px-4">Bezirk</th>
-                  <th className="py-3 px-4">Typische Rollen</th>
-                  <th className="py-3 px-4 text-right">Karriereseite</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-black/[0.04]">
-                {pagedSources.map((source) => (
-                  <tr key={source.id} className="hover:bg-black/[0.015] transition-colors">
-                    <td className="py-3.5 px-4 font-semibold text-[#1d1d1f]">
-                      <div>{source.name}</div>
-                      <div className="text-[11px] text-[#86868b] font-normal line-clamp-1 max-w-sm mt-0.5">
-                        {source.description}
-                      </div>
-                    </td>
-
-                    <td className="py-3.5 px-4">
-                      <span className="inline-block rounded-md bg-black/[0.04] px-2 py-0.5 text-[10.5px] font-semibold text-[#1d1d1f]">
-                        {industryNiches.find((n) => n.id === source.nicheId)?.labelDe || source.nicheId}
-                      </span>
-                    </td>
-
-                    <td className="py-3.5 px-4">
-                      <span className="inline-flex items-center gap-1 text-[#86868b]">
-                        <MapPin className="size-3" />
-                        <span>{source.district}</span>
-                      </span>
-                    </td>
-
-                    <td className="py-3.5 px-4 text-[#86868b]">
-                      {source.typicalRoles ? source.typicalRoles.slice(0, 2).join(', ') : '—'}
-                    </td>
-
-                    <td className="py-3.5 px-4 text-right">
-                      <a
-                        href={source.careersUrl || source.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 rounded-lg border border-black/[0.08] px-2.5 py-1 text-xs font-semibold text-blue-600 hover:bg-blue-50 transition"
-                      >
-                        <span>Karriereseite</span>
-                        <ExternalLink className="size-3" />
-                      </a>
-                    </td>
+          {loading ? (
+            <div className="p-12 text-center text-[#86868b] flex items-center justify-center gap-2">
+              <RefreshCw className="size-4 animate-spin text-blue-600" />
+              <span className="text-xs">Lädt Quellen...</span>
+            </div>
+          ) : (
+            <div className="divide-y divide-black/[0.04] overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-black/[0.02] text-[10.5px] uppercase font-mono tracking-wider text-[#86868b]">
+                  <tr>
+                    <th className="py-3 px-4">Betrieb / Organisation</th>
+                    <th className="py-3 px-4">Kategorie</th>
+                    <th className="py-3 px-4">Bezirk</th>
+                    <th className="py-3 px-4">Typische Rollen</th>
+                    <th className="py-3 px-4 text-right">Karriereseite</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-black/[0.04]">
+                  {sources.map((source) => (
+                    <tr key={source.id} className="hover:bg-black/[0.015] transition-colors">
+                      <td className="py-3.5 px-4 font-semibold text-[#1d1d1f]">
+                        <div>{source.name}</div>
+                        <div className="text-[11px] text-[#86868b] font-normal line-clamp-1 max-w-sm mt-0.5">
+                          {source.description}
+                        </div>
+                      </td>
+
+                      <td className="py-3.5 px-4">
+                        <span className="inline-block rounded-md bg-black/[0.04] px-2 py-0.5 text-[10.5px] font-semibold text-[#1d1d1f]">
+                          {industryNiches.find((n) => n.id === source.nicheId)?.labelDe || source.nicheId}
+                        </span>
+                      </td>
+
+                      <td className="py-3.5 px-4">
+                        <span className="inline-flex items-center gap-1 text-[#86868b]">
+                          <MapPin className="size-3" />
+                          <span>{source.district}</span>
+                        </span>
+                      </td>
+
+                      <td className="py-3.5 px-4 text-[#86868b]">
+                        {source.typicalRoles ? source.typicalRoles.slice(0, 2).join(', ') : '—'}
+                      </td>
+
+                      <td className="py-3.5 px-4 text-right">
+                        <a
+                          href={source.careersUrl || source.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 rounded-lg border border-black/[0.08] px-2.5 py-1 text-xs font-semibold text-blue-600 hover:bg-blue-50 transition"
+                        >
+                          <span>Karriereseite</span>
+                          <ExternalLink className="size-3" />
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
           {/* Sources Pagination */}
           {totalPages > 1 && (
             <div className="p-4 border-t border-black/[0.04] flex items-center justify-between">
               <button
                 type="button"
-                disabled={currentPage <= 1}
+                disabled={page <= 1 || loading}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 className="inline-flex items-center gap-1 rounded-lg border border-black/[0.08] px-3 py-1 text-xs font-semibold disabled:opacity-40 cursor-pointer"
               >
@@ -620,12 +635,12 @@ export function ControlDashboardContent({
               </button>
 
               <span className="text-xs text-[#86868b]">
-                Seite {currentPage} von {totalPages}
+                Seite {page} von {totalPages}
               </span>
 
               <button
                 type="button"
-                disabled={currentPage >= totalPages}
+                disabled={page >= totalPages || loading}
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 className="inline-flex items-center gap-1 rounded-lg border border-black/[0.08] px-3 py-1 text-xs font-semibold disabled:opacity-40 cursor-pointer"
               >

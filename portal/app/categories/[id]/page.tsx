@@ -8,6 +8,7 @@ import { previewJobs } from '@/lib/domain/preview-data';
 import { getIndustry, industryNiches } from '@/lib/domain/taxonomy';
 import { getCategoryJobs } from '@/lib/jobs/feeds';
 import { isJobSuppressed } from '@/lib/sources/suppression-store';
+import { getSourcedJobsByNiche } from '@/lib/sources/sourced-jobs';
 
 export function generateStaticParams() {
   return industryNiches.map((niche) => ({ id: niche.id }));
@@ -45,13 +46,12 @@ export default async function CategoryPage({
   const niche = getIndustry(id);
 
   const feedsJobs = await getCategoryJobs(id);
-  const curatedJobs = previewJobs.filter(
+  const sourcedJobs = getSourcedJobsByNiche(id).filter(
     (job) =>
-      job.industryId === id &&
       !isJobSuppressed(job.id) &&
       (!job.slug || !isJobSuppressed(job.slug)),
   );
-  const categoryJobs = feedsJobs.length > 0 ? feedsJobs : curatedJobs;
+  const categoryJobs = feedsJobs.length > 0 ? feedsJobs : sourcedJobs;
 
   if (!niche)
     return (

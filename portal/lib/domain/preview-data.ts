@@ -1,7 +1,19 @@
 import type { PreviewJob } from './types';
 import { ALL_SOURCED_JOBS } from '@/lib/sources/sourced-jobs';
 
-export const previewJobs: PreviewJob[] = ALL_SOURCED_JOBS;
+// Representative showcase of jobs covering all 32 Berlin niches for instantaneous homepage hydration
+export const previewJobs: PreviewJob[] = (() => {
+  const seenNiches = new Map<string, number>();
+  const showcase: PreviewJob[] = [];
+  for (const job of ALL_SOURCED_JOBS) {
+    const count = seenNiches.get(job.industryId) || 0;
+    if (count < 2) {
+      showcase.push(job);
+      seenNiches.set(job.industryId, count + 1);
+    }
+  }
+  return showcase.length > 0 ? showcase : ALL_SOURCED_JOBS.slice(0, 64);
+})();
 
 export const previewSources = [
   {
