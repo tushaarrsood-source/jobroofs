@@ -82,6 +82,7 @@ export function JobBrowser({
   showHero = true,
 }: JobBrowserProps) {
   const { t, locale, isDe } = useTranslation();
+  const [jobs, setJobs] = useState<any[]>(initialJobs);
   const [query, setQuery] = useState('');
   const [industry, setIndustry] = useState('all');
   const [district, setDistrict] = useState('all');
@@ -91,6 +92,38 @@ export function JobBrowser({
   const [hoveredJobId, setHoveredJobId] = useState<string | null>(null);
   const [displayLimit, setDisplayLimit] = useState(25);
   const jobCardsRef = useRef<Record<string, HTMLDivElement | null>>({});
+
+  useEffect(() => {
+    setJobs(initialJobs);
+  }, [initialJobs]);
+
+  // Background hydration: Load the full active catalog of 1,600 verified jobs across Berlin
+  useEffect(() => {
+    let isMounted = true;
+    fetch('/api/jobs?limit=2000')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (isMounted && data && Array.isArray(data.jobs) && data.jobs.length > 0) {
+          const map = new Map<string, any>();
+          // Hydrate full sourced catalog
+          data.jobs.forEach((j: any) => map.set(j.slug || j.id, j));
+          // Keep any server-rendered initial jobs with custom fields
+          initialJobs.forEach((j: any) => {
+            if (!map.has(j.slug || j.id)) {
+              map.set(j.slug || j.id, j);
+            }
+          });
+          setJobs(Array.from(map.values()));
+        }
+      })
+      .catch(() => {
+        // graceful fallback to initialJobs
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [initialJobs]);
 
   // Reset pagination when filters change
   useEffect(() => {
@@ -104,7 +137,7 @@ export function JobBrowser({
 
   const visibleJobs = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
-    return initialJobs!
+    return jobs
       .filter((job) => {
         // Expiration check: standard (30d) vs premium (60d)
         if (job.expiresAt && isListingExpired(job.expiresAt)) return false;
@@ -170,7 +203,7 @@ export function JobBrowser({
         if (bPrem && !aPrem) return 1;
         return 0;
       });
-  }, [district, employment, filterOrigin, industry, payInterval, query, initialJobs]);
+  }, [district, employment, filterOrigin, industry, payInterval, query, jobs]);
 
   const paginatedJobs = useMemo(() => {
     return visibleJobs.slice(0, displayLimit);
@@ -423,7 +456,7 @@ export function JobBrowser({
             <div>
               <h2 className="text-lg font-bold tracking-tight text-slate-950">{effectiveSectionTitle}</h2>
               <p className="text-xs text-zinc-500">
-                {visibleJobs.length} {t('jobsFound')}
+                {visibleJobs.length.toLocaleString('de-DE')} {t('jobsFound')}
                 {visibleJobs.length > displayLimit ? (
                   <span className="font-mono text-[11px] text-zinc-400 ml-1.5">
                     ({isDe ? `Zeige 1–${Math.min(displayLimit, visibleJobs.length)}` : `Showing 1–${Math.min(displayLimit, visibleJobs.length)}`})
