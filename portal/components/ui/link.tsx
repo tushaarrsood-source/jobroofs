@@ -1,6 +1,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
+import NextLink from 'next/link';
 
 export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string | { pathname?: string; query?: Record<string, string | number>; hash?: string };
@@ -50,39 +51,23 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
     if (onClick) {
       onClick(e);
     }
-    if (e.defaultPrevented) return;
-
-    // Do not intercept non-left clicks or clicks with modifier keys
-    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
-      return;
-    }
-
-    if (rest.target && rest.target !== '_self') {
-      return;
-    }
-
-    // Hash-only links on the same page
-    if (url.startsWith('#')) {
-      return;
-    }
-
-    // If replace is explicitly requested
-    if (replace) {
-      e.preventDefault();
-      window.location.replace(url);
-      return;
-    }
-
-    // Scroll to top if scroll prop is true
-    if (scroll && typeof window !== 'undefined') {
+    if (scroll && typeof window !== 'undefined' && !url.startsWith('#')) {
       window.scrollTo(0, 0);
     }
   };
 
   return (
-    <a ref={ref} href={url} onClick={handleClick} {...rest}>
+    <NextLink
+      ref={ref}
+      href={url}
+      replace={replace}
+      scroll={scroll}
+      prefetch={prefetch}
+      onClick={handleClick}
+      {...rest}
+    >
       {children}
-    </a>
+    </NextLink>
   );
 });
 

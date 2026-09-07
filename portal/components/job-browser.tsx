@@ -77,7 +77,7 @@ export function JobBrowser({
   pageTitle,
   pageSubtitle,
   sectionTitle,
-  viewAllHref = '/direct-employers',
+  viewAllHref = '/all-jobs',
   viewAllLabel,
   showHero = true,
 }: JobBrowserProps) {
@@ -554,7 +554,7 @@ export function JobBrowser({
                   })}
 
                   {displayLimit < visibleJobs.length && (
-                    <div className="pt-4 pb-2 text-center">
+                    <div className="pt-4 pb-2 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
                       <button
                         type="button"
                         onClick={() => setDisplayLimit((prev) => prev + 25)}
@@ -566,6 +566,15 @@ export function JobBrowser({
                             : `Show 25 more jobs (${visibleJobs.length - displayLimit} remaining)`}
                         </span>
                       </button>
+                      {viewAllHref && (
+                        <Link
+                          href={viewAllHref}
+                          className="apple-btn-primary !h-10 !px-6 !text-xs sm:!text-sm inline-flex items-center gap-2"
+                        >
+                          <span>{effectiveViewAllLabel}</span>
+                          <ArrowRight className="size-3.5" />
+                        </Link>
+                      )}
                     </div>
                   )}
                 </>

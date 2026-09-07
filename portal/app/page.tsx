@@ -73,7 +73,11 @@ export default async function Home() {
       <LocalBusinessJsonLd />
       <SiteHeader />
       <PortalWelcomeBanner />
-      <JobBrowser initialJobs={initialJobs} />
+      <JobBrowser
+        initialJobs={initialJobs}
+        viewAllHref="/all-jobs"
+        viewAllLabel="Alle 1.600 Jobs im Überblick"
+      />
 
       {/* Horizontal Scroll Category Carousel */}
       <CategoryCarousel />

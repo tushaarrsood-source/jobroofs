@@ -60,7 +60,7 @@ export function SiteHeader({ control = false }: { control?: boolean }) {
               <div className="flex items-center gap-1 pr-2">
                 {/* 1. Jobs Link */}
                 <Link
-                  href="/"
+                  href="/all-jobs"
                   className={`rounded-full px-3 py-1 text-xs font-medium transition active:scale-[0.97] ${
                     isJobsActive
                       ? 'bg-black/[0.06] text-[#1d1d1f] font-semibold'

@@ -18,8 +18,22 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  if (isJobSuppressed(slug)) return { title: 'Job Not Found' };
-  const job = getSourcedJobBySlug(slug) || previewJobs.find((item) => item.slug === slug);
+  let decodedSlug = slug;
+  try {
+    decodedSlug = decodeURIComponent(slug);
+  } catch (e) {}
+
+  if (isJobSuppressed(slug) || isJobSuppressed(decodedSlug)) return { title: 'Job Not Found' };
+  const job =
+    getSourcedJobBySlug(slug) ||
+    getSourcedJobBySlug(decodedSlug) ||
+    previewJobs.find(
+      (item) =>
+        item.slug === slug ||
+        item.slug === decodedSlug ||
+        item.id === slug ||
+        item.id === decodedSlug,
+    );
 
   if (job) {
     const payLabel = job.compensation?.label || '';
@@ -38,7 +52,7 @@ export async function generateMetadata({
     };
   }
 
-  const dbJob = await getJobById(slug);
+  const dbJob = (await getJobById(slug)) || (await getJobById(decodedSlug));
   if (!dbJob) return { title: 'Job Not Found' };
 
   const district = dbJob.district || 'Berlin';
@@ -63,15 +77,21 @@ export default async function JobDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  if (isJobSuppressed(slug)) {
+  let decodedSlug = slug;
+  try {
+    decodedSlug = decodeURIComponent(slug);
+  } catch (e) {}
+
+  if (isJobSuppressed(slug) || isJobSuppressed(decodedSlug)) {
     return notFound();
   }
   let job: any = null;
 
-  const dbJob = await getJobById(slug);
+  const dbJob = (await getJobById(slug)) || (await getJobById(decodedSlug));
   if (dbJob) {
-    const niches = await getJobNiches(slug);
-    const sourceInfo = await getJobSourceInfo(slug);
+    const targetSlug = dbJob.id;
+    const niches = await getJobNiches(targetSlug);
+    const sourceInfo = await getJobSourceInfo(targetSlug);
     job = {
       id: dbJob.id,
       slug: dbJob.id,
@@ -118,7 +138,16 @@ export default async function JobDetailPage({
   }
 
   if (!job) {
-    job = getSourcedJobBySlug(slug) || previewJobs.find((item) => item.slug === slug || item.id === slug);
+    job =
+      getSourcedJobBySlug(slug) ||
+      getSourcedJobBySlug(decodedSlug) ||
+      previewJobs.find(
+        (item) =>
+          item.slug === slug ||
+          item.slug === decodedSlug ||
+          item.id === slug ||
+          item.id === decodedSlug,
+      );
   }
 
   if (!job) {

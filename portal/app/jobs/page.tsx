@@ -1,5 +1,1 @@
-import { redirect } from 'next/navigation';
-
-export default function JobsPage() {
-  redirect('/#jobs');
-}
+export { default, metadata } from '../all-jobs/page';
