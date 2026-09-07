@@ -73,14 +73,18 @@ export default async function Home() {
       <LocalBusinessJsonLd />
       <SiteHeader />
       <PortalWelcomeBanner />
+
+      {/* Horizontal Scroll Category Carousel - 32 Berlin Categories */}
+      <CategoryCarousel title="Kategorien & Branchen in Berlin" eyebrow="Entdecke 32 Kiez-Branchen" />
+
+      {/* Consolidated All Listings Section */}
       <JobBrowser
         initialJobs={initialJobs}
+        pageTitle="Alle Stellenangebote in Berlin"
+        sectionTitle="Consolidated List View — Alle Stellenangebote"
         viewAllHref="/all-jobs"
         viewAllLabel="Alle 1.600 Jobs im Überblick"
       />
-
-      {/* Horizontal Scroll Category Carousel */}
-      <CategoryCarousel />
 
       <LatestJobs jobs={latestJobs} />
 

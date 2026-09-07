@@ -51,9 +51,6 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
     if (onClick) {
       onClick(e);
     }
-    if (scroll && typeof window !== 'undefined' && !url.startsWith('#')) {
-      window.scrollTo(0, 0);
-    }
   };
 
   return (

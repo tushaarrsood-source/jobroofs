@@ -1,13 +1,21 @@
 const memorySuppressed = new Set<string>();
 
+function isNodeRuntime(): boolean {
+  return (
+    typeof window === 'undefined' &&
+    typeof process !== 'undefined' &&
+    process.versions != null &&
+    process.versions.node != null
+  );
+}
+
 // Get path to suppressed jobs file in data directory (Node runtime only)
 function getSuppressedFilePath(): string | null {
-  if (typeof window !== 'undefined') return null;
+  if (!isNodeRuntime()) return null;
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const fs = require('fs');
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const path = require('path');
+    const req = (0, eval)('require');
+    const fs = req('fs');
+    const path = req('path');
     const dataDir = path.resolve(process.cwd(), 'data');
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
@@ -20,12 +28,12 @@ function getSuppressedFilePath(): string | null {
 
 // Load initially from file if on server
 function loadSuppressedFromFile(): Set<string> {
-  if (typeof window !== 'undefined') return memorySuppressed;
+  if (!isNodeRuntime()) return memorySuppressed;
   const filePath = getSuppressedFilePath();
   if (!filePath) return memorySuppressed;
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const fs = require('fs');
+    const req = (0, eval)('require');
+    const fs = req('fs');
     if (fs.existsSync(filePath)) {
       const raw = fs.readFileSync(filePath, 'utf-8');
       const list = JSON.parse(raw);
@@ -41,12 +49,12 @@ function loadSuppressedFromFile(): Set<string> {
 
 // Save to file if on server
 function saveSuppressedToFile() {
-  if (typeof window !== 'undefined') return;
+  if (!isNodeRuntime()) return;
   const filePath = getSuppressedFilePath();
   if (!filePath) return;
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const fs = require('fs');
+    const req = (0, eval)('require');
+    const fs = req('fs');
     fs.writeFileSync(
       filePath,
       JSON.stringify(Array.from(memorySuppressed), null, 2),
@@ -58,7 +66,7 @@ function saveSuppressedToFile() {
 }
 
 // Initialize on module load
-if (typeof window === 'undefined') {
+if (isNodeRuntime()) {
   loadSuppressedFromFile();
 }
 

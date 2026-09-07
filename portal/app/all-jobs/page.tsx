@@ -5,7 +5,7 @@ import { JobBrowser } from '@/components/job-browser';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { BreadcrumbJsonLd } from '@/components/json-ld';
-import { ALL_SOURCED_JOBS } from '@/lib/sources/sourced-jobs';
+import { previewJobs } from '@/lib/domain/preview-data';
 import { isJobSuppressed } from '@/lib/sources/suppression-store';
 
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 export default function AllJobsPage() {
-  const initialJobs = ALL_SOURCED_JOBS.filter(
+  const initialJobs = previewJobs.filter(
     (job) => !isJobSuppressed(job.id) && (!job.slug || !isJobSuppressed(job.slug)),
   );
 
