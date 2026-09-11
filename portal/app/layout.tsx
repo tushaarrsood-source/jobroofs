@@ -4,7 +4,6 @@ import { AuthProvider } from '@/lib/firebase/auth-context';
 import { LanguageProvider } from '@/lib/i18n/language-context';
 import { MobileNavBar } from '@/components/mobile-nav-bar';
 import { CookieBanner } from '@/components/cookie-banner';
-import { GlobalBgInfographics } from '@/components/global-bg-infographics';
 import './globals.css';
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -119,7 +118,6 @@ export default function RootLayout({
       <body
         className={`${plusJakarta.variable} antialiased selection:bg-[#202a31] selection:text-[#fbfbf8] pb-24 md:pb-0 font-sans bg-[#fbfbf8] text-[#202a31] relative min-h-screen`}
       >
-        <GlobalBgInfographics />
         <AuthProvider>
           <LanguageProvider>
             {children}
@@ -127,6 +125,22 @@ export default function RootLayout({
             <MobileNavBar />
           </LanguageProvider>
         </AuthProvider>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(regs) {
+                  for (var reg of regs) reg.unregister();
+                });
+              }
+              if (typeof window !== 'undefined' && 'caches' in window) {
+                caches.keys().then(function(keys) {
+                  for (var key of keys) caches.delete(key);
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );
