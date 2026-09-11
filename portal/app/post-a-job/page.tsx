@@ -5,11 +5,11 @@ import { BreadcrumbJsonLd } from '@/components/json-ld';
 import { SimplePostJobForm } from '@/components/simple-post-job-form';
 
 export const metadata: Metadata = {
-  title: 'Job schalten — In 2 Minuten online in Berlin | KIEZJOB',
+  title: 'Job schalten — In 2 Minuten online in Berlin | JOBROOFS',
   description:
-    'Schalte dein Stellenangebot direkt für tausende Berliner Studierende, Aushilfen und Minijobber. Schnell, direkt und ohne Vermittlungsgebühren.',
+    'Schalte dein Stellenangebot direkt für tausende Berliner Studierende, Aushilfen und Minijobber auf JOBROOFS — The portal for Temp Jobs.',
   openGraph: {
-    title: 'Job schalten · KIEZJOB Berlin',
+    title: 'Job schalten · JOBROOFS — The portal for Temp Jobs',
     description:
       'Erreiche aktive Berliner Bewerber für Minijobs, Teilzeitstellen und flexible Schichten.',
     url: '/post-a-job',
@@ -25,7 +25,7 @@ export default function PostAJobPage() {
       <div>
         <BreadcrumbJsonLd
           items={[
-            { name: 'KIEZJOB', href: '/' },
+            { name: 'JOBROOFS', href: '/' },
             { name: 'Job schalten', href: '/post-a-job' },
           ]}
         />

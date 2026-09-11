@@ -10,11 +10,11 @@ import { ALL_SOURCED_JOBS } from '@/lib/sources/sourced-jobs';
 import { isJobSuppressed } from '@/lib/sources/suppression-store';
 
 export const metadata: Metadata = {
-  title: 'Alle Stellenangebote in Berlin — KIEZJOB',
+  title: 'Alle Stellenangebote in Berlin — JOBROOFS | The portal for Temp Jobs',
   description:
-    'Vollständiges Verzeichnis aller verifizierten Jobs, Minijobs, Teilzeitstellen und Aushilfsjobs in Berlin. 100% Direktkontakt ohne Zeitarbeit.',
+    'Vollständiges Verzeichnis aller verifizierten Temp Jobs, Minijobs und flexiblen Aushilfsjobs in Berlin. 100% Direktkontakt ohne Zeitarbeit.',
   openGraph: {
-    title: 'Alle Stellenangebote in Berlin · KIEZJOB',
+    title: 'Alle Stellenangebote in Berlin · JOBROOFS — The portal for Temp Jobs',
     description:
       'Stöbere durch die vollständige Übersicht aller Jobs in Berlin across 32 Kategorien.',
     url: '/all-jobs',

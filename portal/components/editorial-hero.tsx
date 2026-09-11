@@ -8,11 +8,14 @@ export function EditorialHero() {
     <section className="pt-8 pb-10 sm:pt-12 sm:pb-14">
       {/* Top Headline Section */}
       <div className="mb-8 sm:mb-10">
+        <div className="inline-flex items-center gap-2 text-xs font-bold tracking-wider uppercase text-[#1b4332] bg-[#e8f1ec] px-3 py-1 rounded-full mb-3.5">
+          <span>BERLIN &middot; THE PORTAL FOR TEMP JOBS</span>
+        </div>
         <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-[#111816]">
-          Jobs of Berlin<span className="text-[#1b4332]">.</span>
+          The portal for Temp Jobs<span className="text-[#1b4332]">.</span>
         </h1>
         <p className="mt-2.5 text-base sm:text-lg text-[#5c6863] font-medium max-w-xl">
-          Save the work you love. Connect directly with local Berlin employers.
+          Save the work you love. 1.600+ verified flexible shifts, minijobs, and temporary gigs direct with Berlin employers.
         </p>
       </div>
 

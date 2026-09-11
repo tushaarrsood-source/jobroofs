@@ -9,11 +9,11 @@ export function WebSiteJsonLd() {
   const data = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'JOBROOFS',
+    name: 'JOBROOFS — The portal for Temp Jobs',
     alternateName: 'JOBROOFS Berlin',
     url: 'https://jobroofs.com',
     description:
-      "Berlin's portal for flexible work, Minijobs, neighborhood housing, and rooms.",
+      'The portal for temp jobs, minijobs, flexible shifts, and student gigs in Berlin.',
     potentialAction: {
       '@type': 'SearchAction',
       target: {

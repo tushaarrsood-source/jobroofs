@@ -21,13 +21,13 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
         {/* Left: Brand Logo (Editorial Style) */}
         <Link
           href="/"
-          className="group flex items-baseline gap-2 select-none"
+          className="group flex items-center gap-2 select-none"
         >
           <span className="text-xl font-extrabold tracking-tight text-[#111816]">
-            KIEZJOB<span className="text-[#1b4332]">.</span>
+            JOBROOFS<span className="text-[#1b4332]">.</span>
           </span>
-          <span className="text-[11px] font-bold text-[#5c6863] uppercase tracking-widest">
-            Berlin
+          <span className="hidden sm:inline-block text-[11px] font-semibold text-[#5c6863] border-l border-[#e5eae7] pl-2">
+            The portal for Temp Jobs
           </span>
         </Link>
 

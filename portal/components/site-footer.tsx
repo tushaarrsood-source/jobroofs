@@ -12,18 +12,18 @@ export function SiteFooter() {
         <div className="grid gap-10 sm:grid-cols-3">
           {/* Brand Col */}
           <div className="sm:col-span-1">
-            <Link href="/" className="inline-flex items-baseline gap-2 text-white">
+            <Link href="/" className="inline-flex items-center gap-2 text-white">
               <span className="text-xl font-extrabold tracking-tight">
-                KIEZJOB<span className="text-[#34d399]">.</span>
+                JOBROOFS<span className="text-[#34d399]">.</span>
               </span>
-              <span className="text-[11px] font-bold text-[#8fa099] uppercase tracking-widest">
-                Berlin
+              <span className="text-[11px] font-bold text-[#8fa099] uppercase tracking-wider pl-2 border-l border-white/20">
+                The portal for Temp Jobs
               </span>
             </Link>
             <p className="mt-3 text-xs leading-relaxed text-[#8fa099]">
               {isDe
-                ? 'Das moderne Berliner Portal für Studierende, Minijobs und Aushilfsjobs. 100% Direktkontakt ohne Zeitarbeit und ohne Vermittlungsgebühren.'
-                : 'The modern Berlin portal for students, minijobs, and part-time jobs. 100% direct contact without temp agencies.'}
+                ? 'Das Berliner Portal für Minijobs, Aushilfen und flexible Schichten. 100% Direktkontakt zum Arbeitgeber ohne Zwischenhändler.'
+                : 'The Berlin portal for temp jobs, minijobs, and flexible shifts. 100% direct contact with local employers without middlemen.'}
             </p>
           </div>
 
@@ -77,7 +77,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-[#5c6863] gap-2">
-          <p>© {new Date().getFullYear()} KIEZJOB Berlin. Designed with craft in Berlin.</p>
+          <p>© {new Date().getFullYear()} JOBROOFS Berlin &middot; The portal for Temp Jobs.</p>
           <div className="flex items-center gap-2">
             <span className="size-2 rounded-full bg-[#34d399]" />
             <span className="text-[#8fa099]">1.600+ verifizierte Kiez-Jobs aktiv</span>

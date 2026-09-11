@@ -38,7 +38,7 @@ export async function generateMetadata({
     const payLabel = job.compensation?.label || '';
     const district = job.district || 'Berlin';
     return {
-      title: `${job.title} — ${job.company} (${district}) | KIEZJOB`,
+      title: `${job.title} — ${job.company} (${district}) | JOBROOFS — The portal for Temp Jobs`,
       description: `${job.title} bei ${job.company} in ${district}, Berlin. ${payLabel}. Jetzt direkt online bewerben.`,
       openGraph: {
         title: `${job.title} — ${job.company} (${district})`,
@@ -57,7 +57,7 @@ export async function generateMetadata({
   const district = dbJob.district || 'Berlin';
   const payText = dbJob.payText || '';
   return {
-    title: `${dbJob.title} — ${dbJob.company} (${district}) | KIEZJOB`,
+    title: `${dbJob.title} — ${dbJob.company} (${district}) | JOBROOFS — The portal for Temp Jobs`,
     description: `${dbJob.title} — ${payText} in ${district}, Berlin. Direkt bewerben.`,
     openGraph: {
       title: `${dbJob.title} — ${dbJob.company} (${district})`,
@@ -169,7 +169,7 @@ export default async function JobDetailPage({
         <JobPostingJsonLd job={job} />
         <BreadcrumbJsonLd
           items={[
-            { name: 'KIEZJOB', href: '/' },
+            { name: 'JOBROOFS', href: '/' },
             { name: getIndustry(job.industryId)?.label || 'Jobs', href: '/' },
             { name: job.title, href: `/jobs/${job.slug || job.id}` },
           ]}

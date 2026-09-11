@@ -25,20 +25,20 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://jobroofs.com'),
   title: {
-    default: 'JOBROOFS — Berlin Portal for Flexible Jobs & Neighborhood Housing',
-    template: '%s · JOBROOFS',
+    default: 'JOBROOFS — The portal for Temp Jobs in Berlin',
+    template: '%s · JOBROOFS — The portal for Temp Jobs',
   },
   description:
-    'Direct marketplace for flexible work, minijobs, WG rooms and apartments across Berlin.',
+    'The portal for temp jobs in Berlin. 1.600+ verified minijobs, student gigs, and flexible shifts with 100% direct employer contact.',
   keywords: [
     'Jobroofs',
+    'The portal for Temp Jobs',
+    'Temp Jobs Berlin',
     'Minijob Berlin',
     'Teilzeitjob Berlin',
     'Nebenjob Berlin',
     'Studentenjob Berlin',
     'Aushilfe Berlin',
-    'Wohnen Berlin',
-    'WG Zimmer Berlin',
     'Part time jobs Berlin',
     'Flexible work Berlin',
     'Temporary work Berlin',
@@ -51,13 +51,13 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     type: 'website',
-    siteName: 'JOBROOFS',
+    siteName: 'JOBROOFS — The portal for Temp Jobs',
     locale: 'de_DE',
     alternateLocale: ['en_US'],
     url: 'https://jobroofs.com',
-    title: 'JOBROOFS — Berlin Portal for Flexible Jobs & Neighborhood Housing',
+    title: 'JOBROOFS — The portal for Temp Jobs in Berlin',
     description:
-      'Direct marketplace for flexible work, minijobs, WG rooms and apartments across Berlin.',
+      'The portal for temp jobs in Berlin. 1.600+ verified minijobs, student gigs, and flexible shifts with 100% direct employer contact.',
   },
   other: {
     'geo.region': 'DE-BE',
@@ -67,9 +67,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'JOBROOFS — Berlin Portal for Flexible Jobs & Neighborhood Housing',
+    title: 'JOBROOFS — The portal for Temp Jobs in Berlin',
     description:
-      'Direct marketplace for flexible work, minijobs, WG rooms and apartments across Berlin.',
+      'The portal for temp jobs in Berlin. 1.600+ verified minijobs, student gigs, and flexible shifts with 100% direct employer contact.',
   },
   robots: {
     index: true,
