@@ -6,6 +6,14 @@
   "storage": {
     "rules": "storage.rules"
   },
+  "hosting": {
+    "source": "portal",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  },
   "apphosting": {
     "backendId": "jobroofs",
     "rootDir": "portal",

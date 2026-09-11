@@ -38,6 +38,10 @@ desktop.ini
 .env
 !portal/.env.example
 
+# Vercel (decommissioned)
+.vercel/
+portal/.vercel/
+
 # Editor directories
 .idea/
 .vscode/
