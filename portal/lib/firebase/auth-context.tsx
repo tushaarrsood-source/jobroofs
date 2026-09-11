@@ -8,6 +8,7 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   updateProfile,
   signOut,
   deleteUser,
@@ -24,6 +25,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<User | null>;
   signInWithEmail: (email: string, pass: string) => Promise<User | null>;
   signUpWithEmail: (email: string, pass: string, name?: string) => Promise<User | null>;
+  sendPasswordReset: (email: string) => Promise<void>;
   signOutUser: () => Promise<void>;
   deleteAccount: () => Promise<void>;
   clearError: () => void;
@@ -36,6 +38,7 @@ const AuthContext = createContext<AuthContextType>({
   signInWithGoogle: async () => null,
   signInWithEmail: async () => null,
   signUpWithEmail: async () => null,
+  sendPasswordReset: async () => {},
   signOutUser: async () => {},
   deleteAccount: async () => {},
   clearError: () => {},
@@ -150,6 +153,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const sendPasswordReset = async (email: string): Promise<void> => {
+    setError(null);
+    const auth = getFirebaseAuth();
+    if (!auth) {
+      setError('Firebase ist noch nicht mit Anmeldedaten konfiguriert.');
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (err: any) {
+      console.error('Password reset error:', err);
+      setError(err.message || 'Passwort-Zurücksetzen fehlgeschlagen');
+      throw err;
+    }
+  };
+
   const signOutUser = async (): Promise<void> => {
     setError(null);
     const auth = getFirebaseAuth();
@@ -207,6 +226,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signInWithGoogle,
         signInWithEmail,
         signUpWithEmail,
+        sendPasswordReset,
         signOutUser,
         deleteAccount,
         clearError,

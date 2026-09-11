@@ -21,5 +21,9 @@ env:
     value: jobroofs-321c7.firebaseapp.com
   - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
     value: jobroofs-321c7.firebasestorage.app
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyBN68Y6_n-xxFIB74OuvEtp0lFhPhY9gGI
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: 1:960773392367:web:c7cb340bf0b0964cbc981a
 
 
