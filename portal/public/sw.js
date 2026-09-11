@@ -1,5 +1,5 @@
-// JOBROOFS Futuristic PWA Service Worker v2.0
-const CACHE_NAME = 'jobroofs-pwa-v2';
+// JOBROOFS Futuristic PWA Service Worker v3.0
+const CACHE_NAME = 'jobroofs-pwa-v3';
 
 const STATIC_PRECACHE = [
   '/',

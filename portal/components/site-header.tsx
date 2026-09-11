@@ -18,12 +18,14 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#d8ded9] bg-[#fbfbf8]/92 backdrop-blur-md transition-all">
-      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6 md:px-8">
+      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6 md:px-8">
         {/* Left: Brand Logo (Architectural Roof Mark + Wordmark) */}
-        <BrandLogo variant="full" size="md" />
+        <div className="shrink-0">
+          <BrandLogo variant="full" size="md" />
+        </div>
 
         {/* Right: Actions */}
-        <div className="flex items-center gap-3 sm:gap-5">
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
           {/* Jobs link */}
           <Link
             href="/"
@@ -39,10 +41,11 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
           {/* Post a job CTA - Silent Luxury Deep Slate */}
           <Link
             href="/post-a-job"
-            className="apple-press inline-flex items-center gap-1.5 rounded-sm bg-[#202a31] px-4 py-2 text-[12.5px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
+            className="apple-press inline-flex items-center gap-1.5 rounded-sm bg-[#202a31] px-2.5 sm:px-4 py-1.5 sm:py-2 text-[11.5px] sm:text-[12.5px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
           >
             <PlusCircle className="size-3.5 stroke-[1.25]" />
-            <span>Job inserieren</span>
+            <span className="hidden xs:inline sm:inline">Job inserieren</span>
+            <span className="inline xs:hidden sm:hidden">Inserieren</span>
           </Link>
 
           {/* Language Toggle */}

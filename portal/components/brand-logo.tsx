@@ -95,7 +95,7 @@ export function BrandLogo({
 
           {variant === 'full' && (
             <span
-              className={`text-[8.5px] font-normal uppercase tracking-[0.22em] -mt-0.5 ${
+              className={`hidden sm:block text-[8.5px] font-normal uppercase tracking-[0.22em] -mt-0.5 ${
                 isDark ? 'text-[#A0AAA4]' : 'text-[#7E8A84]'
               }`}
               style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}

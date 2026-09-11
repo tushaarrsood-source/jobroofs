@@ -2,12 +2,17 @@
 
 import Link from '@/components/ui/link';
 import { PlusCircle, ArrowRight } from 'lucide-react';
+import { HeroBgInfographics } from '@/components/hero-bg-infographics';
+import { MarketplaceSchematic } from '@/components/marketplace-schematic';
 
 export function EditorialHero() {
   return (
     <section className="relative pt-8 pb-10 sm:pt-14 sm:pb-16 overflow-hidden">
+      {/* Background Architectural Blueprint / Infographics Layer */}
+      <HeroBgInfographics />
+
       {/* Top Headline Section */}
-      <div className="max-w-4xl">
+      <div className="relative z-10 max-w-4xl">
         {/* Micro Kicker */}
         <div className="text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#7e8a84] mb-4 sm:mb-5">
           BERLIN WORKFORCE ARCHITECTURE &middot; DIRECT POSITIONS
@@ -27,11 +32,13 @@ export function EditorialHero() {
         </p>
       </div>
 
-      {/* Hairline Divider */}
-      <div className="w-full h-px bg-[#d8ded9] my-8 sm:my-10" />
+      {/* Signature Architectural Marketplace Schematic (Silent Luxury) */}
+      <div className="relative z-10">
+        <MarketplaceSchematic />
+      </div>
 
       {/* Split Grid: Left = Post Your Job Hub, Right = Live Ledger */}
-      <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
+      <div className="relative z-10 grid gap-10 lg:grid-cols-12 lg:items-center">
         {/* Left Column: High-Impact "Post your job" Workstation */}
         <div className="lg:col-span-6 space-y-4">
           <div className="text-[10.5px] font-medium uppercase tracking-[0.2em] text-[#7e8a84]">
