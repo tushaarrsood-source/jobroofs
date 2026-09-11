@@ -1,19 +1,20 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import { AuthProvider } from '@/lib/firebase/auth-context';
 import { LanguageProvider } from '@/lib/i18n/language-context';
 import { MobileNavBar } from '@/components/mobile-nav-bar';
 import { CookieBanner } from '@/components/cookie-banner';
 import './globals.css';
 
-const inter = Inter({
-  variable: '--font-inter',
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: '--font-jakarta',
   subsets: ['latin'],
   display: 'swap',
+  weight: ['400', '500', '600', '700', '800'],
 });
 
 export const viewport: Viewport = {
-  themeColor: '#0f172a',
+  themeColor: '#1b4332',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -115,7 +116,7 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body
-        className={`${inter.variable} antialiased selection:bg-[#0071e3] selection:text-white pb-24 md:pb-0 font-sans`}
+        className={`${plusJakarta.variable} antialiased selection:bg-[#1b4332] selection:text-white pb-24 md:pb-0 font-sans bg-[#fafbfa] text-[#111816]`}
       >
         <AuthProvider>
           <LanguageProvider>

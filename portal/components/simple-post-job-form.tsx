@@ -99,7 +99,7 @@ export function SimplePostJobForm() {
         <div className="mt-6 flex justify-center gap-3">
           <Link
             href="/"
-            className="rounded-xl bg-[#e33525] px-5 py-2.5 text-xs font-semibold text-white hover:bg-[#c92c1d] transition-colors"
+            className="rounded-xl bg-[#1b4332] px-5 py-2.5 text-xs font-semibold text-white hover:bg-[#122f23] transition-colors"
           >
             Zurück zu allen Jobs
           </Link>
@@ -138,7 +138,7 @@ export function SimplePostJobForm() {
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="z.B. Barista, Servicekraft, Küchenhilfe"
-              className="w-full h-11 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#e33525] transition-all"
+              className="w-full h-11 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#1b4332] transition-all"
             />
           </div>
         </div>
@@ -155,7 +155,7 @@ export function SimplePostJobForm() {
               value={formData.company}
               onChange={(e) => setFormData({ ...formData, company: e.target.value })}
               placeholder="z.B. Café Mitte GmbH"
-              className="w-full h-11 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#e33525] transition-all"
+              className="w-full h-11 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#1b4332] transition-all"
             />
           </div>
         </div>
@@ -172,7 +172,7 @@ export function SimplePostJobForm() {
             <select
               value={formData.district}
               onChange={(e) => setFormData({ ...formData, district: e.target.value })}
-              className="w-full h-11 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#e33525] transition-all"
+              className="w-full h-11 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#1b4332] transition-all"
             >
               {BERLIN_DISTRICTS.map((d) => (
                 <option key={d} value={d}>
@@ -190,7 +190,7 @@ export function SimplePostJobForm() {
           <select
             value={formData.employmentType}
             onChange={(e) => setFormData({ ...formData, employmentType: e.target.value })}
-            className="w-full h-11 px-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#e33525] transition-all"
+            className="w-full h-11 px-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#1b4332] transition-all"
           >
             {JOB_TYPES.map((t) => (
               <option key={t} value={t}>
@@ -212,7 +212,7 @@ export function SimplePostJobForm() {
               value={formData.wage}
               onChange={(e) => setFormData({ ...formData, wage: e.target.value })}
               placeholder="z.B. 15,00 € / Std."
-              className="w-full h-11 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#e33525] transition-all"
+              className="w-full h-11 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#1b4332] transition-all"
             />
           </div>
         </div>
@@ -229,7 +229,7 @@ export function SimplePostJobForm() {
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           placeholder="Beschreibe kurz die Tätigkeiten, Arbeitszeiten und was Bewerber mitbringen sollten..."
-          className="w-full p-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#e33525] transition-all"
+          className="w-full p-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#1b4332] transition-all"
         />
       </div>
 
@@ -245,7 +245,7 @@ export function SimplePostJobForm() {
             value={formData.applyUrl}
             onChange={(e) => setFormData({ ...formData, applyUrl: e.target.value })}
             placeholder="https://firma.de/jobs oder jobs@firma.de"
-            className="w-full h-11 px-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#e33525] transition-all"
+            className="w-full h-11 px-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#1b4332] transition-all"
           />
           <p className="mt-1 text-[11px] text-zinc-500">
             Bewerber werden direkt hierhin weitergeleitet.
@@ -264,7 +264,7 @@ export function SimplePostJobForm() {
               value={formData.contactEmail}
               onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
               placeholder="name@unternehmen.de"
-              className="w-full h-11 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#e33525] transition-all"
+              className="w-full h-11 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#1b4332] transition-all"
             />
           </div>
         </div>
@@ -275,7 +275,7 @@ export function SimplePostJobForm() {
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-xl bg-[#e33525] px-6 py-3 text-sm font-bold text-white hover:bg-[#c92c1d] disabled:opacity-50 transition-all shadow-sm cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-xl bg-[#1b4332] px-6 py-3 text-sm font-bold text-white hover:bg-[#122f23] disabled:opacity-50 transition-all shadow-sm cursor-pointer"
         >
           {loading ? 'Wird übermittelt...' : (
             <>

@@ -76,12 +76,10 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
   const filteredJobs = useMemo(() => {
     const q = query.trim().toLowerCase();
     return jobs.filter((job) => {
-      // District filter
       if (selectedDistrict !== 'all') {
         const dist = (job.district || '').toLowerCase();
         if (!dist.includes(selectedDistrict)) return false;
       }
-      // Text query
       if (q) {
         const title = (job.title || '').toLowerCase();
         const company = (job.company || '').toLowerCase();
@@ -106,40 +104,40 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
 
   return (
     <section className="w-full">
-      {/* Search & District Filter Container */}
-      <div className="mb-6 space-y-3">
-        {/* Instant Search Bar */}
+      {/* Search & Filter Section */}
+      <div className="mb-8 space-y-4">
+        {/* Sleek Editorial Search Bar */}
         <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-zinc-400" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-[#5c6863]" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Jobtitel, Firma oder Stichwort suchen..."
-            className="w-full h-12 pl-10 pr-4 rounded-xl border border-zinc-200 bg-white text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#e33525] focus:border-transparent transition-all shadow-xs"
+            className="w-full h-13 pl-11 pr-4 rounded-2xl border border-[#e5eae7] bg-white text-sm text-[#111816] placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#1b4332] focus:border-transparent transition-all shadow-[0_2px_12px_rgb(0,0,0,0.02)]"
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-zinc-400 hover:text-zinc-600"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#5c6863] hover:text-[#111816]"
             >
               Löschen
             </button>
           )}
         </div>
 
-        {/* District Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
+        {/* District Filter Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
           {DISTRICTS.map((d) => {
             const isActive = selectedDistrict === d.id;
             return (
               <button
                 key={d.id}
                 onClick={() => setSelectedDistrict(d.id)}
-                className={`shrink-0 px-3 py-1.5 rounded-full font-medium transition-all ${
+                className={`shrink-0 px-4 py-2 rounded-full font-medium transition-all ${
                   isActive
-                    ? 'bg-[#e33525] text-white shadow-xs'
-                    : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
+                    ? 'bg-[#1b4332] text-white shadow-xs'
+                    : 'bg-white text-[#414d47] border border-[#e5eae7] hover:bg-[#f2f6f4]'
                 }`}
               >
                 {d.label}
@@ -149,58 +147,70 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
         </div>
       </div>
 
-      {/* Feed Status & Count */}
-      <div className="flex items-center justify-between border-b border-zinc-200 pb-3 mb-4 text-xs text-zinc-500 font-medium">
+      {/* Counter & Status Header */}
+      <div className="flex items-center justify-between border-b border-[#e5eae7] pb-3 mb-5 text-xs text-[#5c6863] font-medium">
         <span>
-          {filteredJobs.length.toLocaleString('de-DE')} aktuelle Stellenanzeigen in Berlin
+          <strong className="text-[#111816] font-bold">
+            {filteredJobs.length.toLocaleString('de-DE')}
+          </strong>{' '}
+          aktuelle Stellen in Berlin
         </span>
-        <span>
-          Seite {currentPage} von {totalPages}
+        <span className="font-mono text-xs">
+          {String(currentPage).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
         </span>
       </div>
 
-      {/* Job List */}
-      <div className="space-y-2.5">
+      {/* Job Card Feed */}
+      <div className="space-y-3">
         {displayedJobs.map((job, idx) => {
           const wage = formatWage(job);
           const jobType = formatJobType(job);
           const slug = job.slug || job.id;
+          const itemIndex = String(idx + 1 + (currentPage - 1) * JOBS_PER_PAGE).padStart(2, '0');
 
           return (
             <Link
               key={slug || idx}
               href={`/jobs/${slug}`}
-              className="group block rounded-xl border border-zinc-200 bg-white p-4 transition-all hover:border-[#e33525]/50 hover:shadow-xs"
+              className="group block rounded-[20px] border border-[#e5eae7] bg-white p-5 transition-all hover:border-[#1b4332]/40 hover:shadow-[0_6px_24px_rgb(0,0,0,0.03)]"
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-base sm:text-lg font-bold text-zinc-900 group-hover:text-[#e33525] transition-colors line-clamp-2">
-                    {job.title}
-                  </h3>
-                  <p className="mt-0.5 text-sm font-medium text-zinc-600">
-                    {job.company}
-                  </p>
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-4 min-w-0 flex-1">
+                  {/* Monospaced Item Number (01, 02, etc.) */}
+                  <span className="hidden sm:inline-block font-mono text-xs font-semibold text-zinc-400 pt-0.5 w-6">
+                    {itemIndex}
+                  </span>
 
-                  <div className="mt-2.5 flex flex-wrap items-center gap-2 text-xs">
-                    <span className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-2 py-0.5 font-medium text-zinc-700">
-                      <MapPin className="size-3 text-zinc-500" />
-                      {job.district || 'Berlin'}
-                    </span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base sm:text-lg font-bold text-[#111816] group-hover:text-[#1b4332] transition-colors line-clamp-1">
+                      {job.title}
+                    </h3>
+                    <p className="mt-0.5 text-sm font-medium text-[#5c6863]">
+                      {job.company}
+                    </p>
 
-                    <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-0.5 font-medium text-emerald-700 border border-emerald-200/60">
-                      <Euro className="size-3 text-emerald-600" />
-                      {wage}
-                    </span>
+                    <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-[#f2f6f4] px-2.5 py-1 font-medium text-[#111816]">
+                        <MapPin className="size-3 text-[#1b4332]" />
+                        {job.district || 'Berlin'}
+                      </span>
 
-                    <span className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-2 py-0.5 font-medium text-zinc-600">
-                      <Clock className="size-3 text-zinc-400" />
-                      {jobType}
-                    </span>
+                      <span className="inline-flex items-center gap-1 rounded-full bg-[#e8f1ec] px-2.5 py-1 font-semibold text-[#1b4332] border border-[#1b4332]/10">
+                        <Euro className="size-3 text-[#1b4332]" />
+                        {wage}
+                      </span>
+
+                      <span className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-2.5 py-1 font-medium text-zinc-600">
+                        <Clock className="size-3 text-zinc-400" />
+                        {jobType}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="hidden sm:flex shrink-0 self-center items-center justify-center size-8 rounded-full bg-zinc-50 text-zinc-400 group-hover:bg-[#e33525] group-hover:text-white transition-all">
-                  <ArrowRight className="size-4" />
+                {/* Right Arrow / Pin */}
+                <div className="shrink-0 self-center size-9 rounded-full flex items-center justify-center text-[#1b4332] group-hover:bg-[#e8f1ec] transition-colors">
+                  <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
                 </div>
               </div>
             </Link>
@@ -208,9 +218,9 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
         })}
 
         {displayedJobs.length === 0 && (
-          <div className="rounded-xl border border-dashed border-zinc-300 p-12 text-center">
-            <p className="text-sm font-semibold text-zinc-800">Keine passenden Jobs gefunden</p>
-            <p className="mt-1 text-xs text-zinc-500">
+          <div className="rounded-[24px] border border-dashed border-[#e5eae7] bg-white p-12 text-center">
+            <p className="text-sm font-bold text-[#111816]">Keine passenden Stellen gefunden</p>
+            <p className="mt-1 text-xs text-[#5c6863]">
               Versuche andere Suchbegriffe oder wähle „Alle Bezirke“.
             </p>
             <button
@@ -218,7 +228,7 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
                 setQuery('');
                 setSelectedDistrict('all');
               }}
-              className="mt-4 inline-flex items-center justify-center rounded-lg bg-[#e33525] px-4 py-2 text-xs font-semibold text-white hover:bg-[#c92c1d] transition-colors"
+              className="mt-4 inline-flex items-center justify-center rounded-full bg-[#1b4332] px-5 py-2 text-xs font-semibold text-white hover:bg-[#122f23] transition-colors"
             >
               Filter zurücksetzen
             </button>
@@ -226,23 +236,26 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
         )}
       </div>
 
-      {/* Pagination Controls */}
+      {/* Editorial Pagination Controls (matching reference image bottom pager) */}
       {totalPages > 1 && (
-        <nav className="mt-6 flex items-center justify-between border-t border-zinc-200 pt-4 text-xs font-medium">
+        <nav className="mt-8 flex items-center justify-between border-t border-[#e5eae7] pt-5 text-xs font-medium">
           <button
             onClick={() => {
               setCurrentPage((p) => Math.max(1, p - 1));
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             disabled={currentPage === 1}
-            className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-700 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="inline-flex items-center gap-1 rounded-full border border-[#e5eae7] bg-white px-4 py-2 text-[#111816] hover:bg-[#f2f6f4] disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-2xs"
           >
             <ChevronLeft className="size-3.5" /> Vorherige
           </button>
 
-          <span className="text-zinc-500">
-            Seite <strong className="text-zinc-900">{currentPage}</strong> von {totalPages}
-          </span>
+          {/* Reference Image Style: 07 / 13 */}
+          <div className="flex items-center gap-2 font-mono text-xs font-semibold text-[#111816]">
+            <span>{String(currentPage).padStart(2, '0')}</span>
+            <span className="text-zinc-400">/</span>
+            <span className="text-zinc-500">{String(totalPages).padStart(2, '0')}</span>
+          </div>
 
           <button
             onClick={() => {
@@ -250,7 +263,7 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             disabled={currentPage === totalPages}
-            className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-700 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="inline-flex items-center gap-1 rounded-full border border-[#e5eae7] bg-white px-4 py-2 text-[#111816] hover:bg-[#f2f6f4] disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-2xs"
           >
             Nächste <ChevronRight className="size-3.5" />
           </button>
