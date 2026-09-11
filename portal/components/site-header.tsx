@@ -17,32 +17,32 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/[0.06] bg-[#fafbfa]/85 backdrop-blur-xl saturate-180 transition-all">
-      <div className="mx-auto flex h-16 max-w-4xl items-center justify-between px-4">
+    <header className="sticky top-0 z-50 border-b border-[#d8ded9] bg-[#fbfbf8]/92 backdrop-blur-md transition-all">
+      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6 md:px-8">
         {/* Left: Brand Logo (Architectural Roof Mark + Wordmark) */}
         <BrandLogo variant="full" size="md" />
 
         {/* Right: Actions */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-5">
           {/* Jobs link */}
           <Link
             href="/"
-            className={`hidden sm:inline-block text-xs font-semibold px-3.5 py-1.5 rounded-full transition-all cursor-pointer ${
+            className={`hidden sm:inline-block text-[13px] tracking-[0.01em] transition-colors cursor-pointer ${
               pathname === '/'
-                ? 'text-[#1b4332] bg-[#e8f1ec] font-bold'
-                : 'text-[#5c6863] hover:text-[#111816] hover:bg-black/[0.03]'
+                ? 'text-[#202a31] font-medium'
+                : 'text-[#7e8a84] hover:text-[#202a31]'
             }`}
           >
             Alle Jobs
           </Link>
 
-          {/* Post a job CTA - Forest Green Pill with tactile press */}
+          {/* Post a job CTA - Silent Luxury Deep Slate */}
           <Link
             href="/post-a-job"
-            className="apple-press inline-flex items-center gap-1.5 rounded-full bg-[#1b4332] px-4 py-2 text-xs font-bold text-white hover:bg-[#122f23] transition-all shadow-[0_2px_8px_rgba(27,67,50,0.22)] hover:shadow-[0_4px_14px_rgba(27,67,50,0.32)] cursor-pointer"
+            className="apple-press inline-flex items-center gap-1.5 rounded-sm bg-[#202a31] px-4 py-2 text-[12.5px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
           >
-            <PlusCircle className="size-3.5" />
-            <span>Job schalten</span>
+            <PlusCircle className="size-3.5 stroke-[1.25]" />
+            <span>Job inserieren</span>
           </Link>
 
           {/* Language Toggle */}
@@ -51,23 +51,23 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
           {/* User Auth */}
           {user ? (
             <div className="flex items-center gap-2">
-              <span className="hidden md:inline-block text-xs font-medium text-[#5c6863] max-w-[120px] truncate">
+              <span className="hidden md:inline-block text-[12px] font-normal text-[#7e8a84] max-w-[120px] truncate">
                 {user.email?.split('@')[0]}
               </span>
               <button
                 onClick={() => signOutUser()}
                 title="Abmelden"
-                className="inline-flex size-8 items-center justify-center rounded-full border border-[#e5eae7] text-[#5c6863] hover:text-[#111816] hover:bg-white transition-colors"
+                className="inline-flex size-8 items-center justify-center rounded-sm border border-[#d8ded9] text-[#7e8a84] hover:text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
               >
-                <LogOut className="size-3.5" />
+                <LogOut className="size-3.5 stroke-[1.25]" />
               </button>
             </div>
           ) : (
             <button
               onClick={() => setAuthOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-full border border-[#e5eae7] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#111816] hover:bg-[#f2f6f4] transition-colors shadow-2xs"
+              className="inline-flex items-center gap-1.5 rounded-sm border border-[#d8ded9] bg-transparent px-3 py-1.5 text-[12.5px] font-normal tracking-[0.02em] text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
             >
-              <UserIcon className="size-3.5 text-[#1b4332]" />
+              <UserIcon className="size-3.5 stroke-[1.25] text-[#7e8a84]" />
               <span>Anmelden</span>
             </button>
           )}

@@ -1,12 +1,6 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stopColor="#1b4332" />
-      <stop offset="100%" stopColor="#0a1c14" />
-    </linearGradient>
-  </defs>
-  <rect width="32" height="32" rx="8" fill="url(#bgGrad)" />
-  <path d="M16 6.5L6 15.5L8.5 17.5L16 11L23.5 17.5L26 15.5L16 6.5Z" fill="#34d399" />
-  <path d="M12 25.5V18.5C12 16.2909 13.7909 14.5 16 14.5C18.2091 14.5 20 16.2909 20 18.5V25.5H12Z" fill="#ffffff" />
-  <circle cx="16" cy="9" r="1.5" fill="#ffffff" />
+  <rect width="32" height="32" rx="4" fill="#202a31" />
+  <path d="M6 20L16 8L26 20" stroke="#fbfbf8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M10 20H22" stroke="#7e8a84" stroke-width="1.25" stroke-linecap="round" />
+  <circle cx="16" cy="14" r="1.25" fill="#fbfbf8" />
 </svg>

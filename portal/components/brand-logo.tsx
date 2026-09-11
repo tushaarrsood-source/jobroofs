@@ -11,11 +11,11 @@ interface BrandLogoProps {
 }
 
 /**
- * JOBROOFS Architectural Apex Roof Vector Emblem
- * Mathematical roofline with precision portal aperture
+ * JOBROOFS Silent Luxury Architectural Mark
+ * Minimalist 1.25px rafter truss geometry.
  */
 export function JobroofsMark({
-  size = 32,
+  size = 28,
   variant = 'light',
   className = '',
 }: {
@@ -24,58 +24,41 @@ export function JobroofsMark({
   className?: string;
 }) {
   const isDark = variant === 'dark';
+  const strokeColor = isDark ? '#FBFBF8' : '#202A31';
+  const accentColor = isDark ? '#A0AAA4' : '#7E8A84';
 
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 36 36"
+      viewBox="0 0 32 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`shrink-0 transition-transform duration-200 group-hover:scale-105 ${className}`}
+      className={`shrink-0 transition-opacity duration-200 group-hover:opacity-80 ${className}`}
       aria-hidden="true"
     >
-      <defs>
-        {/* Obsidian to Forest Gradient */}
-        <linearGradient id="roofPrimaryGrad" x1="4" y1="2" x2="32" y2="34" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor={isDark ? '#34d399' : '#1b4332'} />
-          <stop offset="100%" stopColor={isDark ? '#10b981' : '#0a1c14'} />
-        </linearGradient>
-
-        {/* Luminous Apex Highlight */}
-        <linearGradient id="apexShine" x1="18" y1="4" x2="18" y2="20" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor={isDark ? '#ffffff' : '#34d399'} stopOpacity="0.9" />
-          <stop offset="100%" stopColor={isDark ? '#34d399' : '#1b4332'} stopOpacity="0.2" />
-        </linearGradient>
-      </defs>
-
-      {/* Rounded Architectural Base Grounding */}
-      <rect
-        x="3"
-        y="3"
-        width="30"
-        height="30"
-        rx="9"
-        fill={isDark ? '#1f2b26' : '#ffffff'}
-        stroke={isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}
+      {/* Precision Hairline Roof Chevron (1.5px Stroke) */}
+      <path
+        d="M5 19L16 7L27 19"
+        stroke={strokeColor}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      {/* Subtle Structural Rafter Beam */}
+      <path
+        d="M9.5 19H22.5"
+        stroke={accentColor}
         strokeWidth="1"
+        strokeLinecap="round"
       />
-
-      {/* The Architectural Roofline (Peak Chevron) */}
-      <path
-        d="M18 7.5L6.5 17.5L9.5 20L18 12.5L26.5 20L29.5 17.5L18 7.5Z"
-        fill="url(#roofPrimaryGrad)"
+      {/* Quiet Keystone Aperture Dot */}
+      <circle
+        cx="16"
+        cy="13.5"
+        r="1.25"
+        fill={strokeColor}
       />
-
-      {/* The Portal Doorway / Inner Aperture */}
-      <path
-        d="M13.5 28.5V20.5C13.5 18.0147 15.5147 16 18 16C20.4853 16 22.5 18.0147 22.5 20.5V28.5H13.5Z"
-        fill={isDark ? '#34d399' : '#1b4332'}
-        fillOpacity={isDark ? '0.85' : '0.9'}
-      />
-
-      {/* Apex Keystone Dot */}
-      <circle cx="18" cy="10" r="1.5" fill={isDark ? '#ffffff' : '#34d399'} />
     </svg>
   );
 }
@@ -88,43 +71,34 @@ export function BrandLogo({
 }: BrandLogoProps) {
   const isDark = variant === 'dark';
 
-  const markSize = size === 'sm' ? 26 : size === 'lg' ? 38 : 32;
-  const textSize = size === 'sm' ? 'text-lg' : size === 'lg' ? 'text-2xl' : 'text-xl';
+  const markSize = size === 'sm' ? 22 : size === 'lg' ? 32 : 26;
+  const textSize = size === 'sm' ? 'text-[14px]' : size === 'lg' ? 'text-[20px]' : 'text-[16px]';
 
   const content = (
     <div className={`group inline-flex items-center gap-2.5 select-none ${className}`}>
-      {/* Precision Roof Mark */}
+      {/* Quiet Luxury Architectural Mark */}
       <JobroofsMark size={markSize} variant={isDark ? 'dark' : 'light'} />
 
-      {/* Wordmark and Tagline */}
+      {/* Editorial Wordmark and Tagline */}
       {variant !== 'mark' && (
         <div className="flex flex-col">
           <div className="flex items-baseline">
             <span
-              className={`${textSize} font-extrabold tracking-[-0.035em] ${
-                isDark ? 'text-white' : 'text-[#111816]'
+              className={`${textSize} font-medium tracking-[0.14em] uppercase ${
+                isDark ? 'text-[#FBFBF8]' : 'text-[#202A31]'
               }`}
-              style={{
-                fontFamily:
-                  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif',
-              }}
+              style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
             >
               JOBROOFS
-            </span>
-            <span
-              className={`font-black ${
-                isDark ? 'text-[#34d399]' : 'text-[#1b4332]'
-              }`}
-            >
-              .
             </span>
           </div>
 
           {variant === 'full' && (
             <span
-              className={`text-[9.5px] font-bold uppercase tracking-[0.14em] -mt-1 ${
-                isDark ? 'text-[#8fa099]' : 'text-[#5c6863]'
+              className={`text-[8.5px] font-normal uppercase tracking-[0.22em] -mt-0.5 ${
+                isDark ? 'text-[#A0AAA4]' : 'text-[#7E8A84]'
               }`}
+              style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
             >
               The portal for Temp Jobs
             </span>

@@ -127,28 +127,28 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
     <section className="w-full">
       {/* Search & Filter Section */}
       <div className="mb-8 space-y-4">
-        {/* Sleek Editorial Search Bar */}
+        {/* Sleek Architectural Search Bar */}
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-[#86868b]" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 stroke-[1.25] text-[#7e8a84]" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Jobtitel, Firma oder Stichwort suchen..."
-            className="apple-input w-full h-13 pl-11 pr-4 rounded-2xl text-sm text-[#111816] placeholder:text-[#86868b] shadow-[0_2px_12px_rgb(0,0,0,0.02)]"
+            className="w-full h-11 pl-10 pr-4 rounded-sm border border-[#d8ded9] bg-white text-[13.5px] text-[#202a31] placeholder:text-[#7e8a84] focus:border-[#202a31] focus:ring-0 outline-none transition-colors"
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="apple-press absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#86868b] hover:text-[#111816] px-2 py-1 rounded-md cursor-pointer"
+              className="apple-press absolute right-3 top-1/2 -translate-y-1/2 text-[11.5px] font-normal text-[#7e8a84] hover:text-[#202a31] px-2 py-1 cursor-pointer"
             >
               Löschen
             </button>
           )}
         </div>
 
-        {/* District Filter Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+        {/* District Filter Chips */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[12px]">
           {DISTRICTS.map((d) => {
             const isActive = selectedDistrict === d.id;
             return (
@@ -163,10 +163,10 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
                     window.history.replaceState({}, '', url.toString());
                   }
                 }}
-                className={`apple-press shrink-0 px-4 py-2 rounded-full font-semibold transition-all cursor-pointer ${
+                className={`apple-press shrink-0 px-3 py-1.5 rounded-sm font-normal tracking-[0.01em] transition-colors cursor-pointer ${
                   isActive
-                    ? 'bg-[#1b4332] text-white shadow-xs'
-                    : 'bg-white text-[#5c6863] border border-black/[0.07] hover:bg-black/[0.02] hover:text-[#111816]'
+                    ? 'bg-[#202a31] text-[#fbfbf8]'
+                    : 'bg-white text-[#7e8a84] border border-[#d8ded9] hover:text-[#202a31] hover:border-[#202a31]'
                 }`}
               >
                 {d.label}
@@ -177,20 +177,20 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
       </div>
 
       {/* Counter & Status Header */}
-      <div className="flex items-center justify-between border-b border-black/[0.06] pb-3 mb-5 text-xs text-[#5c6863] font-medium">
+      <div className="flex items-center justify-between border-b border-[#d8ded9] pb-3 mb-5 text-[12px] text-[#7e8a84]">
         <span>
-          <strong className="text-[#111816] font-bold">
+          <strong className="text-[#202a31] font-medium">
             {filteredJobs.length.toLocaleString('de-DE')}
           </strong>{' '}
           aktuelle Stellen in Berlin
         </span>
-        <span className="font-mono text-xs">
+        <span className="font-mono text-[11px] text-[#7e8a84]">
           {String(currentPage).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
         </span>
       </div>
 
       {/* Job Card Feed */}
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         {displayedJobs.map((job, idx) => {
           const wage = formatWage(job);
           const jobType = formatJobType(job);
@@ -201,46 +201,53 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
             <Link
               key={slug || idx}
               href={`/jobs/${slug}`}
-              style={{ animationDelay: `${Math.min(idx, 8) * 35}ms` }}
-              className="apple-card-hover stagger-in group block rounded-[22px] border border-black/[0.08] bg-white p-5 sm:p-5.5 cursor-pointer"
+              style={{ animationDelay: `${Math.min(idx, 8) * 30}ms` }}
+              className="silent-card stagger-in group block rounded-sm p-4 sm:p-5 cursor-pointer"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4 min-w-0 flex-1">
-                  {/* Monospaced Item Number (01, 02, etc.) */}
-                  <span className="hidden sm:inline-block font-mono text-xs font-semibold text-zinc-400 pt-0.5 w-6">
+                  {/* Monospaced Item Number */}
+                  <span className="hidden sm:inline-block font-mono text-[11px] text-[#7e8a84] pt-0.5 w-6">
                     {itemIndex}
                   </span>
 
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-base sm:text-lg font-bold text-[#111816] group-hover:text-[#1b4332] transition-colors line-clamp-1 tracking-tight">
+                    <h3
+                      className="text-[15.5px] sm:text-[17px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors line-clamp-1 tracking-tight"
+                      style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
+                    >
                       {job.title}
                     </h3>
-                    <p className="mt-0.5 text-sm font-medium text-[#5c6863]">
+                    <p className="mt-0.5 text-[13px] font-light text-[#7e8a84]">
                       {job.company}
                     </p>
 
-                    <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-[#f2f6f4] px-2.5 py-1 font-medium text-[#111816]">
-                        <MapPin className="size-3 text-[#1b4332]" />
+                    <div className="mt-3 flex flex-wrap items-center gap-3 text-[12px]">
+                      <span className="inline-flex items-center gap-1 text-[#5a6460] font-light">
+                        <MapPin className="size-3 stroke-[1.25] text-[#7e8a84]" />
                         {job.district || 'Berlin'}
                       </span>
 
-                      <span className="inline-flex items-center gap-1 rounded-full bg-[#e8f1ec] px-2.5 py-1 font-semibold text-[#1b4332] border border-[#1b4332]/10">
-                        <Euro className="size-3 text-[#1b4332]" />
+                      <span className="text-[#d8ded9]">&middot;</span>
+
+                      <span className="inline-flex items-center gap-1 text-[#202a31] font-mono">
+                        <Euro className="size-3 stroke-[1.25] text-[#7e8a84]" />
                         {wage}
                       </span>
 
-                      <span className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-2.5 py-1 font-medium text-zinc-600">
-                        <Clock className="size-3 text-zinc-400" />
+                      <span className="text-[#d8ded9]">&middot;</span>
+
+                      <span className="inline-flex items-center gap-1 text-[10.5px] uppercase tracking-[0.14em] text-[#7e8a84]">
+                        <Clock className="size-3 stroke-[1.25] text-[#7e8a84]" />
                         {jobType}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Right Arrow / Pin */}
-                <div className="shrink-0 self-center size-9 rounded-full flex items-center justify-center text-[#1b4332] group-hover:bg-[#e8f1ec] transition-colors">
-                  <ArrowRight className="size-4 stroke-[2] group-hover:translate-x-1 transition-transform duration-200" />
+                {/* Right Arrow */}
+                <div className="shrink-0 self-center size-7 flex items-center justify-center text-[#7e8a84] group-hover:text-[#202a31] group-hover:translate-x-0.5 transition-all">
+                  <ArrowRight className="size-4 stroke-[1.25]" />
                 </div>
               </div>
             </Link>
@@ -248,9 +255,9 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
         })}
 
         {displayedJobs.length === 0 && (
-          <div className="rounded-[24px] border border-dashed border-[#e5eae7] bg-white p-12 text-center">
-            <p className="text-sm font-bold text-[#111816]">Keine passenden Stellen gefunden</p>
-            <p className="mt-1 text-xs text-[#5c6863]">
+          <div className="rounded-sm border border-dashed border-[#d8ded9] bg-white p-12 text-center">
+            <p className="text-[15px] font-normal text-[#202a31]">Keine passenden Stellen gefunden</p>
+            <p className="mt-1 text-[13px] text-[#7e8a84] font-light">
               Versuche andere Suchbegriffe oder wähle „Alle Bezirke“.
             </p>
             <button
@@ -258,7 +265,7 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
                 setQuery('');
                 setSelectedDistrict('all');
               }}
-              className="mt-4 inline-flex items-center justify-center rounded-full bg-[#1b4332] px-5 py-2 text-xs font-semibold text-white hover:bg-[#122f23] transition-colors"
+              className="mt-4 inline-flex items-center justify-center rounded-sm bg-[#202a31] px-5 py-2 text-[12.5px] font-normal text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
             >
               Filter zurücksetzen
             </button>
@@ -266,25 +273,24 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
         )}
       </div>
 
-      {/* Editorial Pagination Controls (matching reference image bottom pager) */}
+      {/* Editorial Pagination Controls */}
       {totalPages > 1 && (
-        <nav className="mt-8 flex items-center justify-between border-t border-[#e5eae7] pt-5 text-xs font-medium">
+        <nav className="mt-8 flex items-center justify-between border-t border-[#d8ded9] pt-5 text-[12px]">
           <button
             onClick={() => {
               setCurrentPage((p) => Math.max(1, p - 1));
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             disabled={currentPage === 1}
-            className="inline-flex items-center gap-1 rounded-full border border-[#e5eae7] bg-white px-4 py-2 text-[#111816] hover:bg-[#f2f6f4] disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-2xs"
+            className="inline-flex items-center gap-1 rounded-sm border border-[#d8ded9] bg-white px-3.5 py-1.5 text-[#202a31] hover:bg-[#f4f4ee] disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
-            <ChevronLeft className="size-3.5" /> Vorherige
+            <ChevronLeft className="size-3.5 stroke-[1.25]" /> Vorherige
           </button>
 
-          {/* Reference Image Style: 07 / 13 */}
-          <div className="flex items-center gap-2 font-mono text-xs font-semibold text-[#111816]">
+          <div className="flex items-center gap-2 font-mono text-[11px] text-[#202a31]">
             <span>{String(currentPage).padStart(2, '0')}</span>
-            <span className="text-zinc-400">/</span>
-            <span className="text-zinc-500">{String(totalPages).padStart(2, '0')}</span>
+            <span className="text-[#d8ded9]">/</span>
+            <span className="text-[#7e8a84]">{String(totalPages).padStart(2, '0')}</span>
           </div>
 
           <button
@@ -293,9 +299,9 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             disabled={currentPage === totalPages}
-            className="inline-flex items-center gap-1 rounded-full border border-[#e5eae7] bg-white px-4 py-2 text-[#111816] hover:bg-[#f2f6f4] disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-2xs"
+            className="inline-flex items-center gap-1 rounded-sm border border-[#d8ded9] bg-white px-3.5 py-1.5 text-[#202a31] hover:bg-[#f4f4ee] disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
-            Nächste <ChevronRight className="size-3.5" />
+            Nächste <ChevronRight className="size-3.5 stroke-[1.25]" />
           </button>
         </nav>
       )}

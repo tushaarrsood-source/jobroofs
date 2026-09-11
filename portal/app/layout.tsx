@@ -14,7 +14,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const viewport: Viewport = {
-  themeColor: '#1b4332',
+  themeColor: '#fbfbf8',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -116,7 +116,7 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body
-        className={`${plusJakarta.variable} antialiased selection:bg-[#1b4332] selection:text-white pb-24 md:pb-0 font-sans bg-[#fafbfa] text-[#111816]`}
+        className={`${plusJakarta.variable} antialiased selection:bg-[#202a31] selection:text-[#fbfbf8] pb-24 md:pb-0 font-sans bg-[#fbfbf8] text-[#202a31]`}
       >
         <AuthProvider>
           <LanguageProvider>

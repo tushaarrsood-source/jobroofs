@@ -1,148 +1,158 @@
 'use client';
 
 import Link from '@/components/ui/link';
-import { Bookmark, MapPin, Share2, PlusCircle, ArrowRight, Sparkles } from 'lucide-react';
 
 export function EditorialHero() {
   return (
-    <section className="relative pt-8 pb-10 sm:pt-14 sm:pb-16 overflow-hidden">
-      {/* Subtle Ambient Apple-Style Radial Glow */}
-      <div
-        className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-b from-[#1b4332]/[0.06] to-transparent rounded-full blur-3xl -z-10"
-        aria-hidden="true"
-      />
-
+    <section className="relative pt-10 pb-12 sm:pt-16 sm:pb-20 overflow-hidden">
       {/* Top Headline Section */}
-      <div className="mb-8 sm:mb-12">
-        <div className="inline-flex items-center gap-2.5 text-xs font-bold tracking-wider uppercase text-[#1b4332] bg-[#e8f1ec] px-3.5 py-1.5 rounded-full mb-4 shadow-2xs border border-[#1b4332]/10">
-          <span className="relative flex size-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full size-2 bg-emerald-600" />
-          </span>
-          <span>BERLIN &middot; 1.600+ VERIFIZIERTE TEMP-JOBS</span>
+      <div className="max-w-4xl">
+        {/* Micro Kicker */}
+        <div className="text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#7e8a84] mb-5 sm:mb-6">
+          BERLIN WORKFORCE ARCHITECTURE &middot; VERIFIED DIRECT POSITIONS
         </div>
 
+        {/* Slender Editorial Headline */}
         <h1
-          className="text-4xl sm:text-6xl font-extrabold tracking-[-0.038em] text-[#111816] leading-[1.06]"
-          style={{
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif',
-          }}
+          className="text-4xl sm:text-6xl lg:text-[72px] font-light sm:font-normal tracking-[-0.025em] text-[#202a31] leading-[1.08]"
+          style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
         >
-          The portal for Temp Jobs<span className="text-[#1b4332]">.</span>
+          The portal for temp jobs.
         </h1>
 
-        <p className="mt-3 text-base sm:text-lg text-[#5c6863] font-medium max-w-xl leading-relaxed tracking-[-0.015em]">
+        {/* Elegant Subtitle */}
+        <p className="mt-4 sm:mt-5 text-base sm:text-lg text-[#5a6460] font-light max-w-2xl leading-relaxed tracking-[-0.01em]">
           Finde Minijobs, flexible Schichten und temporäre Einsätze direkt bei Berliner Betrieben &mdash; 100% ohne Vermittler, 100% transparent.
         </p>
       </div>
 
-      {/* Signature Showcase Layout */}
-      <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
-        {/* Left Column: The Signature Card */}
-        <div className="lg:col-span-7">
-          <div className="apple-card-hover rounded-[24px] border border-black/[0.08] bg-white p-6 sm:p-7 shadow-[0_4px_20px_rgb(0,0,0,0.03)]">
-            {/* Card Header */}
-            <div className="flex items-center justify-between pb-5">
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111816]">
-                Berlin, one job at a time.
-              </h2>
-              <div className="flex items-center gap-1.5 text-xs font-bold tracking-wider uppercase text-[#1b4332] bg-[#e8f1ec] px-2.5 py-1 rounded-full">
-                <Bookmark className="size-3.5 fill-[#1b4332]/20 stroke-[#1b4332]" />
-                <span>DEIN KIEZ</span>
-              </div>
-            </div>
+      {/* Hairline Divider (Direct Translation of Reference Image) */}
+      <div className="w-full h-px bg-[#d8ded9] my-10 sm:my-14" />
 
-            {/* List Rows */}
-            <div className="divide-y divide-black/[0.05] border-t border-black/[0.05]">
-              {/* Row 01 */}
-              <Link
-                href="/?district=mitte"
-                className="group flex items-center justify-between py-4 transition-all hover:bg-black/[0.02] -mx-2 px-2.5 rounded-xl cursor-pointer"
-              >
-                <div className="flex items-center gap-3.5">
-                  <span className="font-mono text-xs font-semibold text-zinc-400">01</span>
-                  <div>
-                    <p className="text-sm font-bold text-[#111816] group-hover:text-[#1b4332] transition-colors">
-                      Specialty Barista & Gastronomy
-                    </p>
-                    <p className="text-xs text-zinc-500 font-medium">Mitte &middot; 15,50 €/Std.</p>
-                  </div>
-                </div>
-                <div className="size-8 rounded-full flex items-center justify-center text-[#1b4332] group-hover:bg-[#e8f1ec] group-hover:translate-x-0.5 transition-all">
-                  <ArrowRight className="size-4 stroke-[2]" />
-                </div>
-              </Link>
+      {/* Split Editorial Lower Grid */}
+      <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
+        {/* Left Column: Manifesto & Direct Access */}
+        <div className="lg:col-span-6 space-y-4">
+          <div className="text-[10.5px] font-medium uppercase tracking-[0.2em] text-[#7e8a84]">
+            FRONT OF THE MARKET &middot; DIRECT ACCESS
+          </div>
 
-              {/* Row 02 */}
-              <Link
-                href="/?district=kreuzberg"
-                className="group flex items-center justify-between py-4 transition-all hover:bg-black/[0.02] -mx-2 px-2.5 rounded-xl cursor-pointer"
-              >
-                <div className="flex items-center gap-3.5">
-                  <span className="font-mono text-xs font-semibold text-zinc-400">02</span>
-                  <div>
-                    <p className="text-sm font-bold text-[#111816] group-hover:text-[#1b4332] transition-colors">
-                      Store Assistant & Retail
-                    </p>
-                    <p className="text-xs text-zinc-500 font-medium">Kreuzberg &middot; 15,00 €/Std.</p>
-                  </div>
-                </div>
-                <div className="size-8 rounded-full flex items-center justify-center text-[#1b4332] group-hover:bg-[#e8f1ec] group-hover:translate-x-0.5 transition-all">
-                  <ArrowRight className="size-4 stroke-[2]" />
-                </div>
-              </Link>
+          <h2
+            className="text-2xl sm:text-[28px] font-normal text-[#202a31] tracking-[-0.015em] leading-snug"
+            style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
+          >
+            Search. Connect. Work on your terms.
+          </h2>
 
-              {/* Row 03 */}
-              <Link
-                href="/?district=friedrichshain"
-                className="group flex items-center justify-between py-4 transition-all hover:bg-black/[0.02] -mx-2 px-2.5 rounded-xl cursor-pointer"
-              >
-                <div className="flex items-center gap-3.5">
-                  <span className="font-mono text-xs font-semibold text-zinc-400">03</span>
-                  <div>
-                    <p className="text-sm font-bold text-[#111816] group-hover:text-[#1b4332] transition-colors">
-                      Event Host & Culture
-                    </p>
-                    <p className="text-xs text-zinc-500 font-medium">Friedrichshain &middot; 16,00 €/Std.</p>
-                  </div>
-                </div>
-                <div className="size-8 rounded-full flex items-center justify-center text-[#1b4332] group-hover:bg-[#e8f1ec] group-hover:translate-x-0.5 transition-all">
-                  <ArrowRight className="size-4 stroke-[2]" />
-                </div>
-              </Link>
-            </div>
+          <p className="text-[14px] sm:text-[15px] text-[#5a6460] font-light leading-relaxed max-w-md">
+            Spare dir Umwege über Leiharbeitsfirmen und Agenturen. Auf JOBROOFS bewirbst du dich mit 1 Klick direkt bei verifizierten Berliner Betrieben &mdash; schnell, unkompliziert und auf Augenhöhe.
+          </p>
+
+          <div className="pt-4 flex flex-wrap items-center gap-4">
+            <Link
+              href="/all-jobs"
+              className="apple-press inline-flex items-center justify-center rounded-sm bg-[#202a31] px-5 py-2.5 text-[12.5px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
+            >
+              <span>Stellenangebote durchsuchen</span>
+            </Link>
+            <Link
+              href="/post-a-job"
+              className="inline-flex items-center gap-1.5 text-[12.5px] font-normal tracking-[0.02em] text-[#202a31] hover:text-[#7e8a84] transition-colors cursor-pointer"
+            >
+              <span>Job inserieren (kostenlos)</span>
+              <span aria-hidden="true">&rarr;</span>
+            </Link>
           </div>
         </div>
 
-        {/* Right Column: Editorial Recommendation */}
-        <div className="lg:col-span-5 space-y-4 lg:pl-4">
-          <div className="flex items-center gap-2">
-            <Share2 className="size-4 text-[#1b4332]" />
-            <span className="text-[11px] font-extrabold tracking-widest uppercase text-[#1b4332]">
-              DIREKTVERMITTLUNG
-            </span>
+        {/* Right Column: Architectural Live Ledger */}
+        <div className="lg:col-span-6 lg:pl-4">
+          <div className="flex items-center justify-between text-[10.5px] font-medium uppercase tracking-[0.2em] text-[#7e8a84] mb-3">
+            <span>CURRENT OPENINGS &middot; BERLIN KIEZE</span>
+            <span className="font-mono text-[10px] text-[#7e8a84]/80">VERIFIED</span>
           </div>
 
-          <h3 className="text-2xl sm:text-3xl font-extrabold tracking-[-0.03em] text-[#111816] leading-snug">
-            Direkt zum Betrieb &mdash; ohne Leiharbeitsfirma.
-          </h3>
-
-          <p className="text-sm text-[#5c6863] leading-relaxed">
-            Spare dir Umwege über Agenturen. Auf JOBROOFS bewirbst du dich mit 1 Klick direkt beim Arbeitgeber &mdash; schnell, unkompliziert und auf Augenhöhe.
-          </p>
-
-          <div className="pt-2 flex flex-wrap items-center gap-3">
+          {/* Architectural Hairline-Divided Ledger */}
+          <div className="border-t border-[#d8ded9]">
+            {/* Row 01 */}
             <Link
-              href="/post-a-job"
-              className="apple-press inline-flex items-center gap-1.5 rounded-full bg-[#1b4332] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#122f23] transition-all shadow-[0_2px_8px_rgba(27,67,50,0.22)] hover:shadow-[0_4px_14px_rgba(27,67,50,0.32)] cursor-pointer"
+              href="/?district=mitte"
+              className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-2 -mx-2 cursor-pointer"
             >
-              <PlusCircle className="size-3.5" />
-              <span>Job schalten</span>
+              <div>
+                <div className="text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
+                  Specialty Barista & Gastronomy
+                </div>
+                <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
+                  Mitte &middot; Torstraße
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
+                  15,50 € / Std.
+                </div>
+                <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
+                  Minijob
+                </div>
+              </div>
             </Link>
-            <span className="text-xs font-medium text-[#5c6863]">
-              In 2 Minuten online &middot; 100% Kiez
+
+            {/* Row 02 */}
+            <Link
+              href="/?district=kreuzberg"
+              className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-2 -mx-2 cursor-pointer"
+            >
+              <div>
+                <div className="text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
+                  Concept Store & Retail Host
+                </div>
+                <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
+                  Kreuzberg &middot; Oranienstraße
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
+                  15,00 € / Std.
+                </div>
+                <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
+                  Teilzeit
+                </div>
+              </div>
+            </Link>
+
+            {/* Row 03 */}
+            <Link
+              href="/?district=friedrichshain"
+              className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-2 -mx-2 cursor-pointer"
+            >
+              <div>
+                <div className="text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
+                  Exhibition & Event Assistant
+                </div>
+                <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
+                  Friedrichshain &middot; Warschauer Str.
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
+                  16,00 € / Std.
+                </div>
+                <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
+                  Werkstudent
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          {/* Ledger Sub-meta */}
+          <div className="flex items-center justify-between pt-3 text-[11px] text-[#7e8a84] font-light">
+            <span className="flex items-center gap-1.5">
+              <span className="size-1.5 rounded-full bg-[#7e8a84]" />
+              <span>Live aktualisiert mit Berliner Betrieben</span>
             </span>
+            <Link href="/all-jobs" className="hover:text-[#202a31] transition-colors">
+              Alle 1.640 anzeigen &rarr;
+            </Link>
           </div>
         </div>
       </div>
