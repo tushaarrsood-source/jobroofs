@@ -47,21 +47,6 @@ export default function ProfilePage() {
                 <ChevronRight className="size-4 text-[#86868b]" />
               </Link>
 
-              <Link
-                href="/wohnen/list"
-                className="flex items-center justify-between p-4.5 text-sm font-medium text-[#1d1d1f] hover:bg-black/[0.02] transition-colors active:scale-[0.99] cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-2xl bg-black/[0.04] text-[#1d1d1f]">
-                    <Home className="size-5" />
-                  </div>
-                  <div>
-                    <div className="text-[#1d1d1f] font-semibold">Wohnung oder WG inserieren</div>
-                    <div className="text-xs text-[#86868b] font-normal">WG-Zimmer, Nachmieter, Zwischenmiete</div>
-                  </div>
-                </div>
-                <ChevronRight className="size-4 text-[#86868b]" />
-              </Link>
 
               <Link
                 href="/control"

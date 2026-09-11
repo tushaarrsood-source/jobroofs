@@ -109,8 +109,8 @@ export function DeleteAccountModal({
             <span className="text-[#ff3b30] font-bold">•</span>
             <span>
               {isDe
-                ? 'Alle deine Stellen- und Wohnungsanzeigen werden sofort offline genommen.'
-                : 'All your job and housing listings will be immediately taken offline.'}
+                ? 'Alle deine Stellenanzeigen werden sofort offline genommen.'
+                : 'All your job listings will be immediately taken offline.'}
             </span>
           </div>
           <div className="flex items-start gap-2">

@@ -130,44 +130,6 @@ export async function POST(request: Request) {
             }
           }
         }
-      } else if (housingSubmissionId) {
-        const d1 = getD1();
-        const { convertHousingSubmissionToListing } = await import(
-          "@/lib/housing/submission-to-listing"
-        );
-
-        await d1
-          .prepare(
-            `UPDATE housing_submissions SET payment_status = 'paid', status = 'approved' WHERE id = ?`,
-          )
-          .bind(housingSubmissionId)
-          .run();
-
-        const submission = await d1
-          .prepare(`SELECT * FROM housing_submissions WHERE id = ?`)
-          .bind(housingSubmissionId)
-          .first<{ id: string; payload_json: string; submitter_email: string }>();
-
-        if (submission) {
-          const listing = convertHousingSubmissionToListing({
-            id: submission.id,
-            payloadJson: submission.payload_json,
-            submitterEmail: submission.submitter_email,
-          });
-
-          const cols = Object.keys(listing).map((k) =>
-            k.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`),
-          );
-          const vals = Object.values(listing);
-          const placeholders = vals.map(() => "?").join(", ");
-
-          await d1
-            .prepare(
-              `INSERT OR IGNORE INTO housing_listings (${cols.join(", ")}) VALUES (${placeholders})`,
-            )
-            .bind(...vals)
-            .run();
-        }
       }
     }
 

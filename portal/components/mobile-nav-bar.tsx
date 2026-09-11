@@ -1,118 +1,65 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from '@/components/ui/link';
 import { usePathname } from 'next/navigation';
-import { Briefcase, Home, Plus, MapPin, User } from 'lucide-react';
+import { Briefcase, Plus, User } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
-import { MobilePostDrawer } from '@/components/mobile-post-drawer';
-import { ProfileDrawer } from '@/components/profile-drawer';
 
 export function MobileNavBar() {
   const pathname = usePathname();
   const { isDe } = useTranslation();
-  const [isPostDrawerOpen, setIsPostDrawerOpen] = useState(false);
-  const [isProfileDrawerOpen, setIsProfileDrawerOpen] = useState(false);
 
-  // Active route indicators
-  const isMap = pathname === '/karte' || pathname.startsWith('/karte') || pathname.includes('view=map');
-  const isJobs = (pathname === '/' || pathname.startsWith('/jobs') || pathname.startsWith('/categories')) && !isMap;
-  const isHousing = pathname.startsWith('/wohnen') && !isMap;
+  const isJobs = pathname === '/' || pathname.startsWith('/jobs') || pathname.startsWith('/categories');
   const isProfile = pathname.startsWith('/profil');
+  const isPost = pathname === '/post-a-job' || pathname === '/post';
 
   return (
-    <>
-      <nav
-        aria-label="Mobile Navigation"
-        className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t border-black/[0.06] bg-white/80 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.03)]"
-        style={{
-          paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 6px)',
-        }}
-      >
-        <div className="mx-auto flex h-14 max-w-lg items-center justify-around px-2">
-          {/* 1. Jobs Tab */}
-          <Link
-            href="/"
-            className={`flex flex-1 flex-col items-center justify-center py-1 transition-all duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.88] select-none ${
-              isJobs && !isMap
-                ? 'text-[#0071e3] font-semibold'
-                : 'text-[#86868b] hover:text-[#1d1d1f]'
-            }`}
-          >
-            <Briefcase className={`size-5 transition-transform duration-150 ${isJobs && !isMap ? 'scale-110 stroke-[2.4]' : 'stroke-[1.8]'}`} />
-            <span className="mt-0.5 text-[10px] tracking-tight">Jobs</span>
-          </Link>
+    <nav
+      aria-label="Mobile Navigation"
+      className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t border-[#e5eae7] bg-[#fafbfa]/95 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.03)]"
+      style={{
+        paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 6px)',
+      }}
+    >
+      <div className="mx-auto flex h-14 max-w-sm items-center justify-around px-4">
+        {/* 1. Jobs Tab */}
+        <Link
+          href="/"
+          className={`flex flex-col items-center justify-center py-1 transition-all select-none ${
+            isJobs
+              ? 'text-[#1b4332] font-bold'
+              : 'text-[#5c6863] hover:text-[#111816]'
+          }`}
+        >
+          <Briefcase className={`size-5 transition-transform ${isJobs ? 'scale-110 stroke-[2.4]' : 'stroke-[1.8]'}`} />
+          <span className="mt-0.5 text-[10px] tracking-tight">Jobs</span>
+        </Link>
 
-          {/* 2. Housing Tab */}
-          <Link
-            href="/wohnen"
-            className={`flex flex-1 flex-col items-center justify-center py-1 transition-all duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.88] select-none ${
-              isHousing && !isMap
-                ? 'text-[#0071e3] font-semibold'
-                : 'text-[#86868b] hover:text-[#1d1d1f]'
-            }`}
-          >
-            <Home className={`size-5 transition-transform duration-150 ${isHousing && !isMap ? 'scale-110 stroke-[2.4]' : 'stroke-[1.8]'}`} />
-            <span className="mt-0.5 text-[10px] tracking-tight">
-              {isDe ? 'Wohnen' : 'Housing'}
-            </span>
-          </Link>
+        {/* 2. Center Action Button (+) */}
+        <Link
+          href="/post-a-job"
+          aria-label="Job schalten"
+          className="flex size-10 items-center justify-center rounded-full bg-[#1b4332] text-white shadow-sm ring-2 ring-[#e8f1ec] transition-transform active:scale-[0.92] hover:bg-[#122f23] cursor-pointer"
+        >
+          <Plus className="size-5 stroke-[2.6]" />
+        </Link>
 
-          {/* 3. Center Action Button (+) */}
-          <div className="flex flex-1 items-center justify-center">
-            <button
-              type="button"
-              onClick={() => setIsPostDrawerOpen(true)}
-              aria-label="Inserat aufgeben"
-              className="flex size-10 items-center justify-center rounded-full bg-[#1d1d1f] text-white shadow-[0_2px_10px_rgba(0,0,0,0.18)] ring-[3px] ring-white transition-[transform,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.88] hover:bg-black cursor-pointer will-change-transform"
-            >
-              <Plus className="size-5 stroke-[2.6]" />
-            </button>
-          </div>
-
-          {/* 4. Map Tab */}
-          <Link
-            href="/karte"
-            className={`flex flex-1 flex-col items-center justify-center py-1 transition-all duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.88] select-none ${
-              isMap
-                ? 'text-[#0071e3] font-semibold'
-                : 'text-[#86868b] hover:text-[#1d1d1f]'
-            }`}
-          >
-            <MapPin className={`size-5 transition-transform duration-150 ${isMap ? 'scale-110 stroke-[2.4]' : 'stroke-[1.8]'}`} />
-            <span className="mt-0.5 text-[10px] tracking-tight">
-              {isDe ? 'Karte' : 'Map'}
-            </span>
-          </Link>
-
-          {/* 5. Profile Tab */}
-          <Link
-            href="/profil"
-            className={`flex flex-1 flex-col items-center justify-center py-1 transition-all duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.88] select-none cursor-pointer ${
-              isProfile
-                ? 'text-[#0071e3] font-semibold'
-                : 'text-[#86868b] hover:text-[#1d1d1f]'
-            }`}
-          >
-            <User className={`size-5 transition-transform duration-150 ${isProfile ? 'scale-110 stroke-[2.4]' : 'stroke-[1.8]'}`} />
-            <span className="mt-0.5 text-[10px] tracking-tight">
-              {isDe ? 'Profil' : 'Profile'}
-            </span>
-          </Link>
-        </div>
-      </nav>
-
-      {/* Post Drawer */}
-      <MobilePostDrawer
-        isOpen={isPostDrawerOpen}
-        onClose={() => setIsPostDrawerOpen(false)}
-      />
-
-      {/* Profile Drawer */}
-      <ProfileDrawer
-        isOpen={isProfileDrawerOpen}
-        onClose={() => setIsProfileDrawerOpen(false)}
-      />
-    </>
+        {/* 3. Profile Tab */}
+        <Link
+          href="/profil"
+          className={`flex flex-col items-center justify-center py-1 transition-all select-none ${
+            isProfile
+              ? 'text-[#1b4332] font-bold'
+              : 'text-[#5c6863] hover:text-[#111816]'
+          }`}
+        >
+          <User className={`size-5 transition-transform ${isProfile ? 'scale-110 stroke-[2.4]' : 'stroke-[1.8]'}`} />
+          <span className="mt-0.5 text-[10px] tracking-tight">
+            {isDe ? 'Profil' : 'Profile'}
+          </span>
+        </Link>
+      </div>
+    </nav>
   );
 }

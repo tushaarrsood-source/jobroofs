@@ -82,46 +82,9 @@ export function MyListings() {
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
             {isDe
-              ? 'Verwalte deine veröffentlichten Jobs und Wohnungsanzeigen'
-              : 'Manage your published jobs and housing postings'}
+              ? 'Verwalte deine veröffentlichten Stellenanzeigen'
+              : 'Manage your published job postings'}
           </p>
-        </div>
-
-        {/* Filter Pills */}
-        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl self-start sm:self-auto">
-          <button
-            type="button"
-            onClick={() => setFilter('all')}
-            className={`pill-tactile rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer select-none ${
-              filter === 'all'
-                ? 'bg-white text-slate-900 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            {isDe ? 'Alle' : 'All'} ({mounted ? listings.length : 0})
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter('job')}
-            className={`pill-tactile rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer select-none ${
-              filter === 'job'
-                ? 'bg-white text-blue-600 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            Jobs ({mounted ? listings.filter((l) => l.type === 'job').length : 0})
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter('housing')}
-            className={`pill-tactile rounded-lg px-2.5 py-1 text-xs font-semibold transition cursor-pointer select-none ${
-              filter === 'housing'
-                ? 'bg-white text-emerald-600 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            {isDe ? 'Wohnen' : 'Housing'} ({mounted ? listings.filter((l) => l.type === 'housing').length : 0})
-          </button>
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { industryNiches } from '@/lib/domain/taxonomy';
 import { previewJobs } from '@/lib/domain/preview-data';
-import { previewHousingListings } from '@/lib/domain/preview-housing';
+import { ALL_SOURCED_JOBS } from '@/lib/sources/sourced-jobs';
 import { getD1 } from '@/db';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -23,13 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'];
   }> = [
     { path: '', priority: 1.0, changeFrequency: 'hourly' },
-    { path: '/wohnen', priority: 0.95, changeFrequency: 'hourly' },
-    { path: '/karte', priority: 0.9, changeFrequency: 'daily' },
-    { path: '/latest-jobs', priority: 0.9, changeFrequency: 'hourly' },
-    { path: '/direct-employers', priority: 0.9, changeFrequency: 'daily' },
-    { path: '/wohnen/list', priority: 0.85, changeFrequency: 'daily' },
-    { path: '/post-a-job', priority: 0.8, changeFrequency: 'weekly' },
-    { path: '/pricing', priority: 0.8, changeFrequency: 'weekly' },
+    { path: '/post-a-job', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/impressum', priority: 0.3, changeFrequency: 'monthly' },
     { path: '/datenschutz', priority: 0.3, changeFrequency: 'monthly' },
     { path: '/agb', priority: 0.3, changeFrequency: 'monthly' },
@@ -44,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     alternates: makeAlternates(r.path),
   }));
 
-  // All 30 category pages
+  // All category pages
   const categoryPages: MetadataRoute.Sitemap = industryNiches.map((niche) => ({
     url: `${baseUrl}/categories/${niche.id}`,
     lastModified: now,
@@ -53,17 +47,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     alternates: makeAlternates(`/categories/${niche.id}`),
   }));
 
-  // Job detail pages (Curated + DB)
+  // Job detail pages (Curated + Sourced + DB)
   const jobIds = new Map<string, Date>();
   previewJobs.forEach((job) => {
     const key = job.slug || job.id;
     jobIds.set(key, now);
   });
+  ALL_SOURCED_JOBS.forEach((job) => {
+    const key = job.slug || job.id;
+    if (!jobIds.has(key)) {
+      jobIds.set(key, now);
+    }
+  });
 
   try {
     const d1 = getD1();
     const rows = await d1
-      .prepare(`SELECT id, last_verified_at, first_seen_at FROM jobs WHERE publication_state = 'published' LIMIT 500`)
+      .prepare(`SELECT id, last_verified_at FROM jobs WHERE publication_state = 'published' LIMIT 500`)
       .all<any>();
     if (rows && rows.results) {
       rows.results.forEach((row: any) => {
@@ -72,7 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
     }
   } catch {
-    // Graceful fallback to curated entries
+    // Graceful fallback
   }
 
   const jobPages: MetadataRoute.Sitemap = Array.from(jobIds.entries()).map(
@@ -85,36 +85,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   );
 
-  // Housing detail pages (Curated + DB)
-  const housingIds = new Map<string, Date>();
-  previewHousingListings.forEach((listing) => {
-    housingIds.set(listing.id, now);
-  });
-
-  try {
-    const d1 = getD1();
-    const rows = await d1
-      .prepare(`SELECT id, first_seen_at FROM housing_listings WHERE publication_state = 'published' LIMIT 500`)
-      .all<any>();
-    if (rows && rows.results) {
-      rows.results.forEach((row: any) => {
-        const date = row.first_seen_at ? new Date(row.first_seen_at) : now;
-        housingIds.set(row.id, date);
-      });
-    }
-  } catch {
-    // Graceful fallback to curated entries
-  }
-
-  const housingPages: MetadataRoute.Sitemap = Array.from(housingIds.entries()).map(
-    ([id, date]) => ({
-      url: `${baseUrl}/wohnen/${id}`,
-      lastModified: date,
-      changeFrequency: 'daily' as const,
-      priority: 0.9,
-      alternates: makeAlternates(`/wohnen/${id}`),
-    }),
-  );
-
-  return [...staticPages, ...categoryPages, ...jobPages, ...housingPages];
+  return [...staticPages, ...categoryPages, ...jobPages];
 }

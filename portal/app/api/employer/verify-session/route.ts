@@ -105,48 +105,6 @@ export async function GET(request: Request) {
           }
         }
       }
-    } else if (housingSubmissionId) {
-      const { convertHousingSubmissionToListing } = await import(
-        '@/lib/housing/submission-to-listing'
-      );
-
-      const submission = await d1
-        .prepare(`SELECT * FROM housing_submissions WHERE id = ?`)
-        .bind(housingSubmissionId)
-        .first<{
-          id: string;
-          submitter_email: string;
-          payload_json: string;
-          payment_status: string;
-        }>();
-
-      if (submission && submission.payment_status !== 'paid') {
-        await d1
-          .prepare(
-            `UPDATE housing_submissions SET payment_status = 'paid', status = 'approved' WHERE id = ?`,
-          )
-          .bind(housingSubmissionId)
-          .run();
-
-        const listing = convertHousingSubmissionToListing({
-          id: submission.id,
-          payloadJson: submission.payload_json,
-          submitterEmail: submission.submitter_email || 'anonym@jobroofs.com',
-        });
-
-        const listingCols = Object.keys(listing).map((k) =>
-          k.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`),
-        );
-        const listingVals = Object.values(listing);
-        const placeholders = listingVals.map(() => '?').join(', ');
-
-        await d1
-          .prepare(
-            `INSERT OR IGNORE INTO housing_listings (${listingCols.join(', ')}) VALUES (${placeholders})`,
-          )
-          .bind(...listingVals)
-          .run();
-      }
     }
 
     return NextResponse.json({
