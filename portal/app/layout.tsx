@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   description:
     'The portal for temp jobs in Berlin. 1.600+ verified minijobs, student gigs, and flexible shifts with 100% direct employer contact.',
   keywords: [
-    'Jobroofs',
+    'JOBROOFS',
     'The portal for Temp Jobs',
     'Temp Jobs Berlin',
     'Minijob Berlin',

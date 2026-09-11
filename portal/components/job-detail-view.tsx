@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { AuthModal } from '@/components/auth-modal';
+import { JobroofsMark } from '@/components/brand-logo';
 
 interface JobDetailViewProps {
   job: any;
@@ -70,7 +71,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
       {/* Top Navigation Bar */}
-      <nav className="mb-6 flex items-center justify-between border-b border-[#e5eae7] pb-4 text-xs font-semibold">
+      <nav className="mb-6 flex items-center justify-between border-b border-black/[0.06] pb-4 text-xs font-semibold">
         {prevSlug ? (
           <Link
             href={`/jobs/${prevSlug}`}
@@ -84,7 +85,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
 
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 rounded-full border border-[#e5eae7] bg-white px-4 py-1.5 text-[#111816] hover:bg-[#f2f6f4] transition-colors shadow-2xs cursor-pointer"
+          className="apple-press inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] bg-white px-4 py-1.5 text-[#111816] hover:bg-[#f2f6f4] transition-all shadow-2xs cursor-pointer"
         >
           <List className="size-3.5 text-[#1b4332]" /> Zurück zur Übersicht
         </Link>
@@ -102,25 +103,25 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
       </nav>
 
       {/* Main Job Article */}
-      <article className="rounded-[24px] border border-[#e5eae7] bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.03)]">
+      <article className="rounded-[28px] border border-black/[0.08] bg-white p-6 sm:p-9 shadow-[0_4px_24px_rgb(0,0,0,0.03)]">
         {/* Company Subtitle */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm font-semibold text-[#5c6863]">
-            <Building2 className="size-4 text-[#1b4332]" />
-            <span className="text-[#111816]">{job.company}</span>
+          <div className="flex items-center gap-2.5 text-sm font-semibold text-[#5c6863]">
+            <JobroofsMark size={24} />
+            <span className="text-[#111816] font-bold">{job.company}</span>
             <span className="text-zinc-300">&middot;</span>
             <span>{job.district || 'Berlin'}</span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs font-bold tracking-wider uppercase text-[#1b4332] bg-[#e8f1ec] px-3 py-1 rounded-full">
+          <div className="flex items-center gap-1.5 text-xs font-bold tracking-wider uppercase text-[#1b4332] bg-[#e8f1ec] px-3 py-1 rounded-full border border-[#1b4332]/10">
             <Bookmark className="size-3.5 fill-[#1b4332]/20 stroke-[#1b4332]" />
             <span>VERIFIED</span>
           </div>
         </div>
 
         {/* Highlighted Job Title Box */}
-        <div className="my-5 rounded-[20px] bg-[#fafbfa] p-6 border border-[#e5eae7]">
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-[#111816] tracking-tight">
+        <div className="my-6 rounded-[22px] bg-[#fafbfa] p-6 sm:p-7 border border-black/[0.06]">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-[#111816] tracking-[-0.035em] leading-tight">
             {job.title}
           </h1>
           <div className="mt-4 flex flex-wrap items-center gap-2 text-xs font-medium">
@@ -204,7 +205,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleApplyClick}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1b4332] px-7 py-3.5 text-sm font-bold text-white hover:bg-[#122f23] transition-all shadow-xs active:scale-[0.98] cursor-pointer"
+              className="apple-press inline-flex items-center justify-center gap-2 rounded-full bg-[#1b4332] px-8 py-3.5 text-sm font-bold text-white hover:bg-[#122f23] transition-all shadow-[0_4px_16px_rgba(27,67,50,0.25)] hover:shadow-[0_6px_20px_rgba(27,67,50,0.35)] cursor-pointer"
             >
               {applyUrl.startsWith('mailto:') ? (
                 <>

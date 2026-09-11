@@ -63,7 +63,7 @@ export default function AllJobsPage() {
       <div>
         <BreadcrumbJsonLd
           items={[
-            { name: 'KIEZJOB', href: '/' },
+            { name: 'JOBROOFS', href: '/' },
             { name: 'Alle Stellenangebote', href: '/all-jobs' },
           ]}
         />

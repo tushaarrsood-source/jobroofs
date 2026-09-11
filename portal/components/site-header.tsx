@@ -8,6 +8,7 @@ import { useTranslation } from '@/lib/i18n/language-context';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { AuthModal } from '@/components/auth-modal';
 import { LanguageToggle } from '@/components/language-toggle';
+import { BrandLogo } from '@/components/brand-logo';
 
 export function SiteHeader({ control = false }: { control?: boolean } = {}) {
   const { t, isDe } = useTranslation();
@@ -16,39 +17,29 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#e5eae7] bg-[#fafbfa]/95 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-black/[0.06] bg-[#fafbfa]/85 backdrop-blur-xl saturate-180 transition-all">
       <div className="mx-auto flex h-16 max-w-4xl items-center justify-between px-4">
-        {/* Left: Brand Logo (Editorial Style) */}
-        <Link
-          href="/"
-          className="group flex items-center gap-2 select-none"
-        >
-          <span className="text-xl font-extrabold tracking-tight text-[#111816]">
-            JOBROOFS<span className="text-[#1b4332]">.</span>
-          </span>
-          <span className="hidden sm:inline-block text-[11px] font-semibold text-[#5c6863] border-l border-[#e5eae7] pl-2">
-            The portal for Temp Jobs
-          </span>
-        </Link>
+        {/* Left: Brand Logo (Architectural Roof Mark + Wordmark) */}
+        <BrandLogo variant="full" size="md" />
 
         {/* Right: Actions */}
         <div className="flex items-center gap-3 sm:gap-4">
           {/* Jobs link */}
           <Link
             href="/"
-            className={`hidden sm:inline-block text-xs font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
+            className={`hidden sm:inline-block text-xs font-semibold px-3.5 py-1.5 rounded-full transition-all cursor-pointer ${
               pathname === '/'
-                ? 'text-[#1b4332] bg-[#e8f1ec]'
-                : 'text-[#5c6863] hover:text-[#111816]'
+                ? 'text-[#1b4332] bg-[#e8f1ec] font-bold'
+                : 'text-[#5c6863] hover:text-[#111816] hover:bg-black/[0.03]'
             }`}
           >
             Alle Jobs
           </Link>
 
-          {/* Post a job CTA - Forest Green Pill */}
+          {/* Post a job CTA - Forest Green Pill with tactile press */}
           <Link
             href="/post-a-job"
-            className="inline-flex items-center gap-1.5 rounded-full bg-[#1b4332] px-4 py-2 text-xs font-bold text-white hover:bg-[#122f23] transition-all shadow-xs active:scale-[0.98] cursor-pointer"
+            className="apple-press inline-flex items-center gap-1.5 rounded-full bg-[#1b4332] px-4 py-2 text-xs font-bold text-white hover:bg-[#122f23] transition-all shadow-[0_2px_8px_rgba(27,67,50,0.22)] hover:shadow-[0_4px_14px_rgba(27,67,50,0.32)] cursor-pointer"
           >
             <PlusCircle className="size-3.5" />
             <span>Job schalten</span>

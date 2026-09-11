@@ -129,7 +129,7 @@ export default async function JobDetailPage({
       workplace: { type: 'on_site', address: dbJob.district ? `${dbJob.district}, Berlin` : 'Berlin' },
       responsibilities: ['Zuverlässige Unterstützung im Tagesgeschäft', 'Teamfähige und saubere Arbeitsweise'],
       requirements: ['Pünktlichkeit & Zuverlässigkeit', 'Gute Deutsch- oder Englischkenntnisse'],
-      contact: { method: 'email', value: 'bewerbung@kiezjob.de', instructions: 'Sende eine kurze Nachricht über die Plattform.' },
+      contact: { method: 'email', value: 'bewerbung@jobroofs.com', instructions: 'Sende eine kurze Nachricht über die Plattform.' },
       firstSeenAt: dbJob.firstSeenAt,
       lastVerifiedAt: dbJob.lastVerifiedAt,
       sourceInfo,

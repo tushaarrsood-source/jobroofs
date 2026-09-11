@@ -129,18 +129,18 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
       <div className="mb-8 space-y-4">
         {/* Sleek Editorial Search Bar */}
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-[#5c6863]" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-[#86868b]" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Jobtitel, Firma oder Stichwort suchen..."
-            className="w-full h-13 pl-11 pr-4 rounded-2xl border border-[#e5eae7] bg-white text-sm text-[#111816] placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#1b4332] focus:border-transparent transition-all shadow-[0_2px_12px_rgb(0,0,0,0.02)]"
+            className="apple-input w-full h-13 pl-11 pr-4 rounded-2xl text-sm text-[#111816] placeholder:text-[#86868b] shadow-[0_2px_12px_rgb(0,0,0,0.02)]"
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#5c6863] hover:text-[#111816]"
+              className="apple-press absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#86868b] hover:text-[#111816] px-2 py-1 rounded-md cursor-pointer"
             >
               Löschen
             </button>
@@ -163,10 +163,10 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
                     window.history.replaceState({}, '', url.toString());
                   }
                 }}
-                className={`shrink-0 px-4 py-2 rounded-full font-medium transition-all cursor-pointer ${
+                className={`apple-press shrink-0 px-4 py-2 rounded-full font-semibold transition-all cursor-pointer ${
                   isActive
                     ? 'bg-[#1b4332] text-white shadow-xs'
-                    : 'bg-white text-[#414d47] border border-[#e5eae7] hover:bg-[#f2f6f4]'
+                    : 'bg-white text-[#5c6863] border border-black/[0.07] hover:bg-black/[0.02] hover:text-[#111816]'
                 }`}
               >
                 {d.label}
@@ -177,7 +177,7 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
       </div>
 
       {/* Counter & Status Header */}
-      <div className="flex items-center justify-between border-b border-[#e5eae7] pb-3 mb-5 text-xs text-[#5c6863] font-medium">
+      <div className="flex items-center justify-between border-b border-black/[0.06] pb-3 mb-5 text-xs text-[#5c6863] font-medium">
         <span>
           <strong className="text-[#111816] font-bold">
             {filteredJobs.length.toLocaleString('de-DE')}
@@ -201,7 +201,8 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
             <Link
               key={slug || idx}
               href={`/jobs/${slug}`}
-              className="group block rounded-[20px] border border-[#e5eae7] bg-white p-5 transition-all hover:border-[#1b4332]/40 hover:shadow-[0_6px_24px_rgb(0,0,0,0.03)] cursor-pointer"
+              style={{ animationDelay: `${Math.min(idx, 8) * 35}ms` }}
+              className="apple-card-hover stagger-in group block rounded-[22px] border border-black/[0.08] bg-white p-5 sm:p-5.5 cursor-pointer"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4 min-w-0 flex-1">
@@ -211,7 +212,7 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
                   </span>
 
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-base sm:text-lg font-bold text-[#111816] group-hover:text-[#1b4332] transition-colors line-clamp-1">
+                    <h3 className="text-base sm:text-lg font-bold text-[#111816] group-hover:text-[#1b4332] transition-colors line-clamp-1 tracking-tight">
                       {job.title}
                     </h3>
                     <p className="mt-0.5 text-sm font-medium text-[#5c6863]">
@@ -239,7 +240,7 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
 
                 {/* Right Arrow / Pin */}
                 <div className="shrink-0 self-center size-9 rounded-full flex items-center justify-center text-[#1b4332] group-hover:bg-[#e8f1ec] transition-colors">
-                  <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
+                  <ArrowRight className="size-4 stroke-[2] group-hover:translate-x-1 transition-transform duration-200" />
                 </div>
               </div>
             </Link>

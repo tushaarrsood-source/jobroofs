@@ -2,6 +2,7 @@
 
 import Link from '@/components/ui/link';
 import { useTranslation } from '@/lib/i18n/language-context';
+import { BrandLogo } from '@/components/brand-logo';
 
 export function SiteFooter() {
   const { isDe } = useTranslation();
@@ -12,15 +13,8 @@ export function SiteFooter() {
         <div className="grid gap-10 sm:grid-cols-3">
           {/* Brand Col */}
           <div className="sm:col-span-1">
-            <Link href="/" className="inline-flex items-center gap-2 text-white">
-              <span className="text-xl font-extrabold tracking-tight">
-                JOBROOFS<span className="text-[#34d399]">.</span>
-              </span>
-              <span className="text-[11px] font-bold text-[#8fa099] uppercase tracking-wider pl-2 border-l border-white/20">
-                The portal for Temp Jobs
-              </span>
-            </Link>
-            <p className="mt-3 text-xs leading-relaxed text-[#8fa099]">
+            <BrandLogo variant="dark" size="md" />
+            <p className="mt-4 text-xs leading-relaxed text-[#8fa099]">
               {isDe
                 ? 'Das Berliner Portal für Minijobs, Aushilfen und flexible Schichten. 100% Direktkontakt zum Arbeitgeber ohne Zwischenhändler.'
                 : 'The Berlin portal for temp jobs, minijobs, and flexible shifts. 100% direct contact with local employers without middlemen.'}
