@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "vinext dev",
     "build": "vinext build",
+    "apphosting:build": "npm run build",
     "start": "vinext start",
     "start:cf": "wrangler dev --config dist/server/wrangler.json",
     "lint": "oxlint",
