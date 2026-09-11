@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function PostAJobPage() {
   return (
-    <div className="min-h-screen bg-[#fbfbf8] text-[#202a31] flex flex-col justify-between">
+    <div className="min-h-screen text-[#202a31] flex flex-col justify-between relative z-10">
       <BreadcrumbJsonLd
         items={[
           { name: 'JOBROOFS', href: '/' },

@@ -46,7 +46,7 @@ export default async function Home() {
   }));
 
   return (
-    <div className="min-h-screen bg-[#fbfbf8] text-[#202a31] flex flex-col justify-between">
+    <div className="min-h-screen text-[#202a31] flex flex-col justify-between relative z-10">
       <WebSiteJsonLd />
       <LocalBusinessJsonLd />
       <SiteHeader />
