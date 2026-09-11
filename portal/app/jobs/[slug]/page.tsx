@@ -1,4 +1,3 @@
-import Link from '@/components/ui/link';
 import type { Metadata } from 'next';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
@@ -7,9 +6,9 @@ import { previewJobs } from '@/lib/domain/preview-data';
 import { getJobById, getJobNiches, getJobSourceInfo } from '@/lib/jobs/feeds';
 import { notFound } from 'next/navigation';
 import { getIndustry } from '@/lib/domain/taxonomy';
-import { JobDetailContent } from '@/components/job-detail-content';
+import { JobDetailView } from '@/components/job-detail-view';
 import { isJobSuppressed } from '@/lib/sources/suppression-store';
-import { getSourcedJobBySlug } from '@/lib/sources/sourced-jobs';
+import { getSourcedJobBySlug, ALL_SOURCED_JOBS } from '@/lib/sources/sourced-jobs';
 
 // Dynamic SEO metadata for each job listing
 export async function generateMetadata({
@@ -39,11 +38,11 @@ export async function generateMetadata({
     const payLabel = job.compensation?.label || '';
     const district = job.district || 'Berlin';
     return {
-      title: `${job.title} at ${job.company} (${district})`,
-      description: `${job.title} — ${payLabel} in ${district}, Berlin. ${job.employmentForms?.join(', ') || 'Flexible work'}. Apply directly on JOBROOFS.`,
+      title: `${job.title} — ${job.company} (${district}) | KIEZJOB`,
+      description: `${job.title} bei ${job.company} in ${district}, Berlin. ${payLabel}. Jetzt direkt online bewerben.`,
       openGraph: {
-        title: `${job.title} at ${job.company} (${district}) · JOBROOFS`,
-        description: `${payLabel} · ${district}, Berlin. Apply now.`,
+        title: `${job.title} — ${job.company} (${district})`,
+        description: `${payLabel} · ${district}, Berlin. Direkt bewerben.`,
         url: `/jobs/${slug}`,
       },
       alternates: {
@@ -58,11 +57,11 @@ export async function generateMetadata({
   const district = dbJob.district || 'Berlin';
   const payText = dbJob.payText || '';
   return {
-    title: `${dbJob.title} at ${dbJob.company} (${district})`,
-    description: `${dbJob.title} — ${payText} in ${district}, Berlin. Apply directly on JOBROOFS.`,
+    title: `${dbJob.title} — ${dbJob.company} (${district}) | KIEZJOB`,
+    description: `${dbJob.title} — ${payText} in ${district}, Berlin. Direkt bewerben.`,
     openGraph: {
-      title: `${dbJob.title} at ${dbJob.company} (${district}) · JOBROOFS`,
-      description: `${payText} · ${district}, Berlin. Apply now.`,
+      title: `${dbJob.title} — ${dbJob.company} (${district})`,
+      description: `${payText} · ${district}, Berlin. Direkt bewerben.`,
       url: `/jobs/${slug}`,
     },
     alternates: {
@@ -130,7 +129,7 @@ export default async function JobDetailPage({
       workplace: { type: 'on_site', address: dbJob.district ? `${dbJob.district}, Berlin` : 'Berlin' },
       responsibilities: ['Zuverlässige Unterstützung im Tagesgeschäft', 'Teamfähige und saubere Arbeitsweise'],
       requirements: ['Pünktlichkeit & Zuverlässigkeit', 'Gute Deutsch- oder Englischkenntnisse'],
-      contact: { method: 'email', value: 'bewerbung@jobroofs.com', instructions: 'Sende eine kurze Nachricht über die Plattform.' },
+      contact: { method: 'email', value: 'bewerbung@kiezjob.de', instructions: 'Sende eine kurze Nachricht über die Plattform.' },
       firstSeenAt: dbJob.firstSeenAt,
       lastVerifiedAt: dbJob.lastVerifiedAt,
       sourceInfo,
@@ -154,19 +153,33 @@ export default async function JobDetailPage({
     return notFound();
   }
 
+  // Calculate adjacent jobs for instant Jobicco-style Prev/Next navigation
+  const currentIndex = ALL_SOURCED_JOBS.findIndex(
+    (j) => j.slug === job.slug || j.id === job.id,
+  );
+  const prevJob = currentIndex > 0 ? ALL_SOURCED_JOBS[currentIndex - 1] : null;
+  const nextJob =
+    currentIndex >= 0 && currentIndex < ALL_SOURCED_JOBS.length - 1
+      ? ALL_SOURCED_JOBS[currentIndex + 1]
+      : null;
+
   return (
-    <main className="min-h-screen bg-[#fafafa] text-zinc-900 flex flex-col justify-between">
+    <main className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between">
       <div>
         <JobPostingJsonLd job={job} />
         <BreadcrumbJsonLd
           items={[
-            { name: 'JOBROOFS', href: '/' },
-            { name: getIndustry(job.industryId)?.label || 'Jobs', href: `/categories/${job.industryId}` },
+            { name: 'KIEZJOB', href: '/' },
+            { name: getIndustry(job.industryId)?.label || 'Jobs', href: '/' },
             { name: job.title, href: `/jobs/${job.slug || job.id}` },
           ]}
         />
         <SiteHeader />
-        <JobDetailContent job={job} />
+        <JobDetailView
+          job={job}
+          prevSlug={prevJob?.slug || prevJob?.id}
+          nextSlug={nextJob?.slug || nextJob?.id}
+        />
       </div>
       <SiteFooter />
     </main>

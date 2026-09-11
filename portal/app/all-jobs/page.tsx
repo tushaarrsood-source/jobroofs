@@ -1,21 +1,22 @@
 import Link from '@/components/ui/link';
 import type { Metadata } from 'next';
-import { ArrowLeft, Sparkles } from 'lucide-react';
-import { JobBrowser } from '@/components/job-browser';
+import { ArrowLeft } from 'lucide-react';
+import { JobFeed } from '@/components/job-feed';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { BreadcrumbJsonLd } from '@/components/json-ld';
 import { previewJobs } from '@/lib/domain/preview-data';
+import { ALL_SOURCED_JOBS } from '@/lib/sources/sourced-jobs';
 import { isJobSuppressed } from '@/lib/sources/suppression-store';
 
 export const metadata: Metadata = {
-  title: 'Alle 1.600 Stellenangebote in Berlin — Consolidated List View',
+  title: 'Alle Stellenangebote in Berlin — KIEZJOB',
   description:
-    'Vollständiges Verzeichnis aller 1.600 verifizierten Jobs, Minijobs, Teilzeitstellen und Aushilfsjobs in Berlin. 100% Direktkontakt ohne Zeitarbeit.',
+    'Vollständiges Verzeichnis aller verifizierten Jobs, Minijobs, Teilzeitstellen und Aushilfsjobs in Berlin. 100% Direktkontakt ohne Zeitarbeit.',
   openGraph: {
-    title: 'Alle Stellenangebote in Berlin · JOBROOFS',
+    title: 'Alle Stellenangebote in Berlin · KIEZJOB',
     description:
-      'Stöbere durch die vollständige Übersicht aller 1.600 Jobs in Berlin across 32 Kategorien.',
+      'Stöbere durch die vollständige Übersicht aller Jobs in Berlin across 32 Kategorien.',
     url: '/all-jobs',
   },
   alternates: {
@@ -24,49 +25,68 @@ export const metadata: Metadata = {
 };
 
 export default function AllJobsPage() {
-  const initialJobs = previewJobs.filter(
-    (job) => !isJobSuppressed(job.id) && (!job.slug || !isJobSuppressed(job.slug)),
-  );
+  const map = new Map<string, any>();
+  for (const j of previewJobs) {
+    if (!isJobSuppressed(j.id) && (!j.slug || !isJobSuppressed(j.slug))) {
+      map.set(j.slug || j.id, j);
+    }
+  }
+  for (const j of ALL_SOURCED_JOBS.slice(0, 40)) {
+    if (!map.has(j.slug || j.id) && !isJobSuppressed(j.id) && !isJobSuppressed(j.slug)) {
+      map.set(j.slug || j.id, j);
+    }
+  }
+
+  const initialJobs = Array.from(map.values()).map((job) => ({
+    id: job.id,
+    slug: job.slug || job.id,
+    title: job.title,
+    company: job.company,
+    district: job.district,
+    postcode: job.postcode,
+    industryId: job.industryId,
+    employmentForms: job.employmentForms,
+    compensation: job.compensation,
+    hours: job.hours,
+    hoursLabel: job.hoursLabel || job.hours?.label,
+    schedule: job.schedule,
+    scheduleSummary: job.scheduleSummary || job.schedule?.summary,
+    tier: job.tier,
+    isFeatured: job.isFeatured,
+    listingOrigin: job.listingOrigin,
+    tags: job.tags,
+    payText: job.payText,
+  }));
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <BreadcrumbJsonLd
-        items={[
-          { name: 'JOBROOFS', href: '/' },
-          { name: 'Alle Stellenangebote in Berlin', href: '/all-jobs' },
-        ]}
-      />
-      <SiteHeader />
+    <main className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between">
+      <div>
+        <BreadcrumbJsonLd
+          items={[
+            { name: 'KIEZJOB', href: '/' },
+            { name: 'Alle Stellenangebote', href: '/all-jobs' },
+          ]}
+        />
+        <SiteHeader />
 
-      <div className="border-b border-black/[0.06] bg-white py-3">
-        <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-6">
-          <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2">
-              <Link
-                href="/"
-                className="inline-flex items-center gap-1 font-semibold text-[#86868b] hover:text-[#1d1d1f] transition-colors"
-              >
-                <ArrowLeft className="size-3.5" /> Startseite
-              </Link>
-              <span className="text-black/20">/</span>
-              <span className="font-semibold text-[#1d1d1f]">Alle 1.600 Stellenangebote</span>
-            </div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 text-[11px] font-semibold">
-              <Sparkles className="size-3 text-emerald-600" />
-              1.600 Live Kiez-Angebote &middot; Alle 32 Berliner Branchen
+        <div className="border-b border-zinc-200 bg-white py-3">
+          <div className="mx-auto max-w-4xl px-4 flex items-center justify-between text-xs">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1 font-semibold text-zinc-500 hover:text-zinc-900 transition-colors"
+            >
+              <ArrowLeft className="size-3.5" /> Startseite
+            </Link>
+            <span className="font-semibold text-zinc-700">
+              Gesamter Stellenkatalog (1.600 Jobs)
             </span>
           </div>
         </div>
-      </div>
 
-      <JobBrowser
-        initialJobs={initialJobs}
-        filterOrigin="all"
-        pageTitle="Alle Stellenangebote in Berlin"
-        pageSubtitle="Vollständige konsolidierte Liste aller 1.600 verifizierten Jobs, Minijobs und flexiblen Schichten in ganz Berlin."
-        sectionTitle="Gesamter Stellenkatalog (1.600 Jobs)"
-        viewAllHref=""
-      />
+        <div className="mx-auto max-w-4xl px-4 py-8">
+          <JobFeed initialJobs={initialJobs} />
+        </div>
+      </div>
 
       <SiteFooter />
     </main>

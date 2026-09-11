@@ -3,162 +3,83 @@
 import { useState } from 'react';
 import Link from '@/components/ui/link';
 import { usePathname } from 'next/navigation';
-import { ArrowUpRight, User as UserIcon, LogOut } from 'lucide-react';
+import { PlusCircle, User as UserIcon, LogOut } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { AuthModal } from '@/components/auth-modal';
 import { LanguageToggle } from '@/components/language-toggle';
 
-export function SiteHeader({ control = false }: { control?: boolean }) {
+export function SiteHeader({ control = false }: { control?: boolean } = {}) {
   const { t, isDe } = useTranslation();
   const { user, signOutUser } = useAuth();
   const [authOpen, setAuthOpen] = useState(false);
   const pathname = usePathname();
 
-  const isMapActive = pathname.startsWith('/karte');
-  const isJobsActive =
-    !isMapActive &&
-    (pathname === '/' ||
-      pathname.startsWith('/jobs') ||
-      pathname.startsWith('/categories') ||
-      pathname === '/post-a-job');
-  const isHousingActive = !isMapActive && pathname.startsWith('/wohnen');
-
   return (
-    <header className="sticky top-0 z-50 border-b border-black/[0.06] glass-chrome shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-      <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between px-3 sm:px-4 md:px-6">
-        {/* Left: Brand Logo (Apple Minimalist) */}
+    <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white/95 backdrop-blur-md">
+      <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
+        {/* Left: Brand Logo (Jobicco Berlin Style) */}
         <Link
           href="/"
-          className="group flex items-center gap-1.5 transition-transform duration-140 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] select-none"
+          className="group flex items-baseline gap-1.5 select-none"
         >
-          <span className="flex items-center text-lg font-bold tracking-tight text-[#1d1d1f]">
-            JOB<span className="text-[#0071e3]">ROOFS</span>
+          <span className="text-xl font-black tracking-tight text-zinc-900">
+            KIEZ<span className="text-[#e33525]">JOB</span>
           </span>
-          <span className="text-[10px] font-semibold text-[#86868b] tracking-wider uppercase pl-0.5">
+          <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider">
             Berlin
           </span>
-          {control ? (
-            <span className="ml-2 rounded-full bg-black/[0.04] px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-[#86868b] border border-black/[0.06]">
-              {t('controlRoom')}
-            </span>
-          ) : null}
         </Link>
 
-        {/* Right: Navigation & Actions */}
-        <div className="flex items-center gap-2 sm:gap-5">
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-[#1d1d1f]">
-            {control ? (
-              <Link
-                href="/"
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-[#86868b] hover:text-[#1d1d1f] transition-colors"
-              >
-                {t('publicPortal')} <ArrowUpRight className="size-3.5" />
-              </Link>
-            ) : (
-              <div className="flex items-center gap-1 pr-2">
-                {/* 1. Jobs Link */}
-                <Link
-                  href="/all-jobs"
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition active:scale-[0.97] ${
-                    isJobsActive
-                      ? 'bg-black/[0.06] text-[#1d1d1f] font-semibold'
-                      : 'text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.03]'
-                  }`}
-                >
-                  Jobs
-                </Link>
+        {/* Right: Actions */}
+        <div className="flex items-center gap-3">
+          {/* Jobs link */}
+          <Link
+            href="/"
+            className={`hidden sm:inline-block text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors ${
+              pathname === '/'
+                ? 'text-[#e33525] font-bold'
+                : 'text-zinc-600 hover:text-zinc-950'
+            }`}
+          >
+            Jobs
+          </Link>
 
-                {/* 2. Housing Link */}
-                <Link
-                  href="/wohnen"
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition active:scale-[0.97] ${
-                    isHousingActive
-                      ? 'bg-black/[0.06] text-[#1d1d1f] font-semibold'
-                      : 'text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.03]'
-                  }`}
-                >
-                  {isDe ? 'Wohnen' : 'Housing'}
-                </Link>
+          {/* Post a job CTA - Jobicco Red Button */}
+          <Link
+            href="/post-a-job"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#e33525] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#c92c1d] transition-colors shadow-2xs"
+          >
+            <PlusCircle className="size-3.5" />
+            <span>Job schalten</span>
+          </Link>
 
-                {/* 3. Karte Link */}
-                <Link
-                  href="/karte"
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition active:scale-[0.97] ${
-                    isMapActive
-                      ? 'bg-black/[0.06] text-[#1d1d1f] font-semibold'
-                      : 'text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.03]'
-                  }`}
-                >
-                  {isDe ? 'Karte' : 'Map'}
-                </Link>
+          {/* Language Toggle */}
+          <LanguageToggle />
 
-                {/* 4. Profil Link */}
-                <Link
-                  href="/profil"
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition active:scale-[0.97] ${
-                    pathname.startsWith('/profil')
-                      ? 'bg-black/[0.06] text-[#1d1d1f] font-semibold'
-                      : 'text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/[0.03]'
-                  }`}
-                >
-                  {isDe ? 'Profil' : 'Profile'}
-                </Link>
-              </div>
-            )}
-
-            {/* Single Unified Apple Primary Action */}
-            <Link
-              href="/post"
-              className="apple-btn-primary"
-            >
-              <span>+ {isDe ? 'Inserieren' : 'Post'}</span>
-            </Link>
-          </nav>
-
-          {/* Auth Button (Visible on both Mobile & Desktop at top of screen) */}
+          {/* User Auth */}
           {user ? (
-            <div className="flex items-center gap-1">
-              <Link
-                href="/profil"
-                className="inline-flex items-center gap-1.5 rounded-full bg-black/[0.04] px-2.5 py-1 text-xs font-medium text-[#1d1d1f] hover:bg-black/[0.08] transition active:scale-[0.96]"
-                title={user.email || undefined}
-              >
-                {user.photoURL ? (
-                  <img src={user.photoURL} alt="" className="size-4.5 rounded-full object-cover" />
-                ) : (
-                  <UserIcon className="size-3.5 text-[#0071e3]" />
-                )}
-                <span className="truncate max-w-[70px] sm:max-w-[110px] text-[12px]">
-                  {user.displayName?.split(' ')[0] || user.email?.split('@')[0] || (isDe ? 'Konto' : 'Account')}
-                </span>
-              </Link>
+            <div className="flex items-center gap-2">
+              <span className="hidden md:inline-block text-xs font-medium text-zinc-600 max-w-[120px] truncate">
+                {user.email?.split('@')[0]}
+              </span>
               <button
-                type="button"
                 onClick={() => signOutUser()}
-                className="grid size-7 place-items-center rounded-full text-[#86868b] hover:bg-black/[0.06] hover:text-[#1d1d1f] transition cursor-pointer"
-                title={isDe ? 'Abmelden' : 'Sign out'}
+                title="Abmelden"
+                className="inline-flex size-8 items-center justify-center rounded-lg border border-zinc-200 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 transition-colors"
               >
-                <LogOut className="size-3" />
+                <LogOut className="size-3.5" />
               </button>
             </div>
           ) : (
             <button
-              type="button"
               onClick={() => setAuthOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#0071e3]/10 border border-[#0071e3]/30 px-3 sm:px-3.5 py-1 text-xs font-semibold text-[#0071e3] hover:bg-[#0071e3] hover:text-white transition-all duration-150 active:scale-[0.96] cursor-pointer shadow-2xs group"
-              title={isDe ? 'Jetzt kostenlos anmelden oder registrieren' : 'Sign in or sign up free'}
+              className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 transition-colors"
             >
-              <UserIcon className="size-3.5 text-[#0071e3] group-hover:text-white transition-colors" />
-              <span className="hidden sm:inline">{isDe ? 'Anmelden / Registrieren' : 'Sign in / Sign up'}</span>
-              <span className="sm:hidden">{isDe ? 'Anmelden' : 'Sign in'}</span>
+              <UserIcon className="size-3.5" />
+              <span>Anmelden</span>
             </button>
           )}
-
-          <div className="border-l border-black/[0.08] pl-2 sm:pl-3">
-            <LanguageToggle />
-          </div>
         </div>
       </div>
 

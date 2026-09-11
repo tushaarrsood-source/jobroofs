@@ -1,4 +1,10 @@
-export type SourceKind = 'direct_employer' | 'specialist_board' | 'large_board';
+export type SourceKind =
+  | 'direct_employer'
+  | 'public_institution'
+  | 'cooperative'
+  | 'local_agency'
+  | 'specialist_board'
+  | 'large_board';
 
 export type ListingOrigin = 'employer_posted' | 'sourced';
 export type ApplicationMethod = 'external_link' | 'email';

@@ -24,7 +24,7 @@ export async function GET(request: Request) {
       return true;
     });
 
-    const paged = filtered.slice(offset, offset + limit).map((j) => ({
+    const paged = filtered.slice(offset, offset + limit).map((j: any) => ({
       id: j.id,
       slug: j.slug,
       title: j.title,
