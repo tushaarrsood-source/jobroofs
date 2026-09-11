@@ -36,7 +36,7 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
           {/* Jobs link */}
           <Link
             href="/"
-            className={`hidden sm:inline-block text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
+            className={`hidden sm:inline-block text-xs font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
               pathname === '/'
                 ? 'text-[#1b4332] bg-[#e8f1ec]'
                 : 'text-[#5c6863] hover:text-[#111816]'
@@ -48,7 +48,7 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
           {/* Post a job CTA - Forest Green Pill */}
           <Link
             href="/post-a-job"
-            className="inline-flex items-center gap-1.5 rounded-full bg-[#1b4332] px-4 py-2 text-xs font-bold text-white hover:bg-[#122f23] transition-all shadow-xs active:scale-[0.98]"
+            className="inline-flex items-center gap-1.5 rounded-full bg-[#1b4332] px-4 py-2 text-xs font-bold text-white hover:bg-[#122f23] transition-all shadow-xs active:scale-[0.98] cursor-pointer"
           >
             <PlusCircle className="size-3.5" />
             <span>Job schalten</span>

@@ -74,7 +74,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
         {prevSlug ? (
           <Link
             href={`/jobs/${prevSlug}`}
-            className="inline-flex items-center gap-1 text-[#5c6863] hover:text-[#1b4332] transition-colors"
+            className="inline-flex items-center gap-1 text-[#5c6863] hover:text-[#1b4332] transition-colors cursor-pointer"
           >
             <ArrowLeft className="size-3.5" /> Vorheriger Job
           </Link>
@@ -84,7 +84,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
 
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 rounded-full border border-[#e5eae7] bg-white px-4 py-1.5 text-[#111816] hover:bg-[#f2f6f4] transition-colors shadow-2xs"
+          className="inline-flex items-center gap-1.5 rounded-full border border-[#e5eae7] bg-white px-4 py-1.5 text-[#111816] hover:bg-[#f2f6f4] transition-colors shadow-2xs cursor-pointer"
         >
           <List className="size-3.5 text-[#1b4332]" /> Zurück zur Übersicht
         </Link>
@@ -92,7 +92,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
         {nextSlug ? (
           <Link
             href={`/jobs/${nextSlug}`}
-            className="inline-flex items-center gap-1 text-[#5c6863] hover:text-[#1b4332] transition-colors"
+            className="inline-flex items-center gap-1 text-[#5c6863] hover:text-[#1b4332] transition-colors cursor-pointer"
           >
             Nächster Job <ArrowRight className="size-3.5" />
           </Link>

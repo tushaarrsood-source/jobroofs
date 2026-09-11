@@ -67,6 +67,27 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
     };
   }, [initialJobs]);
 
+  // Sync with URL query parameters on mount and back/forward navigation
+  useEffect(() => {
+    const syncFromUrl = () => {
+      if (typeof window === 'undefined') return;
+      const params = new URLSearchParams(window.location.search);
+      const dist = params.get('district');
+      if (dist) {
+        const found = DISTRICTS.find(
+          (d) => d.id === dist.toLowerCase() || d.label.toLowerCase() === dist.toLowerCase()
+        );
+        if (found) setSelectedDistrict(found.id);
+      }
+      const q = params.get('q');
+      if (q) setQuery(q);
+    };
+
+    syncFromUrl();
+    window.addEventListener('popstate', syncFromUrl);
+    return () => window.removeEventListener('popstate', syncFromUrl);
+  }, []);
+
   // Reset pagination when search or district changes
   useEffect(() => {
     setCurrentPage(1);
@@ -133,8 +154,16 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
             return (
               <button
                 key={d.id}
-                onClick={() => setSelectedDistrict(d.id)}
-                className={`shrink-0 px-4 py-2 rounded-full font-medium transition-all ${
+                onClick={() => {
+                  setSelectedDistrict(d.id);
+                  if (typeof window !== 'undefined') {
+                    const url = new URL(window.location.href);
+                    if (d.id === 'all') url.searchParams.delete('district');
+                    else url.searchParams.set('district', d.id);
+                    window.history.replaceState({}, '', url.toString());
+                  }
+                }}
+                className={`shrink-0 px-4 py-2 rounded-full font-medium transition-all cursor-pointer ${
                   isActive
                     ? 'bg-[#1b4332] text-white shadow-xs'
                     : 'bg-white text-[#414d47] border border-[#e5eae7] hover:bg-[#f2f6f4]'
@@ -172,7 +201,7 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
             <Link
               key={slug || idx}
               href={`/jobs/${slug}`}
-              className="group block rounded-[20px] border border-[#e5eae7] bg-white p-5 transition-all hover:border-[#1b4332]/40 hover:shadow-[0_6px_24px_rgb(0,0,0,0.03)]"
+              className="group block rounded-[20px] border border-[#e5eae7] bg-white p-5 transition-all hover:border-[#1b4332]/40 hover:shadow-[0_6px_24px_rgb(0,0,0,0.03)] cursor-pointer"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4 min-w-0 flex-1">

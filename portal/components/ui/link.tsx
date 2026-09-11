@@ -1,7 +1,6 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import NextLink from 'next/link';
 
 export interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string | { pathname?: string; query?: Record<string, string | number>; hash?: string };
@@ -51,21 +50,32 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
     if (onClick) {
       onClick(e);
     }
+    // Allow user to use modifier keys for opening in new tabs
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+      return;
+    }
+
+    if (rest.target && rest.target !== '_self') {
+      return;
+    }
+
+    if (replace) {
+      e.preventDefault();
+      window.location.replace(url);
+    }
   };
 
   return (
-    <NextLink
+    <a
       ref={ref}
       href={url}
-      replace={replace}
-      scroll={scroll}
-      prefetch={prefetch}
       onClick={handleClick}
       {...rest}
     >
       {children}
-    </NextLink>
+    </a>
   );
 });
 
 export default Link;
+

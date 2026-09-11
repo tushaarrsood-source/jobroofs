@@ -37,7 +37,7 @@ export function EditorialHero() {
               {/* Row 01 */}
               <Link
                 href="/?district=mitte"
-                className="group flex items-center justify-between py-4 transition-colors hover:bg-[#fafbfa] -mx-2 px-2 rounded-xl"
+                className="group flex items-center justify-between py-4 transition-colors hover:bg-[#fafbfa] -mx-2 px-2 rounded-xl cursor-pointer"
               >
                 <div className="flex items-center gap-3.5">
                   <span className="font-mono text-xs font-medium text-zinc-400">01</span>
@@ -56,7 +56,7 @@ export function EditorialHero() {
               {/* Row 02 */}
               <Link
                 href="/?district=kreuzberg"
-                className="group flex items-center justify-between py-4 transition-colors hover:bg-[#fafbfa] -mx-2 px-2 rounded-xl"
+                className="group flex items-center justify-between py-4 transition-colors hover:bg-[#fafbfa] -mx-2 px-2 rounded-xl cursor-pointer"
               >
                 <div className="flex items-center gap-3.5">
                   <span className="font-mono text-xs font-medium text-zinc-400">02</span>
@@ -75,7 +75,7 @@ export function EditorialHero() {
               {/* Row 03 */}
               <Link
                 href="/?district=friedrichshain"
-                className="group flex items-center justify-between py-4 transition-colors hover:bg-[#fafbfa] -mx-2 px-2 rounded-xl"
+                className="group flex items-center justify-between py-4 transition-colors hover:bg-[#fafbfa] -mx-2 px-2 rounded-xl cursor-pointer"
               >
                 <div className="flex items-center gap-3.5">
                   <span className="font-mono text-xs font-medium text-zinc-400">03</span>
@@ -114,7 +114,7 @@ export function EditorialHero() {
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <Link
               href="/post-a-job"
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#1b4332] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#122f23] transition-all shadow-xs active:scale-[0.98]"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#1b4332] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#122f23] transition-all shadow-xs active:scale-[0.98] cursor-pointer"
             >
               <PlusCircle className="size-3.5" />
               <span>Job schalten</span>
