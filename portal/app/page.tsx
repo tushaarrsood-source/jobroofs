@@ -46,12 +46,12 @@ export default async function Home() {
   }));
 
   return (
-    <div className="min-h-screen bg-[#fafbfa] text-[#111816] flex flex-col justify-between">
+    <div className="min-h-screen bg-[#fbfbf8] text-[#202a31] flex flex-col justify-between">
       <WebSiteJsonLd />
       <LocalBusinessJsonLd />
       <SiteHeader />
 
-      <main className="mx-auto max-w-4xl w-full px-4 flex-1">
+      <main className="mx-auto max-w-5xl w-full px-6 md:px-8 flex-1">
         {/* Signature Editorial Hero matching reference design */}
         <EditorialHero />
 

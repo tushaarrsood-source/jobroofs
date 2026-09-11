@@ -59,7 +59,7 @@ export default function AllJobsPage() {
   }));
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between">
+    <main className="min-h-screen bg-[#fbfbf8] text-[#202a31] flex flex-col justify-between">
       <div>
         <BreadcrumbJsonLd
           items={[
@@ -69,21 +69,21 @@ export default function AllJobsPage() {
         />
         <SiteHeader />
 
-        <div className="border-b border-zinc-200 bg-white py-3">
-          <div className="mx-auto max-w-4xl px-4 flex items-center justify-between text-xs">
+        <div className="border-b border-[#d8ded9] bg-white py-3">
+          <div className="mx-auto max-w-5xl px-6 md:px-8 flex items-center justify-between text-[12px]">
             <Link
               href="/"
-              className="inline-flex items-center gap-1 font-semibold text-zinc-500 hover:text-zinc-900 transition-colors"
+              className="inline-flex items-center gap-1 font-normal text-[#7e8a84] hover:text-[#202a31] transition-colors"
             >
-              <ArrowLeft className="size-3.5" /> Startseite
+              <ArrowLeft className="size-3.5 stroke-[1.25]" /> Startseite
             </Link>
-            <span className="font-semibold text-zinc-700">
+            <span className="font-normal text-[#7e8a84]">
               Gesamter Stellenkatalog (1.600 Jobs)
             </span>
           </div>
         </div>
 
-        <div className="mx-auto max-w-4xl px-4 py-8">
+        <div className="mx-auto max-w-5xl px-6 md:px-8 py-8">
           <JobFeed initialJobs={initialJobs} />
         </div>
       </div>

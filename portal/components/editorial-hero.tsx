@@ -1,67 +1,75 @@
 'use client';
 
 import Link from '@/components/ui/link';
+import { PlusCircle, ArrowRight } from 'lucide-react';
 
 export function EditorialHero() {
   return (
-    <section className="relative pt-10 pb-12 sm:pt-16 sm:pb-20 overflow-hidden">
+    <section className="relative pt-8 pb-10 sm:pt-14 sm:pb-16 overflow-hidden">
       {/* Top Headline Section */}
       <div className="max-w-4xl">
         {/* Micro Kicker */}
-        <div className="text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#7e8a84] mb-5 sm:mb-6">
-          BERLIN WORKFORCE ARCHITECTURE &middot; VERIFIED DIRECT POSITIONS
+        <div className="text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#7e8a84] mb-4 sm:mb-5">
+          BERLIN WORKFORCE ARCHITECTURE &middot; DIRECT POSITIONS
         </div>
 
         {/* Slender Editorial Headline */}
         <h1
-          className="text-4xl sm:text-6xl lg:text-[72px] font-light sm:font-normal tracking-[-0.025em] text-[#202a31] leading-[1.08]"
+          className="text-4xl sm:text-6xl lg:text-[70px] font-light sm:font-normal tracking-[-0.025em] text-[#202a31] leading-[1.08]"
           style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
         >
           The portal for temp jobs.
         </h1>
 
-        {/* Elegant Subtitle */}
-        <p className="mt-4 sm:mt-5 text-base sm:text-lg text-[#5a6460] font-light max-w-2xl leading-relaxed tracking-[-0.01em]">
-          Finde Minijobs, flexible Schichten und temporäre Einsätze direkt bei Berliner Betrieben &mdash; 100% ohne Vermittler, 100% transparent.
+        {/* Crisp Single-Sentence Subtitle */}
+        <p className="mt-3 sm:mt-4 text-base sm:text-lg text-[#5a6460] font-light max-w-2xl leading-relaxed tracking-[-0.01em]">
+          Direktkontakt zu Berliner Betrieben &mdash; Minijobs, flexible Schichten und Aushilfen ohne Agenturen.
         </p>
       </div>
 
-      {/* Hairline Divider (Direct Translation of Reference Image) */}
-      <div className="w-full h-px bg-[#d8ded9] my-10 sm:my-14" />
+      {/* Hairline Divider */}
+      <div className="w-full h-px bg-[#d8ded9] my-8 sm:my-10" />
 
-      {/* Split Editorial Lower Grid */}
-      <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
-        {/* Left Column: Manifesto & Direct Access */}
+      {/* Split Grid: Left = Post Your Job Hub, Right = Live Ledger */}
+      <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
+        {/* Left Column: High-Impact "Post your job" Workstation */}
         <div className="lg:col-span-6 space-y-4">
           <div className="text-[10.5px] font-medium uppercase tracking-[0.2em] text-[#7e8a84]">
-            FRONT OF THE MARKET &middot; DIRECT ACCESS
+            FOR EMPLOYERS &middot; BERLIN VENUES
           </div>
 
           <h2
-            className="text-2xl sm:text-[28px] font-normal text-[#202a31] tracking-[-0.015em] leading-snug"
+            className="text-2xl sm:text-[30px] font-normal text-[#202a31] tracking-[-0.015em] leading-tight"
             style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
           >
-            Search. Connect. Work on your terms.
+            Verstärkung gesucht? In 2 Minuten online.
           </h2>
 
           <p className="text-[14px] sm:text-[15px] text-[#5a6460] font-light leading-relaxed max-w-md">
-            Spare dir Umwege über Leiharbeitsfirmen und Agenturen. Auf JOBROOFS bewirbst du dich mit 1 Klick direkt bei verifizierten Berliner Betrieben &mdash; schnell, unkompliziert und auf Augenhöhe.
+            Inseriere offene Schichten oder Minijobs direkt in deinem Kiez. Erreiche motivierte Talente ohne Agentur-Umwege.
           </p>
 
-          <div className="pt-4 flex flex-wrap items-center gap-4">
-            <Link
-              href="/all-jobs"
-              className="apple-press inline-flex items-center justify-center rounded-sm bg-[#202a31] px-5 py-2.5 text-[12.5px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
-            >
-              <span>Stellenangebote durchsuchen</span>
-            </Link>
+          <div className="pt-2 space-y-2.5">
+            {/* Big Prominent "Post your job" Button */}
             <Link
               href="/post-a-job"
-              className="inline-flex items-center gap-1.5 text-[12.5px] font-normal tracking-[0.02em] text-[#202a31] hover:text-[#7e8a84] transition-colors cursor-pointer"
+              className="apple-press group inline-flex items-center justify-between gap-4 rounded-sm bg-[#202a31] hover:bg-[#2d3a43] text-[#fbfbf8] px-6 py-3.5 text-[14px] font-normal tracking-[0.02em] transition-all cursor-pointer w-full sm:w-auto min-w-[280px]"
             >
-              <span>Job inserieren (kostenlos)</span>
-              <span aria-hidden="true">&rarr;</span>
+              <div className="flex items-center gap-2.5">
+                <PlusCircle className="size-4 stroke-[1.5]" />
+                <span>Job jetzt inserieren (ab 0 €)</span>
+              </div>
+              <ArrowRight className="size-4 stroke-[1.5] group-hover:translate-x-0.5 transition-transform" />
             </Link>
+
+            {/* Micro Trust Indicators */}
+            <div className="flex items-center gap-2 text-[11.5px] text-[#7e8a84] font-light">
+              <span>100% Direktkontakt</span>
+              <span>&middot;</span>
+              <span>Keine Kreditkarte nötig</span>
+              <span>&middot;</span>
+              <span>Sofort live</span>
+            </div>
           </div>
         </div>
 
