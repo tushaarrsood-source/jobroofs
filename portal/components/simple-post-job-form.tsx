@@ -379,35 +379,35 @@ export function SimplePostJobForm() {
 
   if (!user) {
     return (
-      <div className="max-w-xl mx-auto my-8 sm:my-14">
-        <div className="rounded-2xl border border-[#d8ded9] bg-white p-7 sm:p-9 text-center shadow-xs">
-          <div className="size-12 rounded-full bg-[#f4f4ee] flex items-center justify-center mx-auto text-[#202a31] mb-4">
-            <UserIcon className="size-6 stroke-[1.5]" />
+      <div className="max-w-md mx-auto my-3 sm:my-6">
+        <div className="rounded-2xl border border-[#d8ded9] bg-white p-5 sm:p-6 text-center shadow-xs">
+          <div className="size-10 rounded-full bg-[#f4f4ee] flex items-center justify-center mx-auto text-[#202a31] mb-3">
+            <UserIcon className="size-5 stroke-[1.5]" />
           </div>
 
           <h2
-            className="text-2xl sm:text-3xl font-light text-[#202a31] tracking-tight"
+            className="text-xl sm:text-2xl font-light text-[#202a31] tracking-tight"
             style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
           >
             {isDe ? 'Anmelden zum Inserieren' : 'Sign in to post a job'}
           </h2>
 
-          <p className="mt-2 text-[13.5px] text-[#5a6460] font-light leading-relaxed max-w-md mx-auto">
+          <p className="mt-1.5 text-[13px] text-[#5a6460] font-light leading-relaxed max-w-sm mx-auto">
             {isDe
               ? 'Um eine Stelle zu inserieren und Bewerbungen zu empfangen, erstelle bitte ein kostenloses Konto oder melde dich an.'
               : 'To post a job and receive direct candidate applications, please sign in or create a free account.'}
           </p>
 
-          <div className="my-6 border-t border-[#d8ded9] pt-6 space-y-2.5 text-left max-w-sm mx-auto">
-            <div className="flex items-center gap-2.5 text-[12.5px] text-[#202a31]">
+          <div className="my-4 border-t border-[#d8ded9] pt-3.5 space-y-2 text-left max-w-xs mx-auto">
+            <div className="flex items-center gap-2 text-[12px] text-[#202a31]">
               <span className="size-1.5 rounded-full bg-emerald-600 shrink-0" />
               <span>{isDe ? '1. Stellenanzeige 100% kostenlos' : '1st job posting 100% free'}</span>
             </div>
-            <div className="flex items-center gap-2.5 text-[12.5px] text-[#202a31]">
+            <div className="flex items-center gap-2 text-[12px] text-[#202a31]">
               <span className="size-1.5 rounded-full bg-emerald-600 shrink-0" />
               <span>{isDe ? 'Direkter Kontakt zu Berliner Bewerbern' : 'Direct contact with Berlin applicants'}</span>
             </div>
-            <div className="flex items-center gap-2.5 text-[12.5px] text-[#202a31]">
+            <div className="flex items-center gap-2 text-[12px] text-[#202a31]">
               <span className="size-1.5 rounded-full bg-emerald-600 shrink-0" />
               <span>{isDe ? 'Jederzeit im Profil verwalten' : 'Manage anytime in your profile'}</span>
             </div>
@@ -416,10 +416,10 @@ export function SimplePostJobForm() {
           <button
             type="button"
             onClick={() => setAuthOpen(true)}
-            className="apple-press inline-flex items-center justify-center gap-2 w-full sm:w-auto min-w-[240px] px-6 py-3.5 rounded-xl bg-[#202a31] text-[#fbfbf8] text-[13.5px] font-medium tracking-[0.02em] hover:bg-[#161D22] transition-colors cursor-pointer shadow-xs"
+            className="apple-press inline-flex items-center justify-center gap-2 w-full sm:w-auto min-w-[200px] px-5 py-2.5 rounded-xl bg-[#202a31] text-[#fbfbf8] text-[13px] font-medium tracking-[0.02em] hover:bg-[#161D22] transition-colors cursor-pointer shadow-xs"
           >
             <span>{isDe ? 'Jetzt anmelden / registrieren' : 'Sign in / Register now'}</span>
-            <ArrowRight className="size-4 stroke-[1.5]" />
+            <ArrowRight className="size-3.5 stroke-[1.5]" />
           </button>
         </div>
 
@@ -559,26 +559,26 @@ export function SimplePostJobForm() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 sm:space-y-5">
       {/* Header & Step Tracker */}
-      <div className="border-b border-[#d8ded9] pb-6 sm:pb-8">
-        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4">
+      <div className="border-b border-[#d8ded9] pb-3 sm:pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3">
           <div>
-            <div className="text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#7e8a84] mb-2">
+            <div className="text-[10px] sm:text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#7e8a84] mb-1 sm:mb-1.5">
               {isDe ? 'FÜR ARBEITGEBER · DIREKTE INSERATE' : 'EMPLOYER INTAKE · DIRECT LISTINGS'}
             </div>
             <h1
-              className="text-3xl sm:text-4xl font-light sm:font-normal tracking-[-0.025em] text-[#202a31]"
+              className="text-2xl sm:text-3xl font-light sm:font-normal tracking-[-0.025em] text-[#202a31]"
               style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
             >
               {isDe ? 'Job jetzt inserieren.' : 'Post a job now.'}
             </h1>
-            <p className="mt-1.5 text-[14.5px] text-[#5a6460] font-light">
+            <p className="mt-1 text-[13.5px] text-[#5a6460] font-light">
               {isDe
                 ? 'Erreiche motivierte Studierende, Aushilfen und Fachkräfte direkt in deinem Kiez — ohne Agenturen.'
                 : 'Reach motivated students, helpers, and local talents directly in your neighborhood — without agencies.'}
             </p>
-            <p className="mt-2 text-[12px] text-[#7e8a84] font-light">
+            <p className="mt-1 text-[11.5px] text-[#7e8a84] font-light">
               {isFreeEligible ? (
                 <span className="text-emerald-800 font-medium">
                   {isDe ? '1. Inserat 100% kostenlos · ' : '1st listing 100% free · '}
@@ -599,18 +599,18 @@ export function SimplePostJobForm() {
 
             {/* 1st Job Free Welcome Banner */}
             {!user ? (
-              <div className="mt-3.5 rounded-xl border border-emerald-600/30 bg-emerald-500/10 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-emerald-950">
-                <div className="flex items-start gap-2.5">
-                  <div className="size-7 rounded-lg bg-emerald-700 text-white flex items-center justify-center shrink-0 mt-0.5">
-                    <Gift className="size-3.5" />
+              <div className="mt-2.5 rounded-xl border border-emerald-600/30 bg-emerald-500/10 p-2.5 sm:p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-emerald-950">
+                <div className="flex items-start gap-2">
+                  <div className="size-6 rounded-lg bg-emerald-700 text-white flex items-center justify-center shrink-0 mt-0.5">
+                    <Gift className="size-3" />
                   </div>
                   <div>
-                    <div className="text-[12.5px] font-semibold text-emerald-900">
+                    <div className="text-[12px] font-semibold text-emerald-900">
                       {isDe
                         ? '1. Inserat 100% kostenlos für jeden neuen Benutzeraccount'
                         : '1st job listing 100% free for every new user account'}
                     </div>
-                    <div className="text-[11.5px] text-emerald-800/80 font-light mt-0.5">
+                    <div className="text-[11px] text-emerald-800/80 font-light mt-0.5">
                       {isDe
                         ? 'Melde dich kurz an oder erstelle ein kostenloses Konto, um dein 1. Inserat gratis zu schalten.'
                         : 'Sign in or create a free account to post your 1st job for free.'}
@@ -620,18 +620,18 @@ export function SimplePostJobForm() {
                 <button
                   type="button"
                   onClick={() => setAuthOpen(true)}
-                  className="apple-press shrink-0 inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#202a31] text-[#fbfbf8] text-[11.5px] font-medium hover:bg-[#161D22] transition-colors cursor-pointer"
+                  className="apple-press shrink-0 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#202a31] text-[#fbfbf8] text-[11px] font-medium hover:bg-[#161D22] transition-colors cursor-pointer"
                 >
                   <span>{isDe ? 'Kostenlos anmelden' : 'Sign in for free'}</span>
                   <ArrowRight className="size-3" />
                 </button>
               </div>
             ) : isFreeEligible ? (
-              <div className="mt-3.5 rounded-xl border border-emerald-600/30 bg-emerald-500/10 p-3 flex items-center gap-2.5 text-emerald-950">
-                <div className="size-6 rounded-lg bg-emerald-700 text-white flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="size-3.5" />
+              <div className="mt-2.5 rounded-xl border border-emerald-600/30 bg-emerald-500/10 p-2.5 flex items-center gap-2 text-emerald-950">
+                <div className="size-5 rounded-lg bg-emerald-700 text-white flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="size-3" />
                 </div>
-                <div className="text-[12px] text-emerald-900">
+                <div className="text-[11.5px] text-emerald-900">
                   {isDe ? (
                     <>
                       Willkommens-Vorteil aktiv für <span className="font-semibold">{user.email}</span>: Dein 1. Job ist <strong>100% kostenlos</strong> (0 € / 15 Tage)!
@@ -647,11 +647,11 @@ export function SimplePostJobForm() {
           </div>
 
           {/* Silent Luxury Segmented Step Indicator */}
-          <div className="flex items-center gap-1 p-0.5 rounded-sm border border-[#d8ded9] bg-transparent self-start sm:self-auto">
+          <div className="flex items-center gap-1 p-0.5 rounded-sm border border-[#d8ded9] bg-transparent self-start sm:self-auto shrink-0">
             <button
               type="button"
               onClick={() => goToStep(1)}
-              className={`px-2.5 sm:px-3 py-1.5 rounded-sm text-[11px] sm:text-[11.5px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
+              className={`px-2 sm:px-2.5 py-1 rounded-sm text-[11px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
                 step === 1
                   ? 'bg-[#202a31] text-[#fbfbf8]'
                   : 'text-[#7e8a84] hover:text-[#202a31]'
@@ -663,7 +663,7 @@ export function SimplePostJobForm() {
             <button
               type="button"
               onClick={() => goToStep(2)}
-              className={`px-2.5 sm:px-3 py-1.5 rounded-sm text-[11px] sm:text-[11.5px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
+              className={`px-2 sm:px-2.5 py-1 rounded-sm text-[11px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
                 step === 2
                   ? 'bg-[#202a31] text-[#fbfbf8]'
                   : 'text-[#7e8a84] hover:text-[#202a31]'
@@ -675,7 +675,7 @@ export function SimplePostJobForm() {
             <button
               type="button"
               onClick={() => goToStep(3)}
-              className={`px-2.5 sm:px-3 py-1.5 rounded-sm text-[11px] sm:text-[11.5px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
+              className={`px-2 sm:px-2.5 py-1 rounded-sm text-[11px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
                 step === 3
                   ? 'bg-[#202a31] text-[#fbfbf8]'
                   : 'text-[#7e8a84] hover:text-[#202a31]'
@@ -690,9 +690,9 @@ export function SimplePostJobForm() {
 
       {/* Main Centered Intake Form */}
       <div className="max-w-2xl mx-auto">
-        <form onSubmit={handleNext} className="space-y-6">
+        <form onSubmit={handleNext} className="space-y-4">
           {error && (
-            <div className="flex items-center gap-2 rounded-xl bg-red-50/80 p-3.5 text-[12.5px] font-normal text-red-800 border border-red-200">
+            <div className="flex items-center gap-2 rounded-xl bg-red-50/80 p-3 text-[12px] font-normal text-red-800 border border-red-200">
               <AlertCircle className="size-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -700,22 +700,22 @@ export function SimplePostJobForm() {
 
           {/* STEP 1: Basisdaten */}
           {step === 1 && (
-            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-5 sm:p-8 rounded-2xl shadow-xs space-y-6">
-              <div className="border-b border-[#d8ded9] pb-3">
+            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-4 sm:p-6 rounded-2xl shadow-xs space-y-4">
+              <div className="border-b border-[#d8ded9] pb-2.5">
                 <h2
-                  className="text-lg font-normal text-[#202a31] tracking-[-0.015em]"
+                  className="text-base sm:text-lg font-normal text-[#202a31] tracking-[-0.015em]"
                   style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
                 >
                   1. Basisdaten der Stelle
                 </h2>
-                <p className="text-[12.5px] text-[#7e8a84] font-light mt-0.5">
+                <p className="text-[12px] text-[#7e8a84] font-light mt-0.5">
                   Worum geht es und wer sucht Verstärkung?
                 </p>
               </div>
 
               {/* Title Input */}
-              <div className="space-y-2">
-                <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+              <div className="space-y-1.5">
+                <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
                   Stellenbezeichnung *
                 </label>
                 <input
@@ -724,13 +724,13 @@ export function SimplePostJobForm() {
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="z. B. Specialty Barista, Servicekraft, Event-Aushilfe"
-                  className="w-full h-11 px-3.5 text-base sm:text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
+                  className="w-full h-10 px-3 text-base sm:text-[13.5px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
                 />
               </div>
 
               {/* Company Input */}
-              <div className="space-y-2">
-                <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+              <div className="space-y-1.5">
+                <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
                   Arbeitgeber / Unternehmen *
                 </label>
                 <input
@@ -739,16 +739,16 @@ export function SimplePostJobForm() {
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                   placeholder="z. B. Café Morgenstern GmbH"
-                  className="w-full h-11 px-3.5 text-base sm:text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
+                  className="w-full h-10 px-3 text-base sm:text-[13.5px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
                 />
               </div>
 
               {/* District Selection Chips */}
-              <div className="space-y-2">
-                <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+              <div className="space-y-1.5">
+                <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
                   Berliner Bezirk *
                 </label>
-                <div className="flex flex-wrap gap-1.5 mb-2">
+                <div className="flex flex-wrap gap-1.5 mb-1.5">
                   {QUICK_DISTRICTS.map((d) => {
                     const isSelected = formData.district === d;
                     return (
@@ -756,7 +756,7 @@ export function SimplePostJobForm() {
                         key={d}
                         type="button"
                         onClick={() => setFormData({ ...formData, district: d })}
-                        className={`px-3 py-1.5 rounded-lg text-[12px] font-normal transition-colors cursor-pointer ${
+                        className={`px-2.5 py-1 rounded-lg text-[11.5px] font-normal transition-colors cursor-pointer ${
                           isSelected
                             ? 'bg-[#202a31] text-[#fbfbf8]'
                             : 'border border-[#d8ded9] text-[#7e8a84] hover:text-[#202a31] hover:border-[#202a31] bg-white'
@@ -772,7 +772,7 @@ export function SimplePostJobForm() {
                 <select
                   value={formData.district}
                   onChange={(e) => setFormData({ ...formData, district: e.target.value })}
-                  className="w-full h-10 px-3.5 text-[13px] text-[#202a31] border border-[#d8ded9] rounded-xl bg-white cursor-pointer focus:border-[#202a31] outline-none transition-colors"
+                  className="w-full h-9 px-3 text-[12.5px] text-[#202a31] border border-[#d8ded9] rounded-xl bg-white cursor-pointer focus:border-[#202a31] outline-none transition-colors"
                 >
                   {BERLIN_DISTRICTS.map((d) => (
                     <option key={d} value={d}>
@@ -782,10 +782,10 @@ export function SimplePostJobForm() {
                 </select>
               </div>
 
-              <div className="pt-3 border-t border-[#d8ded9] flex justify-end">
+              <div className="pt-2.5 border-t border-[#d8ded9] flex justify-end">
                 <button
                   type="submit"
-                  className="apple-press inline-flex items-center gap-2 rounded-xl bg-[#202a31] px-6 py-3 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] transition-colors cursor-pointer"
+                  className="apple-press inline-flex items-center gap-2 rounded-xl bg-[#202a31] px-5 py-2.5 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] transition-colors cursor-pointer"
                 >
                   <span>Weiter zu Konditionen</span>
                   <ArrowRight className="size-3.5 stroke-[1.5]" />
@@ -796,25 +796,25 @@ export function SimplePostJobForm() {
 
           {/* STEP 2: Konditionen */}
           {step === 2 && (
-            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-6 sm:p-8 rounded-2xl shadow-xs space-y-6">
-              <div className="border-b border-[#d8ded9] pb-3">
+            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-4 sm:p-6 rounded-2xl shadow-xs space-y-4">
+              <div className="border-b border-[#d8ded9] pb-2.5">
                 <h2
-                  className="text-lg font-normal text-[#202a31] tracking-[-0.015em]"
+                  className="text-base sm:text-lg font-normal text-[#202a31] tracking-[-0.015em]"
                   style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
                 >
                   2. Konditionen & Aufgaben
                 </h2>
-                <p className="text-[12.5px] text-[#7e8a84] font-light mt-0.5">
+                <p className="text-[12px] text-[#7e8a84] font-light mt-0.5">
                   Vergütung, Anstellungsform und Tätigkeitsbeschreibung.
                 </p>
               </div>
 
               {/* Employment Type Chips */}
-              <div className="space-y-2">
-                <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+              <div className="space-y-1.5">
+                <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
                   Anstellungsart *
                 </label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
                   {EMPLOYMENT_TYPES.map((t) => {
                     const isSelected = formData.employmentType === t;
                     return (
@@ -822,7 +822,7 @@ export function SimplePostJobForm() {
                         key={t}
                         type="button"
                         onClick={() => setFormData({ ...formData, employmentType: t })}
-                        className={`p-2.5 rounded-xl border text-left text-[12px] transition-colors cursor-pointer ${
+                        className={`p-2 rounded-xl border text-left text-[11.5px] transition-colors cursor-pointer ${
                           isSelected
                             ? 'border-[#202a31] bg-[#202a31] text-[#fbfbf8]'
                             : 'border-[#d8ded9] bg-white text-[#7e8a84] hover:text-[#202a31] hover:border-[#202a31]'
@@ -830,7 +830,7 @@ export function SimplePostJobForm() {
                       >
                         <div className="font-normal">{t.split('(')[0]}</div>
                         {t.includes('(') && (
-                          <div className={`text-[10px] mt-0.5 ${isSelected ? 'text-[#fbfbf8]/70' : 'text-[#7e8a84]'}`}>
+                          <div className={`text-[9.5px] mt-0.5 ${isSelected ? 'text-[#fbfbf8]/70' : 'text-[#7e8a84]'}`}>
                             ({t.split('(')[1]}
                           </div>
                         )}
@@ -841,8 +841,8 @@ export function SimplePostJobForm() {
               </div>
 
               {/* Wage Selector */}
-              <div className="space-y-2">
-                <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+              <div className="space-y-1.5">
+                <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
                   Vergütung / Stundenlohn *
                 </label>
                 <div className="flex flex-wrap gap-1.5">
@@ -853,7 +853,7 @@ export function SimplePostJobForm() {
                         key={w}
                         type="button"
                         onClick={() => setFormData({ ...formData, wage: w })}
-                        className={`px-3 py-1.5 rounded-lg text-[12px] font-mono transition-colors cursor-pointer ${
+                        className={`px-2.5 py-1 rounded-lg text-[11.5px] font-mono transition-colors cursor-pointer ${
                           isSelected
                             ? 'bg-[#202a31] text-[#fbfbf8]'
                             : 'border border-[#d8ded9] text-[#7e8a84] hover:text-[#202a31] hover:border-[#202a31] bg-white'
@@ -869,42 +869,42 @@ export function SimplePostJobForm() {
                   value={formData.wage}
                   onChange={(e) => setFormData({ ...formData, wage: e.target.value })}
                   placeholder="Oder individuelle Angabe, z. B. 18,50 € / Std. + Trinkgeld"
-                  className="w-full h-10 px-3.5 text-base sm:text-[13px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors mt-2"
+                  className="w-full h-9 px-3 text-base sm:text-[12.5px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors mt-1.5"
                 />
               </div>
 
               {/* Description Textarea */}
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+                  <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
                     Aufgaben & Profil *
                   </label>
-                  <span className="text-[10.5px] text-[#7e8a84]">
+                  <span className="text-[10px] text-[#7e8a84]">
                     Klar & unkompliziert
                   </span>
                 </div>
                 <textarea
                   required
-                  rows={5}
+                  rows={3}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Beschreibe kurz die Aufgaben, gewünschte Schichten oder Sprachkenntnisse (z. B. Deutsch B1 oder Englisch)."
-                  className="w-full p-3.5 text-base sm:text-[13.5px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors resize-y leading-relaxed"
+                  className="w-full p-3 text-base sm:text-[13px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors resize-y leading-relaxed"
                 />
               </div>
 
-              <div className="pt-3 border-t border-[#d8ded9] flex items-center justify-between">
+              <div className="pt-2.5 border-t border-[#d8ded9] flex items-center justify-between">
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="inline-flex items-center gap-1.5 text-[12.5px] text-[#7e8a84] hover:text-[#202a31] transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-[12px] text-[#7e8a84] hover:text-[#202a31] transition-colors cursor-pointer"
                 >
                   <ArrowLeft className="size-3.5 stroke-[1.5]" />
                   <span>Zurück</span>
                 </button>
                 <button
                   type="submit"
-                  className="apple-press inline-flex items-center gap-2 rounded-xl bg-[#202a31] px-6 py-3 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] transition-colors cursor-pointer"
+                  className="apple-press inline-flex items-center gap-2 rounded-xl bg-[#202a31] px-5 py-2.5 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] transition-colors cursor-pointer"
                 >
                   <span>Weiter zu Kontakt & Live</span>
                   <ArrowRight className="size-3.5 stroke-[1.5]" />
@@ -915,23 +915,23 @@ export function SimplePostJobForm() {
 
           {/* STEP 3: Kontakt & Live */}
           {step === 3 && (
-            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-5 sm:p-8 rounded-2xl shadow-xs space-y-6">
-              <div className="border-b border-[#d8ded9] pb-3">
+            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-4 sm:p-6 rounded-2xl shadow-xs space-y-4">
+              <div className="border-b border-[#d8ded9] pb-2.5">
                 <h2
-                  className="text-lg font-normal text-[#202a31] tracking-[-0.015em]"
+                  className="text-base sm:text-lg font-normal text-[#202a31] tracking-[-0.015em]"
                   style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
                 >
                   3. Bewerbungsmethode & Veröffentlichung
                 </h2>
-                <p className="text-[12.5px] text-[#7e8a84] font-light mt-0.5">
+                <p className="text-[12px] text-[#7e8a84] font-light mt-0.5">
                   Wie sollen Berliner Talente direkt mit dir in Kontakt treten?
                 </p>
               </div>
 
               {/* Direct Application Options */}
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+              <div className="space-y-3">
+                <div className="space-y-1.5">
+                  <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
                     Direkt-Bewerbungslink (Website / Karriereportal)
                   </label>
                   <input
@@ -939,21 +939,21 @@ export function SimplePostJobForm() {
                     value={formData.applyUrl}
                     onChange={(e) => setFormData({ ...formData, applyUrl: e.target.value })}
                     placeholder="https://deine-firma.de/jobs/barista"
-                    className="w-full h-11 px-3.5 text-base sm:text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
+                    className="w-full h-9 px-3 text-base sm:text-[13px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
                   />
                 </div>
 
-                <div className="relative my-2 flex items-center justify-center">
+                <div className="relative my-1 flex items-center justify-center">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-[#d8ded9]" />
                   </div>
-                  <span className="relative bg-[#fbfbf8] px-3 text-[10.5px] uppercase tracking-[0.2em] text-[#7e8a84]">
+                  <span className="relative bg-[#fbfbf8] px-2.5 text-[10px] uppercase tracking-[0.2em] text-[#7e8a84]">
                     oder
                   </span>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+                <div className="space-y-1.5">
+                  <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
                     Bewerbungs-E-Mail / Ansprechpartner
                   </label>
                   <input
@@ -961,40 +961,40 @@ export function SimplePostJobForm() {
                     value={formData.contactEmail}
                     onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
                     placeholder="jobs@morgenstern-cafe.berlin"
-                    className="w-full h-11 px-3.5 text-base sm:text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
+                    className="w-full h-9 px-3 text-base sm:text-[13px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
                   />
-                  <p className="text-[11.5px] text-[#7e8a84] font-light">
+                  <p className="text-[11px] text-[#7e8a84] font-light">
                     Kandidaten senden ihre Kurzbewerbung direkt an diese Adresse.
                   </p>
                 </div>
               </div>
 
               {/* Placement / Tier Selector */}
-              <div className="space-y-2 pt-2">
-                <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+              <div className="space-y-1.5 pt-1">
+                <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
                   Platzierung & Sichtbarkeit wählen
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   {isFreeEligible ? (
                     /* Free 1st Job Tier */
                     <button
                       type="button"
                       onClick={() => setFormData({ ...formData, tier: 'free' })}
-                      className={`p-4 rounded-xl border text-left transition-all cursor-pointer relative ${
+                      className={`p-3 sm:p-3.5 rounded-xl border text-left transition-all cursor-pointer relative ${
                         formData.tier === 'free'
                           ? 'border-emerald-600 bg-emerald-50/80 ring-1 ring-emerald-600 shadow-2xs'
                           : 'border-[#d8ded9] bg-white hover:border-emerald-600'
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-[13.5px] font-medium text-[#202a31] flex items-center gap-1.5">
+                        <span className="text-[13px] font-medium text-[#202a31] flex items-center gap-1.5">
                           <Gift className="size-3.5 text-emerald-600" />
                           <span>1. Inserat Gratis</span>
                         </span>
-                        <span className="font-mono text-[13px] font-semibold text-emerald-700">0 €</span>
+                        <span className="font-mono text-[12.5px] font-semibold text-emerald-700">0 €</span>
                       </div>
-                      <p className="mt-1.5 text-[11.5px] text-[#5a6460] font-light leading-relaxed">
-                        15 Tage Laufzeit &middot; 100% Direktkontakt &middot; Sofort live im Direktbereich ohne Zahlungsdaten.
+                      <p className="mt-1 text-[11px] text-[#5a6460] font-light leading-relaxed">
+                        15 Tage Laufzeit &middot; 100% Direktkontakt &middot; Sofort live ohne Zahlungsdaten.
                       </p>
                     </button>
                   ) : (
@@ -1002,18 +1002,18 @@ export function SimplePostJobForm() {
                     <button
                       type="button"
                       onClick={() => setFormData({ ...formData, tier: 'starter' })}
-                      className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
+                      className={`p-3 sm:p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
                         formData.tier === 'starter'
                           ? 'border-[#202a31] bg-[#f4f4ee]/80 shadow-2xs ring-1 ring-[#202a31]'
                           : 'border-[#d8ded9] bg-white hover:border-[#202a31]'
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-[13.5px] font-medium text-[#202a31]">Quick (15 Tage)</span>
-                        <span className="font-mono text-[13px] font-medium text-[#202a31]">9,99 €</span>
+                        <span className="text-[13px] font-medium text-[#202a31]">Quick (15 Tage)</span>
+                        <span className="font-mono text-[12.5px] font-medium text-[#202a31]">9,99 €</span>
                       </div>
-                      <p className="mt-1.5 text-[11.5px] text-[#7e8a84] font-light leading-relaxed">
-                        15 Tage Laufzeit &middot; Sofort gelistet im Direktbereich &middot; 100% Direktkontakt.
+                      <p className="mt-1 text-[11px] text-[#7e8a84] font-light leading-relaxed">
+                        15 Tage Laufzeit &middot; Sofort im Direktbereich &middot; 100% Direktkontakt.
                       </p>
                     </button>
                   )}
@@ -1022,18 +1022,18 @@ export function SimplePostJobForm() {
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, tier: 'standard' })}
-                    className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
+                    className={`p-3 sm:p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
                       formData.tier === 'standard'
                         ? 'border-[#202a31] bg-[#f4f4ee]/80 shadow-2xs ring-1 ring-[#202a31]'
                         : 'border-[#d8ded9] bg-white hover:border-[#202a31]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-[13.5px] font-medium text-[#202a31]">Standard (30 Tage)</span>
-                      <span className="font-mono text-[13px] font-medium text-[#202a31]">14,99 €</span>
+                      <span className="text-[13px] font-medium text-[#202a31]">Standard (30 Tage)</span>
+                      <span className="font-mono text-[12.5px] font-medium text-[#202a31]">14,99 €</span>
                     </div>
-                    <p className="mt-1.5 text-[11.5px] text-[#7e8a84] font-light leading-relaxed">
-                      30 Tage Laufzeit &middot; Voller Monat im Direktbereich &middot; Inkl. Kiez- & Bezirksfilter.
+                    <p className="mt-1 text-[11px] text-[#7e8a84] font-light leading-relaxed">
+                      30 Tage Laufzeit &middot; Voller Monat im Direktbereich &middot; Inkl. Kiez-Filter.
                     </p>
                   </button>
 
@@ -1041,28 +1041,28 @@ export function SimplePostJobForm() {
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, tier: 'premium' })}
-                    className={`p-4 rounded-xl border text-left transition-all cursor-pointer relative ${
+                    className={`p-3 sm:p-3.5 rounded-xl border text-left transition-all cursor-pointer relative ${
                       formData.tier === 'premium'
                         ? 'border-[#202a31] bg-[#ecece4]/70 ring-1 ring-[#202a31] shadow-2xs'
                         : 'border-[#d8ded9] bg-white hover:border-[#202a31]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-[13.5px] font-medium text-[#202a31] flex items-center gap-1.5">
+                      <span className="text-[13px] font-medium text-[#202a31] flex items-center gap-1.5">
                         <Sparkles className="size-3.5 text-[#9e7d3b]" />
                         <span>{isFreeEligible ? 'Spotlight Upgrade' : 'Spotlight (60 Tage)'}</span>
                       </span>
-                      <span className="font-mono text-[13px] font-medium text-[#202a31]">24,99 €</span>
+                      <span className="font-mono text-[12.5px] font-medium text-[#202a31]">24,99 €</span>
                     </div>
-                    <p className="mt-1.5 text-[11.5px] text-[#5a6460] font-light leading-relaxed">
-                      60 Tage Laufzeit &middot; Direkt ganz oben im <strong>Spotlight (Hero)</strong> &middot; Höchste Reichweite.
+                    <p className="mt-1 text-[11px] text-[#5a6460] font-light leading-relaxed">
+                      60 Tage Laufzeit &middot; Ganz oben im <strong>Spotlight (Hero)</strong> &middot; Maximale Reichweite.
                     </p>
                   </button>
                 </div>
               </div>
 
               {/* Trust Badge */}
-              <div className="rounded-xl border border-[#d8ded9] bg-[#f4f4ee]/60 p-4 flex items-start gap-3 text-[12.5px] text-[#5a6460]">
+              <div className="rounded-xl border border-[#d8ded9] bg-[#f4f4ee]/60 p-3 flex items-start gap-2.5 text-[12px] text-[#5a6460]">
                 <ShieldCheck className="size-4 text-[#202a31] shrink-0 mt-0.5 stroke-[1.5]" />
                 <div>
                   <p className="font-medium text-[#202a31]">
@@ -1074,11 +1074,11 @@ export function SimplePostJobForm() {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-[#d8ded9] flex items-center justify-between">
+              <div className="pt-2.5 border-t border-[#d8ded9] flex items-center justify-between">
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="inline-flex items-center gap-1.5 text-[12.5px] text-[#7e8a84] hover:text-[#202a31] transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-[12px] text-[#7e8a84] hover:text-[#202a31] transition-colors cursor-pointer"
                 >
                   <ArrowLeft className="size-3.5 stroke-[1.5]" />
                   <span>Zurück</span>
@@ -1086,7 +1086,7 @@ export function SimplePostJobForm() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="apple-press inline-flex items-center gap-2 rounded-xl bg-[#202a31] px-6 py-3 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] disabled:opacity-50 transition-colors cursor-pointer shadow-xs"
+                  className="apple-press inline-flex items-center gap-2 rounded-xl bg-[#202a31] px-5 py-2.5 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] disabled:opacity-50 transition-colors cursor-pointer shadow-xs"
                 >
                   {loading ? (
                     'Verarbeitung...'

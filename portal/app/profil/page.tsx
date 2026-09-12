@@ -18,7 +18,7 @@ export default function ProfilePage() {
       <div>
         <SiteHeader />
         
-        <div className="mx-auto max-w-2xl px-4 sm:px-6 py-8 sm:py-12 space-y-6">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 py-4 sm:py-6 space-y-4">
           {/* User Account & Privacy Card */}
           <ProfileAccountCard />
 
@@ -26,7 +26,7 @@ export default function ProfilePage() {
           <MyListings />
 
           {/* Quick actions */}
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             <h2 className="text-[10.5px] font-mono font-medium uppercase tracking-[0.2em] text-[#7E8A84] px-1">
               Aktionen & Services
             </h2>
@@ -37,34 +37,15 @@ export default function ProfilePage() {
 
               <Link
                 href="/post-a-job"
-                className="flex items-center justify-between p-4.5 text-sm font-medium text-[#202A31] hover:bg-[#F0F1EA] transition-colors cursor-pointer"
+                className="flex items-center justify-between p-4 text-sm font-medium text-[#202A31] hover:bg-[#F0F1EA] transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-3.5">
-                  <div className="flex size-10 items-center justify-center rounded-xl bg-white border border-[#D8DED9] text-[#202A31]">
-                    <Briefcase className="size-5" />
+                  <div className="flex size-9 items-center justify-center rounded-xl bg-white border border-[#D8DED9] text-[#202A31]">
+                    <Briefcase className="size-4.5" />
                   </div>
                   <div>
                     <div className="text-[#202A31] font-medium text-sm">Job inserieren</div>
                     <div className="text-xs text-[#7E8A84] font-light">Aushilfe, Minijob 603 €, Teilzeit</div>
-                  </div>
-                </div>
-                <ChevronRight className="size-4 text-[#7E8A84]" />
-              </Link>
-
-              <Link
-                href="/control"
-                className="flex items-center justify-between p-4.5 text-sm font-medium text-[#202A31] hover:bg-[#F0F1EA] transition-colors cursor-pointer"
-              >
-                <div className="flex items-center gap-3.5">
-                  <div className="flex size-10 items-center justify-center rounded-xl bg-white border border-[#D8DED9] text-[#202A31]">
-                    <Briefcase className="size-5 text-[#202A31]" />
-                  </div>
-                  <div>
-                    <div className="text-[#202A31] font-medium flex items-center gap-2">
-                      <span>Source Control & Dashboard</span>
-                      <span className="rounded-full bg-[#202A31] px-2 py-0.5 text-[9.5px] font-mono font-medium text-[#FBFBF8]">1.600 Stellen</span>
-                    </div>
-                    <div className="text-xs text-[#7E8A84] font-light">Alle 1.600 Berliner Stellen & Quellen einsehen & verwalten</div>
                   </div>
                 </div>
                 <ChevronRight className="size-4 text-[#7E8A84]" />

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from '@/components/ui/link';
-import { Briefcase, Home, Plus, ExternalLink, Trash2, CheckCircle2, Clock, Sparkles, Cloud, CloudOff } from 'lucide-react';
+import { Briefcase, Home, Plus, ExternalLink, Trash2, CheckCircle2, Clock, Sparkles } from 'lucide-react';
 import { getMyListings, removeMyListing, seedDemoListingsIfEmpty, syncUserListingsWithCloud, upgradeMyListingLocally, UserListing } from '@/lib/storage/my-listings';
 import { upgradeJobToSpotlight } from '@/lib/firebase/firestore-service';
 import { useTranslation } from '@/lib/i18n/language-context';
@@ -52,9 +52,9 @@ export function MyListings() {
   };
 
   return (
-    <div className="rounded-2xl border border-[#D8DED9] bg-[#FBFBF8] p-5 sm:p-7 shadow-xs">
+    <div className="rounded-2xl border border-[#D8DED9] bg-[#FBFBF8] p-4 sm:p-5 shadow-xs">
       {/* Header with Title and Filter Tabs */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#D8DED9] pb-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#D8DED9] pb-3 sm:pb-4">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-base font-semibold text-[#202A31] flex items-center gap-2">
@@ -66,8 +66,8 @@ export function MyListings() {
             {mounted && (
               user ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10.5px] font-medium text-emerald-800 border border-emerald-500/20">
-                  <Cloud className="size-3" />
-                  <span className="hidden sm:inline">Cloud Sync</span>
+                  <CheckCircle2 className="size-3 text-emerald-600" />
+                  <span className="hidden sm:inline">{isDe ? 'Synchronisiert' : 'Synced'}</span>
                 </span>
               ) : (
                 <button
@@ -75,8 +75,8 @@ export function MyListings() {
                   onClick={() => setAuthOpen(true)}
                   className="inline-flex items-center gap-1 rounded-full bg-[#F0F1EA] border border-[#D8DED9] px-2.5 py-0.5 text-[10.5px] font-medium text-[#202A31] hover:bg-white transition cursor-pointer"
                 >
-                  <CloudOff className="size-3 text-[#7E8A84]" />
-                  <span>{isDe ? 'Anmelden' : 'Sign in'}</span>
+                  <span className="size-1.5 rounded-full bg-[#7E8A84]" />
+                  <span>{isDe ? 'Lokal' : 'Local'}</span>
                 </button>
               )
             )}

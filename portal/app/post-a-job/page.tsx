@@ -30,7 +30,7 @@ export default function PostAJobPage() {
       />
       <SiteHeader />
 
-      <main className="mx-auto max-w-5xl w-full px-6 md:px-8 flex-1 py-10 sm:py-14">
+      <main className="mx-auto max-w-3xl w-full px-4 sm:px-6 flex-1 py-4 sm:py-6">
         <SimplePostJobForm />
       </main>
 
