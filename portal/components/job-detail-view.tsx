@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from '@/components/ui/link';
 import {
   ArrowLeft,
@@ -14,10 +14,13 @@ import {
   Mail,
   ShieldCheck,
   Bookmark,
+  CheckCircle2,
 } from 'lucide-react';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { AuthModal } from '@/components/auth-modal';
 import { JobroofsMark } from '@/components/brand-logo';
+import { upgradeMyListingLocally } from '@/lib/storage/my-listings';
+import { upgradeJobToSpotlight } from '@/lib/firebase/firestore-service';
 
 interface JobDetailViewProps {
   job: any;
@@ -29,6 +32,21 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
   const { user } = useAuth();
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [pendingTarget, setPendingTarget] = useState<string | null>(null);
+  const [showSuccessBanner, setShowSuccessBanner] = useState(false);
+  const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('upgraded') === 'true') {
+        setShowUpgradeBanner(true);
+        upgradeMyListingLocally(job.id || job.slug);
+        upgradeJobToSpotlight(job.id || job.slug).catch(console.error);
+      } else if (params.get('payment_success') === 'true') {
+        setShowSuccessBanner(true);
+      }
+    }
+  }, [job.id, job.slug]);
 
   const applyUrl =
     job.application?.url ||
@@ -100,6 +118,50 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
           <span className="text-[#d8ded9] cursor-not-allowed">Nächster Job</span>
         )}
       </nav>
+
+      {showUpgradeBanner && (
+        <div className="mb-6 rounded-sm border border-emerald-200 bg-emerald-50/80 p-4 text-emerald-950 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <CheckCircle2 className="size-5 text-emerald-600 shrink-0" />
+            <div>
+              <p className="text-[13px] font-medium text-emerald-900">
+                Spotlight-Upgrade erfolgreich aktiviert!
+              </p>
+              <p className="text-[12px] text-emerald-700">
+                Deine Anzeige ist jetzt mit höchster Priorität für 60 Tage ganz oben platziert.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowUpgradeBanner(false)}
+            className="text-xs text-emerald-700 hover:text-emerald-900 ml-4 underline cursor-pointer"
+          >
+            Schließen
+          </button>
+        </div>
+      )}
+
+      {showSuccessBanner && !showUpgradeBanner && (
+        <div className="mb-6 rounded-sm border border-emerald-200 bg-emerald-50/80 p-4 text-emerald-950 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <CheckCircle2 className="size-5 text-emerald-600 shrink-0" />
+            <div>
+              <p className="text-[13px] font-medium text-emerald-900">
+                Zahlung erfolgreich abgeschlossen!
+              </p>
+              <p className="text-[12px] text-emerald-700">
+                Deine Stellenanzeige ist nun live geschaltet und für Berliner Jobsuchende sichtbar.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowSuccessBanner(false)}
+            className="text-xs text-emerald-700 hover:text-emerald-900 ml-4 underline cursor-pointer"
+          >
+            Schließen
+          </button>
+        </div>
+      )}
 
       {/* Main Job Article */}
       <article className="rounded-sm border border-[#d8ded9] bg-white p-6 sm:p-9">

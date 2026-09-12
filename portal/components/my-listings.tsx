@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from '@/components/ui/link';
 import { Briefcase, Home, Plus, ExternalLink, Trash2, CheckCircle2, Clock, Sparkles, Cloud, CloudOff } from 'lucide-react';
-import { getMyListings, removeMyListing, seedDemoListingsIfEmpty, syncUserListingsWithCloud, UserListing } from '@/lib/storage/my-listings';
+import { getMyListings, removeMyListing, seedDemoListingsIfEmpty, syncUserListingsWithCloud, upgradeMyListingLocally, UserListing } from '@/lib/storage/my-listings';
+import { upgradeJobToSpotlight } from '@/lib/firebase/firestore-service';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { AuthModal } from '@/components/auth-modal';
@@ -173,13 +174,53 @@ export function MyListings() {
                   </div>
                 </div>
 
-                {/* Card Footer Actions */}
-                <div className="mt-3.5 flex items-center justify-between border-t border-[#D8DED9] pt-3">
+                <div className="mt-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-[#D8DED9] pt-3">
                   <div className="text-[11px] text-[#7E8A84] font-mono">
-                    {isDe ? 'Gebucht für' : 'Booked for'} {listing.pricePaidEur} €
+                    {listing.pricePaidEur === 0
+                      ? isDe ? 'Kostenloses Erstinserat (0 €)' : 'Free 1st Job (0 €)'
+                      : `${isDe ? 'Gebucht für' : 'Booked for'} ${listing.pricePaidEur} €`}
                   </div>
 
                   <div className="flex items-center gap-2">
+                    {listing.tier !== 'premium' && listing.type === 'job' && (
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          try {
+                            const res = await fetch('/api/checkout', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                tier: 'premium',
+                                jobData: {
+                                  slug: listing.linkUrl.replace('/jobs/', ''),
+                                  title: listing.title,
+                                  isUpgrade: true,
+                                },
+                              }),
+                            });
+                            const data = await res.json();
+                            if (data.checkoutUrl) {
+                              window.location.href = data.checkoutUrl;
+                              return;
+                            }
+                            // Direct upgrade fallback
+                            upgradeMyListingLocally(listing.id);
+                            await upgradeJobToSpotlight(listing.id);
+                            setListings(getMyListings());
+                            alert(isDe ? 'Inserat erfolgreich auf Spotlight geupgradet!' : 'Listing successfully upgraded to Spotlight!');
+                          } catch (err: any) {
+                            alert(err.message || 'Upgrade fehlgeschlagen.');
+                          }
+                        }}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 px-2.5 py-1 text-xs font-medium transition cursor-pointer"
+                        title={isDe ? 'Auf Spotlight upgraden (24,99 €)' : 'Upgrade to Spotlight (€24.99)'}
+                      >
+                        <Sparkles className="size-3 text-amber-600" />
+                        <span>{isDe ? 'Auf Spotlight upgraden (24,99 €)' : 'Upgrade to Spotlight (€24.99)'}</span>
+                      </button>
+                    )}
+
                     <button
                       type="button"
                       onClick={async () => {

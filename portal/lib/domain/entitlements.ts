@@ -1,6 +1,6 @@
 import { STRIPE_CATALOG, getStripePriceId } from '@/lib/stripe/products';
 
-export type ListingTier = 'starter' | 'standard' | 'premium' | 'annual';
+export type ListingTier = 'free' | 'starter' | 'standard' | 'premium' | 'annual';
 export type ListingServiceType = 'job' | 'housing';
 
 export interface TierConfig {
@@ -24,6 +24,38 @@ export interface TierConfig {
 }
 
 export const JOB_TIERS: Record<ListingTier, TierConfig> = {
+  free: {
+    tier: 'free',
+    serviceType: 'job',
+    labelDe: '1. Inserat Gratis (15 Tage)',
+    labelEn: '1st Job Free (15 Days)',
+    priceEur: 0,
+    durationDays: 15,
+    durationMonths: 0.5,
+    featured: false,
+    badgeDe: '🎁 Erstinserat Gratis',
+    badgeEn: '🎁 1st Free Job',
+    descriptionDe: '100% kostenloses Erstinserat für jedes neue Benutzerkonto.',
+    descriptionEn: '100% free first job listing for every new user account.',
+    perksDe: [
+      '0 € einmalig gratis für jedes neue Konto',
+      '15 Tage Laufzeit (automatische Deaktivierung)',
+      '100% Direktkontakt ohne Zeitarbeit / Zwischenhändler',
+      'In Kiez- und Bezirksuche gelistet',
+      'Interaktive Karten-Platzierung',
+      'Jederzeit auf Premium-Spotlight upgradebar',
+    ],
+    perksEn: [
+      '€0 one-time free for every new user account',
+      '15-day duration (automatic deactivation)',
+      '100% direct contact without agency middlemen',
+      'Listed in district and neighborhood search',
+      'Interactive map placement',
+      'Upgradable to Premium Spotlight at any time',
+    ],
+    stripePriceId: '',
+    stripeProductId: '',
+  },
   starter: {
     tier: 'starter',
     serviceType: 'job',

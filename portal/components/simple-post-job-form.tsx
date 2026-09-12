@@ -9,9 +9,16 @@ import {
   AlertCircle,
   ShieldCheck,
   Sparkles,
+  Gift,
 } from 'lucide-react';
-import { saveMyListing } from '@/lib/storage/my-listings';
-import { createJobInFirestore } from '@/lib/firebase/firestore-service';
+import { saveMyListing, getMyListings, upgradeMyListingLocally } from '@/lib/storage/my-listings';
+import {
+  createJobInFirestore,
+  isUserEligibleForFreeJob,
+  markFreeJobUsed,
+} from '@/lib/firebase/firestore-service';
+import { useAuth } from '@/lib/firebase/auth-context';
+import { AuthModal } from '@/components/auth-modal';
 
 const BERLIN_DISTRICTS = [
   'Mitte',
@@ -57,6 +64,11 @@ const WAGE_PRESETS = [
 ];
 
 export function SimplePostJobForm() {
+  const { user } = useAuth();
+  const [authOpen, setAuthOpen] = useState(false);
+  const [isFreeEligible, setIsFreeEligible] = useState(true);
+  const [lastCreatedJob, setLastCreatedJob] = useState<{ id: string; slug: string; title: string } | null>(null);
+  const [upgrading, setUpgrading] = useState(false);
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
   const [formData, setFormData] = useState({
@@ -68,19 +80,44 @@ export function SimplePostJobForm() {
     applyUrl: '',
     contactEmail: '',
     description: '',
-    tier: 'starter' as 'starter' | 'standard' | 'premium',
+    tier: 'free' as 'free' | 'starter' | 'standard' | 'premium',
   });
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Check 1st free job eligibility
+  useEffect(() => {
+    async function checkEligibility() {
+      if (user?.uid) {
+        const eligible = await isUserEligibleForFreeJob(user.uid);
+        setIsFreeEligible(eligible);
+        if (!eligible && formData.tier === 'free') {
+          setFormData((prev) => ({ ...prev, tier: 'starter' }));
+        } else if (eligible && formData.tier === 'starter') {
+          setFormData((prev) => ({ ...prev, tier: 'free' }));
+        }
+      } else {
+        const localJobs = getMyListings().filter((l) => l.type === 'job');
+        const eligible = localJobs.length === 0;
+        setIsFreeEligible(eligible);
+        if (!eligible && formData.tier === 'free') {
+          setFormData((prev) => ({ ...prev, tier: 'starter' }));
+        } else if (eligible && formData.tier === 'starter') {
+          setFormData((prev) => ({ ...prev, tier: 'free' }));
+        }
+      }
+    }
+    checkEligibility();
+  }, [user]);
+
   // Pre-select tier if ?tier=... in URL
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const t = params.get('tier');
-      if (t === 'premium' || t === 'standard' || t === 'starter') {
+      if (t === 'premium' || t === 'standard' || t === 'starter' || t === 'free') {
         setFormData((prev) => ({ ...prev, tier: t as any }));
       }
     }
@@ -136,9 +173,48 @@ export function SimplePostJobForm() {
     handleSubmit();
   };
 
+  const handleUpgradeToSpotlight = async (slugToUpgrade: string) => {
+    setUpgrading(true);
+    setError(null);
+    try {
+      const checkoutRes = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tier: 'premium',
+          jobData: {
+            slug: slugToUpgrade,
+            title: formData.title || 'Inserat',
+            company: formData.company || 'Betrieb',
+            isUpgrade: true,
+          },
+        }),
+      });
+      const checkoutData = await checkoutRes.json();
+      if (checkoutData.checkoutUrl) {
+        window.location.href = checkoutData.checkoutUrl;
+        return;
+      }
+      // Offline / fallback mode
+      upgradeMyListingLocally(slugToUpgrade);
+      alert('Inserat wurde erfolgreich auf Premium Spotlight geupgradet!');
+      window.location.href = `/jobs/${slugToUpgrade}`;
+    } catch (err: any) {
+      setError(err.message || 'Upgrade fehlgeschlagen.');
+    } finally {
+      setUpgrading(false);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!formData.applyUrl.trim() && !formData.contactEmail.trim()) {
       setError('Bitte gib mindestens eine Bewerbungsmethode (Link oder E-Mail) an.');
+      return;
+    }
+
+    if (formData.tier === 'free' && !user) {
+      setError('Bitte erstelle ein kostenloses Konto oder melde dich an, um dein 1. Inserat gratis zu schalten.');
+      setAuthOpen(true);
       return;
     }
 
@@ -158,12 +234,22 @@ export function SimplePostJobForm() {
       const jobSlug = `${companySlug}-${titleSlug}-${submissionId.slice(-4)}`;
 
       const tierDurationDays = formData.tier === 'premium' ? 60 : formData.tier === 'standard' ? 30 : 15;
-      const tierPricePaid = formData.tier === 'premium' ? 24.99 : formData.tier === 'standard' ? 14.99 : 9.99;
-      const tierLabel = formData.tier === 'premium'
-        ? '⭐ Premium Spotlight'
-        : formData.tier === 'standard'
-        ? 'Standard Inserat'
-        : 'Quick Inserat';
+      const tierPricePaid =
+        formData.tier === 'premium'
+          ? 24.99
+          : formData.tier === 'standard'
+          ? 14.99
+          : formData.tier === 'free'
+          ? 0
+          : 9.99;
+      const tierLabel =
+        formData.tier === 'premium'
+          ? '⭐ Premium Spotlight'
+          : formData.tier === 'free'
+          ? '🎁 Erstinserat (Gratis)'
+          : formData.tier === 'standard'
+          ? 'Standard Inserat'
+          : 'Quick Inserat';
 
       // 1. Save locally so it's safely stored for this employer
       saveMyListing({
@@ -181,10 +267,13 @@ export function SimplePostJobForm() {
         pricePaidEur: tierPricePaid,
       });
 
+      setLastCreatedJob({ id: submissionId, slug: jobSlug, title: formData.title });
+
       // 2. Save to Firestore if configured
+      const assignedUserId = user?.uid || 'employer-' + Date.now();
       createJobInFirestore(
         {
-          userId: 'employer-' + Date.now(),
+          userId: assignedUserId,
           title: formData.title,
           company: formData.company,
           district: formData.district,
@@ -200,12 +289,24 @@ export function SimplePostJobForm() {
         submissionId
       ).catch(() => {});
 
+      if (formData.tier === 'free' && user?.uid) {
+        markFreeJobUsed(user.uid).catch(() => {});
+        setIsFreeEligible(false);
+      }
+
       // 3. Dispatch update event
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new Event('jobroofs_listings_updated'));
       }
 
-      // 4. Initiate Stripe Checkout
+      // 4. If free tier, finish immediately (no payment needed!)
+      if (formData.tier === 'free') {
+        setSuccess(true);
+        setLoading(false);
+        return;
+      }
+
+      // 5. If paid tier, initiate Stripe Checkout
       const checkoutRes = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -256,10 +357,11 @@ export function SimplePostJobForm() {
           className="mt-6 text-2xl sm:text-3xl font-light text-[#202a31] tracking-[-0.02em]"
           style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
         >
-          Job erfolgreich inseriert.
+          {formData.tier === 'free' ? 'Job erfolgreich kostenlos inseriert!' : 'Job erfolgreich inseriert.'}
         </h2>
         <p className="mt-3 text-[14px] text-[#5a6460] font-light leading-relaxed max-w-md mx-auto">
-          Deine Anzeige für <span className="font-medium text-[#202a31]">{formData.title}</span> bei <span className="font-medium text-[#202a31]">{formData.company}</span> ist eingegangen und wird sofort{' '}
+          Deine Anzeige für <span className="font-medium text-[#202a31]">{formData.title}</span> bei{' '}
+          <span className="font-medium text-[#202a31]">{formData.company}</span> ist eingegangen und wird sofort{' '}
           {formData.tier === 'premium' ? (
             <span className="font-medium text-[#202a31]">im Premium-Spotlight ganz oben und im Direktbereich</span>
           ) : (
@@ -268,12 +370,36 @@ export function SimplePostJobForm() {
           geschaltet.
         </p>
 
+        {/* Spotlight Upgrade Offer */}
+        {formData.tier !== 'premium' && lastCreatedJob && (
+          <div className="mt-6 p-4 rounded-xl border border-amber-500/30 bg-amber-500/10 text-left flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div className="text-[13px] font-semibold text-amber-900 flex items-center gap-1.5">
+                <Sparkles className="size-4 text-amber-600" />
+                <span>Möchtest du maximale Reichweite in ganz Berlin?</span>
+              </div>
+              <div className="text-[12px] text-amber-800/80 font-light mt-0.5">
+                Hebe dein Inserat jetzt für 24,99 € ins Premium-Spotlight ganz oben auf die Startseite (60 Tage aktiv).
+              </div>
+            </div>
+            <button
+              type="button"
+              disabled={upgrading}
+              onClick={() => handleUpgradeToSpotlight(lastCreatedJob.slug)}
+              className="apple-press shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-[#202a31] text-[#fbfbf8] text-[12px] font-medium hover:bg-[#161D22] transition-colors cursor-pointer shadow-xs"
+            >
+              <span>{upgrading ? 'Weiterleitung...' : 'Auf Spotlight upgraden (24,99 €)'}</span>
+              <ArrowRight className="size-3" />
+            </button>
+          </div>
+        )}
+
         <div className="mt-8 pt-6 border-t border-[#d8ded9] flex flex-col sm:flex-row justify-center gap-3">
           <Link
-            href="/"
+            href={lastCreatedJob ? `/jobs/${lastCreatedJob.slug}` : '/'}
             className="apple-press inline-flex items-center justify-center rounded-xl bg-[#202a31] px-6 py-3.5 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] transition-colors cursor-pointer"
           >
-            Zur Startseite & Inserat ansehen
+            Inserat ansehen
           </Link>
           <button
             type="button"
@@ -289,7 +415,7 @@ export function SimplePostJobForm() {
                 applyUrl: '',
                 contactEmail: '',
                 description: '',
-                tier: 'starter',
+                tier: isFreeEligible ? 'free' : 'starter',
               });
             }}
             className="apple-press inline-flex items-center justify-center rounded-xl border border-[#d8ded9] bg-white px-6 py-3.5 text-[13px] font-normal text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
@@ -319,7 +445,10 @@ export function SimplePostJobForm() {
             <p className="mt-1.5 text-[14.5px] text-[#5a6460] font-light">
               Erreiche motivierte Studierende, Aushilfen und Fachkräfte direkt in deinem Kiez &mdash; ohne Agenturen.
             </p>
-            <p className="mt-2.5 text-[12px] text-[#7e8a84] font-light">
+            <p className="mt-2 text-[12px] text-[#7e8a84] font-light">
+              {isFreeEligible ? (
+                <span className="text-emerald-800 font-medium">1. Inserat 100% kostenlos &middot; </span>
+              ) : null}
               9,99 € für 15 Tage &middot; 14,99 € für 30 Tage &middot; 24,99 € für 60 Tage &middot; Mit dem Fortfahren stimmst du den{' '}
               <Link href="/agb" className="underline underline-offset-2 hover:text-[#202a31] transition-colors">
                 AGB
@@ -330,6 +459,42 @@ export function SimplePostJobForm() {
               </Link>{' '}
               zu.
             </p>
+
+            {/* 1st Job Free Welcome Banner */}
+            {!user ? (
+              <div className="mt-3.5 rounded-xl border border-emerald-600/30 bg-emerald-500/10 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-emerald-950">
+                <div className="flex items-start gap-2.5">
+                  <div className="size-7 rounded-lg bg-emerald-700 text-white flex items-center justify-center shrink-0 mt-0.5">
+                    <Gift className="size-3.5" />
+                  </div>
+                  <div>
+                    <div className="text-[12.5px] font-semibold text-emerald-900">
+                      1. Inserat 100% kostenlos für jeden neuen Benutzeraccount
+                    </div>
+                    <div className="text-[11.5px] text-emerald-800/80 font-light mt-0.5">
+                      Melde dich kurz an oder erstelle ein kostenloses Konto, um dein 1. Inserat gratis zu schalten.
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setAuthOpen(true)}
+                  className="apple-press shrink-0 inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#202a31] text-[#fbfbf8] text-[11.5px] font-medium hover:bg-[#161D22] transition-colors cursor-pointer"
+                >
+                  <span>Kostenlos anmelden</span>
+                  <ArrowRight className="size-3" />
+                </button>
+              </div>
+            ) : isFreeEligible ? (
+              <div className="mt-3.5 rounded-xl border border-emerald-600/30 bg-emerald-500/10 p-3 flex items-center gap-2.5 text-emerald-950">
+                <div className="size-6 rounded-lg bg-emerald-700 text-white flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="size-3.5" />
+                </div>
+                <div className="text-[12px] text-emerald-900">
+                  Willkommens-Vorteil aktiv für <span className="font-semibold">{user.email}</span>: Dein 1. Job ist <strong>100% kostenlos</strong> (0 € / 15 Tage)!
+                </div>
+              </div>
+            ) : null}
           </div>
 
           {/* Silent Luxury Segmented Step Indicator */}
@@ -661,24 +826,48 @@ export function SimplePostJobForm() {
                   Platzierung & Sichtbarkeit wählen
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {/* Starter Tier */}
-                  <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, tier: 'starter' })}
-                    className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
-                      formData.tier === 'starter'
-                        ? 'border-[#202a31] bg-[#f4f4ee]/80 shadow-2xs ring-1 ring-[#202a31]'
-                        : 'border-[#d8ded9] bg-white hover:border-[#202a31]'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[13.5px] font-medium text-[#202a31]">Quick (15 Tage)</span>
-                      <span className="font-mono text-[13px] font-medium text-[#202a31]">9,99 €</span>
-                    </div>
-                    <p className="mt-1.5 text-[11.5px] text-[#7e8a84] font-light leading-relaxed">
-                      15 Tage Laufzeit &middot; Sofort gelistet im Direktbereich &middot; 100% Direktkontakt.
-                    </p>
-                  </button>
+                  {isFreeEligible ? (
+                    /* Free 1st Job Tier */
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, tier: 'free' })}
+                      className={`p-4 rounded-xl border text-left transition-all cursor-pointer relative ${
+                        formData.tier === 'free'
+                          ? 'border-emerald-600 bg-emerald-50/80 ring-1 ring-emerald-600 shadow-2xs'
+                          : 'border-[#d8ded9] bg-white hover:border-emerald-600'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[13.5px] font-medium text-[#202a31] flex items-center gap-1.5">
+                          <Gift className="size-3.5 text-emerald-600" />
+                          <span>1. Inserat Gratis</span>
+                        </span>
+                        <span className="font-mono text-[13px] font-semibold text-emerald-700">0 €</span>
+                      </div>
+                      <p className="mt-1.5 text-[11.5px] text-[#5a6460] font-light leading-relaxed">
+                        15 Tage Laufzeit &middot; 100% Direktkontakt &middot; Sofort live im Direktbereich ohne Zahlungsdaten.
+                      </p>
+                    </button>
+                  ) : (
+                    /* Starter Tier */
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, tier: 'starter' })}
+                      className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
+                        formData.tier === 'starter'
+                          ? 'border-[#202a31] bg-[#f4f4ee]/80 shadow-2xs ring-1 ring-[#202a31]'
+                          : 'border-[#d8ded9] bg-white hover:border-[#202a31]'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[13.5px] font-medium text-[#202a31]">Quick (15 Tage)</span>
+                        <span className="font-mono text-[13px] font-medium text-[#202a31]">9,99 €</span>
+                      </div>
+                      <p className="mt-1.5 text-[11.5px] text-[#7e8a84] font-light leading-relaxed">
+                        15 Tage Laufzeit &middot; Sofort gelistet im Direktbereich &middot; 100% Direktkontakt.
+                      </p>
+                    </button>
+                  )}
 
                   {/* Standard Tier */}
                   <button
@@ -712,12 +901,12 @@ export function SimplePostJobForm() {
                     <div className="flex items-center justify-between">
                       <span className="text-[13.5px] font-medium text-[#202a31] flex items-center gap-1.5">
                         <Sparkles className="size-3.5 text-[#9e7d3b]" />
-                        <span>Spotlight (60 Tage)</span>
+                        <span>{isFreeEligible ? 'Spotlight Upgrade' : 'Spotlight (60 Tage)'}</span>
                       </span>
                       <span className="font-mono text-[13px] font-medium text-[#202a31]">24,99 €</span>
                     </div>
                     <p className="mt-1.5 text-[11.5px] text-[#5a6460] font-light leading-relaxed">
-                      60 Tage Laufzeit &middot; Ganz oben im <strong>Spotlight (Hero)</strong> &middot; Höchste Reichweite.
+                      60 Tage Laufzeit &middot; Direkt ganz oben im <strong>Spotlight (Hero)</strong> &middot; Höchste Reichweite.
                     </p>
                   </button>
                 </div>
@@ -751,11 +940,13 @@ export function SimplePostJobForm() {
                   className="apple-press inline-flex items-center gap-2 rounded-xl bg-[#202a31] px-6 py-3 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] disabled:opacity-50 transition-colors cursor-pointer shadow-xs"
                 >
                   {loading ? (
-                    'Weiterleitung zu Stripe...'
+                    'Verarbeitung...'
                   ) : (
                     <>
                       <span>
-                        {formData.tier === 'premium'
+                        {formData.tier === 'free'
+                          ? 'Jetzt kostenlos live schalten (0 €)'
+                          : formData.tier === 'premium'
                           ? 'Mit Stripe sicher bezahlen (24,99 €)'
                           : formData.tier === 'standard'
                           ? 'Mit Stripe sicher bezahlen (14,99 €)'
@@ -770,6 +961,8 @@ export function SimplePostJobForm() {
           )}
         </form>
       </div>
+
+      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </div>
   );
 }

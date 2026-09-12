@@ -10,7 +10,7 @@ export interface StripeProductDefinition {
   name: string;
   amountEur: number;
   type: 'job' | 'housing';
-  tier: 'starter' | 'standard' | 'premium' | 'annual';
+  tier: 'free' | 'starter' | 'standard' | 'premium' | 'annual';
   durationDays: number;
   featured: boolean;
   unlimited?: boolean;

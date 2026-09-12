@@ -39,9 +39,13 @@ export async function POST(request: Request) {
       'metadata[title]': title,
       'metadata[company]': company,
       'metadata[jobSlug]': jobSlug,
-      success_url: `${appUrl}/jobs/${jobSlug}?payment_success=true`,
+      success_url: `${appUrl}/jobs/${jobSlug}?payment_success=true${jobData?.isUpgrade ? '&upgraded=true' : ''}`,
       cancel_url: `${appUrl}/post-a-job?canceled=true`,
     });
+
+    if (jobData?.isUpgrade) {
+      sessionBody.append('metadata[isUpgrade]', 'true');
+    }
 
     if (contactEmail && contactEmail.includes('@')) {
       sessionBody.append('customer_email', contactEmail);

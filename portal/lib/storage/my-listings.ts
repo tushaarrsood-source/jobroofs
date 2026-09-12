@@ -8,7 +8,7 @@ export interface UserListing {
   title: string;
   subtitle: string;
   badgeLabel: string;
-  tier: 'starter' | 'standard' | 'premium';
+  tier: 'free' | 'starter' | 'standard' | 'premium';
   tierLabel: string;
   status: 'active' | 'pending' | 'expired';
   postedAt: string;
@@ -82,6 +82,29 @@ export function clearAllMyListings(): void {
     localStorage.removeItem(STORAGE_KEY);
     window.dispatchEvent(new Event('jobroofs_listings_updated'));
   } catch {}
+}
+
+export function upgradeMyListingLocally(id: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const current = getMyListings();
+    const updated = current.map((listing) => {
+      if (listing.id === id) {
+        return {
+          ...listing,
+          tier: 'premium' as const,
+          tierLabel: '⭐ Premium Spotlight',
+          pricePaidEur: 24.99,
+          expiresAt: new Date(Date.now() + 60 * 86400000).toISOString(),
+        };
+      }
+      return listing;
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    window.dispatchEvent(new Event('jobroofs_listings_updated'));
+  } catch (err) {
+    console.error('Failed to upgrade listing locally', err);
+  }
 }
 
 export function seedDemoListingsIfEmpty(): UserListing[] {

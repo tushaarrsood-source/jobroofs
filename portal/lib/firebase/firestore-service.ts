@@ -33,7 +33,7 @@ export interface FirestoreJob {
   contactPhone?: string;
   websiteUrl?: string;
   status: 'active' | 'published' | 'expired' | 'filled';
-  tier: 'starter' | 'standard' | 'premium';
+  tier: 'free' | 'starter' | 'standard' | 'premium';
   createdAt?: any;
   updatedAt?: any;
   expiresAt?: string;
@@ -182,12 +182,26 @@ export async function getUserListingsFromFirestore(userId: string): Promise<User
         subtitle: `${data.company} · ${data.district}`,
         badgeLabel: data.payText || 'n. V.',
         tier: data.tier || 'standard',
-        tierLabel: data.tier === 'premium' ? '⭐ Premium (30 Tage)' : 'Standard (30 Tage)',
+        tierLabel:
+          data.tier === 'premium'
+            ? '⭐ Premium Spotlight'
+            : data.tier === 'free'
+            ? '🎁 Erstinserat (Gratis)'
+            : data.tier === 'standard'
+            ? 'Standard (30 Tage)'
+            : 'Quick (15 Tage)',
         status: (data.status === 'published' ? 'active' : data.status) as any,
         postedAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
         expiresAt: data.expiresAt || new Date(Date.now() + 30 * 86400000).toISOString(),
         linkUrl: `/jobs/${data.id}`,
-        pricePaidEur: data.tier === 'premium' ? 59 : 29,
+        pricePaidEur:
+          data.tier === 'premium'
+            ? 24.99
+            : data.tier === 'free'
+            ? 0
+            : data.tier === 'standard'
+            ? 14.99
+            : 9.99,
       });
     });
 
@@ -290,3 +304,68 @@ export async function deleteUserDataFromFirestore(userId: string): Promise<boole
     return false;
   }
 }
+
+/**
+ * Checks whether a user account is eligible for the 1st free job listing.
+ * Returns true if the user has no existing published jobs and hasn't used the promo yet.
+ */
+export async function isUserEligibleForFreeJob(userId?: string | null): Promise<boolean> {
+  const db = getFirebaseDb();
+  if (!db || !userId) return true; // Eligible by default for new accounts
+
+  try {
+    const userDocRef = doc(db, 'users', userId);
+    const userSnap = await getDoc(userDocRef);
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      if (data.hasUsedFreeListing || data.firstJobUsed) {
+        return false;
+      }
+    }
+
+    // Check if user has already published any jobs
+    const jobsQuery = query(collection(db, 'jobs'), where('userId', '==', userId));
+    const jobsSnap = await getDocs(jobsQuery);
+    return jobsSnap.empty;
+  } catch (err) {
+    console.warn('Could not check free job eligibility, defaulting to true:', err);
+    return true;
+  }
+}
+
+/**
+ * Marks that a user has used their free listing promotion.
+ */
+export async function markFreeJobUsed(userId: string): Promise<void> {
+  const db = getFirebaseDb();
+  if (!db || !userId) return;
+
+  try {
+    const userDocRef = doc(db, 'users', userId);
+    await setDoc(userDocRef, { hasUsedFreeListing: true, updatedAt: serverTimestamp() }, { merge: true });
+  } catch (err) {
+    console.warn('Could not mark free job used:', err);
+  }
+}
+
+/**
+ * Upgrades an existing job to Premium Spotlight.
+ */
+export async function upgradeJobToSpotlight(jobId: string): Promise<boolean> {
+  const db = getFirebaseDb();
+  if (!db || !jobId) return false;
+
+  try {
+    const docRef = doc(db, 'jobs', jobId);
+    await updateDoc(docRef, {
+      tier: 'premium',
+      expiresAt: new Date(Date.now() + 60 * 86400000).toISOString(),
+      updatedAt: serverTimestamp(),
+    });
+    return true;
+  } catch (err) {
+    console.error('Error upgrading job to spotlight:', err);
+    return false;
+  }
+}
+
