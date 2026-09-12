@@ -15,6 +15,10 @@ import {
   ShieldCheck,
   Bookmark,
   CheckCircle2,
+  Share2,
+  Copy,
+  Check,
+  MessageCircle,
 } from 'lucide-react';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { AuthModal } from '@/components/auth-modal';
@@ -34,6 +38,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
   const [pendingTarget, setPendingTarget] = useState<string | null>(null);
   const [showSuccessBanner, setShowSuccessBanner] = useState(false);
   const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -47,6 +52,23 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
       }
     }
   }, [job.id, job.slug]);
+
+  const handleCopyLink = () => {
+    if (typeof window !== 'undefined') {
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleWhatsAppShare = () => {
+    if (typeof window !== 'undefined') {
+      const text = encodeURIComponent(
+        `Job in Berlin: ${job.title} bei ${job.company}\n${window.location.href}`
+      );
+      window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+    }
+  };
 
   const applyUrl =
     job.application?.url ||
@@ -86,7 +108,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
   const requirements = job.requirements || [];
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
+    <div className="mx-auto max-w-4xl px-4 py-8 pb-24 sm:pb-8">
       {/* Top Navigation Bar */}
       <nav className="mb-6 flex items-center justify-between border-b border-[#d8ded9] pb-4 text-[12px]">
         {prevSlug ? (
@@ -285,11 +307,68 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
           </div>
         </section>
 
+        {/* Share Section */}
+        <section className="mt-5 pt-4 border-t border-[#d8ded9] flex flex-wrap items-center justify-between gap-3 text-[12px] text-[#7e8a84]">
+          <span className="flex items-center gap-1.5 font-medium text-[#202a31]">
+            <Share2 className="size-3.5 stroke-[1.25]" /> Diese Stelle teilen:
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleWhatsAppShare}
+              className="apple-press inline-flex items-center gap-1.5 rounded-sm border border-[#d8ded9] bg-white px-3 py-1.5 text-[11.5px] text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
+            >
+              <MessageCircle className="size-3.5 text-emerald-600" />
+              <span>WhatsApp</span>
+            </button>
+            <button
+              onClick={handleCopyLink}
+              className="apple-press inline-flex items-center gap-1.5 rounded-sm border border-[#d8ded9] bg-white px-3 py-1.5 text-[11.5px] text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
+            >
+              {copied ? (
+                <>
+                  <Check className="size-3.5 text-emerald-600" />
+                  <span className="text-emerald-700 font-medium">Kopiert!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="size-3.5 text-[#7e8a84]" />
+                  <span>Link kopieren</span>
+                </>
+              )}
+            </button>
+          </div>
+        </section>
+
         <div className="mt-4 flex items-center justify-center gap-1.5 text-center text-xs text-zinc-400">
           <ShieldCheck className="size-3.5 text-[#1b4332]" />
           <span>Geprüftes Berliner Stellenangebot &middot; Direktkontakt ohne Zeitarbeit</span>
         </div>
       </article>
+
+      {/* Sticky Mobile Application Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#d8ded9] p-3 sm:hidden shadow-lg flex items-center justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="text-[12.5px] font-medium text-[#202a31] truncate">{job.title}</p>
+          <p className="text-[11px] text-[#7e8a84] truncate">{job.company} &middot; {wage}</p>
+        </div>
+        <a
+          href={applyUrl}
+          onClick={handleApplyClick}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="apple-press shrink-0 inline-flex items-center gap-1.5 rounded-sm bg-[#202a31] px-4 py-2.5 text-[12px] font-medium text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
+        >
+          {job.application?.email ? (
+            <>
+              <Mail className="size-3.5" /> E-Mail
+            </>
+          ) : (
+            <>
+              <span>Bewerben</span> &rarr;
+            </>
+          )}
+        </a>
+      </div>
 
       {/* Auth Gate Modal */}
       <AuthModal

@@ -10,6 +10,10 @@ import {
   ShieldCheck,
   Sparkles,
   Gift,
+  Share2,
+  Copy,
+  Check,
+  MessageCircle,
 } from 'lucide-react';
 import { saveMyListing, getMyListings, upgradeMyListingLocally } from '@/lib/storage/my-listings';
 import {
@@ -69,6 +73,7 @@ export function SimplePostJobForm() {
   const [isFreeEligible, setIsFreeEligible] = useState(true);
   const [lastCreatedJob, setLastCreatedJob] = useState<{ id: string; slug: string; title: string } | null>(null);
   const [upgrading, setUpgrading] = useState(false);
+  const [successCopied, setSuccessCopied] = useState(false);
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
   const [formData, setFormData] = useState({
@@ -391,6 +396,56 @@ export function SimplePostJobForm() {
               <span>{upgrading ? 'Weiterleitung...' : 'Auf Spotlight upgraden (24,99 €)'}</span>
               <ArrowRight className="size-3" />
             </button>
+          </div>
+        )}
+
+        {/* Share Section on Success */}
+        {lastCreatedJob && (
+          <div className="mt-6 p-4 rounded-xl border border-[#d8ded9] bg-white text-left">
+            <div className="text-[12.5px] font-medium text-[#202a31] flex items-center gap-1.5">
+              <Share2 className="size-3.5 text-[#7e8a84]" />
+              <span>Inserat sofort mit deinem Netzwerk oder Helfern teilen:</span>
+            </div>
+            <div className="mt-2.5 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    const url = `${window.location.origin}/jobs/${lastCreatedJob.slug}`;
+                    const text = encodeURIComponent(`Wir suchen Unterstützung in Berlin: ${formData.title} bei ${formData.company} (${formData.wage})\n${url}`);
+                    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+                  }
+                }}
+                className="apple-press inline-flex items-center gap-1.5 rounded-lg border border-[#d8ded9] bg-white px-3.5 py-2 text-[12px] font-medium text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
+              >
+                <MessageCircle className="size-3.5 text-emerald-600" />
+                <span>Per WhatsApp teilen</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    const url = `${window.location.origin}/jobs/${lastCreatedJob.slug}`;
+                    navigator.clipboard.writeText(url);
+                    setSuccessCopied(true);
+                    setTimeout(() => setSuccessCopied(false), 2000);
+                  }
+                }}
+                className="apple-press inline-flex items-center gap-1.5 rounded-lg border border-[#d8ded9] bg-white px-3.5 py-2 text-[12px] font-medium text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
+              >
+                {successCopied ? (
+                  <>
+                    <Check className="size-3.5 text-emerald-600" />
+                    <span className="text-emerald-700 font-medium">Link kopiert!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="size-3.5 text-[#7e8a84]" />
+                    <span>Link kopieren</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         )}
 
