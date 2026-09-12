@@ -4,7 +4,7 @@ import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { WebSiteJsonLd, LocalBusinessJsonLd } from '@/components/json-ld';
 import { previewJobs } from '@/lib/domain/preview-data';
-import { ALL_SOURCED_JOBS } from '@/lib/sources/sourced-jobs';
+import { ALL_SOURCED_JOBS, getDirectEmployerJobs } from '@/lib/sources/sourced-jobs';
 import { isJobSuppressed } from '@/lib/sources/suppression-store';
 
 export default async function Home() {
@@ -45,6 +45,22 @@ export default async function Home() {
     payText: job.payText,
   }));
 
+  // Initial verified direct employer jobs for section above search bar
+  const initialDirectJobs = getDirectEmployerJobs(6).map((job) => ({
+    id: job.id,
+    slug: job.slug || job.id,
+    title: job.title,
+    company: job.company,
+    district: job.district,
+    postcode: job.postcode,
+    industryId: job.industryId,
+    employmentForms: job.employmentForms,
+    compensation: job.compensation,
+    payText: job.compensation?.label || 'Vergütung n.V.',
+    listingOrigin: 'employer_posted',
+    isDirect: true,
+  }));
+
   return (
     <div className="min-h-screen text-[#202a31] flex flex-col justify-between relative z-10">
       <WebSiteJsonLd />
@@ -52,12 +68,12 @@ export default async function Home() {
       <SiteHeader />
 
       <main className="mx-auto max-w-5xl w-full px-6 md:px-8 flex-1">
-        {/* Signature Editorial Hero matching reference design */}
+        {/* Signature Editorial Hero with Premium Spotlight */}
         <EditorialHero />
 
-        {/* Full Interactive Job Feed */}
+        {/* Full Interactive Job Feed with Direct Employer Listings Above Search Bar */}
         <div className="pt-2 pb-16">
-          <JobFeed initialJobs={initialJobs} />
+          <JobFeed initialJobs={initialJobs} initialDirectJobs={initialDirectJobs} />
         </div>
       </main>
 

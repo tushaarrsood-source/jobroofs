@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from '@/components/ui/link';
 import {
   ArrowRight,
@@ -8,8 +8,10 @@ import {
   CheckCircle2,
   AlertCircle,
   ShieldCheck,
+  Sparkles,
 } from 'lucide-react';
-import { JobroofsMark } from '@/components/brand-logo';
+import { saveMyListing } from '@/lib/storage/my-listings';
+import { createJobInFirestore } from '@/lib/firebase/firestore-service';
 
 const BERLIN_DISTRICTS = [
   'Mitte',
@@ -66,11 +68,22 @@ export function SimplePostJobForm() {
     applyUrl: '',
     contactEmail: '',
     description: '',
+    tier: 'standard' as 'standard' | 'premium',
   });
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Pre-select premium tier if ?tier=premium in URL
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('tier') === 'premium') {
+        setFormData((prev) => ({ ...prev, tier: 'premium' }));
+      }
+    }
+  }, []);
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,30 +124,80 @@ export function SimplePostJobForm() {
     setError(null);
 
     try {
-      const res = await fetch('/api/employer/submit', {
+      const companySlug = formData.company
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      const titleSlug = formData.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      const submissionId = `direct-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+      const jobSlug = `${companySlug}-${titleSlug}-${submissionId.slice(-4)}`;
+
+      // 1. Submit to API
+      await fetch('/api/employer/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           submitterEmail: formData.contactEmail || formData.applyUrl,
-          pricingPlan: 'standard',
+          pricingPlan: formData.tier,
           payload: {
+            id: submissionId,
+            slug: jobSlug,
             title: formData.title,
             company: formData.company,
             district: formData.district,
             employmentForms: [formData.employmentType],
             payText: formData.wage,
             description: formData.description,
+            tier: formData.tier,
             application: {
               url: formData.applyUrl.startsWith('http') ? formData.applyUrl : null,
               email: formData.applyUrl.includes('@') ? formData.applyUrl : formData.contactEmail,
             },
           },
         }),
+      }).catch(() => {});
+
+      // 2. Save locally so it appears immediately on homepage in Direct Employer section & Premium Spotlight
+      saveMyListing({
+        id: submissionId,
+        type: 'job',
+        title: formData.title,
+        subtitle: `${formData.company} · ${formData.district}`,
+        badgeLabel: formData.wage,
+        tier: formData.tier,
+        tierLabel: formData.tier === 'premium' ? '⭐ Premium Spotlight' : 'Direkt vom Betrieb',
+        status: 'active',
+        postedAt: new Date().toISOString(),
+        expiresAt: new Date(Date.now() + (formData.tier === 'premium' ? 60 : 30) * 86400000).toISOString(),
+        linkUrl: `/jobs/${jobSlug}`,
+        pricePaidEur: formData.tier === 'premium' ? 49 : 29,
       });
 
-      if (!res.ok) {
-        const data: any = await res.json().catch(() => ({}));
-        throw new Error(data.error || 'Fehler beim Absenden der Anzeige.');
+      // 3. Save to Firestore if available
+      createJobInFirestore(
+        {
+          userId: 'employer-' + Date.now(),
+          title: formData.title,
+          company: formData.company,
+          district: formData.district,
+          description: formData.description,
+          payText: formData.wage,
+          hoursLabel: 'Flexible Schichten',
+          employmentForms: [formData.employmentType],
+          contactEmail: formData.contactEmail || '',
+          websiteUrl: formData.applyUrl || '',
+          status: 'published',
+          tier: formData.tier,
+        },
+        submissionId
+      ).catch(() => {});
+
+      // 4. Broadcast update to reactive components
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event('jobroofs_listings_updated'));
       }
 
       setSuccess(true);
@@ -147,8 +210,8 @@ export function SimplePostJobForm() {
 
   if (success) {
     return (
-      <div className="border border-[#d8ded9] bg-[#fbfbf8] p-8 sm:p-14 text-center max-w-xl mx-auto rounded-sm">
-        <div className="mx-auto flex size-12 items-center justify-center rounded-sm bg-[#202a31] text-[#fbfbf8]">
+      <div className="border border-[#d8ded9] bg-[#fbfbf8] p-8 sm:p-14 text-center max-w-xl mx-auto rounded-xl">
+        <div className="mx-auto flex size-12 items-center justify-center rounded-xl bg-[#202a31] text-[#fbfbf8]">
           <CheckCircle2 className="size-6 stroke-[1.5]" />
         </div>
         <h2
@@ -158,15 +221,21 @@ export function SimplePostJobForm() {
           Job erfolgreich inseriert.
         </h2>
         <p className="mt-3 text-[14px] text-[#5a6460] font-light leading-relaxed max-w-md mx-auto">
-          Deine Anzeige für <span className="font-medium text-[#202a31]">{formData.title}</span> bei <span className="font-medium text-[#202a31]">{formData.company}</span> ist eingegangen und wird sofort im Berliner Kiez geschaltet.
+          Deine Anzeige für <span className="font-medium text-[#202a31]">{formData.title}</span> bei <span className="font-medium text-[#202a31]">{formData.company}</span> ist eingegangen und wird sofort{' '}
+          {formData.tier === 'premium' ? (
+            <span className="font-medium text-[#202a31]">im Premium-Spotlight ganz oben und im Direktbereich</span>
+          ) : (
+            <span className="font-medium text-[#202a31]">im Direktbereich über der Suche</span>
+          )}{' '}
+          geschaltet.
         </p>
 
         <div className="mt-8 pt-6 border-t border-[#d8ded9] flex flex-col sm:flex-row justify-center gap-3">
           <Link
             href="/"
-            className="apple-press inline-flex items-center justify-center rounded-sm bg-[#202a31] px-6 py-3 text-[13px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
+            className="apple-press inline-flex items-center justify-center rounded-xl bg-[#202a31] px-6 py-3.5 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] transition-colors cursor-pointer"
           >
-            Zurück zur Übersicht
+            Zur Startseite & Inserat ansehen
           </Link>
           <button
             type="button"
@@ -182,9 +251,10 @@ export function SimplePostJobForm() {
                 applyUrl: '',
                 contactEmail: '',
                 description: '',
+                tier: 'standard',
               });
             }}
-            className="apple-press inline-flex items-center justify-center rounded-sm border border-[#d8ded9] bg-transparent px-6 py-3 text-[13px] font-normal text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
+            className="apple-press inline-flex items-center justify-center rounded-xl border border-[#d8ded9] bg-white px-6 py-3.5 text-[13px] font-normal text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
           >
             Weiteren Job inserieren
           </button>
@@ -537,6 +607,55 @@ export function SimplePostJobForm() {
                   <p className="text-[11.5px] text-[#7e8a84] font-light">
                     Kandidaten senden ihre Kurzbewerbung direkt an diese Adresse.
                   </p>
+                </div>
+              </div>
+
+              {/* Placement / Tier Selector */}
+              <div className="space-y-2 pt-2">
+                <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+                  Platzierung & Sichtbarkeit wählen
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* Standard Tier */}
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, tier: 'standard' })}
+                    className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
+                      formData.tier === 'standard'
+                        ? 'border-[#202a31] bg-[#f4f4ee]/80 shadow-2xs'
+                        : 'border-[#d8ded9] bg-white hover:border-[#202a31]'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[13.5px] font-medium text-[#202a31]">Standard Inserat</span>
+                      <span className="font-mono text-[13px] text-[#202a31]">29 €</span>
+                    </div>
+                    <p className="mt-1 text-[11.5px] text-[#7e8a84] font-light leading-relaxed">
+                      30 Tage online &middot; Sofort gelistet im neuen Direktbereich über der Suche.
+                    </p>
+                  </button>
+
+                  {/* Premium Spotlight Tier */}
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, tier: 'premium' })}
+                    className={`p-4 rounded-xl border text-left transition-all cursor-pointer relative ${
+                      formData.tier === 'premium'
+                        ? 'border-[#202a31] bg-[#ecece4]/60 ring-1 ring-[#202a31] shadow-2xs'
+                        : 'border-[#d8ded9] bg-white hover:border-[#202a31]'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[13.5px] font-medium text-[#202a31] flex items-center gap-1.5">
+                        <Sparkles className="size-3.5 text-[#9e7d3b]" />
+                        <span>Premium Spotlight</span>
+                      </span>
+                      <span className="font-mono text-[13px] text-[#202a31]">49 €</span>
+                    </div>
+                    <p className="mt-1 text-[11.5px] text-[#5a6460] font-light leading-relaxed">
+                      60 Tage online &middot; Ganz oben im <strong>Premium-Spotlight</strong> (Hero) + Direktbereich + Premium-Badge.
+                    </p>
+                  </button>
                 </div>
               </div>
 

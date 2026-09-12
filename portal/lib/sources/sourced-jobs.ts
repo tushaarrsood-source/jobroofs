@@ -40,6 +40,26 @@ export function getSourcedJobsByDistrict(district: string): PreviewJob[] {
   return ALL_SOURCED_JOBS.filter((j) => j.district.toLowerCase().includes(norm));
 }
 
+export function getDirectEmployerJobs(limit = 6): PreviewJob[] {
+  const direct: PreviewJob[] = [];
+  for (const job of ALL_SOURCED_JOBS) {
+    if (job.sourceKind === 'direct_employer') {
+      direct.push(job);
+      if (direct.length >= limit) break;
+    }
+  }
+  return direct;
+}
+
+export function getPremiumPartnerJobs(limit = 3): PreviewJob[] {
+  const partners = ['the barn', 'charit', 'kesselhaus', 'bonanza', 'daluma'];
+  const featured = ALL_SOURCED_JOBS.filter((j) =>
+    partners.some((p) => j.company.toLowerCase().includes(p))
+  );
+  if (featured.length >= limit) return featured.slice(0, limit);
+  return [...featured, ...ALL_SOURCED_JOBS.slice(0, limit - featured.length)];
+}
+
 export function getSourcedJobsStats() {
   const nicheCounts: Record<string, number> = {};
   for (const [nicheId, jobs] of jobsByNiche.entries()) {

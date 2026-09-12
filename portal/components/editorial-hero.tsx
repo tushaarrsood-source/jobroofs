@@ -1,17 +1,57 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from '@/components/ui/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
+import { getMyListings, type UserListing } from '@/lib/storage/my-listings';
+
+// Verified flagship Berlin partner employers featured in the Premium Spotlight
+const VERIFIED_PREMIUM_PARTNERS = [
+  {
+    slug: 'gastronomy-the-barn-coffee-roasters-barista',
+    title: 'Specialty Barista & Roastery',
+    company: 'The Barn Coffee Roasters',
+    district: 'Mitte · Auguststraße',
+    pay: '16,50 € / Std.',
+    jobType: 'Minijob / Teilzeit',
+  },
+  {
+    slug: 'healthcare-support-charite-universitatsmedizin-ambulanzen-mfa-ambulanz',
+    title: 'Klinischer Support & Betreuung',
+    company: 'Charité Universitätsmedizin',
+    district: 'Mitte · Campus Mitte',
+    pay: '16,00 € / Std.',
+    jobType: 'Werkstudent',
+  },
+  {
+    slug: 'events-kesselhaus-maschinenhaus-kulturbrauerei-tresenkraft',
+    title: 'Event Host & Kulturgastronomie',
+    company: 'Kesselhaus Kulturbrauerei',
+    district: 'Prenzlauer Berg · Knaackstr.',
+    pay: '17,00 € / Std.',
+    jobType: 'Flexibel / Event',
+  },
+];
 
 export function EditorialHero() {
+  const [userPremiumListings, setUserPremiumListings] = useState<UserListing[]>([]);
+
+  useEffect(() => {
+    const checkPremium = () => {
+      const all = getMyListings();
+      const premiums = all.filter((l) => l.type === 'job' && l.tier === 'premium' && l.status !== 'expired');
+      setUserPremiumListings(premiums);
+    };
+
+    checkPremium();
+    window.addEventListener('jobroofs_listings_updated', checkPremium);
+    return () => window.removeEventListener('jobroofs_listings_updated', checkPremium);
+  }, []);
+
   return (
     <section className="relative pt-8 pb-10 sm:pt-14 sm:pb-16">
       {/* Top Headline Section */}
       <div className="max-w-4xl">
-        {/* Micro Kicker */}
-        <div className="text-[9.5px] sm:text-[10.5px] font-medium uppercase tracking-[0.12em] sm:tracking-[0.22em] text-[#7e8a84] mb-3 sm:mb-5 break-words">
-          BERLIN WORKFORCE ARCHITECTURE &middot; DIRECT POSITIONS
-        </div>
 
         {/* Slender Editorial Headline */}
         <h1
@@ -30,7 +70,7 @@ export function EditorialHero() {
       {/* Hairline Divider */}
       <div className="w-full h-px bg-[#d8ded9] my-7 sm:my-10" />
 
-      {/* Split Grid: Left = Post Your Job Hub, Right = Live Ledger */}
+      {/* Split Grid: Left = Post Your Job Hub, Right = Premium Spotlight */}
       <div className="grid gap-8 lg:gap-10 lg:grid-cols-12 lg:items-center">
         {/* Left Column: Ultra-Clean "Post a Job" Hub */}
         <div className="lg:col-span-6 space-y-4">
@@ -56,93 +96,115 @@ export function EditorialHero() {
           </div>
         </div>
 
-        {/* Right Column: Architectural Live Ledger */}
+        {/* Right Column: Dedicated PREMIUM SPOTLIGHT */}
         <div className="lg:col-span-6 lg:pl-4">
           <div className="flex items-center justify-between text-[10px] sm:text-[10.5px] font-medium uppercase tracking-[0.12em] sm:tracking-[0.2em] text-[#7e8a84] mb-3">
-            <span>CURRENT OPENINGS &middot; BERLIN KIEZE</span>
-            <span className="font-mono text-[10px] text-[#7e8a84]/80">VERIFIED</span>
+            <span className="flex items-center gap-1.5 text-[#202a31] font-semibold">
+              <Sparkles className="size-3 text-[#9e7d3b]" />
+              <span>PREMIUM SPOTLIGHT &middot; BERLIN</span>
+            </span>
+            <span className="inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-[#202a31] bg-[#ecece4] px-2 py-0.5 rounded-sm font-semibold border border-[#d8ded9]">
+              ★ PREMIUM
+            </span>
           </div>
 
           {/* Architectural Hairline-Divided Ledger */}
           <div className="border-t border-[#d8ded9]">
-            {/* Row 01 */}
-            <Link
-              href="/?district=mitte"
-              className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-1 sm:px-2 sm:-mx-2 cursor-pointer"
-            >
-              <div>
-                <div className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
-                  Specialty Barista & Gastronomy
+            {/* User-submitted Premium Listings (if active) */}
+            {userPremiumListings.map((userJob) => (
+              <Link
+                key={userJob.id}
+                href={userJob.linkUrl}
+                className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-1 sm:px-2 sm:-mx-2 cursor-pointer bg-[#fcfcf9]"
+              >
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
+                      {userJob.title}
+                    </span>
+                    <span className="font-mono text-[9px] uppercase bg-[#202a31] text-[#fbfbf8] px-1.5 py-0.2 rounded-xs font-medium">
+                      ★ SPOTLIGHT
+                    </span>
+                  </div>
+                  <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
+                    {userJob.subtitle}
+                  </div>
                 </div>
-                <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
-                  Mitte &middot; Torstraße
+                <div className="text-right shrink-0 pl-3">
+                  <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
+                    {userJob.badgeLabel}
+                  </div>
+                  <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
+                    Dein Inserat
+                  </div>
                 </div>
-              </div>
-              <div className="text-right">
-                <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
-                  15,50 € / Std.
-                </div>
-                <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
-                  Minijob
-                </div>
-              </div>
-            </Link>
+              </Link>
+            ))}
 
-            {/* Row 02 */}
-            <Link
-              href="/?district=kreuzberg"
-              className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-1 sm:px-2 sm:-mx-2 cursor-pointer"
-            >
-              <div>
-                <div className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
-                  Concept Store & Retail Host
+            {/* Verified Partner Premium Listings */}
+            {VERIFIED_PREMIUM_PARTNERS.map((job) => (
+              <Link
+                key={job.slug}
+                href={`/jobs/${job.slug}`}
+                className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-1 sm:px-2 sm:-mx-2 cursor-pointer"
+              >
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
+                      {job.title}
+                    </span>
+                    <span className="font-mono text-[8.5px] uppercase text-[#7e8a84] border border-[#d8ded9] px-1.5 py-0.2 rounded-xs">
+                      PREMIUM
+                    </span>
+                  </div>
+                  <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
+                    {job.company} &middot; {job.district}
+                  </div>
                 </div>
-                <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
-                  Kreuzberg &middot; Oranienstraße
+                <div className="text-right shrink-0 pl-3">
+                  <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
+                    {job.pay}
+                  </div>
+                  <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
+                    {job.jobType}
+                  </div>
                 </div>
-              </div>
-              <div className="text-right">
-                <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
-                  15,00 € / Std.
-                </div>
-                <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
-                  Teilzeit
-                </div>
-              </div>
-            </Link>
+              </Link>
+            ))}
+          </div>
 
-            {/* Row 03 */}
-            <Link
-              href="/?district=friedrichshain"
-              className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-1 sm:px-2 sm:-mx-2 cursor-pointer"
-            >
+          {/* Spotlight Booking Action Card */}
+          <div className="mt-3.5 pt-3 border-t border-[#d8ded9]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#f4f4ee]/80 hover:bg-[#f4f4ee] border border-[#d8ded9] rounded-xl p-3.5 transition-colors">
               <div>
-                <div className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
-                  Exhibition & Event Assistant
+                <div className="text-[12.5px] font-medium text-[#202a31] flex items-center gap-1.5">
+                  <span>Dein Job im Premium-Spotlight?</span>
+                  <span className="text-[10px] font-mono font-medium text-[#202a31] bg-[#ecece4] px-1.5 py-0.5 rounded-xs border border-[#d8ded9]">
+                    ab 49 €
+                  </span>
                 </div>
-                <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
-                  Friedrichshain &middot; Warschauer Str.
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
-                  16,00 € / Std.
-                </div>
-                <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
-                  Werkstudent
+                <div className="text-[11px] text-[#7e8a84] font-light mt-0.5">
+                  Ganz oben platziert für maximale Reichweite & Bewerber in Berlin
                 </div>
               </div>
-            </Link>
+              <Link
+                href="/post-a-job?tier=premium"
+                className="apple-press shrink-0 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#202a31] text-[#fbfbf8] text-[12px] font-medium tracking-[0.02em] hover:bg-[#161D22] transition-colors cursor-pointer"
+              >
+                <span>Spotlight buchen</span>
+                <ArrowRight className="size-3" />
+              </Link>
+            </div>
           </div>
 
           {/* Ledger Sub-meta */}
           <div className="flex items-center justify-between pt-3 text-[11px] text-[#7e8a84] font-light">
             <span className="flex items-center gap-1.5">
-              <span className="size-1.5 rounded-full bg-[#7e8a84]" />
-              <span>Live aktualisiert mit Berliner Betrieben</span>
+              <span className="size-1.5 rounded-full bg-[#202a31]" />
+              <span>Verifizierte Berliner Premium-Partner</span>
             </span>
-            <Link href="/all-jobs" className="hover:text-[#202a31] transition-colors">
-              Alle 1.640 anzeigen &rarr;
+            <Link href="/pricing" className="hover:text-[#202a31] transition-colors">
+              Premium-Vorteile ansehen &rarr;
             </Link>
           </div>
         </div>
