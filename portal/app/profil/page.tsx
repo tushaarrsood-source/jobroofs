@@ -13,12 +13,12 @@ export const metadata: Metadata = {
 
 export default function ProfilePage() {
   return (
-    <main className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col justify-between">
+    <main className="min-h-screen bg-[#FBFBF8] text-[#202A31] flex flex-col justify-between">
       <div>
         <SiteHeader />
         
-        <div className="mx-auto max-w-2xl px-4 sm:px-6 py-6 sm:py-10 space-y-6">
-          {/* User Account & Privacy (DSGVO) Card */}
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 py-8 sm:py-12 space-y-6">
+          {/* User Account & Privacy Card */}
           <ProfileAccountCard />
 
           {/* User's Listings Section */}
@@ -26,77 +26,76 @@ export default function ProfilePage() {
 
           {/* Quick actions */}
           <div className="space-y-3">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#86868b] px-1">
+            <h2 className="text-[10.5px] font-mono font-medium uppercase tracking-[0.2em] text-[#7E8A84] px-1">
               Aktionen & Services
             </h2>
 
-            <div className="overflow-hidden rounded-[20px] border border-black/[0.06] bg-white divide-y divide-black/[0.04] shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+            <div className="overflow-hidden rounded-2xl border border-[#D8DED9] bg-[#FBFBF8] divide-y divide-[#D8DED9] shadow-xs">
               <Link
                 href="/post-a-job"
-                className="flex items-center justify-between p-4.5 text-sm font-medium text-[#1d1d1f] hover:bg-black/[0.02] transition-colors active:scale-[0.99] cursor-pointer"
+                className="flex items-center justify-between p-4.5 text-sm font-medium text-[#202A31] hover:bg-[#F0F1EA] transition-colors cursor-pointer"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-2xl bg-black/[0.04] text-[#1d1d1f]">
+                <div className="flex items-center gap-3.5">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-white border border-[#D8DED9] text-[#202A31]">
                     <Briefcase className="size-5" />
                   </div>
                   <div>
-                    <div className="text-[#1d1d1f] font-semibold">Job inserieren</div>
-                    <div className="text-xs text-[#86868b] font-normal">Aushilfe, Minijob 603 €, Teilzeit</div>
+                    <div className="text-[#202A31] font-medium text-sm">Job inserieren</div>
+                    <div className="text-xs text-[#7E8A84] font-light">Aushilfe, Minijob 603 €, Teilzeit</div>
                   </div>
                 </div>
-                <ChevronRight className="size-4 text-[#86868b]" />
+                <ChevronRight className="size-4 text-[#7E8A84]" />
               </Link>
-
 
               <Link
                 href="/control"
-                className="flex items-center justify-between p-4.5 text-sm font-medium text-[#1d1d1f] hover:bg-black/[0.02] transition-colors active:scale-[0.99] cursor-pointer"
+                className="flex items-center justify-between p-4.5 text-sm font-medium text-[#202A31] hover:bg-[#F0F1EA] transition-colors cursor-pointer"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-2xl bg-black/[0.04] text-[#1d1d1f]">
-                    <Briefcase className="size-5 text-blue-600" />
+                <div className="flex items-center gap-3.5">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-white border border-[#D8DED9] text-[#202A31]">
+                    <Briefcase className="size-5 text-[#202A31]" />
                   </div>
                   <div>
-                    <div className="text-[#1d1d1f] font-semibold flex items-center gap-2">
+                    <div className="text-[#202A31] font-medium flex items-center gap-2">
                       <span>Source Control & Dashboard</span>
-                      <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200 font-mono">1.600 Stellen</span>
+                      <span className="rounded-full bg-[#202A31] px-2 py-0.5 text-[9.5px] font-mono font-medium text-[#FBFBF8]">1.600 Stellen</span>
                     </div>
-                    <div className="text-xs text-[#86868b] font-normal">Alle 1.600 Berliner Stellen & Quellen einsehen & löschen</div>
+                    <div className="text-xs text-[#7E8A84] font-light">Alle 1.600 Berliner Stellen & Quellen einsehen & verwalten</div>
                   </div>
                 </div>
-                <ChevronRight className="size-4 text-[#86868b]" />
+                <ChevronRight className="size-4 text-[#7E8A84]" />
               </Link>
 
               <a
                 href="mailto:kontakt@jobroofs.com"
-                className="flex items-center justify-between p-4 text-sm font-medium text-slate-800 hover:bg-slate-50 transition-[background-color,transform] duration-150 active:scale-[0.99] cursor-pointer"
+                className="flex items-center justify-between p-4.5 text-sm font-medium text-[#202A31] hover:bg-[#F0F1EA] transition-colors cursor-pointer"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex size-9 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
+                <div className="flex items-center gap-3.5">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-white border border-[#D8DED9] text-[#202A31]">
                     <HelpCircle className="size-5" />
                   </div>
                   <div>
-                    <div className="text-slate-900 font-semibold">Hilfe & Support</div>
-                    <div className="text-xs text-slate-500 font-normal">kontakt@jobroofs.com</div>
+                    <div className="text-[#202A31] font-medium">Hilfe & Support</div>
+                    <div className="text-xs text-[#7E8A84] font-light">kontakt@jobroofs.com</div>
                   </div>
                 </div>
-                <ArrowRight className="size-4 text-slate-400" />
+                <ArrowRight className="size-4 text-[#7E8A84]" />
               </a>
 
               <Link
                 href="/impressum"
-                className="flex items-center justify-between p-4 text-sm font-medium text-slate-800 hover:bg-slate-50 transition-[background-color,transform] duration-150 active:scale-[0.99] cursor-pointer"
+                className="flex items-center justify-between p-4.5 text-sm font-medium text-[#202A31] hover:bg-[#F0F1EA] transition-colors cursor-pointer"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex size-9 items-center justify-center rounded-lg bg-slate-50 text-slate-600">
+                <div className="flex items-center gap-3.5">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-white border border-[#D8DED9] text-[#202A31]">
                     <Shield className="size-5" />
                   </div>
                   <div>
-                    <div className="text-slate-900 font-semibold">Impressum & Datenschutz</div>
-                    <div className="text-xs text-slate-500 font-normal">Rechtliche Angaben und Richtlinien</div>
+                    <div className="text-[#202A31] font-medium">Impressum & Datenschutz</div>
+                    <div className="text-xs text-[#7E8A84] font-light">Rechtliche Angaben und Richtlinien</div>
                   </div>
                 </div>
-                <ChevronRight className="size-4 text-slate-400" />
+                <ChevronRight className="size-4 text-[#7E8A84]" />
               </Link>
             </div>
           </div>

@@ -51,20 +51,20 @@ export function MyListings() {
   };
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs">
+    <div className="rounded-2xl border border-[#D8DED9] bg-[#FBFBF8] p-5 sm:p-7 shadow-xs">
       {/* Header with Title and Filter Tabs */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#D8DED9] pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+            <h2 className="text-base font-semibold text-[#202A31] flex items-center gap-2">
               <span>{isDe ? 'Meine Inserate' : 'My Listings'}</span>
-              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600 font-mono">
+              <span className="rounded-full bg-[#F0F1EA] px-2 py-0.5 text-xs font-medium text-[#7E8A84] font-mono">
                 {mounted ? listings.length : '...'}
               </span>
             </h2>
             {mounted && (
               user ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10.5px] font-medium text-emerald-700 border border-emerald-200/60">
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10.5px] font-medium text-emerald-800 border border-emerald-500/20">
                   <Cloud className="size-3" />
                   <span className="hidden sm:inline">Cloud Sync</span>
                 </span>
@@ -72,15 +72,15 @@ export function MyListings() {
                 <button
                   type="button"
                   onClick={() => setAuthOpen(true)}
-                  className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-[10.5px] font-medium text-blue-700 hover:bg-blue-100 transition cursor-pointer"
+                  className="inline-flex items-center gap-1 rounded-full bg-[#F0F1EA] border border-[#D8DED9] px-2.5 py-0.5 text-[10.5px] font-medium text-[#202A31] hover:bg-white transition cursor-pointer"
                 >
-                  <CloudOff className="size-3" />
+                  <CloudOff className="size-3 text-[#7E8A84]" />
                   <span>{isDe ? 'Anmelden' : 'Sign in'}</span>
                 </button>
               )
             )}
           </div>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-[#7E8A84] mt-0.5 font-light">
             {isDe
               ? 'Verwalte deine veröffentlichten Stellenanzeigen'
               : 'Manage your published job postings'}
@@ -92,28 +92,26 @@ export function MyListings() {
       <div className="mt-4 space-y-3">
         {!mounted ? (
           <div className="space-y-3 py-2 animate-pulse">
-            <div className="h-16 bg-slate-100 rounded-xl"></div>
-            <div className="h-16 bg-slate-100 rounded-xl"></div>
+            <div className="h-16 bg-[#F0F1EA] rounded-xl"></div>
+            <div className="h-16 bg-[#F0F1EA] rounded-xl"></div>
           </div>
         ) : filteredListings.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/50 p-6 text-center">
-            <p className="text-sm font-medium text-slate-600">
-              {isDe ? 'Keine Inserate in dieser Kategorie.' : 'No listings in this category.'}
+          <div className="rounded-xl border border-dashed border-[#D8DED9] bg-white/60 p-8 text-center">
+            <p className="text-sm font-medium text-[#202A31]">
+              {isDe ? 'Keine aktiven Inserate vorhanden.' : 'No active listings found.'}
             </p>
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
+            <p className="text-xs text-[#7E8A84] mt-1 font-light max-w-sm mx-auto">
+              {isDe
+                ? 'Veröffentliche eine Stelle direkt in Berlin ohne Vermittler.'
+                : 'Publish a position directly in Berlin with zero middleman fees.'}
+            </p>
+            <div className="mt-5 flex justify-center">
               <Link
                 href="/post-a-job"
-                className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-blue-600 px-4 text-xs font-bold text-white transition hover:bg-blue-700"
+                className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#202A31] px-5 text-xs font-medium text-[#FBFBF8] hover:bg-[#161D22] transition-colors"
               >
                 <Plus className="size-3.5" />
-                {isDe ? 'Job inserieren (29 €)' : 'Post Job (29 €)'}
-              </Link>
-              <Link
-                href="/wohnen/list"
-                className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
-              >
-                <Plus className="size-3.5" />
-                {isDe ? 'Wohnung inserieren (29 €)' : 'List Room (29 €)'}
+                <span>{isDe ? 'Job jetzt inserieren' : 'Post Job Now'}</span>
               </Link>
             </div>
           </div>
@@ -125,42 +123,36 @@ export function MyListings() {
             return (
               <div
                 key={listing.id}
-                className="rounded-xl border border-slate-200 bg-white p-4 card-tactile"
+                className="rounded-xl border border-[#D8DED9] bg-white p-4.5 transition-colors"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-start gap-3">
-                    <div
-                      className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${
-                        isJob ? 'bg-blue-50 text-blue-600' : 'bg-emerald-50 text-emerald-600'
-                      }`}
-                    >
-                      {isJob ? <Briefcase className="size-5" /> : <Home className="size-5" />}
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#F0F1EA] border border-[#D8DED9] text-[#202A31]">
+                      <Briefcase className="size-5" />
                     </div>
 
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <span
-                          className={`rounded-md px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                            isJob
-                              ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                              : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                          }`}
-                        >
-                          {isJob ? 'Job' : isDe ? 'Wohnen' : 'Housing'}
+                        <span className="rounded-md bg-[#202A31] text-[#FBFBF8] px-2 py-0.5 text-[9.5px] font-mono font-medium uppercase tracking-wider">
+                          Job
                         </span>
-                        <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-700 font-mono">
-                          {listing.badgeLabel}
-                        </span>
-                        <span className="rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-800 border border-amber-200">
-                          {listing.tierLabel}
-                        </span>
+                        {listing.badgeLabel && (
+                          <span className="rounded-md bg-[#F0F1EA] border border-[#D8DED9] px-2 py-0.5 text-[9.5px] font-mono text-[#202A31]">
+                            {listing.badgeLabel}
+                          </span>
+                        )}
+                        {listing.tierLabel && (
+                          <span className="rounded-md bg-amber-500/10 border border-amber-500/25 px-2 py-0.5 text-[9.5px] font-medium text-amber-800">
+                            {listing.tierLabel}
+                          </span>
+                        )}
                       </div>
 
-                      <h3 className="mt-1.5 text-sm font-bold text-slate-900 leading-snug">
+                      <h3 className="mt-1.5 text-sm font-semibold text-[#202A31] leading-snug">
                         {listing.title}
                       </h3>
 
-                      <p className="text-xs text-slate-500 mt-0.5">
+                      <p className="text-xs text-[#7E8A84] mt-0.5 font-light">
                         {listing.subtitle}
                       </p>
                     </div>
@@ -168,12 +160,12 @@ export function MyListings() {
 
                   {/* Actions & Status */}
                   <div className="flex flex-col items-end gap-2 shrink-0">
-                    <div className="flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                      <CheckCircle2 className="size-3" />
+                    <div className="flex items-center gap-1 text-[10.5px] font-medium text-emerald-800 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                      <CheckCircle2 className="size-3 text-emerald-700" />
                       <span>{isDe ? 'Aktiv' : 'Active'}</span>
                     </div>
-                    <span className="flex items-center gap-1 text-[11px] text-slate-500 font-mono">
-                      <Clock className="size-3 text-slate-400" />
+                    <span className="flex items-center gap-1 text-[11px] text-[#7E8A84] font-mono">
+                      <Clock className="size-3 text-[#7E8A84]" />
                       {daysRemaining > 0
                         ? isDe ? `Noch ${daysRemaining} Tage` : `${daysRemaining}d left`
                         : isDe ? 'Abgelaufen' : 'Expired'}
@@ -182,8 +174,8 @@ export function MyListings() {
                 </div>
 
                 {/* Card Footer Actions */}
-                <div className="mt-3.5 flex items-center justify-between border-t border-slate-100 pt-2.5">
-                  <div className="text-[11px] text-slate-400">
+                <div className="mt-3.5 flex items-center justify-between border-t border-[#D8DED9] pt-3">
+                  <div className="text-[11px] text-[#7E8A84] font-mono">
                     {isDe ? 'Gebucht für' : 'Booked for'} {listing.pricePaidEur} €
                   </div>
 
@@ -196,7 +188,7 @@ export function MyListings() {
                           setListings((prev) => prev.filter((l) => l.id !== listing.id));
                         }
                       }}
-                      className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer"
+                      className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs text-[#7E8A84] hover:text-red-700 hover:bg-red-50 transition cursor-pointer"
                       title={isDe ? 'Inserat löschen' : 'Delete listing'}
                     >
                       <Trash2 className="size-3.5" />
@@ -205,7 +197,7 @@ export function MyListings() {
 
                     <Link
                       href={listing.linkUrl}
-                      className="btn-tactile inline-flex items-center gap-1 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-blue-600"
+                      className="inline-flex items-center gap-1.5 rounded-xl bg-[#202A31] hover:bg-[#161D22] px-3.5 py-1.5 text-xs font-medium text-[#FBFBF8] transition-colors"
                     >
                       <span>{isDe ? 'Inserat ansehen' : 'View Listing'}</span>
                       <ExternalLink className="size-3" />

@@ -256,12 +256,11 @@ export function SimplePostJobForm() {
         </div>
       </div>
 
-      {/* Main Grid: Form Left, Live Card Preview Right */}
-      <div className="grid gap-10 lg:grid-cols-12 items-start">
-        {/* Left Form Workstation (7 Cols) */}
-        <form onSubmit={handleNext} className="lg:col-span-7 space-y-6">
+      {/* Main Centered Intake Form */}
+      <div className="max-w-2xl mx-auto">
+        <form onSubmit={handleNext} className="space-y-6">
           {error && (
-            <div className="flex items-center gap-2 rounded-sm bg-[#fbfbf8] p-3.5 text-[12.5px] font-normal text-[#c43224] border border-[#c43224]/30">
+            <div className="flex items-center gap-2 rounded-xl bg-red-50/80 p-3.5 text-[12.5px] font-normal text-red-800 border border-red-200">
               <AlertCircle className="size-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -269,7 +268,7 @@ export function SimplePostJobForm() {
 
           {/* STEP 1: Basisdaten */}
           {step === 1 && (
-            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-6 sm:p-8 rounded-sm space-y-6">
+            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-6 sm:p-8 rounded-2xl shadow-xs space-y-6">
               <div className="border-b border-[#d8ded9] pb-3">
                 <h2
                   className="text-lg font-normal text-[#202a31] tracking-[-0.015em]"
@@ -293,7 +292,7 @@ export function SimplePostJobForm() {
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="z. B. Specialty Barista, Servicekraft, Event-Aushilfe"
-                  className="w-full h-11 px-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-sm bg-[#fbfbf8] focus:border-[#202a31] outline-none transition-colors"
+                  className="w-full h-11 px-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
                 />
               </div>
 
@@ -308,7 +307,7 @@ export function SimplePostJobForm() {
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                   placeholder="z. B. Café Morgenstern GmbH"
-                  className="w-full h-11 px-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-sm bg-[#fbfbf8] focus:border-[#202a31] outline-none transition-colors"
+                  className="w-full h-11 px-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
                 />
               </div>
 
@@ -325,10 +324,10 @@ export function SimplePostJobForm() {
                         key={d}
                         type="button"
                         onClick={() => setFormData({ ...formData, district: d })}
-                        className={`px-3 py-1.5 rounded-sm text-[12px] font-normal transition-colors cursor-pointer ${
+                        className={`px-3 py-1.5 rounded-lg text-[12px] font-normal transition-colors cursor-pointer ${
                           isSelected
                             ? 'bg-[#202a31] text-[#fbfbf8]'
-                            : 'border border-[#d8ded9] text-[#7e8a84] hover:text-[#202a31] hover:border-[#202a31] bg-transparent'
+                            : 'border border-[#d8ded9] text-[#7e8a84] hover:text-[#202a31] hover:border-[#202a31] bg-white'
                         }`}
                       >
                         {d}
@@ -341,7 +340,7 @@ export function SimplePostJobForm() {
                 <select
                   value={formData.district}
                   onChange={(e) => setFormData({ ...formData, district: e.target.value })}
-                  className="w-full h-10 px-3.5 text-[13px] text-[#202a31] border border-[#d8ded9] rounded-sm bg-[#fbfbf8] cursor-pointer focus:border-[#202a31] outline-none transition-colors"
+                  className="w-full h-10 px-3.5 text-[13px] text-[#202a31] border border-[#d8ded9] rounded-xl bg-white cursor-pointer focus:border-[#202a31] outline-none transition-colors"
                 >
                   {BERLIN_DISTRICTS.map((d) => (
                     <option key={d} value={d}>
@@ -354,7 +353,7 @@ export function SimplePostJobForm() {
               <div className="pt-3 border-t border-[#d8ded9] flex justify-end">
                 <button
                   type="submit"
-                  className="apple-press inline-flex items-center gap-2 rounded-sm bg-[#202a31] px-6 py-3 text-[13px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
+                  className="apple-press inline-flex items-center gap-2 rounded-xl bg-[#202a31] px-6 py-3 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] transition-colors cursor-pointer"
                 >
                   <span>Weiter zu Konditionen</span>
                   <ArrowRight className="size-3.5 stroke-[1.5]" />
@@ -363,9 +362,9 @@ export function SimplePostJobForm() {
             </div>
           )}
 
-          {/* STEP 2: Konditionen & Beschreibung */}
+          {/* STEP 2: Konditionen */}
           {step === 2 && (
-            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-6 sm:p-8 rounded-sm space-y-6">
+            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-6 sm:p-8 rounded-2xl shadow-xs space-y-6">
               <div className="border-b border-[#d8ded9] pb-3">
                 <h2
                   className="text-lg font-normal text-[#202a31] tracking-[-0.015em]"
@@ -374,7 +373,7 @@ export function SimplePostJobForm() {
                   2. Konditionen & Aufgaben
                 </h2>
                 <p className="text-[12.5px] text-[#7e8a84] font-light mt-0.5">
-                  Wie wird gearbeitet und was verdient das Talent?
+                  Vergütung, Anstellungsform und Tätigkeitsbeschreibung.
                 </p>
               </div>
 
@@ -383,44 +382,49 @@ export function SimplePostJobForm() {
                 <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
                   Anstellungsart *
                 </label>
-                <div className="flex flex-wrap gap-1.5">
-                  {JOB_TYPES.map((t) => {
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {EMPLOYMENT_TYPES.map((t) => {
                     const isSelected = formData.employmentType === t;
                     return (
                       <button
                         key={t}
                         type="button"
                         onClick={() => setFormData({ ...formData, employmentType: t })}
-                        className={`px-3 py-1.5 rounded-sm text-[12px] font-normal transition-colors cursor-pointer ${
+                        className={`p-2.5 rounded-xl border text-left text-[12px] transition-colors cursor-pointer ${
                           isSelected
-                            ? 'bg-[#202a31] text-[#fbfbf8]'
-                            : 'border border-[#d8ded9] text-[#7e8a84] hover:text-[#202a31] hover:border-[#202a31] bg-transparent'
+                            ? 'border-[#202a31] bg-[#202a31] text-[#fbfbf8]'
+                            : 'border-[#d8ded9] bg-white text-[#7e8a84] hover:text-[#202a31] hover:border-[#202a31]'
                         }`}
                       >
-                        {t}
+                        <div className="font-normal">{t.split('(')[0]}</div>
+                        {t.includes('(') && (
+                          <div className={`text-[10px] mt-0.5 ${isSelected ? 'text-[#fbfbf8]/70' : 'text-[#7e8a84]'}`}>
+                            ({t.split('(')[1]}
+                          </div>
+                        )}
                       </button>
                     );
                   })}
                 </div>
               </div>
 
-              {/* Wage Selector & Presets */}
+              {/* Wage Selector */}
               <div className="space-y-2">
                 <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
-                  Stundenlohn / Vergütung *
+                  Vergütung / Stundenlohn *
                 </label>
-                <div className="flex flex-wrap gap-1.5 mb-2">
-                  {WAGE_PRESETS.map((w) => {
+                <div className="flex flex-wrap gap-1.5">
+                  {QUICK_WAGES.map((w) => {
                     const isSelected = formData.wage === w;
                     return (
                       <button
                         key={w}
                         type="button"
                         onClick={() => setFormData({ ...formData, wage: w })}
-                        className={`px-3 py-1 rounded-sm text-[12px] font-mono transition-colors cursor-pointer ${
+                        className={`px-3 py-1.5 rounded-lg text-[12px] font-mono transition-colors cursor-pointer ${
                           isSelected
                             ? 'bg-[#202a31] text-[#fbfbf8]'
-                            : 'border border-[#d8ded9] text-[#7e8a84] hover:text-[#202a31] hover:border-[#202a31] bg-transparent'
+                            : 'border border-[#d8ded9] text-[#7e8a84] hover:text-[#202a31] hover:border-[#202a31] bg-white'
                         }`}
                       >
                         {w}
@@ -430,26 +434,30 @@ export function SimplePostJobForm() {
                 </div>
                 <input
                   type="text"
-                  required
                   value={formData.wage}
                   onChange={(e) => setFormData({ ...formData, wage: e.target.value })}
-                  placeholder="z. B. 16,50 € / Std."
-                  className="w-full h-11 px-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-sm bg-[#fbfbf8] focus:border-[#202a31] outline-none transition-colors font-mono"
+                  placeholder="Oder individuelle Angabe, z. B. 18,50 € / Std. + Trinkgeld"
+                  className="w-full h-10 px-3.5 text-[13px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors mt-2"
                 />
               </div>
 
-              {/* Description */}
+              {/* Description Textarea */}
               <div className="space-y-2">
-                <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
-                  Aufgaben & Anforderungen *
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+                    Aufgaben & Profil *
+                  </label>
+                  <span className="text-[10.5px] text-[#7e8a84]">
+                    Klar & unkompliziert
+                  </span>
+                </div>
                 <textarea
                   required
                   rows={5}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Beschreibe kurz die typischen Aufgaben, Schichten (z. B. Wochenende, abends) und was Bewerber mitbringen sollten..."
-                  className="w-full p-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-sm bg-[#fbfbf8] focus:border-[#202a31] outline-none leading-relaxed resize-y min-h-[130px] transition-colors"
+                  placeholder="Beschreibe kurz die Aufgaben, gewünschte Schichten oder Sprachkenntnisse (z. B. Deutsch B1 oder Englisch)."
+                  className="w-full p-3.5 text-[13.5px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors resize-y leading-relaxed"
                 />
               </div>
 
@@ -464,62 +472,73 @@ export function SimplePostJobForm() {
                 </button>
                 <button
                   type="submit"
-                  className="apple-press inline-flex items-center gap-2 rounded-sm bg-[#202a31] px-6 py-3 text-[13px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
+                  className="apple-press inline-flex items-center gap-2 rounded-xl bg-[#202a31] px-6 py-3 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] transition-colors cursor-pointer"
                 >
-                  <span>Weiter zur Vorschau</span>
+                  <span>Weiter zu Kontakt & Live</span>
                   <ArrowRight className="size-3.5 stroke-[1.5]" />
                 </button>
               </div>
             </div>
           )}
 
-          {/* STEP 3: Kontakt & Veröffentlichung */}
+          {/* STEP 3: Kontakt & Live */}
           {step === 3 && (
-            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-6 sm:p-8 rounded-sm space-y-6">
+            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-6 sm:p-8 rounded-2xl shadow-xs space-y-6">
               <div className="border-b border-[#d8ded9] pb-3">
                 <h2
                   className="text-lg font-normal text-[#202a31] tracking-[-0.015em]"
                   style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
                 >
-                  3. Bewerbungsweg & Veröffentlichung
+                  3. Bewerbungsmethode & Veröffentlichung
                 </h2>
                 <p className="text-[12.5px] text-[#7e8a84] font-light mt-0.5">
-                  Wie treten Bewerber direkt mit dir in Kontakt?
+                  Wie sollen Berliner Talente direkt mit dir in Kontakt treten?
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
-                  Bewerbungs-Link oder E-Mail *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.applyUrl}
-                  onChange={(e) => setFormData({ ...formData, applyUrl: e.target.value })}
-                  placeholder="https://deine-website.de/jobs oder jobs@dein-betrieb.de"
-                  className="w-full h-11 px-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-sm bg-[#fbfbf8] focus:border-[#202a31] outline-none transition-colors"
-                />
-                <p className="text-[11.5px] text-[#7e8a84] font-light">
-                  Bewerber klicken auf &bdquo;Jetzt bewerben&ldquo; und gelangen direkt zu deiner Kontaktadresse.
-                </p>
-              </div>
+              {/* Direct Application Options */}
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+                    Direkt-Bewerbungslink (Website / Karriereportal)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.applyUrl}
+                    onChange={(e) => setFormData({ ...formData, applyUrl: e.target.value })}
+                    placeholder="https://deine-firma.de/jobs/barista"
+                    className="w-full h-11 px-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
+                  />
+                </div>
 
-              <div className="space-y-2">
-                <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
-                  Verwaltungs-E-Mail (optional für Bestätigung)
-                </label>
-                <input
-                  type="email"
-                  value={formData.contactEmail}
-                  onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
-                  placeholder="kontakt@dein-betrieb.de"
-                  className="w-full h-11 px-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-sm bg-[#fbfbf8] focus:border-[#202a31] outline-none transition-colors"
-                />
+                <div className="relative my-2 flex items-center justify-center">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-[#d8ded9]" />
+                  </div>
+                  <span className="relative bg-[#fbfbf8] px-3 text-[10.5px] uppercase tracking-[0.2em] text-[#7e8a84]">
+                    oder
+                  </span>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+                    Bewerbungs-E-Mail / Ansprechpartner
+                  </label>
+                  <input
+                    type="email"
+                    value={formData.contactEmail}
+                    onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
+                    placeholder="jobs@morgenstern-cafe.berlin"
+                    className="w-full h-11 px-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
+                  />
+                  <p className="text-[11.5px] text-[#7e8a84] font-light">
+                    Kandidaten senden ihre Kurzbewerbung direkt an diese Adresse.
+                  </p>
+                </div>
               </div>
 
               {/* Trust Badge */}
-              <div className="rounded-sm border border-[#d8ded9] bg-[#f4f4ee]/60 p-4 flex items-start gap-3 text-[12.5px] text-[#5a6460]">
+              <div className="rounded-xl border border-[#d8ded9] bg-[#f4f4ee]/60 p-4 flex items-start gap-3 text-[12.5px] text-[#5a6460]">
                 <ShieldCheck className="size-4 text-[#202a31] shrink-0 mt-0.5 stroke-[1.5]" />
                 <div>
                   <p className="font-medium text-[#202a31]">
@@ -543,7 +562,7 @@ export function SimplePostJobForm() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="apple-press inline-flex items-center gap-2 rounded-sm bg-[#202a31] px-6 py-3 text-[13px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] disabled:opacity-50 transition-colors cursor-pointer"
+                  className="apple-press inline-flex items-center gap-2 rounded-xl bg-[#202a31] px-6 py-3 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] disabled:opacity-50 transition-colors cursor-pointer"
                 >
                   {loading ? 'Wird übermittelt...' : (
                     <>
@@ -556,61 +575,6 @@ export function SimplePostJobForm() {
             </div>
           )}
         </form>
-
-        {/* Right Column: Architectural Live Ledger Preview (5 Cols) */}
-        <div className="lg:col-span-5 sticky top-24 space-y-3">
-          <div className="flex items-center justify-between text-[10.5px] font-medium uppercase tracking-[0.2em] text-[#7e8a84] px-1">
-            <span>LIVE VORSCHAU DER ANZEIGE</span>
-            <span className="font-mono text-[10px] text-[#7e8a84]/80">VERIFIED DIRECT</span>
-          </div>
-
-          {/* Authentic JOBROOFS Silent Luxury Card */}
-          <div className="rounded-sm border border-[#d8ded9] bg-[#fbfbf8] p-6 transition-all space-y-4">
-            {/* Top Brand & Compensation Row */}
-            <div className="flex items-baseline justify-between border-b border-[#d8ded9] pb-4">
-              <div>
-                <div className="text-[10px] uppercase tracking-[0.16em] text-[#7e8a84] font-medium">
-                  {formData.company || 'Dein Unternehmen'} &middot; {formData.district}
-                </div>
-                <h3
-                  className="text-xl font-normal text-[#202a31] tracking-[-0.015em] mt-1 line-clamp-1"
-                  style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
-                >
-                  {formData.title || 'Specialty Barista & Gastronomy'}
-                </h3>
-              </div>
-              <div className="text-right shrink-0 pl-3">
-                <div className="text-[15px] font-mono text-[#202a31] font-normal">
-                  {formData.wage}
-                </div>
-                <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
-                  {formData.employmentType.split(' ')[0]}
-                </div>
-              </div>
-            </div>
-
-            {/* Description Preview in Editorial Ledger Style */}
-            <div className="text-[13.5px] text-[#5a6460] font-light leading-relaxed line-clamp-5 min-h-[90px]">
-              {formData.description || 'Hier erscheint die Aufgabenbeschreibung für Berliner Talente, sobald du sie im Formular eingibst...'}
-            </div>
-
-            {/* Footer Action Preview */}
-            <div className="pt-4 border-t border-[#d8ded9] flex items-center justify-between text-[11.5px] text-[#7e8a84] font-light">
-              <span className="flex items-center gap-1.5">
-                <span className="size-1.5 rounded-full bg-[#7e8a84]" />
-                <span>Direktkontakt &middot; Berlin {formData.district}</span>
-              </span>
-              <span className="text-[12px] font-normal text-[#202a31]">
-                Jetzt bewerben &rarr;
-              </span>
-            </div>
-          </div>
-
-          {/* Micro Helper Note */}
-          <div className="text-[11px] text-[#7e8a84] font-light px-1">
-            Diese Vorschau entspricht exakt der Darstellung im Berliner Job-Feed.
-          </div>
-        </div>
       </div>
     </div>
   );

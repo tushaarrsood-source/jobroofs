@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { X, Mail, Lock, User as UserIcon, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { useTranslation } from '@/lib/i18n/language-context';
+import { JobroofsMark } from '@/components/brand-logo';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -26,12 +27,12 @@ function formatAuthError(err: any, isDe: boolean): string {
     message.includes('invalid-credential')
   ) {
     return isDe
-      ? 'E-Mail oder Passwort nicht korrekt. Falls du noch kein Konto hast, klicke bitte oben auf „Registrieren“.'
+      ? 'E-Mail oder Passwort nicht korrekt. Falls du noch kein Konto hast, klicke bitte oben auf „Konto erstellen“.'
       : 'Incorrect email or password. If you do not have an account yet, please click "Register" above.';
   }
   if (code === 'auth/user-not-found') {
     return isDe
-      ? 'Kein Konto mit dieser E-Mail gefunden. Bitte erstelle zuerst ein kostenloses Konto (oben auf „Registrieren“ klicken).'
+      ? 'Kein Konto mit dieser E-Mail gefunden. Bitte erstelle zuerst ein kostenloses Konto.'
       : 'No account found with this email. Please click "Register" above to create one.';
   }
   if (code === 'auth/email-already-in-use') {
@@ -51,7 +52,7 @@ function formatAuthError(err: any, isDe: boolean): string {
   }
   if (code === 'auth/unauthorized-domain' || message.includes('unauthorized-domain')) {
     return isDe
-      ? 'Domain in Firebase Authentication noch nicht autorisiert. Bitte in der Firebase Console unter Authentication -> Settings -> Authorized domains „jobroofs.com“ und „www.jobroofs.com“ hinzufügen.'
+      ? 'Domain in Firebase Authentication noch nicht autorisiert. Bitte in der Firebase Console unter Authentication -> Settings -> Authorized domains „jobroofs.com“ hinzufügen.'
       : 'Domain not authorized in Firebase Console -> Authentication -> Settings -> Authorized domains. Please add "jobroofs.com".';
   }
   if (code === 'auth/popup-closed-by-user') {
@@ -205,32 +206,43 @@ export function AuthModal({
         ? 'Kostenlos registrieren und sofort Minijobs oder Temp-Jobs inserieren.'
         : 'Sign up for free to post temp jobs and manage your profile.'
       : isDe
-      ? 'Gib deine E-Mail-Adresse ein. Wir senden dir einen Link zum Zurücksetzen deines Passworts.'
+      ? 'Gib deine E-Mail-Adresse ein. Wir senden dir einen Link zum Zurücksetzen.'
       : 'Enter your email address and we will send you a reset link.');
 
   const modalContent = (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-y-auto">
-      {/* Frosted Glass Backdrop */}
+      {/* Deep Architectural Scrim */}
       <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-md transition-opacity"
+        className="fixed inset-0 bg-[#202A31]/45 backdrop-blur-sm transition-opacity"
         onClick={handleClose}
       />
 
-      {/* Modal Card */}
-      <div className="relative w-full max-w-md overflow-hidden rounded-[24px] border border-black/[0.08] bg-white p-6 sm:p-7 shadow-2xl transition-all my-8">
-        {/* Close Button */}
+      {/* Silent Luxury Modal Card */}
+      <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#D8DED9] bg-[#FBFBF8] p-6 sm:p-8 shadow-[0_24px_64px_rgba(32,42,49,0.16)] transition-all my-8 text-[#202A31]">
+        {/* Subtle Architectural Accent Line */}
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#202A31]" />
+
+        {/* Minimal Close Button */}
         <button
           type="button"
           onClick={handleClose}
-          className="absolute top-4 right-4 grid size-8 place-items-center rounded-full bg-black/[0.04] text-[#86868b] hover:bg-black/[0.08] hover:text-[#1d1d1f] transition cursor-pointer"
+          className="absolute top-5 right-5 grid size-7 place-items-center rounded-lg border border-[#D8DED9] bg-[#FBFBF8] text-[#7E8A84] hover:text-[#202A31] hover:border-[#202A31] transition-colors cursor-pointer"
           aria-label="Close"
         >
-          <X className="size-4" />
+          <X className="size-3.5" />
         </button>
+
+        {/* Brand Kicker Header */}
+        <div className="flex items-center gap-2 mb-3">
+          <JobroofsMark size={20} />
+          <span className="font-mono text-[9.5px] uppercase tracking-[0.24em] text-[#7E8A84] font-medium">
+            JOBROOFS // AUTH DIRECT
+          </span>
+        </div>
 
         {/* Mode Switcher Segmented Control */}
         {mode !== 'reset' ? (
-          <div className="mb-5 flex rounded-full bg-[#f5f5f7] p-1 border border-black/[0.04]">
+          <div className="mb-6 flex rounded-xl bg-[#F0F1EA] p-1 border border-[#D8DED9]">
             <button
               type="button"
               onClick={() => {
@@ -238,10 +250,10 @@ export function AuthModal({
                 setLocalError(null);
                 clearError();
               }}
-              className={`flex-1 rounded-full py-1.5 text-xs font-semibold transition cursor-pointer ${
+              className={`flex-1 rounded-lg py-2 text-xs font-medium tracking-wide transition-all cursor-pointer ${
                 mode === 'signin'
-                  ? 'bg-white text-[#1d1d1f] shadow-xs'
-                  : 'text-[#86868b] hover:text-[#1d1d1f]'
+                  ? 'bg-[#202A31] text-[#FBFBF8] shadow-xs'
+                  : 'text-[#7E8A84] hover:text-[#202A31]'
               }`}
             >
               {isDe ? 'Anmelden' : 'Sign In'}
@@ -253,17 +265,17 @@ export function AuthModal({
                 setLocalError(null);
                 clearError();
               }}
-              className={`flex-1 rounded-full py-1.5 text-xs font-semibold transition cursor-pointer ${
+              className={`flex-1 rounded-lg py-2 text-xs font-medium tracking-wide transition-all cursor-pointer ${
                 mode === 'signup'
-                  ? 'bg-white text-[#1d1d1f] shadow-xs'
-                  : 'text-[#86868b] hover:text-[#1d1d1f]'
+                  ? 'bg-[#202A31] text-[#FBFBF8] shadow-xs'
+                  : 'text-[#7E8A84] hover:text-[#202A31]'
               }`}
             >
               {isDe ? 'Konto erstellen' : 'Register'}
             </button>
           </div>
         ) : (
-          <div className="mb-4">
+          <div className="mb-5">
             <button
               type="button"
               onClick={() => {
@@ -271,7 +283,7 @@ export function AuthModal({
                 setLocalError(null);
                 setResetSent(false);
               }}
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-[#0071e3] hover:underline cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-[#7E8A84] hover:text-[#202A31] transition-colors cursor-pointer"
             >
               <ArrowLeft className="size-3.5" />
               <span>{isDe ? 'Zurück zur Anmeldung' : 'Back to sign in'}</span>
@@ -279,32 +291,32 @@ export function AuthModal({
           </div>
         )}
 
-        {/* Header */}
-        <div className="text-center pt-1">
-          <h2 className="text-xl sm:text-2xl font-semibold tracking-[-0.025em] text-[#1d1d1f]">
+        {/* Title & Subtitle */}
+        <div className="mb-5">
+          <h2 className="text-xl sm:text-[22px] font-semibold tracking-[-0.02em] text-[#202A31]">
             {effectiveTitle}
           </h2>
-          <p className="mt-1 text-xs sm:text-[13px] text-[#86868b] leading-relaxed">
+          <p className="mt-1 text-xs text-[#7E8A84] leading-relaxed">
             {effectiveSubtitle}
           </p>
         </div>
 
         {/* Error Alert */}
         {(localError || error) && (
-          <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700 leading-snug">
+          <div className="mb-4 rounded-xl border border-red-200 bg-red-50/80 p-3 text-xs text-red-800 leading-snug">
             {localError || (error ? formatAuthError({ message: error }, isDe) : null)}
           </div>
         )}
 
         {/* Password Reset Confirmation Banner */}
         {resetSent && (
-          <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-800 leading-snug flex items-start gap-2">
-            <CheckCircle2 className="size-4 text-emerald-600 shrink-0 mt-0.5" />
+          <div className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50/80 p-3 text-xs text-emerald-900 leading-snug flex items-start gap-2.5">
+            <CheckCircle2 className="size-4 text-emerald-700 shrink-0 mt-0.5" />
             <div>
               <p className="font-semibold">
                 {isDe ? 'E-Mail wurde versendet!' : 'Reset email sent!'}
               </p>
-              <p className="mt-0.5 text-[#5c6863]">
+              <p className="mt-0.5 text-emerald-800">
                 {isDe
                   ? 'Prüfe bitte deinen Posteingang (und ggf. Spam-Ordner) und folge den Anweisungen.'
                   : 'Please check your inbox (and spam folder) and follow the instructions.'}
@@ -316,12 +328,12 @@ export function AuthModal({
         {/* Google Sign-In Button (shown for signin & signup) */}
         {mode !== 'reset' && (
           <>
-            <div className="mt-5">
+            <div>
               <button
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={isSubmitting}
-                className="flex w-full items-center justify-center gap-3 rounded-full border border-black/[0.12] bg-white px-4 py-2.5 text-[13px] sm:text-sm font-semibold text-[#1d1d1f] shadow-2xs transition hover:bg-black/[0.02] hover:border-black/[0.2] active:scale-[0.98] disabled:opacity-50 cursor-pointer"
+                className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#D8DED9] bg-white hover:bg-[#F4F5EE] hover:border-[#202A31] px-4 py-2.5 text-xs font-medium text-[#202A31] shadow-2xs transition-colors disabled:opacity-50 cursor-pointer"
               >
                 <svg className="size-4 shrink-0" viewBox="0 0 24 24">
                   <path
@@ -353,12 +365,12 @@ export function AuthModal({
               </button>
             </div>
 
-            {/* Divider */}
+            {/* Architectural Divider */}
             <div className="relative my-4 flex items-center justify-center">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-black/[0.06]" />
+                <div className="w-full border-t border-[#D8DED9]" />
               </div>
-              <span className="relative bg-white px-2.5 text-[11px] font-medium text-[#86868b] uppercase tracking-wider">
+              <span className="relative bg-[#FBFBF8] px-3 font-mono text-[9px] uppercase tracking-[0.2em] text-[#7E8A84]">
                 {isDe ? 'oder mit E-Mail' : 'or with email'}
               </span>
             </div>
@@ -366,38 +378,38 @@ export function AuthModal({
         )}
 
         {/* Email Form */}
-        <form onSubmit={handleSubmitEmail} className="space-y-3 mt-4">
+        <form onSubmit={handleSubmitEmail} className="space-y-3.5">
           {mode === 'signup' && (
             <div>
-              <label className="block text-[11px] font-semibold text-[#86868b] uppercase tracking-wider mb-1">
+              <label className="block text-[10px] font-mono uppercase tracking-[0.18em] text-[#7E8A84] mb-1">
                 {isDe ? 'Name oder Unternehmen (optional)' : 'Name or Company (optional)'}
               </label>
               <div className="relative">
-                <UserIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 size-3.5 text-[#86868b]" />
+                <UserIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 size-3.5 text-[#7E8A84]" />
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder={isDe ? 'z. B. Café Morgenstern' : 'e.g. Café Morgenstern'}
-                  className="w-full rounded-xl border border-black/[0.08] bg-[#f5f5f7]/60 py-2 pl-9 pr-3 text-xs text-[#1d1d1f] placeholder:text-[#86868b] focus:border-[#0071e3] focus:bg-white focus:outline-none transition"
+                  className="w-full rounded-xl border border-[#D8DED9] bg-white py-2.5 pl-9 pr-3 text-xs text-[#202A31] placeholder:text-[#9DA9A2] focus:border-[#202A31] focus:ring-1 focus:ring-[#202A31] focus:outline-none transition"
                 />
               </div>
             </div>
           )}
 
           <div>
-            <label className="block text-[11px] font-semibold text-[#86868b] uppercase tracking-wider mb-1">
-              E-Mail
+            <label className="block text-[10px] font-mono uppercase tracking-[0.18em] text-[#7E8A84] mb-1">
+              {isDe ? 'E-Mail-Adresse' : 'Email Address'}
             </label>
             <div className="relative">
-              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 size-3.5 text-[#86868b]" />
+              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 size-3.5 text-[#7E8A84]" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@beispiel.de"
-                className="w-full rounded-xl border border-black/[0.08] bg-[#f5f5f7]/60 py-2 pl-9 pr-3 text-xs text-[#1d1d1f] placeholder:text-[#86868b] focus:border-[#0071e3] focus:bg-white focus:outline-none transition"
+                className="w-full rounded-xl border border-[#D8DED9] bg-white py-2.5 pl-9 pr-3 text-xs text-[#202A31] placeholder:text-[#9DA9A2] focus:border-[#202A31] focus:ring-1 focus:ring-[#202A31] focus:outline-none transition"
               />
             </div>
           </div>
@@ -405,8 +417,8 @@ export function AuthModal({
           {mode !== 'reset' && (
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="block text-[11px] font-semibold text-[#86868b] uppercase tracking-wider">
-                  Passwort
+                <label className="block text-[10px] font-mono uppercase tracking-[0.18em] text-[#7E8A84]">
+                  {isDe ? 'Passwort' : 'Password'}
                 </label>
                 {mode === 'signin' && (
                   <button
@@ -416,14 +428,14 @@ export function AuthModal({
                       setLocalError(null);
                       setResetSent(false);
                     }}
-                    className="text-[11px] font-medium text-[#0071e3] hover:underline cursor-pointer"
+                    className="text-[11px] font-medium text-[#7E8A84] hover:text-[#202A31] transition-colors cursor-pointer underline underline-offset-2"
                   >
                     {isDe ? 'Passwort vergessen?' : 'Forgot password?'}
                   </button>
                 )}
               </div>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 size-3.5 text-[#86868b]" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 size-3.5 text-[#7E8A84]" />
                 <input
                   type="password"
                   required
@@ -431,7 +443,7 @@ export function AuthModal({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={mode === 'signup' ? (isDe ? 'Mindestens 6 Zeichen' : 'Min. 6 characters') : '••••••••'}
-                  className="w-full rounded-xl border border-black/[0.08] bg-[#f5f5f7]/60 py-2 pl-9 pr-3 text-xs text-[#1d1d1f] placeholder:text-[#86868b] focus:border-[#0071e3] focus:bg-white focus:outline-none transition"
+                  className="w-full rounded-xl border border-[#D8DED9] bg-white py-2.5 pl-9 pr-3 text-xs text-[#202A31] placeholder:text-[#9DA9A2] focus:border-[#202A31] focus:ring-1 focus:ring-[#202A31] focus:outline-none transition"
                 />
               </div>
             </div>
@@ -440,14 +452,14 @@ export function AuthModal({
           <button
             type="submit"
             disabled={isSubmitting}
-            className="apple-btn-primary w-full !h-10 !text-xs font-semibold mt-2 cursor-pointer"
+            className="w-full rounded-xl bg-[#202A31] hover:bg-[#161D22] text-[#FBFBF8] py-3 text-xs font-medium tracking-wide shadow-xs transition-colors flex items-center justify-center gap-2 mt-2 cursor-pointer disabled:opacity-50"
           >
             {isSubmitting ? (
-              <Loader2 className="size-4 animate-spin" />
+              <Loader2 className="size-4 animate-spin text-[#FBFBF8]" />
             ) : mode === 'signin' ? (
-              isDe ? 'Anmelden' : 'Sign In'
+              isDe ? 'Jetzt anmelden' : 'Sign In'
             ) : mode === 'signup' ? (
-              isDe ? 'Konto kostenlos erstellen' : 'Create Free Account'
+              isDe ? 'Konto erstellen' : 'Create Free Account'
             ) : (
               isDe ? 'Link anfordern' : 'Send Reset Link'
             )}
@@ -456,7 +468,7 @@ export function AuthModal({
 
         {/* Footer info & toggle */}
         {mode !== 'reset' && (
-          <div className="mt-4 text-center text-xs text-[#86868b]">
+          <div className="mt-5 text-center text-xs text-[#7E8A84] border-t border-[#D8DED9]/60 pt-4">
             {mode === 'signin' ? (
               <p>
                 {isDe ? 'Noch kein Konto? ' : "Don't have an account? "}
@@ -467,7 +479,7 @@ export function AuthModal({
                     clearError();
                     setLocalError(null);
                   }}
-                  className="font-semibold text-[#0071e3] hover:underline cursor-pointer"
+                  className="font-medium text-[#202A31] hover:underline underline-offset-2 cursor-pointer ml-1"
                 >
                   {isDe ? 'Jetzt registrieren' : 'Register now'}
                 </button>
@@ -482,7 +494,7 @@ export function AuthModal({
                     clearError();
                     setLocalError(null);
                   }}
-                  className="font-semibold text-[#0071e3] hover:underline cursor-pointer"
+                  className="font-medium text-[#202A31] hover:underline underline-offset-2 cursor-pointer ml-1"
                 >
                   {isDe ? 'Hier anmelden' : 'Sign in here'}
                 </button>
