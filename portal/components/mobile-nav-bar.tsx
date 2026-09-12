@@ -17,44 +17,44 @@ export function MobileNavBar() {
   return (
     <nav
       aria-label="Mobile Navigation"
-      className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t border-[#e5eae7] bg-[#fafbfa]/95 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.03)]"
+      className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t border-[#d8ded9] bg-[#fbfbf8]/95 backdrop-blur-xl shadow-[0_-4px_20px_rgba(32,42,49,0.06)]"
       style={{
-        paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 6px)',
+        paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 8px)',
       }}
     >
-      <div className="mx-auto flex h-14 max-w-sm items-center justify-around px-4">
+      <div className="mx-auto flex h-14 max-w-sm items-center justify-around px-6">
         {/* 1. Jobs Tab */}
         <Link
           href="/"
-          className={`flex flex-col items-center justify-center py-1 transition-all select-none ${
+          className={`flex flex-col items-center justify-center py-1 transition-colors select-none ${
             isJobs
-              ? 'text-[#1b4332] font-bold'
-              : 'text-[#5c6863] hover:text-[#111816]'
+              ? 'text-[#202a31] font-medium'
+              : 'text-[#7e8a84] hover:text-[#202a31]'
           }`}
         >
-          <Briefcase className={`size-5 transition-transform ${isJobs ? 'scale-110 stroke-[2.4]' : 'stroke-[1.8]'}`} />
+          <Briefcase className={`size-5 transition-transform ${isJobs ? 'scale-105 stroke-[1.8]' : 'stroke-[1.3]'}`} />
           <span className="mt-0.5 text-[10px] tracking-tight">Jobs</span>
         </Link>
 
         {/* 2. Center Action Button (+) */}
         <Link
           href="/post-a-job"
-          aria-label="Job schalten"
-          className="flex size-10 items-center justify-center rounded-full bg-[#1b4332] text-white shadow-sm ring-2 ring-[#e8f1ec] transition-transform active:scale-[0.92] hover:bg-[#122f23] cursor-pointer"
+          aria-label={isDe ? 'Job inserieren' : 'Post a Job'}
+          className="flex size-10 items-center justify-center rounded-full bg-[#202a31] text-[#fbfbf8] shadow-xs ring-2 ring-[#d8ded9] transition-transform active:scale-[0.92] hover:bg-[#161d22] cursor-pointer"
         >
-          <Plus className="size-5 stroke-[2.6]" />
+          <Plus className="size-5 stroke-[1.8]" />
         </Link>
 
         {/* 3. Profile Tab */}
         <Link
           href="/profil"
-          className={`flex flex-col items-center justify-center py-1 transition-all select-none ${
+          className={`flex flex-col items-center justify-center py-1 transition-colors select-none ${
             isProfile
-              ? 'text-[#1b4332] font-bold'
-              : 'text-[#5c6863] hover:text-[#111816]'
+              ? 'text-[#202a31] font-medium'
+              : 'text-[#7e8a84] hover:text-[#202a31]'
           }`}
         >
-          <User className={`size-5 transition-transform ${isProfile ? 'scale-110 stroke-[2.4]' : 'stroke-[1.8]'}`} />
+          <User className={`size-5 transition-transform ${isProfile ? 'scale-105 stroke-[1.8]' : 'stroke-[1.3]'}`} />
           <span className="mt-0.5 text-[10px] tracking-tight">
             {isDe ? 'Profil' : 'Profile'}
           </span>

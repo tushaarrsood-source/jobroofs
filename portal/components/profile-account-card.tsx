@@ -16,23 +16,23 @@ export function ProfileAccountCard() {
   return (
     <>
       {/* 1. Main Profile Card */}
-      <div className="rounded-2xl border border-[#D8DED9] bg-[#FBFBF8] p-6 sm:p-7 shadow-xs">
+      <div className="rounded-2xl border border-[#D8DED9] bg-[#FBFBF8] p-4 sm:p-7 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-4 min-w-0">
+          <div className="flex items-center gap-3.5 min-w-0">
             {user?.photoURL ? (
               <img
                 src={user.photoURL}
                 alt=""
-                className="size-14 rounded-full object-cover shrink-0 ring-1 ring-[#D8DED9]"
+                className="size-12 sm:size-14 rounded-full object-cover shrink-0 ring-1 ring-[#D8DED9]"
               />
             ) : (
-              <div className="flex size-14 items-center justify-center rounded-2xl bg-[#F0F1EA] text-[#202A31] border border-[#D8DED9] shrink-0">
-                <UserIcon className="size-7 text-[#7E8A84]" />
+              <div className="flex size-12 sm:size-14 items-center justify-center rounded-2xl bg-[#F0F1EA] text-[#202A31] border border-[#D8DED9] shrink-0">
+                <UserIcon className="size-6 sm:size-7 text-[#7E8A84]" />
               </div>
             )}
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-semibold tracking-[-0.02em] text-[#202A31] truncate">
+                <h1 className="text-lg sm:text-xl font-semibold tracking-[-0.02em] text-[#202A31] truncate">
                   {user?.displayName || (user ? user.email?.split('@')[0] : (isDe ? 'Mein Bereich' : 'My Account'))}
                 </h1>
                 {isMasterAccount(user?.email) ? (
@@ -66,7 +66,7 @@ export function ProfileAccountCard() {
               <button
                 type="button"
                 onClick={() => signOutUser()}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-[#D8DED9] bg-white hover:bg-[#F0F1EA] px-4 py-2 text-xs font-medium text-[#202A31] transition cursor-pointer"
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 rounded-xl border border-[#D8DED9] bg-white hover:bg-[#F0F1EA] px-4 py-2 text-xs font-medium text-[#202A31] transition cursor-pointer"
               >
                 <LogOut className="size-3.5 text-[#7E8A84]" />
                 <span>{isDe ? 'Abmelden' : 'Sign out'}</span>
@@ -75,7 +75,7 @@ export function ProfileAccountCard() {
               <button
                 type="button"
                 onClick={() => setAuthOpen(true)}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-[#202A31] hover:bg-[#161D22] px-5 py-2.5 text-xs font-medium text-[#FBFBF8] shadow-xs transition cursor-pointer"
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 rounded-xl bg-[#202A31] hover:bg-[#161D22] px-5 py-2.5 text-xs font-medium text-[#FBFBF8] shadow-xs transition cursor-pointer"
               >
                 <span>{isDe ? 'Jetzt Anmelden' : 'Sign in now'}</span>
               </button>

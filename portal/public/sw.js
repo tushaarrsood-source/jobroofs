@@ -1,22 +1,21 @@
-// JOBROOFS Self-Clearing Service Worker
-// Automatically flushes all stale cache storage and unregisters itself across all client browsers.
+// JOBROOFS PWA Service Worker
+// Network-first pass-through ensuring always live data while fulfilling PWA installation criteria
 self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(keys.map((key) => caches.delete(key)));
-    }).then(() => {
-      return self.registration.unregister();
-    }).then(() => {
-      return self.clients.claim();
-    })
-  );
+  event.waitUntil(self.clients.claim());
 });
 
-// Pass-through fetch with zero cache interception
+// Network-first pass-through with zero stale caching
 self.addEventListener('fetch', (event) => {
-  event.respondWith(fetch(event.request));
+  event.respondWith(
+    fetch(event.request).catch(() => {
+      // Offline fallback if network is completely unavailable
+      return new Response('JOBROOFS ist offline. Bitte überprüfe deine Internetverbindung.', {
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+      });
+    })
+  );
 });

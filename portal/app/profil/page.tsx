@@ -5,6 +5,7 @@ import { SiteFooter } from '@/components/site-footer';
 import { User, Globe, Briefcase, Home, HelpCircle, Shield, ChevronRight, ArrowRight } from 'lucide-react';
 import { ProfileAccountCard } from '@/components/profile-account-card';
 import { MyListings } from '@/components/my-listings';
+import { ProfileAppTrigger } from '@/components/profile-app-trigger';
 
 export const metadata: Metadata = {
   title: 'Mein Bereich · JOBROOFS',
@@ -31,6 +32,9 @@ export default function ProfilePage() {
             </h2>
 
             <div className="overflow-hidden rounded-2xl border border-[#D8DED9] bg-[#FBFBF8] divide-y divide-[#D8DED9] shadow-xs">
+              {/* App Install Trigger */}
+              <ProfileAppTrigger />
+
               <Link
                 href="/post-a-job"
                 className="flex items-center justify-between p-4.5 text-sm font-medium text-[#202A31] hover:bg-[#F0F1EA] transition-colors cursor-pointer"

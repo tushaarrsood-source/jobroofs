@@ -218,7 +218,7 @@ export function AuthModal({
       />
 
       {/* Silent Luxury Modal Card */}
-      <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#D8DED9] bg-[#FBFBF8] p-6 sm:p-8 shadow-[0_24px_64px_rgba(32,42,49,0.16)] transition-all my-8 text-[#202A31]">
+      <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-[#D8DED9] bg-[#FBFBF8] p-5 sm:p-8 shadow-[0_24px_64px_rgba(32,42,49,0.16)] transition-all my-4 sm:my-8 text-[#202A31]">
         {/* Subtle Architectural Accent Line */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#202A31]" />
 
@@ -391,7 +391,7 @@ export function AuthModal({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder={isDe ? 'z. B. Café Morgenstern' : 'e.g. Café Morgenstern'}
-                  className="w-full rounded-xl border border-[#D8DED9] bg-white py-2.5 pl-9 pr-3 text-xs text-[#202A31] placeholder:text-[#9DA9A2] focus:border-[#202A31] focus:ring-1 focus:ring-[#202A31] focus:outline-none transition"
+                  className="w-full rounded-xl border border-[#D8DED9] bg-white py-2.5 pl-9 pr-3 text-base sm:text-xs text-[#202A31] placeholder:text-[#9DA9A2] focus:border-[#202A31] focus:ring-1 focus:ring-[#202A31] focus:outline-none transition"
                 />
               </div>
             </div>
@@ -409,7 +409,7 @@ export function AuthModal({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@beispiel.de"
-                className="w-full rounded-xl border border-[#D8DED9] bg-white py-2.5 pl-9 pr-3 text-xs text-[#202A31] placeholder:text-[#9DA9A2] focus:border-[#202A31] focus:ring-1 focus:ring-[#202A31] focus:outline-none transition"
+                className="w-full rounded-xl border border-[#D8DED9] bg-white py-2.5 pl-9 pr-3 text-base sm:text-xs text-[#202A31] placeholder:text-[#9DA9A2] focus:border-[#202A31] focus:ring-1 focus:ring-[#202A31] focus:outline-none transition"
               />
             </div>
           </div>
@@ -443,7 +443,7 @@ export function AuthModal({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={mode === 'signup' ? (isDe ? 'Mindestens 6 Zeichen' : 'Min. 6 characters') : '••••••••'}
-                  className="w-full rounded-xl border border-[#D8DED9] bg-white py-2.5 pl-9 pr-3 text-xs text-[#202A31] placeholder:text-[#9DA9A2] focus:border-[#202A31] focus:ring-1 focus:ring-[#202A31] focus:outline-none transition"
+                  className="w-full rounded-xl border border-[#D8DED9] bg-white py-2.5 pl-9 pr-3 text-base sm:text-xs text-[#202A31] placeholder:text-[#9DA9A2] focus:border-[#202A31] focus:ring-1 focus:ring-[#202A31] focus:outline-none transition"
                 />
               </div>
             </div>

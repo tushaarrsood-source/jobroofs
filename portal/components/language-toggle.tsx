@@ -7,17 +7,17 @@ export function LanguageToggle({ className = '' }: { className?: string }) {
 
   return (
     <div
-      className={`inline-flex items-center rounded-lg border border-foreground/15 bg-white p-0.5 text-xs font-semibold shadow-xs ${className}`}
+      className={`inline-flex items-center rounded-sm border border-[#d8ded9] bg-white p-0.5 text-xs font-medium shadow-2xs ${className}`}
       role="group"
       aria-label="Language selector"
     >
       <button
         type="button"
         onClick={() => setLocale('de')}
-        className={`rounded-md px-2.5 py-1 text-xs font-semibold pill-tactile cursor-pointer transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] ${
+        className={`rounded-xs px-2 sm:px-2.5 py-1 text-[11px] font-mono tracking-tight cursor-pointer transition-colors duration-150 ${
           locale === 'de'
-            ? 'bg-[#18221e] text-white shadow-2xs'
-            : 'text-slate-600 hover:text-slate-900'
+            ? 'bg-[#202a31] text-[#fbfbf8]'
+            : 'text-[#7e8a84] hover:text-[#202a31]'
         }`}
         aria-pressed={locale === 'de'}
       >
@@ -26,10 +26,10 @@ export function LanguageToggle({ className = '' }: { className?: string }) {
       <button
         type="button"
         onClick={() => setLocale('en')}
-        className={`rounded-md px-2.5 py-1 text-xs font-semibold pill-tactile cursor-pointer transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] ${
+        className={`rounded-xs px-2 sm:px-2.5 py-1 text-[11px] font-mono tracking-tight cursor-pointer transition-colors duration-150 ${
           locale === 'en'
-            ? 'bg-[#18221e] text-white shadow-2xs'
-            : 'text-slate-600 hover:text-slate-900'
+            ? 'bg-[#202a31] text-[#fbfbf8]'
+            : 'text-[#7e8a84] hover:text-[#202a31]'
         }`}
         aria-pressed={locale === 'en'}
       >

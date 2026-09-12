@@ -9,13 +9,13 @@ export function EditorialHero() {
       {/* Top Headline Section */}
       <div className="max-w-4xl">
         {/* Micro Kicker */}
-        <div className="text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#7e8a84] mb-4 sm:mb-5">
+        <div className="text-[9.5px] sm:text-[10.5px] font-medium uppercase tracking-[0.12em] sm:tracking-[0.22em] text-[#7e8a84] mb-3 sm:mb-5 break-words">
           BERLIN WORKFORCE ARCHITECTURE &middot; DIRECT POSITIONS
         </div>
 
         {/* Slender Editorial Headline */}
         <h1
-          className="text-4xl sm:text-6xl lg:text-[70px] font-light sm:font-normal tracking-[-0.025em] text-[#202a31] leading-[1.08]"
+          className="text-3xl sm:text-6xl lg:text-[70px] font-light sm:font-normal tracking-[-0.025em] text-[#202a31] leading-[1.1] sm:leading-[1.08] break-words"
           style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
         >
           The portal for temp jobs.
@@ -28,18 +28,18 @@ export function EditorialHero() {
       </div>
 
       {/* Hairline Divider */}
-      <div className="w-full h-px bg-[#d8ded9] my-8 sm:my-10" />
+      <div className="w-full h-px bg-[#d8ded9] my-7 sm:my-10" />
 
       {/* Split Grid: Left = Post Your Job Hub, Right = Live Ledger */}
-      <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
+      <div className="grid gap-8 lg:gap-10 lg:grid-cols-12 lg:items-center">
         {/* Left Column: Ultra-Clean "Post a Job" Hub */}
         <div className="lg:col-span-6 space-y-4">
-          <div className="text-[10px] font-mono font-medium uppercase tracking-[0.24em] text-[#7e8a84]">
+          <div className="text-[10px] font-mono font-medium uppercase tracking-[0.16em] sm:tracking-[0.24em] text-[#7e8a84]">
             FOR EMPLOYERS &middot; DIRECT LISTINGS
           </div>
 
           <h2
-            className="text-4xl sm:text-5xl lg:text-[56px] font-light sm:font-normal text-[#202a31] tracking-[-0.025em] leading-[1.08]"
+            className="text-3xl sm:text-5xl lg:text-[56px] font-light sm:font-normal text-[#202a31] tracking-[-0.025em] leading-[1.1] sm:leading-[1.08]"
             style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
           >
             Post a job.
@@ -48,7 +48,7 @@ export function EditorialHero() {
           <div className="pt-2">
             <Link
               href="/post-a-job"
-              className="apple-press group inline-flex items-center justify-between gap-4 rounded-xl bg-[#202a31] hover:bg-[#161D22] text-[#fbfbf8] px-6 py-3.5 text-[14px] font-medium tracking-[0.02em] transition-all cursor-pointer shadow-xs min-w-[200px]"
+              className="apple-press group inline-flex items-center justify-between gap-4 rounded-xl bg-[#202a31] hover:bg-[#161D22] text-[#fbfbf8] px-6 py-3.5 text-[14px] font-medium tracking-[0.02em] transition-all cursor-pointer shadow-xs w-full sm:w-auto min-w-[200px]"
             >
               <span>Start here</span>
               <ArrowRight className="size-4 stroke-[1.5] group-hover:translate-x-0.5 transition-transform" />
@@ -58,7 +58,7 @@ export function EditorialHero() {
 
         {/* Right Column: Architectural Live Ledger */}
         <div className="lg:col-span-6 lg:pl-4">
-          <div className="flex items-center justify-between text-[10.5px] font-medium uppercase tracking-[0.2em] text-[#7e8a84] mb-3">
+          <div className="flex items-center justify-between text-[10px] sm:text-[10.5px] font-medium uppercase tracking-[0.12em] sm:tracking-[0.2em] text-[#7e8a84] mb-3">
             <span>CURRENT OPENINGS &middot; BERLIN KIEZE</span>
             <span className="font-mono text-[10px] text-[#7e8a84]/80">VERIFIED</span>
           </div>
@@ -68,10 +68,10 @@ export function EditorialHero() {
             {/* Row 01 */}
             <Link
               href="/?district=mitte"
-              className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-2 -mx-2 cursor-pointer"
+              className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-1 sm:px-2 sm:-mx-2 cursor-pointer"
             >
               <div>
-                <div className="text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
+                <div className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
                   Specialty Barista & Gastronomy
                 </div>
                 <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
@@ -91,10 +91,10 @@ export function EditorialHero() {
             {/* Row 02 */}
             <Link
               href="/?district=kreuzberg"
-              className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-2 -mx-2 cursor-pointer"
+              className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-1 sm:px-2 sm:-mx-2 cursor-pointer"
             >
               <div>
-                <div className="text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
+                <div className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
                   Concept Store & Retail Host
                 </div>
                 <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
@@ -114,10 +114,10 @@ export function EditorialHero() {
             {/* Row 03 */}
             <Link
               href="/?district=friedrichshain"
-              className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-2 -mx-2 cursor-pointer"
+              className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-1 sm:px-2 sm:-mx-2 cursor-pointer"
             >
               <div>
-                <div className="text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
+                <div className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
                   Exhibition & Event Assistant
                 </div>
                 <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">

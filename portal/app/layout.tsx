@@ -4,6 +4,7 @@ import { AuthProvider } from '@/lib/firebase/auth-context';
 import { LanguageProvider } from '@/lib/i18n/language-context';
 import { MobileNavBar } from '@/components/mobile-nav-bar';
 import { CookieBanner } from '@/components/cookie-banner';
+import { PwaInstallPrompt } from '@/components/pwa-install-prompt';
 import './globals.css';
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -114,29 +115,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de">
+    <html lang="de" className="overflow-x-clip max-w-full">
       <body
-        className={`${plusJakarta.variable} antialiased selection:bg-[#202a31] selection:text-[#fbfbf8] pb-24 md:pb-0 font-sans bg-[#fbfbf8] text-[#202a31] relative min-h-screen`}
+        className={`${plusJakarta.variable} antialiased selection:bg-[#202a31] selection:text-[#fbfbf8] pb-24 md:pb-0 font-sans bg-[#fbfbf8] text-[#202a31] relative min-h-screen overflow-x-clip max-w-full`}
       >
         <AuthProvider>
           <LanguageProvider>
             {children}
             <CookieBanner />
             <MobileNavBar />
+            <PwaInstallPrompt />
           </LanguageProvider>
         </AuthProvider>
         <script
           dangerouslySetInnerHTML={{
             __html: `
               if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(regs) {
-                  for (var reg of regs) reg.unregister();
-                });
-              }
-              if (typeof window !== 'undefined' && 'caches' in window) {
-                caches.keys().then(function(keys) {
-                  for (var key of keys) caches.delete(key);
-                });
+                navigator.serviceWorker.register('/sw.js').catch(function() {});
               }
             `,
           }}

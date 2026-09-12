@@ -135,7 +135,7 @@ export function JobFeed({ initialJobs = [] }: { initialJobs: any[] }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Jobtitel, Firma oder Stichwort suchen..."
-            className="w-full h-11 pl-10 pr-4 rounded-sm border border-[#d8ded9] bg-white text-[13.5px] text-[#202a31] placeholder:text-[#7e8a84] focus:border-[#202a31] focus:ring-0 outline-none transition-colors"
+            className="w-full h-11 pl-10 pr-4 rounded-sm border border-[#d8ded9] bg-white text-base sm:text-[13.5px] text-[#202a31] placeholder:text-[#7e8a84] focus:border-[#202a31] focus:ring-0 outline-none transition-colors"
           />
           {query && (
             <button

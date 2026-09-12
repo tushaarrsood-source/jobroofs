@@ -218,39 +218,42 @@ export function SimplePostJobForm() {
             <button
               type="button"
               onClick={() => setStep(1)}
-              className={`px-3 py-1.5 rounded-sm text-[11.5px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-sm text-[11px] sm:text-[11.5px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
                 step === 1
                   ? 'bg-[#202a31] text-[#fbfbf8]'
                   : 'text-[#7e8a84] hover:text-[#202a31]'
               }`}
             >
-              1. Basisdaten
+              <span className="sm:hidden">1. Basis</span>
+              <span className="hidden sm:inline">1. Basisdaten</span>
             </button>
             <button
               type="button"
               onClick={() => {
                 if (formData.title && formData.company) setStep(2);
               }}
-              className={`px-3 py-1.5 rounded-sm text-[11.5px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-sm text-[11px] sm:text-[11.5px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
                 step === 2
                   ? 'bg-[#202a31] text-[#fbfbf8]'
                   : 'text-[#7e8a84] hover:text-[#202a31]'
               }`}
             >
-              2. Konditionen
+              <span className="sm:hidden">2. Details</span>
+              <span className="hidden sm:inline">2. Konditionen</span>
             </button>
             <button
               type="button"
               onClick={() => {
                 if (formData.title && formData.company && formData.description) setStep(3);
               }}
-              className={`px-3 py-1.5 rounded-sm text-[11.5px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-sm text-[11px] sm:text-[11.5px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
                 step === 3
                   ? 'bg-[#202a31] text-[#fbfbf8]'
                   : 'text-[#7e8a84] hover:text-[#202a31]'
               }`}
             >
-              3. Kontakt & Live
+              <span className="sm:hidden">3. Kontakt</span>
+              <span className="hidden sm:inline">3. Kontakt & Live</span>
             </button>
           </div>
         </div>
@@ -268,7 +271,7 @@ export function SimplePostJobForm() {
 
           {/* STEP 1: Basisdaten */}
           {step === 1 && (
-            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-6 sm:p-8 rounded-2xl shadow-xs space-y-6">
+            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-5 sm:p-8 rounded-2xl shadow-xs space-y-6">
               <div className="border-b border-[#d8ded9] pb-3">
                 <h2
                   className="text-lg font-normal text-[#202a31] tracking-[-0.015em]"
@@ -292,7 +295,7 @@ export function SimplePostJobForm() {
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="z. B. Specialty Barista, Servicekraft, Event-Aushilfe"
-                  className="w-full h-11 px-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
+                  className="w-full h-11 px-3.5 text-base sm:text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
                 />
               </div>
 
@@ -307,7 +310,7 @@ export function SimplePostJobForm() {
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                   placeholder="z. B. Café Morgenstern GmbH"
-                  className="w-full h-11 px-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
+                  className="w-full h-11 px-3.5 text-base sm:text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
                 />
               </div>
 
@@ -437,7 +440,7 @@ export function SimplePostJobForm() {
                   value={formData.wage}
                   onChange={(e) => setFormData({ ...formData, wage: e.target.value })}
                   placeholder="Oder individuelle Angabe, z. B. 18,50 € / Std. + Trinkgeld"
-                  className="w-full h-10 px-3.5 text-[13px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors mt-2"
+                  className="w-full h-10 px-3.5 text-base sm:text-[13px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors mt-2"
                 />
               </div>
 
@@ -457,7 +460,7 @@ export function SimplePostJobForm() {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Beschreibe kurz die Aufgaben, gewünschte Schichten oder Sprachkenntnisse (z. B. Deutsch B1 oder Englisch)."
-                  className="w-full p-3.5 text-[13.5px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors resize-y leading-relaxed"
+                  className="w-full p-3.5 text-base sm:text-[13.5px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors resize-y leading-relaxed"
                 />
               </div>
 
@@ -483,7 +486,7 @@ export function SimplePostJobForm() {
 
           {/* STEP 3: Kontakt & Live */}
           {step === 3 && (
-            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-6 sm:p-8 rounded-2xl shadow-xs space-y-6">
+            <div className="border border-[#d8ded9] bg-[#fbfbf8] p-5 sm:p-8 rounded-2xl shadow-xs space-y-6">
               <div className="border-b border-[#d8ded9] pb-3">
                 <h2
                   className="text-lg font-normal text-[#202a31] tracking-[-0.015em]"
@@ -507,7 +510,7 @@ export function SimplePostJobForm() {
                     value={formData.applyUrl}
                     onChange={(e) => setFormData({ ...formData, applyUrl: e.target.value })}
                     placeholder="https://deine-firma.de/jobs/barista"
-                    className="w-full h-11 px-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
+                    className="w-full h-11 px-3.5 text-base sm:text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
                   />
                 </div>
 
@@ -529,7 +532,7 @@ export function SimplePostJobForm() {
                     value={formData.contactEmail}
                     onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
                     placeholder="jobs@morgenstern-cafe.berlin"
-                    className="w-full h-11 px-3.5 text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
+                    className="w-full h-11 px-3.5 text-base sm:text-[14px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
                   />
                   <p className="text-[11.5px] text-[#7e8a84] font-light">
                     Kandidaten senden ihre Kurzbewerbung direkt an diese Adresse.

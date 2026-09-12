@@ -3,13 +3,14 @@
 import Link from '@/components/ui/link';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { BrandLogo } from '@/components/brand-logo';
+import { openAppInstallModal } from '@/components/pwa-install-prompt';
 
 export function SiteFooter() {
   const { isDe } = useTranslation();
 
   return (
     <footer className="bg-[#182026] text-[#a0aaa4] border-t border-[#2a363f] mt-24">
-      <div className="mx-auto max-w-5xl px-6 md:px-8 py-16">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 md:px-8 py-16">
         <div className="grid gap-12 sm:grid-cols-3">
           {/* Brand Col */}
           <div className="sm:col-span-1">
@@ -36,6 +37,15 @@ export function SiteFooter() {
                 <Link href="/post-a-job" className="text-[#fbfbf8] hover:underline underline-offset-4">
                   Job in Berlin inserieren (ab 0 €)
                 </Link>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={openAppInstallModal}
+                  className="hover:text-[#fbfbf8] transition-colors text-left cursor-pointer"
+                >
+                  {isDe ? 'JOBROOFS als App laden (PWA)' : 'Install JOBROOFS WebApp'}
+                </button>
               </li>
               <li>
                 <Link href="/impressum" className="hover:text-[#fbfbf8] transition-colors">
