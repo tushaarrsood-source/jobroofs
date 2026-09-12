@@ -36,12 +36,11 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
     (job.application?.email ? `mailto:${job.application.email}` : '#');
 
   const handleApplyClick = (e: React.MouseEvent) => {
-    if (!user) {
+    if (applyUrl === '#') {
       e.preventDefault();
-      setPendingTarget(applyUrl);
-      setAuthModalOpen(true);
       return;
     }
+    // Directly navigates to 100% verified employer application portal
   };
 
   const handleAuthSuccess = () => {

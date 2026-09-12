@@ -52,7 +52,7 @@ export function getDirectEmployerJobs(limit = 6): PreviewJob[] {
 }
 
 export function getPremiumPartnerJobs(limit = 3): PreviewJob[] {
-  const partners = ['the barn', 'charit', 'kesselhaus', 'bonanza', 'daluma'];
+  const partners = ['charit', "l'osteria", '25hours', 'kadewe', 'michelberger', 'bvg', 'soho house'];
   const featured = ALL_SOURCED_JOBS.filter((j) =>
     partners.some((p) => j.company.toLowerCase().includes(p))
   );

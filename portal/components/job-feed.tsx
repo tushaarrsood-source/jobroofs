@@ -271,8 +271,21 @@ export function JobFeed({
             })}
           </div>
         ) : (
-          <div className="py-5 text-center">
-            <p className="text-[13px] text-[#7e8a84] font-light">Keine direkten Inserate für diesen Filter</p>
+          <div className="py-7 px-4 text-center rounded-xl border border-[#d8ded9] bg-white/70">
+            <p className="text-[13.5px] font-medium text-[#202a31]">
+              Noch keine direkten Inserate vorhanden.
+            </p>
+            <p className="text-[12px] text-[#7e8a84] font-light mt-1 max-w-md mx-auto">
+              Es gibt aktuell noch keine direkten Stellenanzeigen von Arbeitgebern. Sei der erste Berliner Betrieb!
+            </p>
+            <div className="mt-3.5">
+              <Link
+                href="/post-a-job"
+                className="apple-press inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#202a31] text-[#fbfbf8] text-[12px] font-medium hover:bg-[#161D22] transition-colors cursor-pointer shadow-2xs"
+              >
+                <span>+ Jetzt als erster Betrieb inserieren</span>
+              </Link>
+            </div>
           </div>
         )}
       </div>
@@ -284,7 +297,7 @@ export function JobFeed({
         </div>
         <div className="relative flex justify-center">
           <span className="bg-[#fbfbf8] px-4 text-[10px] sm:text-[10.5px] font-medium uppercase tracking-[0.18em] text-[#7e8a84]">
-            Alle 1.640+ Stellen im Kiez durchsuchen
+            Alle verifizierten Stellen im Kiez durchsuchen
           </span>
         </div>
       </div>

@@ -31,7 +31,7 @@ export default function AllJobsPage() {
       map.set(j.slug || j.id, j);
     }
   }
-  for (const j of ALL_SOURCED_JOBS.slice(0, 40)) {
+  for (const j of ALL_SOURCED_JOBS) {
     if (!map.has(j.slug || j.id) && !isJobSuppressed(j.id) && !isJobSuppressed(j.slug)) {
       map.set(j.slug || j.id, j);
     }
@@ -78,7 +78,7 @@ export default function AllJobsPage() {
               <ArrowLeft className="size-3.5 stroke-[1.25]" /> Startseite
             </Link>
             <span className="font-normal text-[#7e8a84]">
-              Gesamter Stellenkatalog (1.600 Jobs)
+              Gesamter verifizierter Stellenkatalog ({ALL_SOURCED_JOBS.length} Jobs)
             </span>
           </div>
         </div>

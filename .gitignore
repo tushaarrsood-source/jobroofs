@@ -50,3 +50,4 @@ portal/.vercel/
 *.njsproj
 *.sln
 *.sw?
+scratch/

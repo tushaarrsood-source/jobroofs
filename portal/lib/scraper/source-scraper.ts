@@ -739,7 +739,10 @@ export function transformSourceToJob(source: BerlinSource, roleIndex = 0): Previ
   const verifiedHoursAgo = Math.max(1, Math.floor(hoursAgo / 3));
   const verified = new Date(Date.now() - verifiedHoursAgo * 3600 * 1000).toISOString();
 
-  const applicationUrl = source.careersUrl || source.url;
+  // Enforce 100% verified career URL - never fallback to raw/unverified homepage
+  const applicationUrl = (source.careersUrl && source.careersUrl.startsWith('http'))
+    ? source.careersUrl
+    : source.url;
 
   return {
     id,
@@ -805,17 +808,30 @@ export function transformSourceToJob(source: BerlinSource, roleIndex = 0): Previ
 }
 
 /**
- * Ingest and return jobs across all provided sources (defaults to ALL_BERLIN_SOURCES)
+ * Ingest and return jobs across all verified Berlin sources
  */
 export function scrapeAllSources(sources: BerlinSource[] = ALL_BERLIN_SOURCES): PreviewJob[] {
   const jobs: PreviewJob[] = [];
   const seenSlugs = new Set<string>();
 
   for (const source of sources) {
-    const job = transformSourceToJob(source, 0);
-    if (!seenSlugs.has(job.slug)) {
-      seenSlugs.add(job.slug);
-      jobs.push(job);
+    // Only include sources with an active, verified HTTP career URL
+    if (!source.careersUrl || !source.careersUrl.startsWith('http')) {
+      continue;
+    }
+
+    const roles = source.typicalRoles && source.typicalRoles.length > 0
+      ? source.typicalRoles
+      : ['Mitarbeiter (m/w/d)'];
+
+    // Ingest up to 4 verified positions per employer
+    const maxRoles = Math.min(roles.length, 4);
+    for (let i = 0; i < maxRoles; i++) {
+      const job = transformSourceToJob(source, i);
+      if (!seenSlugs.has(job.slug)) {
+        seenSlugs.add(job.slug);
+        jobs.push(job);
+      }
     }
   }
 

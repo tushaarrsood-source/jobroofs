@@ -5,34 +5,6 @@ import Link from '@/components/ui/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { getMyListings, type UserListing } from '@/lib/storage/my-listings';
 
-// Verified flagship Berlin partner employers featured in the Premium Spotlight
-const VERIFIED_PREMIUM_PARTNERS = [
-  {
-    slug: 'gastronomy-the-barn-coffee-roasters-barista',
-    title: 'Specialty Barista & Roastery',
-    company: 'The Barn Coffee Roasters',
-    district: 'Mitte · Auguststraße',
-    pay: '16,50 € / Std.',
-    jobType: 'Minijob / Teilzeit',
-  },
-  {
-    slug: 'healthcare-support-charite-universitatsmedizin-ambulanzen-mfa-ambulanz',
-    title: 'Klinischer Support & Betreuung',
-    company: 'Charité Universitätsmedizin',
-    district: 'Mitte · Campus Mitte',
-    pay: '16,00 € / Std.',
-    jobType: 'Werkstudent',
-  },
-  {
-    slug: 'events-kesselhaus-maschinenhaus-kulturbrauerei-tresenkraft',
-    title: 'Event Host & Kulturgastronomie',
-    company: 'Kesselhaus Kulturbrauerei',
-    district: 'Prenzlauer Berg · Knaackstr.',
-    pay: '17,00 € / Std.',
-    jobType: 'Flexibel / Event',
-  },
-];
-
 export function EditorialHero() {
   const [userPremiumListings, setUserPremiumListings] = useState<UserListing[]>([]);
 
@@ -144,36 +116,16 @@ export function EditorialHero() {
               </Link>
             ))}
 
-            {/* Verified Partner Premium Listings */}
-            {VERIFIED_PREMIUM_PARTNERS.map((job) => (
-              <Link
-                key={job.slug}
-                href={`/jobs/${job.slug}`}
-                className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] hover:bg-[#f4f4ee]/70 transition-colors px-1 sm:px-2 sm:-mx-2 cursor-pointer"
-              >
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors">
-                      {job.title}
-                    </span>
-                    <span className="font-mono text-[8.5px] uppercase text-[#7e8a84] border border-[#d8ded9] px-1.5 py-0.2 rounded-xs">
-                      PREMIUM
-                    </span>
-                  </div>
-                  <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
-                    {job.company} &middot; {job.district}
-                  </div>
-                </div>
-                <div className="text-right shrink-0 pl-3">
-                  <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
-                    {job.pay}
-                  </div>
-                  <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
-                    {job.jobType}
-                  </div>
-                </div>
-              </Link>
-            ))}
+            {userPremiumListings.length === 0 && (
+              <div className="py-7 px-4 text-center">
+                <p className="text-[13.5px] font-medium text-[#202a31]">
+                  Aktuell noch keine Spotlight-Inserate.
+                </p>
+                <p className="mt-1 text-[12px] text-[#7e8a84] font-light max-w-sm mx-auto">
+                  Sichere deinem Berliner Betrieb 60 Tage maximale Sichtbarkeit ganz oben auf JOBROOFS für 49 €.
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Spotlight Booking Action Card */}
@@ -204,7 +156,7 @@ export function EditorialHero() {
           <div className="flex items-center justify-between pt-3 text-[11px] text-[#7e8a84] font-light">
             <span className="flex items-center gap-1.5">
               <span className="size-1.5 rounded-full bg-[#202a31]" />
-              <span>Verifizierte Berliner Premium-Partner</span>
+              <span>Berliner Betriebe im Spotlight</span>
             </span>
             <Link href="/pricing" className="hover:text-[#202a31] transition-colors">
               Premium-Vorteile ansehen &rarr;

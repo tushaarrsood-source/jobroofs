@@ -85,6 +85,27 @@ export function SimplePostJobForm() {
     }
   }, []);
 
+  const goToStep = (targetStep: 1 | 2 | 3) => {
+    setError(null);
+    if (targetStep === 2) {
+      if (!formData.title.trim() || !formData.company.trim()) {
+        setError('Bitte gib zuerst die Stellenbezeichnung und dein Unternehmen in Schritt 1 an.');
+        return;
+      }
+    }
+    if (targetStep === 3) {
+      if (!formData.title.trim() || !formData.company.trim()) {
+        setError('Bitte fülle zuerst Schritt 1 (Basisdaten) aus.');
+        return;
+      }
+      if (!formData.description.trim()) {
+        setError('Bitte gib in Schritt 2 eine kurze Tätigkeitsbeschreibung an.');
+        return;
+      }
+    }
+    setStep(targetStep);
+  };
+
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -135,32 +156,7 @@ export function SimplePostJobForm() {
       const submissionId = `direct-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
       const jobSlug = `${companySlug}-${titleSlug}-${submissionId.slice(-4)}`;
 
-      // 1. Submit to API
-      await fetch('/api/employer/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          submitterEmail: formData.contactEmail || formData.applyUrl,
-          pricingPlan: formData.tier,
-          payload: {
-            id: submissionId,
-            slug: jobSlug,
-            title: formData.title,
-            company: formData.company,
-            district: formData.district,
-            employmentForms: [formData.employmentType],
-            payText: formData.wage,
-            description: formData.description,
-            tier: formData.tier,
-            application: {
-              url: formData.applyUrl.startsWith('http') ? formData.applyUrl : null,
-              email: formData.applyUrl.includes('@') ? formData.applyUrl : formData.contactEmail,
-            },
-          },
-        }),
-      }).catch(() => {});
-
-      // 2. Save locally so it appears immediately on homepage in Direct Employer section & Premium Spotlight
+      // 1. Save locally so it's safely stored for this employer
       saveMyListing({
         id: submissionId,
         type: 'job',
@@ -176,7 +172,7 @@ export function SimplePostJobForm() {
         pricePaidEur: formData.tier === 'premium' ? 49 : 29,
       });
 
-      // 3. Save to Firestore if available
+      // 2. Save to Firestore if configured
       createJobInFirestore(
         {
           userId: 'employer-' + Date.now(),
@@ -195,11 +191,44 @@ export function SimplePostJobForm() {
         submissionId
       ).catch(() => {});
 
-      // 4. Broadcast update to reactive components
+      // 3. Dispatch update event
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new Event('jobroofs_listings_updated'));
       }
 
+      // 4. Initiate Stripe Checkout
+      const checkoutRes = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tier: formData.tier,
+          jobData: {
+            slug: jobSlug,
+            title: formData.title,
+            company: formData.company,
+            district: formData.district,
+            wage: formData.wage,
+            contactEmail: formData.contactEmail || undefined,
+            applyUrl: formData.applyUrl || undefined,
+          },
+        }),
+      });
+
+      const checkoutData = await checkoutRes.json();
+
+      if (checkoutData.checkoutUrl) {
+        // Direct seamless redirect to Stripe Checkout
+        window.location.href = checkoutData.checkoutUrl;
+        return;
+      }
+
+      if (checkoutData.error && !checkoutData.mock) {
+        setError(checkoutData.error);
+        setLoading(false);
+        return;
+      }
+
+      // If mock/preview mode or Stripe keys not present, show instant success
       setSuccess(true);
     } catch (err: any) {
       setError(err.message || 'Ein unerwarteter Fehler ist aufgetreten.');
@@ -298,7 +327,7 @@ export function SimplePostJobForm() {
           <div className="flex items-center gap-1 p-0.5 rounded-sm border border-[#d8ded9] bg-transparent self-start sm:self-auto">
             <button
               type="button"
-              onClick={() => setStep(1)}
+              onClick={() => goToStep(1)}
               className={`px-2.5 sm:px-3 py-1.5 rounded-sm text-[11px] sm:text-[11.5px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
                 step === 1
                   ? 'bg-[#202a31] text-[#fbfbf8]'
@@ -310,9 +339,7 @@ export function SimplePostJobForm() {
             </button>
             <button
               type="button"
-              onClick={() => {
-                if (formData.title && formData.company) setStep(2);
-              }}
+              onClick={() => goToStep(2)}
               className={`px-2.5 sm:px-3 py-1.5 rounded-sm text-[11px] sm:text-[11.5px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
                 step === 2
                   ? 'bg-[#202a31] text-[#fbfbf8]'
@@ -324,9 +351,7 @@ export function SimplePostJobForm() {
             </button>
             <button
               type="button"
-              onClick={() => {
-                if (formData.title && formData.company && formData.description) setStep(3);
-              }}
+              onClick={() => goToStep(3)}
               className={`px-2.5 sm:px-3 py-1.5 rounded-sm text-[11px] sm:text-[11.5px] font-normal tracking-[0.02em] transition-colors cursor-pointer ${
                 step === 3
                   ? 'bg-[#202a31] text-[#fbfbf8]'
@@ -695,11 +720,17 @@ export function SimplePostJobForm() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="apple-press inline-flex items-center gap-2 rounded-xl bg-[#202a31] px-6 py-3 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] disabled:opacity-50 transition-colors cursor-pointer"
+                  className="apple-press inline-flex items-center gap-2 rounded-xl bg-[#202a31] px-6 py-3 text-[13px] font-medium tracking-[0.02em] text-[#fbfbf8] hover:bg-[#161D22] disabled:opacity-50 transition-colors cursor-pointer shadow-xs"
                 >
-                  {loading ? 'Wird übermittelt...' : (
+                  {loading ? (
+                    'Weiterleitung zu Stripe...'
+                  ) : (
                     <>
-                      <span>Anzeige jetzt veröffentlichen</span>
+                      <span>
+                        {formData.tier === 'premium'
+                          ? 'Mit Stripe sicher bezahlen (49 €)'
+                          : 'Mit Stripe sicher bezahlen (29 €)'}
+                      </span>
                       <ArrowRight className="size-3.5 stroke-[1.5]" />
                     </>
                   )}

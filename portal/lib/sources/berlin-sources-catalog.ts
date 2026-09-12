@@ -88,13 +88,10 @@ export {
   localServicesSources,
 };
 
-// Master collection of all 1,600 Berlin Sources across all 32 industry niches
-export const ALL_BERLIN_SOURCES: BerlinSource[] = [
-  ...hospitalityAndTourismSources,
-  ...retailAndLogisticsSources,
-  ...communityAndCareSources,
-  ...businessAndCreativeSources,
-];
+import { VERIFIED_BERLIN_SOURCES } from './verified-sources';
+
+// Master collection of 100% verified Berlin Employers with tested HTTP 200 career URLs
+export const ALL_BERLIN_SOURCES: BerlinSource[] = VERIFIED_BERLIN_SOURCES;
 
 // Pre-indexed map for high-performance lookup
 const sourcesById = new Map<string, BerlinSource>();
