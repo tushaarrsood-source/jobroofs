@@ -281,6 +281,17 @@ export function SimplePostJobForm() {
             <p className="mt-1.5 text-[14.5px] text-[#5a6460] font-light">
               Erreiche motivierte Studierende, Aushilfen und Fachkräfte direkt in deinem Kiez &mdash; ohne Agenturen.
             </p>
+            <p className="mt-2.5 text-[12px] text-[#7e8a84] font-light">
+              29 € für 30 Tage &middot; 49 € für 60 Tage &middot; Mit dem Fortfahren stimmst du den{' '}
+              <Link href="/agb" className="underline underline-offset-2 hover:text-[#202a31] transition-colors">
+                AGB
+              </Link>{' '}
+              und{' '}
+              <Link href="/datenschutz" className="underline underline-offset-2 hover:text-[#202a31] transition-colors">
+                Richtlinien
+              </Link>{' '}
+              zu.
+            </p>
           </div>
 
           {/* Silent Luxury Segmented Step Indicator */}
@@ -627,11 +638,11 @@ export function SimplePostJobForm() {
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-[13.5px] font-medium text-[#202a31]">Standard Inserat</span>
+                      <span className="text-[13.5px] font-medium text-[#202a31]">Standard Inserat (30 Tage)</span>
                       <span className="font-mono text-[13px] text-[#202a31]">29 €</span>
                     </div>
                     <p className="mt-1 text-[11.5px] text-[#7e8a84] font-light leading-relaxed">
-                      30 Tage online &middot; Sofort gelistet im neuen Direktbereich über der Suche.
+                      30 Tage Laufzeit &middot; 100% Direktkontakt ohne Zeitarbeit &middot; Sofort gelistet im Direktbereich über der Suche.
                     </p>
                   </button>
 
@@ -648,12 +659,12 @@ export function SimplePostJobForm() {
                     <div className="flex items-center justify-between">
                       <span className="text-[13.5px] font-medium text-[#202a31] flex items-center gap-1.5">
                         <Sparkles className="size-3.5 text-[#9e7d3b]" />
-                        <span>Premium Spotlight</span>
+                        <span>Premium Spotlight (60 Tage)</span>
                       </span>
                       <span className="font-mono text-[13px] text-[#202a31]">49 €</span>
                     </div>
                     <p className="mt-1 text-[11.5px] text-[#5a6460] font-light leading-relaxed">
-                      60 Tage online &middot; Ganz oben im <strong>Premium-Spotlight</strong> (Hero) + Direktbereich + Premium-Badge.
+                      60 Tage Laufzeit &middot; Ganz oben im <strong>Premium-Spotlight</strong> (Hero) &middot; Priorisierter Direktbereich &middot; Premium-Badge.
                     </p>
                   </button>
                 </div>
