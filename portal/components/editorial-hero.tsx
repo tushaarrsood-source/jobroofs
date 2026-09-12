@@ -1,7 +1,7 @@
 'use client';
 
 import Link from '@/components/ui/link';
-import { PlusCircle, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export function EditorialHero() {
   return (
@@ -32,44 +32,27 @@ export function EditorialHero() {
 
       {/* Split Grid: Left = Post Your Job Hub, Right = Live Ledger */}
       <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
-        {/* Left Column: High-Impact "Post your job" Workstation */}
+        {/* Left Column: Ultra-Clean "Post a Job" Hub */}
         <div className="lg:col-span-6 space-y-4">
-          <div className="text-[10.5px] font-medium uppercase tracking-[0.2em] text-[#7e8a84]">
-            FOR EMPLOYERS &middot; BERLIN VENUES
+          <div className="text-[10px] font-mono font-medium uppercase tracking-[0.24em] text-[#7e8a84]">
+            FOR EMPLOYERS &middot; DIRECT LISTINGS
           </div>
 
           <h2
-            className="text-2xl sm:text-[30px] font-normal text-[#202a31] tracking-[-0.015em] leading-tight"
+            className="text-4xl sm:text-5xl lg:text-[56px] font-light sm:font-normal text-[#202a31] tracking-[-0.025em] leading-[1.08]"
             style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
           >
-            Verstärkung gesucht? In 2 Minuten online.
+            Post a job.
           </h2>
 
-          <p className="text-[14px] sm:text-[15px] text-[#5a6460] font-light leading-relaxed max-w-md">
-            Inseriere offene Schichten oder Minijobs direkt in deinem Kiez. Erreiche motivierte Talente ohne Agentur-Umwege.
-          </p>
-
-          <div className="pt-2 space-y-2.5">
-            {/* Big Prominent "Post your job" Button */}
+          <div className="pt-2">
             <Link
               href="/post-a-job"
-              className="apple-press group inline-flex items-center justify-between gap-4 rounded-sm bg-[#202a31] hover:bg-[#2d3a43] text-[#fbfbf8] px-6 py-3.5 text-[14px] font-normal tracking-[0.02em] transition-all cursor-pointer w-full sm:w-auto min-w-[280px]"
+              className="apple-press group inline-flex items-center justify-between gap-4 rounded-xl bg-[#202a31] hover:bg-[#161D22] text-[#fbfbf8] px-6 py-3.5 text-[14px] font-medium tracking-[0.02em] transition-all cursor-pointer shadow-xs min-w-[200px]"
             >
-              <div className="flex items-center gap-2.5">
-                <PlusCircle className="size-4 stroke-[1.5]" />
-                <span>Job jetzt inserieren (ab 0 €)</span>
-              </div>
+              <span>Start here</span>
               <ArrowRight className="size-4 stroke-[1.5] group-hover:translate-x-0.5 transition-transform" />
             </Link>
-
-            {/* Micro Trust Indicators */}
-            <div className="flex items-center gap-2 text-[11.5px] text-[#7e8a84] font-light">
-              <span>100% Direktkontakt</span>
-              <span>&middot;</span>
-              <span>Keine Kreditkarte nötig</span>
-              <span>&middot;</span>
-              <span>Sofort live</span>
-            </div>
           </div>
         </div>
 
