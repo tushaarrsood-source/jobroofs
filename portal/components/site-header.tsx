@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from '@/components/ui/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { PlusCircle, User as UserIcon, LogOut, Smartphone } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { useAuth } from '@/lib/firebase/auth-context';
@@ -12,10 +12,21 @@ import { BrandLogo } from '@/components/brand-logo';
 import { openAppInstallModal } from '@/components/pwa-install-prompt';
 
 export function SiteHeader({ control = false }: { control?: boolean } = {}) {
+  const router = useRouter();
   const { t, isDe } = useTranslation();
   const { user, signOutUser } = useAuth();
   const [authOpen, setAuthOpen] = useState(false);
+  const [pendingPostJob, setPendingPostJob] = useState(false);
   const pathname = usePathname();
+
+  const handlePostJobClick = () => {
+    if (!user) {
+      setPendingPostJob(true);
+      setAuthOpen(true);
+    } else {
+      router.push('/post-a-job');
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#d8ded9] bg-[#fbfbf8]/92 backdrop-blur-md transition-all">
@@ -40,13 +51,14 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
           </Link>
 
           {/* Post a job CTA - Silent Luxury Deep Slate (Hidden on < sm since mobile nav has prominent center + button) */}
-          <Link
-            href="/post-a-job"
+          <button
+            type="button"
+            onClick={handlePostJobClick}
             className="apple-press hidden sm:inline-flex items-center gap-1.5 rounded-sm bg-[#202a31] px-3.5 sm:px-4 py-1.5 sm:py-2 text-[12.5px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
           >
             <PlusCircle className="size-3.5 stroke-[1.25]" />
             <span>{isDe ? 'Job inserieren' : 'Post a Job'}</span>
-          </Link>
+          </button>
 
           {/* App Install Trigger */}
           <button
@@ -89,7 +101,19 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
         </div>
       </div>
 
-      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
+      <AuthModal
+        isOpen={authOpen}
+        onClose={() => {
+          setAuthOpen(false);
+          setPendingPostJob(false);
+        }}
+        onSuccess={() => {
+          if (pendingPostJob) {
+            setPendingPostJob(false);
+            router.push('/post-a-job');
+          }
+        }}
+      />
     </header>
   );
 }

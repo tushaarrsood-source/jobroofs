@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from '@/components/ui/link';
 import { Search, MapPin, Euro, Clock, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getMyListings } from '@/lib/storage/my-listings';
 import { useTranslation } from '@/lib/i18n/language-context';
+import { useAuth } from '@/lib/firebase/auth-context';
+import { AuthModal } from '@/components/auth-modal';
 
 const DISTRICTS = [
   { id: 'all', labelDe: 'Alle Bezirke', labelEn: 'All Districts' },
@@ -146,7 +149,9 @@ export function JobFeed({
   initialJobs: any[];
   initialDirectJobs?: any[];
 }) {
+  const router = useRouter();
   const { isDe } = useTranslation();
+  const { user } = useAuth();
   const [jobs, setJobs] = useState<any[]>(initialJobs);
   const [directJobs, setDirectJobs] = useState<any[]>(initialDirectJobs);
   const [query, setQuery] = useState('');
@@ -154,6 +159,15 @@ export function JobFeed({
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState<'newest' | 'urgent' | 'wage'>('newest');
   const [currentPage, setCurrentPage] = useState(1);
+  const [authOpen, setAuthOpen] = useState(false);
+
+  const handlePostJobClick = () => {
+    if (!user) {
+      setAuthOpen(true);
+    } else {
+      router.push('/post-a-job');
+    }
+  };
 
   // Hydrate direct employer jobs from localStorage and verified partners
   useEffect(() => {
@@ -310,12 +324,13 @@ export function JobFeed({
               {isDe ? 'Direkt vom Berliner Betrieb' : 'Direct from Berlin Employer'}
             </span>
           </div>
-          <Link
-            href="/post-a-job"
+          <button
+            type="button"
+            onClick={handlePostJobClick}
             className="apple-press inline-flex items-center gap-1 text-[11.5px] font-medium text-[#7e8a84] hover:text-[#202a31] transition-colors cursor-pointer"
           >
             <span>{isDe ? '+ Inserat aufgeben' : '+ Post a job'}</span>
-          </Link>
+          </button>
         </div>
 
         {/* Direct Job Rows — same style as main feed, tiny crown badge */}
@@ -391,23 +406,15 @@ export function JobFeed({
             })}
           </div>
         ) : (
-          <div className="py-7 px-4 text-center rounded-xl border border-[#d8ded9] bg-white/70">
+          <div className="py-6 px-4 text-center rounded-xl border border-[#d8ded9] bg-white/70">
             <p className="text-[13.5px] font-medium text-[#202a31]">
               {isDe ? 'Noch keine direkten Inserate vorhanden.' : 'No direct listings yet.'}
             </p>
             <p className="text-[12px] text-[#7e8a84] font-light mt-1 max-w-md mx-auto">
               {isDe
-                ? 'Es gibt aktuell noch keine direkten Stellenanzeigen von Arbeitgebern. Sei der erste Berliner Betrieb!'
-                : 'There are currently no direct employer job postings. Be the first Berlin business!'}
+                ? 'Direkte Stellenanzeigen von verifizierten Berliner Betrieben erscheinen hier.'
+                : 'Direct job postings from verified Berlin businesses appear here.'}
             </p>
-            <div className="mt-3.5">
-              <Link
-                href="/post-a-job"
-                className="apple-press inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#202a31] text-[#fbfbf8] text-[12px] font-medium hover:bg-[#161D22] transition-colors cursor-pointer shadow-2xs"
-              >
-                <span>{isDe ? '+ Jetzt als erster Betrieb inserieren' : '+ Post the first direct listing'}</span>
-              </Link>
-            </div>
           </div>
         )}
       </div>
@@ -675,6 +682,12 @@ export function JobFeed({
           </button>
         </nav>
       )}
+
+      <AuthModal
+        isOpen={authOpen}
+        onClose={() => setAuthOpen(false)}
+        onSuccess={() => router.push('/post-a-job')}
+      />
     </section>
   );
 }

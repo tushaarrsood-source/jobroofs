@@ -1,14 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from '@/components/ui/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { getMyListings, type UserListing } from '@/lib/storage/my-listings';
 import { useTranslation } from '@/lib/i18n/language-context';
+import { useAuth } from '@/lib/firebase/auth-context';
+import { AuthModal } from '@/components/auth-modal';
 
 export function EditorialHero() {
+  const router = useRouter();
   const { isDe } = useTranslation();
+  const { user } = useAuth();
   const [userPremiumListings, setUserPremiumListings] = useState<UserListing[]>([]);
+  const [authOpen, setAuthOpen] = useState(false);
 
   useEffect(() => {
     const checkPremium = () => {
@@ -22,11 +28,18 @@ export function EditorialHero() {
     return () => window.removeEventListener('jobroofs_listings_updated', checkPremium);
   }, []);
 
+  const handlePostJobClick = () => {
+    if (!user) {
+      setAuthOpen(true);
+    } else {
+      router.push('/post-a-job');
+    }
+  };
+
   return (
     <section className="relative pt-8 pb-10 sm:pt-14 sm:pb-16">
       {/* Top Headline Section */}
       <div className="max-w-4xl">
-
         {/* Slender Editorial Headline */}
         <h1
           className="text-3xl sm:text-6xl lg:text-[70px] font-light sm:font-normal tracking-[-0.025em] text-[#202a31] leading-[1.1] sm:leading-[1.08] break-words"
@@ -46,9 +59,9 @@ export function EditorialHero() {
       {/* Hairline Divider */}
       <div className="w-full h-px bg-[#d8ded9] my-7 sm:my-10" />
 
-      {/* Split Grid: Left = Post Your Job Hub, Right = Premium Spotlight */}
+      {/* Split Grid: Left = Single Clean "Post a Job" Hub, Right = Premium Spotlight Ledger */}
       <div className="grid gap-8 lg:gap-10 lg:grid-cols-12 lg:items-center">
-        {/* Left Column: Ultra-Clean "Post a Job" Hub */}
+        {/* Left Column: Ultra-Clean Single "Post a Job" CTA Hub */}
         <div className="lg:col-span-6 space-y-4">
           <div className="text-[10px] font-mono font-medium uppercase tracking-[0.16em] sm:tracking-[0.24em] text-[#7e8a84]">
             {isDe ? 'FÜR ARBEITGEBER · DIREKTE INSERATE' : 'FOR EMPLOYERS · DIRECT LISTINGS'}
@@ -62,20 +75,21 @@ export function EditorialHero() {
           </h2>
 
           <div className="pt-2">
-            <Link
-              href="/post-a-job"
+            <button
+              type="button"
+              onClick={handlePostJobClick}
               className="apple-press group inline-flex items-center justify-between gap-4 rounded-xl bg-[#202a31] hover:bg-[#161D22] text-[#fbfbf8] px-6 py-3.5 text-[14px] font-medium tracking-[0.02em] transition-all cursor-pointer shadow-xs w-full sm:w-auto min-w-[200px]"
             >
-              <span>{isDe ? 'Jetzt starten' : 'Start here'}</span>
+              <span>{isDe ? 'Job inserieren' : 'Post a job'}</span>
               <ArrowRight className="size-4 stroke-[1.5] group-hover:translate-x-0.5 transition-transform" />
-            </Link>
+            </button>
             <p className="mt-2 text-[12px] text-[#7e8a84] font-light">
               {isDe ? 'In wenigen Schritten online inserieren' : 'Online in just a few steps'}
             </p>
           </div>
         </div>
 
-        {/* Right Column: Dedicated PREMIUM SPOTLIGHT */}
+        {/* Right Column: Dedicated PREMIUM SPOTLIGHT (Display-only ledger, no extra CTA button) */}
         <div className="lg:col-span-6 lg:pl-4">
           <div className="flex items-center justify-between text-[10px] sm:text-[10.5px] font-medium uppercase tracking-[0.12em] sm:tracking-[0.2em] text-[#7e8a84] mb-3">
             <span className="flex items-center gap-1.5 text-[#202a31] font-semibold">
@@ -127,51 +141,31 @@ export function EditorialHero() {
                 </p>
                 <p className="mt-1 text-[12px] text-[#7e8a84] font-light max-w-sm mx-auto">
                   {isDe
-                    ? 'Sichere deinem Berliner Betrieb 60 Tage maximale Sichtbarkeit ganz oben auf JOBROOFS.'
-                    : 'Secure 60 days of maximum visibility at the top of JOBROOFS for your Berlin business.'}
+                    ? '60 Tage maximale Sichtbarkeit ganz oben auf JOBROOFS für Berliner Betriebe.'
+                    : '60 days of maximum visibility at the top of JOBROOFS for Berlin businesses.'}
                 </p>
               </div>
             )}
           </div>
 
-          {/* Spotlight Booking Action Card */}
-          <div className="mt-3.5 pt-3 border-t border-[#d8ded9]">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#f4f4ee]/80 hover:bg-[#f4f4ee] border border-[#d8ded9] rounded-xl p-3.5 transition-colors">
-              <div>
-                <div className="text-[12.5px] font-medium text-[#202a31] flex items-center gap-1.5">
-                  <span>{isDe ? 'Dein Job im Premium-Spotlight?' : 'Your job in Premium Spotlight?'}</span>
-                  <span className="text-[10px] font-mono font-medium text-[#202a31] bg-[#ecece4] px-1.5 py-0.5 rounded-xs border border-[#d8ded9]">
-                    {isDe ? 'Top-Platzierung' : 'Top Placement'}
-                  </span>
-                </div>
-                <div className="text-[11px] text-[#7e8a84] font-light mt-0.5">
-                  {isDe
-                    ? '60 Tage ganz oben platziert für maximale Reichweite & Bewerber in Berlin'
-                    : 'Placed at the top for 60 days for maximum reach & applicants in Berlin'}
-                </div>
-              </div>
-              <Link
-                href="/post-a-job?tier=premium"
-                className="apple-press shrink-0 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#202a31] text-[#fbfbf8] text-[12px] font-medium tracking-[0.02em] hover:bg-[#161D22] transition-colors cursor-pointer"
-              >
-                <span>{isDe ? 'Spotlight buchen' : 'Book Spotlight'}</span>
-                <ArrowRight className="size-3" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Ledger Sub-meta */}
-          <div className="flex items-center justify-between pt-3 text-[11px] text-[#7e8a84] font-light">
+          {/* Minimal Ledger Sub-meta */}
+          <div className="flex items-center justify-between pt-3 border-t border-[#d8ded9] text-[11px] text-[#7e8a84] font-light">
             <span className="flex items-center gap-1.5">
               <span className="size-1.5 rounded-full bg-[#202a31]" />
               <span>{isDe ? 'Berliner Betriebe im Spotlight' : 'Berlin businesses in spotlight'}</span>
             </span>
-            <Link href="/post-a-job?tier=premium" className="hover:text-[#202a31] transition-colors">
-              {isDe ? 'Premium-Vorteile ansehen →' : 'View premium benefits →'}
-            </Link>
+            <span className="font-mono text-[10px] text-[#7e8a84]">
+              {isDe ? 'Top-Platzierung' : 'Top placement'}
+            </span>
           </div>
         </div>
       </div>
+
+      <AuthModal
+        isOpen={authOpen}
+        onClose={() => setAuthOpen(false)}
+        onSuccess={() => router.push('/post-a-job')}
+      />
     </section>
   );
 }

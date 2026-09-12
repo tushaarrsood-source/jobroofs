@@ -14,6 +14,8 @@ import {
   Copy,
   Check,
   MessageCircle,
+  User as UserIcon,
+  Loader2,
 } from 'lucide-react';
 import { saveMyListing, getMyListings, upgradeMyListingLocally } from '@/lib/storage/my-listings';
 import {
@@ -69,7 +71,7 @@ const QUICK_WAGES = [
 ];
 
 export function SimplePostJobForm() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { isDe } = useTranslation();
   const [authOpen, setAuthOpen] = useState(false);
   const [isFreeEligible, setIsFreeEligible] = useState(true);
@@ -94,20 +96,25 @@ export function SimplePostJobForm() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Auto pre-fill user email when logged in
+  useEffect(() => {
+    if (user?.email && !formData.contactEmail) {
+      setFormData((prev) => ({ ...prev, contactEmail: user.email || '' }));
+    }
+  }, [user]);
+
+  // If user is not logged in after auth loads, auto-prompt auth modal
+  useEffect(() => {
+    if (!authLoading && !user) {
+      setAuthOpen(true);
+    }
+  }, [authLoading, user]);
+
   // Check 1st free job eligibility
   useEffect(() => {
     async function checkEligibility() {
       if (user?.uid) {
         const eligible = await isUserEligibleForFreeJob(user.uid);
-        setIsFreeEligible(eligible);
-        if (!eligible && formData.tier === 'free') {
-          setFormData((prev) => ({ ...prev, tier: 'starter' }));
-        } else if (eligible && formData.tier === 'starter') {
-          setFormData((prev) => ({ ...prev, tier: 'free' }));
-        }
-      } else {
-        const localJobs = getMyListings().filter((l) => l.type === 'job');
-        const eligible = localJobs.length === 0;
         setIsFreeEligible(eligible);
         if (!eligible && formData.tier === 'free') {
           setFormData((prev) => ({ ...prev, tier: 'starter' }));
@@ -219,8 +226,12 @@ export function SimplePostJobForm() {
       return;
     }
 
-    if (formData.tier === 'free' && !user) {
-      setError('Bitte erstelle ein kostenloses Konto oder melde dich an, um dein 1. Inserat gratis zu schalten.');
+    if (!user) {
+      setError(
+        isDe
+          ? 'Bitte melde dich an oder erstelle ein kostenloses Konto, um deine Stelle zu inserieren.'
+          : 'Please sign in or create a free account to post your job.'
+      );
       setAuthOpen(true);
       return;
     }
@@ -286,34 +297,35 @@ export function SimplePostJobForm() {
           district: formData.district,
           description: formData.description,
           payText: formData.wage,
-          hoursLabel: 'Flexible Schichten',
-          employmentForms: [formData.employmentType],
-          contactEmail: formData.contactEmail || '',
-          websiteUrl: formData.applyUrl || '',
-          status: 'published',
+          employmentType: formData.employmentType,
+          contactEmail: formData.contactEmail,
+          applyUrl: formData.applyUrl,
           tier: formData.tier,
+          status: 'active',
+          slug: jobSlug,
         },
         submissionId
-      ).catch(() => {});
+      ).catch(console.error);
 
+      // 3. If user used free tier, record in Firestore
       if (formData.tier === 'free' && user?.uid) {
-        markFreeJobUsed(user.uid).catch(() => {});
+        markFreeJobUsed(user.uid, submissionId).catch(console.error);
         setIsFreeEligible(false);
       }
 
-      // 3. Dispatch update event
+      // 4. Dispatch update event
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new Event('jobroofs_listings_updated'));
       }
 
-      // 4. If free tier, finish immediately (no payment needed!)
+      // If free tier, no checkout needed
       if (formData.tier === 'free') {
         setSuccess(true);
         setLoading(false);
         return;
       }
 
-      // 5. If paid tier, initiate Stripe Checkout
+      // 4. Create Stripe checkout session
       const checkoutRes = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -353,6 +365,68 @@ export function SimplePostJobForm() {
       setLoading(false);
     }
   };
+
+  if (authLoading) {
+    return (
+      <div className="py-24 text-center">
+        <Loader2 className="size-6 animate-spin mx-auto text-[#7e8a84]" />
+        <p className="mt-3 text-[12.5px] text-[#7e8a84] font-light">
+          {isDe ? 'Lade Kontostatus...' : 'Checking account status...'}
+        </p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="max-w-xl mx-auto my-8 sm:my-14">
+        <div className="rounded-2xl border border-[#d8ded9] bg-white p-7 sm:p-9 text-center shadow-xs">
+          <div className="size-12 rounded-full bg-[#f4f4ee] flex items-center justify-center mx-auto text-[#202a31] mb-4">
+            <UserIcon className="size-6 stroke-[1.5]" />
+          </div>
+
+          <h2
+            className="text-2xl sm:text-3xl font-light text-[#202a31] tracking-tight"
+            style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
+          >
+            {isDe ? 'Anmelden zum Inserieren' : 'Sign in to post a job'}
+          </h2>
+
+          <p className="mt-2 text-[13.5px] text-[#5a6460] font-light leading-relaxed max-w-md mx-auto">
+            {isDe
+              ? 'Um eine Stelle zu inserieren und Bewerbungen zu empfangen, erstelle bitte ein kostenloses Konto oder melde dich an.'
+              : 'To post a job and receive direct candidate applications, please sign in or create a free account.'}
+          </p>
+
+          <div className="my-6 border-t border-[#d8ded9] pt-6 space-y-2.5 text-left max-w-sm mx-auto">
+            <div className="flex items-center gap-2.5 text-[12.5px] text-[#202a31]">
+              <span className="size-1.5 rounded-full bg-emerald-600 shrink-0" />
+              <span>{isDe ? '1. Stellenanzeige 100% kostenlos' : '1st job posting 100% free'}</span>
+            </div>
+            <div className="flex items-center gap-2.5 text-[12.5px] text-[#202a31]">
+              <span className="size-1.5 rounded-full bg-emerald-600 shrink-0" />
+              <span>{isDe ? 'Direkter Kontakt zu Berliner Bewerbern' : 'Direct contact with Berlin applicants'}</span>
+            </div>
+            <div className="flex items-center gap-2.5 text-[12.5px] text-[#202a31]">
+              <span className="size-1.5 rounded-full bg-emerald-600 shrink-0" />
+              <span>{isDe ? 'Jederzeit im Profil verwalten' : 'Manage anytime in your profile'}</span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setAuthOpen(true)}
+            className="apple-press inline-flex items-center justify-center gap-2 w-full sm:w-auto min-w-[240px] px-6 py-3.5 rounded-xl bg-[#202a31] text-[#fbfbf8] text-[13.5px] font-medium tracking-[0.02em] hover:bg-[#161D22] transition-colors cursor-pointer shadow-xs"
+          >
+            <span>{isDe ? 'Jetzt anmelden / registrieren' : 'Sign in / Register now'}</span>
+            <ArrowRight className="size-4 stroke-[1.5]" />
+          </button>
+        </div>
+
+        <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
+      </div>
+    );
+  }
 
   if (success) {
     return (
