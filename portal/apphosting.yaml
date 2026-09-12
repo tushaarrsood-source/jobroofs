@@ -27,7 +27,3 @@ env:
     value: 1:960773392367:web:c7cb340bf0b0964cbc981a
   - variable: NEXT_PUBLIC_APP_URL
     value: https://jobroofs.com
-  - variable: STRIPE_SECRET_KEY
-    secret: STRIPE_SECRET_KEY
-
-
