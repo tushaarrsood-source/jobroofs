@@ -8,7 +8,7 @@ export interface UserListing {
   title: string;
   subtitle: string;
   badgeLabel: string;
-  tier: 'standard' | 'premium';
+  tier: 'starter' | 'standard' | 'premium';
   tierLabel: string;
   status: 'active' | 'pending' | 'expired';
   postedAt: string;

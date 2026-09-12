@@ -1,6 +1,6 @@
 import { STRIPE_CATALOG, getStripePriceId } from '@/lib/stripe/products';
 
-export type ListingTier = 'standard' | 'premium' | 'annual';
+export type ListingTier = 'starter' | 'standard' | 'premium' | 'annual';
 export type ListingServiceType = 'job' | 'housing';
 
 export interface TierConfig {
@@ -24,12 +24,42 @@ export interface TierConfig {
 }
 
 export const JOB_TIERS: Record<ListingTier, TierConfig> = {
+  starter: {
+    tier: 'starter',
+    serviceType: 'job',
+    labelDe: 'Quick (15 Tage)',
+    labelEn: 'Quick (15 Days)',
+    priceEur: 9.99,
+    durationDays: 15,
+    durationMonths: 0.5,
+    featured: false,
+    badgeDe: '15 Tage aktiv',
+    badgeEn: '15 days active',
+    descriptionDe: '15 Tage Laufzeit für schnelles Einstellen in Berlin.',
+    descriptionEn: '15-day listing duration for fast hiring across Berlin.',
+    perksDe: [
+      '9,99 € Einmalzahlung (kein Abo)',
+      '15 Tage Laufzeit (automatische Deaktivierung)',
+      '100% Direktkontakt ohne Zeitarbeit / Zwischenhändler',
+      'In Kiez- und Bezirksuche gelistet',
+      'Interaktive Karten-Platzierung',
+    ],
+    perksEn: [
+      '€9.99 one-time payment (no subscription)',
+      '15-day duration (automatic deactivation)',
+      '100% direct contact without agency middlemen',
+      'Listed in district and neighborhood search',
+      'Interactive map placement',
+    ],
+    stripePriceId: STRIPE_CATALOG.jobroofs_job_starter.priceId,
+    stripeProductId: STRIPE_CATALOG.jobroofs_job_starter.productId,
+  },
   standard: {
     tier: 'standard',
     serviceType: 'job',
     labelDe: 'Standard (30 Tage)',
     labelEn: 'Standard (30 Days)',
-    priceEur: 29,
+    priceEur: 14.99,
     durationDays: 30,
     durationMonths: 1,
     featured: false,
@@ -38,14 +68,14 @@ export const JOB_TIERS: Record<ListingTier, TierConfig> = {
     descriptionDe: '30 Tage Laufzeit für dein Inserat in Berlin.',
     descriptionEn: '30-day listing duration across Berlin neighborhoods.',
     perksDe: [
-      '29 € Einmalzahlung (kein Abo)',
+      '14,99 € Einmalzahlung (kein Abo)',
       '30 Tage Laufzeit (automatische Deaktivierung)',
       '100% Direktkontakt ohne Zeitarbeit / Zwischenhändler',
       'In Kiez- und Bezirksuche gelistet',
       'Interaktive Karten-Platzierung',
     ],
     perksEn: [
-      '€29 one-time payment (no subscription)',
+      '€14.99 one-time payment (no subscription)',
       '30-day duration (automatic deactivation)',
       '100% direct contact without agency middlemen',
       'Listed in district and neighborhood search',
@@ -59,7 +89,7 @@ export const JOB_TIERS: Record<ListingTier, TierConfig> = {
     serviceType: 'job',
     labelDe: 'Premium Plus (60 Tage)',
     labelEn: 'Premium Plus (60 Days)',
-    priceEur: 49,
+    priceEur: 24.99,
     durationDays: 60,
     durationMonths: 2,
     featured: true,
@@ -68,14 +98,14 @@ export const JOB_TIERS: Record<ListingTier, TierConfig> = {
     descriptionDe: 'Volle 2 Monate maximale Reichweite & Top-Platzierung in ganz Berlin.',
     descriptionEn: 'Full 2 months maximum reach & top placement across Berlin.',
     perksDe: [
-      '49 € Einmalzahlung (kein Abo)',
+      '24,99 € Einmalzahlung (kein Abo)',
       '60 Tage Laufzeit (volle 2 Monate aktiv)',
       '⭐ Hervorgehoben ganz oben in den Suchergebnissen',
       'Priorisierter Pin auf der interaktiven Karte',
       'Automatischer Reichweiten-Push nach 30 Tagen',
     ],
     perksEn: [
-      '€49 one-time payment (no subscription)',
+      '€24.99 one-time payment (no subscription)',
       '60-day duration (full 2 months active)',
       '⭐ Featured at the top of search results',
       'Priority pin on the interactive map',

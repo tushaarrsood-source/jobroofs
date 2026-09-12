@@ -19,7 +19,8 @@ export async function convertSubmissionToJob(
 
   const now = new Date().toISOString();
   const isPremium = submission.pricing_plan === 'premium' || payload.pricingPlan === 'premium' || payload.tier === 'premium';
-  const durationDays = isPremium ? 60 : 30;
+  const isStarter = submission.pricing_plan === 'starter' || payload.pricingPlan === 'starter' || payload.tier === 'starter';
+  const durationDays = isPremium ? 60 : isStarter ? 15 : 30;
   const expiresAt = new Date(
     Date.now() + durationDays * 24 * 60 * 60 * 1000,
   ).toISOString();

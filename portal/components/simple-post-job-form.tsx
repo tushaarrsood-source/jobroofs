@@ -68,19 +68,20 @@ export function SimplePostJobForm() {
     applyUrl: '',
     contactEmail: '',
     description: '',
-    tier: 'standard' as 'standard' | 'premium',
+    tier: 'starter' as 'starter' | 'standard' | 'premium',
   });
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Pre-select premium tier if ?tier=premium in URL
+  // Pre-select tier if ?tier=... in URL
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
-      if (params.get('tier') === 'premium') {
-        setFormData((prev) => ({ ...prev, tier: 'premium' }));
+      const t = params.get('tier');
+      if (t === 'premium' || t === 'standard' || t === 'starter') {
+        setFormData((prev) => ({ ...prev, tier: t as any }));
       }
     }
   }, []);
@@ -156,6 +157,14 @@ export function SimplePostJobForm() {
       const submissionId = `direct-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
       const jobSlug = `${companySlug}-${titleSlug}-${submissionId.slice(-4)}`;
 
+      const tierDurationDays = formData.tier === 'premium' ? 60 : formData.tier === 'standard' ? 30 : 15;
+      const tierPricePaid = formData.tier === 'premium' ? 24.99 : formData.tier === 'standard' ? 14.99 : 9.99;
+      const tierLabel = formData.tier === 'premium'
+        ? '⭐ Premium Spotlight'
+        : formData.tier === 'standard'
+        ? 'Standard Inserat'
+        : 'Quick Inserat';
+
       // 1. Save locally so it's safely stored for this employer
       saveMyListing({
         id: submissionId,
@@ -164,12 +173,12 @@ export function SimplePostJobForm() {
         subtitle: `${formData.company} · ${formData.district}`,
         badgeLabel: formData.wage,
         tier: formData.tier,
-        tierLabel: formData.tier === 'premium' ? '⭐ Premium Spotlight' : 'Direkt vom Betrieb',
+        tierLabel: tierLabel,
         status: 'active',
         postedAt: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + (formData.tier === 'premium' ? 60 : 30) * 86400000).toISOString(),
+        expiresAt: new Date(Date.now() + tierDurationDays * 86400000).toISOString(),
         linkUrl: `/jobs/${jobSlug}`,
-        pricePaidEur: formData.tier === 'premium' ? 49 : 29,
+        pricePaidEur: tierPricePaid,
       });
 
       // 2. Save to Firestore if configured
@@ -280,7 +289,7 @@ export function SimplePostJobForm() {
                 applyUrl: '',
                 contactEmail: '',
                 description: '',
-                tier: 'standard',
+                tier: 'starter',
               });
             }}
             className="apple-press inline-flex items-center justify-center rounded-xl border border-[#d8ded9] bg-white px-6 py-3.5 text-[13px] font-normal text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
@@ -311,7 +320,7 @@ export function SimplePostJobForm() {
               Erreiche motivierte Studierende, Aushilfen und Fachkräfte direkt in deinem Kiez &mdash; ohne Agenturen.
             </p>
             <p className="mt-2.5 text-[12px] text-[#7e8a84] font-light">
-              29 € für 30 Tage &middot; 49 € für 60 Tage &middot; Mit dem Fortfahren stimmst du den{' '}
+              9,99 € für 15 Tage &middot; 14,99 € für 30 Tage &middot; 24,99 € für 60 Tage &middot; Mit dem Fortfahren stimmst du den{' '}
               <Link href="/agb" className="underline underline-offset-2 hover:text-[#202a31] transition-colors">
                 AGB
               </Link>{' '}
@@ -651,23 +660,42 @@ export function SimplePostJobForm() {
                 <label className="block text-[11px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
                   Platzierung & Sichtbarkeit wählen
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {/* Starter Tier */}
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, tier: 'starter' })}
+                    className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
+                      formData.tier === 'starter'
+                        ? 'border-[#202a31] bg-[#f4f4ee]/80 shadow-2xs ring-1 ring-[#202a31]'
+                        : 'border-[#d8ded9] bg-white hover:border-[#202a31]'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[13.5px] font-medium text-[#202a31]">Quick (15 Tage)</span>
+                      <span className="font-mono text-[13px] font-medium text-[#202a31]">9,99 €</span>
+                    </div>
+                    <p className="mt-1.5 text-[11.5px] text-[#7e8a84] font-light leading-relaxed">
+                      15 Tage Laufzeit &middot; Sofort gelistet im Direktbereich &middot; 100% Direktkontakt.
+                    </p>
+                  </button>
+
                   {/* Standard Tier */}
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, tier: 'standard' })}
                     className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
                       formData.tier === 'standard'
-                        ? 'border-[#202a31] bg-[#f4f4ee]/80 shadow-2xs'
+                        ? 'border-[#202a31] bg-[#f4f4ee]/80 shadow-2xs ring-1 ring-[#202a31]'
                         : 'border-[#d8ded9] bg-white hover:border-[#202a31]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-[13.5px] font-medium text-[#202a31]">Standard Inserat (30 Tage)</span>
-                      <span className="font-mono text-[13px] text-[#202a31]">29 €</span>
+                      <span className="text-[13.5px] font-medium text-[#202a31]">Standard (30 Tage)</span>
+                      <span className="font-mono text-[13px] font-medium text-[#202a31]">14,99 €</span>
                     </div>
-                    <p className="mt-1 text-[11.5px] text-[#7e8a84] font-light leading-relaxed">
-                      30 Tage Laufzeit &middot; 100% Direktkontakt ohne Zeitarbeit &middot; Sofort gelistet im Direktbereich über der Suche.
+                    <p className="mt-1.5 text-[11.5px] text-[#7e8a84] font-light leading-relaxed">
+                      30 Tage Laufzeit &middot; Voller Monat im Direktbereich &middot; Inkl. Kiez- & Bezirksfilter.
                     </p>
                   </button>
 
@@ -677,19 +705,19 @@ export function SimplePostJobForm() {
                     onClick={() => setFormData({ ...formData, tier: 'premium' })}
                     className={`p-4 rounded-xl border text-left transition-all cursor-pointer relative ${
                       formData.tier === 'premium'
-                        ? 'border-[#202a31] bg-[#ecece4]/60 ring-1 ring-[#202a31] shadow-2xs'
+                        ? 'border-[#202a31] bg-[#ecece4]/70 ring-1 ring-[#202a31] shadow-2xs'
                         : 'border-[#d8ded9] bg-white hover:border-[#202a31]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-[13.5px] font-medium text-[#202a31] flex items-center gap-1.5">
                         <Sparkles className="size-3.5 text-[#9e7d3b]" />
-                        <span>Premium Spotlight (60 Tage)</span>
+                        <span>Spotlight (60 Tage)</span>
                       </span>
-                      <span className="font-mono text-[13px] text-[#202a31]">49 €</span>
+                      <span className="font-mono text-[13px] font-medium text-[#202a31]">24,99 €</span>
                     </div>
-                    <p className="mt-1 text-[11.5px] text-[#5a6460] font-light leading-relaxed">
-                      60 Tage Laufzeit &middot; Ganz oben im <strong>Premium-Spotlight</strong> (Hero) &middot; Priorisierter Direktbereich &middot; Premium-Badge.
+                    <p className="mt-1.5 text-[11.5px] text-[#5a6460] font-light leading-relaxed">
+                      60 Tage Laufzeit &middot; Ganz oben im <strong>Spotlight (Hero)</strong> &middot; Höchste Reichweite.
                     </p>
                   </button>
                 </div>
@@ -728,8 +756,10 @@ export function SimplePostJobForm() {
                     <>
                       <span>
                         {formData.tier === 'premium'
-                          ? 'Mit Stripe sicher bezahlen (49 €)'
-                          : 'Mit Stripe sicher bezahlen (29 €)'}
+                          ? 'Mit Stripe sicher bezahlen (24,99 €)'
+                          : formData.tier === 'standard'
+                          ? 'Mit Stripe sicher bezahlen (14,99 €)'
+                          : 'Mit Stripe sicher bezahlen (9,99 €)'}
                       </span>
                       <ArrowRight className="size-3.5 stroke-[1.5]" />
                     </>

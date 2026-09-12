@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import Link from '@/components/ui/link';
 import { Check, Zap, ArrowRight } from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default function PricingPage() {
+  redirect('/post-a-job');
   return (
     <main className="min-h-screen bg-[#FBFBF8] text-[#202A31] flex flex-col justify-between">
       <div>

@@ -4,8 +4,8 @@ import { getStripePriceId } from '@/lib/stripe/products';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { tier = 'standard', jobData } = body;
-    const plan = tier === 'premium' ? 'premium' : 'standard';
+    const { tier = 'starter', jobData } = body;
+    const plan = tier === 'premium' ? 'premium' : tier === 'standard' ? 'standard' : 'starter';
     const priceId = getStripePriceId('job', plan);
 
     const stripeSecret = process.env.STRIPE_SECRET_KEY;
@@ -26,6 +26,7 @@ export async function POST(request: Request) {
     const title = jobData?.title || 'Stellenangebot';
     const jobSlug = jobData?.slug || 'berlin-job';
     const contactEmail = jobData?.contactEmail || undefined;
+    const durationDays = plan === 'premium' ? '60' : plan === 'standard' ? '30' : '15';
 
     const sessionBody = new URLSearchParams({
       mode: 'payment',
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
       'metadata[service]': 'jobroofs',
       'metadata[type]': 'job',
       'metadata[tier]': plan,
-      'metadata[durationDays]': plan === 'premium' ? '60' : '30',
+      'metadata[durationDays]': durationDays,
       'metadata[title]': title,
       'metadata[company]': company,
       'metadata[jobSlug]': jobSlug,

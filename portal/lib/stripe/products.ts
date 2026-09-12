@@ -10,19 +10,30 @@ export interface StripeProductDefinition {
   name: string;
   amountEur: number;
   type: 'job' | 'housing';
-  tier: 'standard' | 'premium' | 'annual';
+  tier: 'starter' | 'standard' | 'premium' | 'annual';
   durationDays: number;
   featured: boolean;
   unlimited?: boolean;
 }
 
 export const STRIPE_CATALOG: Record<string, StripeProductDefinition> = {
+  jobroofs_job_starter: {
+    lookupKey: 'jobroofs_job_starter',
+    productId: 'prod_VFIqM4hUQeG0op',
+    priceId: 'price_1UEoExF7VAvjOqD8RscXCdOG',
+    name: 'JOBROOFS Quick Job Listing (15 Days)',
+    amountEur: 9.99,
+    type: 'job',
+    tier: 'starter',
+    durationDays: 15,
+    featured: false,
+  },
   jobroofs_job_standard: {
     lookupKey: 'jobroofs_job_standard',
-    productId: 'prod_VCffo1Py7lk2NR',
-    priceId: 'price_1UCGK2F7VAvjOqD84KdVxCxS',
+    productId: 'prod_VFIqrISfvGv5vi',
+    priceId: 'price_1UEoEyF7VAvjOqD88xQJxIfd',
     name: 'JOBROOFS Standard Job Listing (30 Days)',
-    amountEur: 29,
+    amountEur: 14.99,
     type: 'job',
     tier: 'standard',
     durationDays: 30,
@@ -30,10 +41,10 @@ export const STRIPE_CATALOG: Record<string, StripeProductDefinition> = {
   },
   jobroofs_job_premium: {
     lookupKey: 'jobroofs_job_premium',
-    productId: 'prod_VCff7DCJ3Zbkzg',
-    priceId: 'price_1UCGK3F7VAvjOqD8cRlRnKUI',
-    name: 'JOBROOFS Premium Job Listing (60 Days) - Top Placement',
-    amountEur: 49,
+    productId: 'prod_VFIqiXHu3OJa9d',
+    priceId: 'price_1UEoEyF7VAvjOqD826PzNB6v',
+    name: 'JOBROOFS Premium Spotlight Job Listing (60 Days)',
+    amountEur: 24.99,
     type: 'job',
     tier: 'premium',
     durationDays: 60,

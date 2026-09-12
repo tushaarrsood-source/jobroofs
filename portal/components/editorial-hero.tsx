@@ -66,7 +66,7 @@ export function EditorialHero() {
               <ArrowRight className="size-4 stroke-[1.5] group-hover:translate-x-0.5 transition-transform" />
             </Link>
             <p className="mt-2 text-[12px] text-[#7e8a84] font-light">
-              29 € (30 Tage) &middot; 49 € (60 Tage)
+              In wenigen Schritten online inserieren
             </p>
           </div>
         </div>
@@ -122,7 +122,7 @@ export function EditorialHero() {
                   Aktuell noch keine Spotlight-Inserate.
                 </p>
                 <p className="mt-1 text-[12px] text-[#7e8a84] font-light max-w-sm mx-auto">
-                  Sichere deinem Berliner Betrieb 60 Tage maximale Sichtbarkeit ganz oben auf JOBROOFS für 49 €.
+                  Sichere deinem Berliner Betrieb 60 Tage maximale Sichtbarkeit ganz oben auf JOBROOFS.
                 </p>
               </div>
             )}
@@ -135,7 +135,7 @@ export function EditorialHero() {
                 <div className="text-[12.5px] font-medium text-[#202a31] flex items-center gap-1.5">
                   <span>Dein Job im Premium-Spotlight?</span>
                   <span className="text-[10px] font-mono font-medium text-[#202a31] bg-[#ecece4] px-1.5 py-0.5 rounded-xs border border-[#d8ded9]">
-                    49 € &middot; 60 Tage
+                    Top-Platzierung
                   </span>
                 </div>
                 <div className="text-[11px] text-[#7e8a84] font-light mt-0.5">
@@ -158,7 +158,7 @@ export function EditorialHero() {
               <span className="size-1.5 rounded-full bg-[#202a31]" />
               <span>Berliner Betriebe im Spotlight</span>
             </span>
-            <Link href="/pricing" className="hover:text-[#202a31] transition-colors">
+            <Link href="/post-a-job?tier=premium" className="hover:text-[#202a31] transition-colors">
               Premium-Vorteile ansehen &rarr;
             </Link>
           </div>

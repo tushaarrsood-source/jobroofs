@@ -33,7 +33,7 @@ export interface FirestoreJob {
   contactPhone?: string;
   websiteUrl?: string;
   status: 'active' | 'published' | 'expired' | 'filled';
-  tier: 'standard' | 'premium';
+  tier: 'starter' | 'standard' | 'premium';
   createdAt?: any;
   updatedAt?: any;
   expiresAt?: string;
@@ -83,13 +83,15 @@ export async function createJobInFirestore(
   const id = customId || `job-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
   const docRef = doc(db, 'jobs', id);
 
+  const durationDays = jobData.tier === 'premium' ? 60 : jobData.tier === 'standard' ? 30 : 15;
+
   await setDoc(docRef, {
     ...jobData,
     id,
     status: jobData.status || 'published',
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
-    expiresAt: new Date(Date.now() + 30 * 86400000).toISOString(),
+    expiresAt: new Date(Date.now() + durationDays * 86400000).toISOString(),
   });
 
   return id;

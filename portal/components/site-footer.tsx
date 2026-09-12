@@ -35,7 +35,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link href="/post-a-job" className="text-[#fbfbf8] hover:underline underline-offset-4">
-                  Job in Berlin inserieren (ab 0 €)
+                  Job in Berlin inserieren
                 </Link>
               </li>
               <li>

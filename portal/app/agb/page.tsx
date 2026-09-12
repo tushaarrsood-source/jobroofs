@@ -35,7 +35,7 @@ export default function AgbPage() {
             <div>
               <h2 className="font-bold text-zinc-950 text-base">§ 2 Veröffentlichung & Gebühren</h2>
               <p className="mt-1 text-zinc-600">
-                Die Veröffentlichung eines Einzelinserats (Job oder Wohnung) erfolgt nach Zahlung der angegebenen Einstellgebühr (29 €) für eine feste Laufzeit von 30 Tagen. Eine automatische Verlängerung oder ein Abonnement findet nicht statt.
+                Die Veröffentlichung eines Einzelinserats erfolgt nach Auswahl des gewünschten Laufzeit-Tarifs (15, 30 oder 60 Tage) und Zahlung der im Buchungsprozess ausgewiesenen einmaligen Einstellgebühr. Eine automatische Verlängerung oder ein Abonnement findet nicht statt.
               </p>
             </div>
 
