@@ -94,10 +94,14 @@ export function EditorialHero() {
           <div className="flex items-center justify-between text-[10px] sm:text-[10.5px] font-medium uppercase tracking-[0.12em] sm:tracking-[0.2em] text-[#7e8a84] mb-3">
             <span className="flex items-center gap-1.5 text-[#202a31] font-semibold">
               <Sparkles className="size-3 text-[#9e7d3b]" />
-              <span>{isDe ? 'DIREKTE INSERATE · BERLIN' : 'DIRECT LISTINGS · BERLIN'}</span>
+              <span>
+                {directListings.length > 0
+                  ? (isDe ? 'DIREKTE INSERATE · BERLIN' : 'DIRECT LISTINGS · BERLIN')
+                  : (isDe ? 'DIREKTKONTAKT · BERLIN' : 'DIRECT HIRING · BERLIN')}
+              </span>
             </span>
             <span className="inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-[#202a31] bg-[#ecece4] px-2 py-0.5 rounded-sm font-semibold border border-[#d8ded9]">
-              ★ DIREKT
+              {directListings.length > 0 ? '★ DIREKT' : '100% DIREKT'}
             </span>
           </div>
 
@@ -135,16 +139,79 @@ export function EditorialHero() {
             ))}
 
             {directListings.length === 0 && (
-              <div className="py-7 px-4 text-center">
-                <p className="text-[13.5px] font-medium text-[#202a31]">
-                  {isDe ? 'Aktuell noch keine direkten Inserate.' : 'No direct listings yet.'}
-                </p>
-                <p className="mt-1 text-[12px] text-[#7e8a84] font-light max-w-sm mx-auto">
-                  {isDe
-                    ? 'Inseriere dein Stellenangebot direkt auf JOBROOFS für Berliner Talente.'
-                    : 'Post your job directly on JOBROOFS for Berlin talent.'}
-                </p>
-              </div>
+              <>
+                <div className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] px-1 sm:px-2 sm:-mx-2">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31]">
+                        {isDe ? 'Direktanstellung ohne Vermittler' : 'Direct employment without agencies'}
+                      </span>
+                      <span className="font-mono text-[9px] uppercase bg-[#202a31] text-[#fbfbf8] px-1.5 py-0.2 rounded-xs font-medium">
+                        0 € GEBÜHR
+                      </span>
+                    </div>
+                    <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
+                      {isDe ? 'Keine Zeitarbeitsfirmen oder Zwischenagenturen' : 'No staffing agencies or middlemen'}
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0 pl-3">
+                    <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
+                      100% Direkt
+                    </div>
+                    <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
+                      {isDe ? 'Garantie' : 'Guarantee'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] px-1 sm:px-2 sm:-mx-2">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31]">
+                        {isDe ? 'Faire & transparente Konditionen' : 'Fair & transparent terms'}
+                      </span>
+                      <span className="font-mono text-[9px] uppercase bg-[#1e4635] text-[#fbfbf8] px-1.5 py-0.2 rounded-xs font-medium">
+                        FAIR PAY
+                      </span>
+                    </div>
+                    <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
+                      {isDe ? 'Verifizierte Stundenlöhne ab 14,00 € bis über 22 €' : 'Verified hourly wages from €14.00 to over €22'}
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0 pl-3">
+                    <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
+                      ab 14 €/h
+                    </div>
+                    <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
+                      {isDe ? 'Stundenlohn' : 'Hourly Wage'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="group flex items-baseline justify-between py-3.5 border-b border-[#d8ded9] px-1 sm:px-2 sm:-mx-2">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31]">
+                        {isDe ? 'Sofortige Sichtbarkeit im Kiez' : 'Instant neighborhood visibility'}
+                      </span>
+                      <span className="font-mono text-[9px] uppercase bg-[#9e7d3b] text-[#fbfbf8] px-1.5 py-0.2 rounded-xs font-medium">
+                        TOP-PLATZ
+                      </span>
+                    </div>
+                    <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
+                      {isDe ? 'Direkte Arbeitgeber-Inserate stehen immer an 1. Stelle' : 'Direct employer postings always pin to #1 spot'}
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0 pl-3">
+                    <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
+                      Top Feed
+                    </div>
+                    <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
+                      {isDe ? 'Priorität' : 'Priority'}
+                    </div>
+                  </div>
+                </div>
+              </>
             )}
           </div>
 

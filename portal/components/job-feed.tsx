@@ -1,13 +1,10 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from '@/components/ui/link';
 import { Search, MapPin, Euro, Clock, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getMyListings } from '@/lib/storage/my-listings';
 import { useTranslation } from '@/lib/i18n/language-context';
-import { useAuth } from '@/lib/firebase/auth-context';
-import { AuthModal } from '@/components/auth-modal';
 
 const DISTRICTS = [
   { id: 'all', labelDe: 'Alle Bezirke', labelEn: 'All Districts' },
@@ -149,9 +146,7 @@ export function JobFeed({
   initialJobs: any[];
   initialDirectJobs?: any[];
 }) {
-  const router = useRouter();
   const { isDe } = useTranslation();
-  const { user } = useAuth();
   const [jobs, setJobs] = useState<any[]>(initialJobs);
   const [directJobs, setDirectJobs] = useState<any[]>(initialDirectJobs);
   const [query, setQuery] = useState('');
@@ -159,15 +154,6 @@ export function JobFeed({
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState<'newest' | 'urgent' | 'wage'>('newest');
   const [currentPage, setCurrentPage] = useState(1);
-  const [authOpen, setAuthOpen] = useState(false);
-
-  const handlePostJobClick = () => {
-    if (!user) {
-      setAuthOpen(true);
-    } else {
-      router.push('/post-a-job');
-    }
-  };
 
   // Hydrate direct employer jobs from localStorage and verified partners
   useEffect(() => {
@@ -258,30 +244,13 @@ export function JobFeed({
     setCurrentPage(1);
   }, [query, selectedDistrict, selectedCategory, sortBy]);
 
-  // Filter direct employer listings
-  const filteredDirectJobs = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const res = directJobs.filter((job) => {
-      if (selectedDistrict !== 'all') {
-        const dist = (job.district || '').toLowerCase();
-        if (!dist.includes(selectedDistrict)) return false;
-      }
-      if (!matchesCategory(job, selectedCategory)) return false;
-      if (q) {
-        const title = (job.title || '').toLowerCase();
-        const company = (job.company || '').toLowerCase();
-        const district = (job.district || '').toLowerCase();
-        return title.includes(q) || company.includes(q) || district.includes(q);
-      }
-      return true;
-    });
-    return sortJobsList(res, sortBy, isDe);
-  }, [directJobs, query, selectedDistrict, selectedCategory, sortBy, isDe]);
-
-  // Fast client-side filtering for full catalog
+  // Fast client-side filtering for full catalog including direct employer listings
   const filteredJobs = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const res = jobs.filter((job) => {
+    const directSlugs = new Set(directJobs.map((d) => d.slug || d.id));
+    const combined = [...directJobs, ...jobs.filter((j) => !directSlugs.has(j.slug || j.id))];
+
+    const res = combined.filter((job) => {
       if (selectedDistrict !== 'all') {
         const dist = (job.district || '').toLowerCase();
         if (!dist.includes(selectedDistrict)) return false;
@@ -302,7 +271,7 @@ export function JobFeed({
       return true;
     });
     return sortJobsList(res, sortBy, isDe);
-  }, [jobs, query, selectedDistrict, selectedCategory, sortBy, isDe]);
+  }, [jobs, directJobs, query, selectedDistrict, selectedCategory, sortBy, isDe]);
 
   const totalPages = Math.max(1, Math.ceil(filteredJobs.length / JOBS_PER_PAGE));
   const displayedJobs = useMemo(() => {
@@ -312,128 +281,7 @@ export function JobFeed({
 
   return (
     <section className="w-full">
-      {/* ========================================================================= */}
-      {/* 1. DIRECT EMPLOYER LISTINGS SECTION (ENTIRELY ABOVE SEARCH BAR)           */}
-      {/* ========================================================================= */}
-      <div className="mb-10 sm:mb-12">
-        {/* Section Header — minimal */}
-        <div className="flex items-center justify-between pb-4 border-b border-[#d8ded9] mb-1">
-          <div className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-[#1e4635]" />
-            <span className="text-[10px] font-mono font-medium uppercase tracking-[0.18em] text-[#7e8a84]">
-              {isDe ? 'Direkt vom Berliner Betrieb' : 'Direct from Berlin Employer'}
-            </span>
-          </div>
-          <button
-            type="button"
-            onClick={handlePostJobClick}
-            className="apple-press inline-flex items-center gap-1 text-[11.5px] font-medium text-[#7e8a84] hover:text-[#202a31] transition-colors cursor-pointer"
-          >
-            <span>{isDe ? '+ Inserat aufgeben' : '+ Post a job'}</span>
-          </button>
-        </div>
-
-        {/* Direct Job Rows — same style as main feed, tiny crown badge */}
-        {filteredDirectJobs.length > 0 ? (
-          <div className="space-y-2.5 mt-2.5">
-            {filteredDirectJobs.slice(0, 6).map((job, idx) => {
-              const wage = formatWage(job, isDe);
-              const jobType = formatJobType(job, isDe);
-              const slug = job.slug || job.id;
-              const urgent = isUrgentJob(job);
-              const relTime = getRelativeTime(job, idx, isDe);
-
-              return (
-                <Link
-                  key={slug}
-                  href={`/jobs/${slug}`}
-                  className="silent-card group block rounded-sm p-4 sm:p-5 cursor-pointer"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        <h3
-                          className="text-[15.5px] sm:text-[17px] font-normal text-[#202a31] group-hover:text-[#4a5751] transition-colors line-clamp-1 tracking-tight"
-                          style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
-                        >
-                          {job.title}
-                        </h3>
-                        {/* Tiny crown — direct employer marker */}
-                        <span className="shrink-0 text-[11px] leading-none" title={isDe ? 'Direkt vom Betrieb' : 'Direct from employer'}>👑</span>
-                        {job.isUserListing && (
-                          <span className="shrink-0 font-mono text-[8.5px] uppercase bg-[#202a31] text-[#fbfbf8] px-1.5 py-0.5 rounded-xs font-medium leading-none">
-                            {isDe ? 'DEIN INSERAT' : 'YOUR LISTING'}
-                          </span>
-                        )}
-                        {urgent && (
-                          <span className="shrink-0 font-mono text-[8.5px] uppercase bg-amber-500/10 text-amber-900 border border-amber-500/30 px-1.5 py-0.5 rounded-xs font-medium leading-none">
-                            {isDe ? '⚡ DRINGEND' : '⚡ URGENT'}
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-0.5 flex items-center justify-between text-[13px] font-light text-[#7e8a84]">
-                        <span>{job.company}</span>
-                        <span className="font-mono text-[11px] text-[#7e8a84] shrink-0 ml-2">
-                          {relTime}
-                        </span>
-                      </div>
-
-                      <div className="mt-3 flex flex-wrap items-center gap-3 text-[12px]">
-                        <span className="inline-flex items-center gap-1 text-[#5a6460] font-light">
-                          <MapPin className="size-3 stroke-[1.25] text-[#7e8a84]" />
-                          {job.district || 'Berlin'}
-                        </span>
-                        <span className="text-[#d8ded9]">&middot;</span>
-                        <span className="inline-flex items-center gap-1 text-[#202a31] font-mono font-medium">
-                          <Euro className="size-3 stroke-[1.25] text-[#7e8a84]" />
-                          {wage}
-                        </span>
-                        <span className="text-[#d8ded9]">&middot;</span>
-                        <span className="inline-flex items-center gap-1 text-[10.5px] uppercase tracking-[0.14em] text-[#7e8a84]">
-                          <Clock className="size-3 stroke-[1.25] text-[#7e8a84]" />
-                          {jobType}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Right Arrow */}
-                    <div className="shrink-0 self-center size-7 flex items-center justify-center text-[#7e8a84] group-hover:text-[#202a31] group-hover:translate-x-0.5 transition-all">
-                      <ArrowRight className="size-4 stroke-[1.25]" />
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="py-6 px-4 text-center rounded-xl border border-[#d8ded9] bg-white/70">
-            <p className="text-[13.5px] font-medium text-[#202a31]">
-              {isDe ? 'Noch keine direkten Inserate vorhanden.' : 'No direct listings yet.'}
-            </p>
-            <p className="text-[12px] text-[#7e8a84] font-light mt-1 max-w-md mx-auto">
-              {isDe
-                ? 'Direkte Stellenanzeigen von verifizierten Berliner Betrieben erscheinen hier.'
-                : 'Direct job postings from verified Berlin businesses appear here.'}
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Hairline Catalog Transition / Divider */}
-      <div className="relative my-8 sm:my-10">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-[#d8ded9]" />
-        </div>
-        <div className="relative flex justify-center">
-          <span className="bg-[#fbfbf8] px-4 text-[10px] sm:text-[10.5px] font-medium uppercase tracking-[0.18em] text-[#7e8a84]">
-            {isDe ? 'Alle verifizierten Stellen im Kiez durchsuchen' : 'Search all verified neighborhood jobs'}
-          </span>
-        </div>
-      </div>
-
-      {/* ========================================================================= */}
-      {/* 2. SEARCH & FILTER SECTION                                               */}
-      {/* ========================================================================= */}
+      {/* Search & Filter Section */}
       <div className="mb-8 space-y-3">
         {/* Sleek Architectural Search Bar */}
         <div className="relative">
@@ -682,12 +530,6 @@ export function JobFeed({
           </button>
         </nav>
       )}
-
-      <AuthModal
-        isOpen={authOpen}
-        onClose={() => setAuthOpen(false)}
-        onSuccess={() => router.push('/post-a-job')}
-      />
     </section>
   );
 }
