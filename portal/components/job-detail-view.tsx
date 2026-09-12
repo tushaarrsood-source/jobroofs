@@ -21,6 +21,7 @@ import {
   MessageCircle,
 } from 'lucide-react';
 import { useAuth } from '@/lib/firebase/auth-context';
+import { useTranslation } from '@/lib/i18n/language-context';
 import { AuthModal } from '@/components/auth-modal';
 import { JobroofsMark } from '@/components/brand-logo';
 import { upgradeMyListingLocally } from '@/lib/storage/my-listings';
@@ -34,6 +35,7 @@ interface JobDetailViewProps {
 
 export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
   const { user } = useAuth();
+  const { isDe } = useTranslation();
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [pendingTarget, setPendingTarget] = useState<string | null>(null);
   const [showSuccessBanner, setShowSuccessBanner] = useState(false);
@@ -97,13 +99,18 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
 
   const wage =
     job.payText ||
-    job.compensation?.label ||
     (job.compensation?.amountMin
-      ? `${job.compensation.amountMin} €/Std.`
-      : 'Vergütung n.V.');
+      ? `${job.compensation.amountMin} €/${isDe ? 'Std.' : 'h'}`
+      : job.compensation?.label
+      ? job.compensation.label.toLowerCase().includes('tarif')
+        ? (isDe ? 'Tarif / Vereinbarung' : 'Tariff / agreement')
+        : job.compensation.label.toLowerCase().includes('vereinbarung')
+        ? (isDe ? 'Vergütung n.V.' : 'Compensation neg.')
+        : job.compensation.label
+      : isDe ? 'Vergütung n.V.' : 'Compensation neg.');
 
-  const hours = job.hours?.label || job.hoursLabel || 'Flexible Arbeitszeiten';
-  const schedule = job.schedule?.summary || job.scheduleSummary || 'Nach Absprache';
+  const hours = job.hours?.label || job.hoursLabel || (isDe ? 'Flexible Arbeitszeiten' : 'Flexible Hours');
+  const schedule = job.schedule?.summary || job.scheduleSummary || (isDe ? 'Nach Absprache' : 'By arrangement');
   const responsibilities = job.responsibilities || [];
   const requirements = job.requirements || [];
 
@@ -116,17 +123,19 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
             href={`/jobs/${prevSlug}`}
             className="inline-flex items-center gap-1 text-[#7e8a84] hover:text-[#202a31] transition-colors cursor-pointer"
           >
-            <ArrowLeft className="size-3.5 stroke-[1.25]" /> Vorheriger Job
+            <ArrowLeft className="size-3.5 stroke-[1.25]" /> {isDe ? 'Vorheriger Job' : 'Previous Job'}
           </Link>
         ) : (
-          <span className="text-[#d8ded9] cursor-not-allowed">Vorheriger Job</span>
+          <span className="text-[#d8ded9] cursor-not-allowed">
+            {isDe ? 'Vorheriger Job' : 'Previous Job'}
+          </span>
         )}
 
         <Link
           href="/"
           className="apple-press inline-flex items-center gap-1.5 rounded-sm border border-[#d8ded9] bg-transparent px-3.5 py-1.5 text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
         >
-          <List className="size-3.5 stroke-[1.25] text-[#7e8a84]" /> Zurück zur Übersicht
+          <List className="size-3.5 stroke-[1.25] text-[#7e8a84]" /> {isDe ? 'Zurück zur Übersicht' : 'Back to Overview'}
         </Link>
 
         {nextSlug ? (
@@ -134,10 +143,12 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
             href={`/jobs/${nextSlug}`}
             className="inline-flex items-center gap-1 text-[#7e8a84] hover:text-[#202a31] transition-colors cursor-pointer"
           >
-            Nächster Job <ArrowRight className="size-3.5 stroke-[1.25]" />
+            {isDe ? 'Nächster Job' : 'Next Job'} <ArrowRight className="size-3.5 stroke-[1.25]" />
           </Link>
         ) : (
-          <span className="text-[#d8ded9] cursor-not-allowed">Nächster Job</span>
+          <span className="text-[#d8ded9] cursor-not-allowed">
+            {isDe ? 'Nächster Job' : 'Next Job'}
+          </span>
         )}
       </nav>
 
@@ -147,10 +158,12 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
             <CheckCircle2 className="size-5 text-emerald-600 shrink-0" />
             <div>
               <p className="text-[13px] font-medium text-emerald-900">
-                Spotlight-Upgrade erfolgreich aktiviert!
+                {isDe ? 'Spotlight-Upgrade erfolgreich aktiviert!' : 'Spotlight upgrade successfully activated!'}
               </p>
               <p className="text-[12px] text-emerald-700">
-                Deine Anzeige ist jetzt mit höchster Priorität für 60 Tage ganz oben platziert.
+                {isDe
+                  ? 'Deine Anzeige ist jetzt mit höchster Priorität für 60 Tage ganz oben platziert.'
+                  : 'Your listing is now placed at the top with highest priority for 60 days.'}
               </p>
             </div>
           </div>
@@ -158,7 +171,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
             onClick={() => setShowUpgradeBanner(false)}
             className="text-xs text-emerald-700 hover:text-emerald-900 ml-4 underline cursor-pointer"
           >
-            Schließen
+            {isDe ? 'Schließen' : 'Close'}
           </button>
         </div>
       )}
@@ -169,10 +182,12 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
             <CheckCircle2 className="size-5 text-emerald-600 shrink-0" />
             <div>
               <p className="text-[13px] font-medium text-emerald-900">
-                Zahlung erfolgreich abgeschlossen!
+                {isDe ? 'Zahlung erfolgreich abgeschlossen!' : 'Payment completed successfully!'}
               </p>
               <p className="text-[12px] text-emerald-700">
-                Deine Stellenanzeige ist nun live geschaltet und für Berliner Jobsuchende sichtbar.
+                {isDe
+                  ? 'Deine Stellenanzeige ist nun live geschaltet und für Berliner Jobsuchende sichtbar.'
+                  : 'Your job listing is now live and visible to Berlin job seekers.'}
               </p>
             </div>
           </div>
@@ -180,7 +195,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
             onClick={() => setShowSuccessBanner(false)}
             className="text-xs text-emerald-700 hover:text-emerald-900 ml-4 underline cursor-pointer"
           >
-            Schließen
+            {isDe ? 'Schließen' : 'Close'}
           </button>
         </div>
       )}
@@ -227,50 +242,111 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
           </div>
         </div>
 
-        {/* Responsibilities */}
-        {responsibilities.length > 0 && (
-          <section className="mt-6">
-            <h2 className="text-[14px] font-medium uppercase tracking-[0.1em] text-[#7e8a84]">Was du bei uns machst</h2>
-            <div className="mt-3 divide-y divide-[#d8ded9] border-t border-[#d8ded9]">
-              {responsibilities.map((resp: string, idx: number) => (
-                <div key={idx} className="flex items-start gap-3.5 py-3">
-                  <span className="font-mono text-[11px] text-[#7e8a84] pt-0.5">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
-                  <span className="text-[14px] text-[#5a6460] font-light leading-relaxed">{resp}</span>
+        {/* Verified Employer Information Notice (Only 100% credible & verified employer data) */}
+        {!job.isUserListing ? (
+          <section className="mt-6 rounded-sm border border-[#d8ded9] bg-[#fbfbf8] p-5 sm:p-6">
+            <div className="flex items-start gap-3.5">
+              <div className="shrink-0 p-2 bg-[#ecece4] rounded-sm text-[#202a31]">
+                <Building2 className="size-5 stroke-[1.25]" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h2 className="text-[15px] font-medium text-[#202a31]">
+                  {isDe ? 'Offizielle Stellenausschreibung & Karriereportal' : 'Official Job Vacancies & Career Portal'}
+                </h2>
+                <p className="mt-1.5 text-[13.5px] text-[#5a6460] font-light leading-relaxed">
+                  {isDe
+                    ? `${job.company} rekrutiert aktuell in Berlin-${job.district || 'Berlin'}. Um 100% verlässliche und tagesaktuelle Informationen zu gewährleisten, werden alle offenen Stellen, Aufgabenbereiche und Anforderungen direkt auf dem offiziellen Karriereportal des Arbeitgebers geführt.`
+                    : `${job.company} is currently hiring in Berlin-${job.district || 'Berlin'}. To ensure 100% credible, verified, and up-to-date information, all current vacancies, task profiles, and qualifications are managed directly on the employer's official career portal.`}
+                </p>
+                <div className="mt-4">
+                  <a
+                    href={applyUrl}
+                    onClick={handleApplyClick}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="apple-press inline-flex items-center gap-2 rounded-sm bg-[#202a31] px-5 py-2.5 text-[13px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
+                  >
+                    <span>
+                      {isDe
+                        ? `Offizielle Karriereseite von ${job.company} aufrufen`
+                        : `Visit ${job.company}'s Official Career Portal`}
+                    </span>
+                    <ExternalLink className="size-3.5 stroke-[1.25]" />
+                  </a>
                 </div>
-              ))}
+              </div>
             </div>
           </section>
-        )}
+        ) : (
+          <>
+            {/* Responsibilities for User Listings */}
+            {responsibilities.length > 0 && (
+              <section className="mt-6">
+                <h2 className="text-[14px] font-medium uppercase tracking-[0.1em] text-[#7e8a84]">
+                  {isDe ? 'Was du bei uns machst' : 'What you will do'}
+                </h2>
+                <div className="mt-3 divide-y divide-[#d8ded9] border-t border-[#d8ded9]">
+                  {responsibilities.map((resp: string, idx: number) => (
+                    <div key={idx} className="flex items-start gap-3.5 py-3">
+                      <span className="font-mono text-[11px] text-[#7e8a84] pt-0.5">
+                        {String(idx + 1).padStart(2, '0')}
+                      </span>
+                      <span className="text-[14px] text-[#5a6460] font-light leading-relaxed">{resp}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
 
-        {/* Requirements */}
-        {requirements.length > 0 && (
-          <section className="mt-6 border-t border-[#d8ded9] pt-6">
-            <h2 className="text-[14px] font-medium uppercase tracking-[0.1em] text-[#7e8a84]">Was dich ausmacht</h2>
-            <div className="mt-3 divide-y divide-[#d8ded9] border-t border-[#d8ded9]">
-              {requirements.map((req: string, idx: number) => (
-                <div key={idx} className="flex items-start gap-3.5 py-3">
-                  <span className="font-mono text-[11px] text-[#7e8a84] pt-0.5">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
-                  <span className="text-[14px] text-[#5a6460] font-light leading-relaxed">{req}</span>
+            {/* Requirements for User Listings */}
+            {requirements.length > 0 && (
+              <section className="mt-6 border-t border-[#d8ded9] pt-6">
+                <h2 className="text-[14px] font-medium uppercase tracking-[0.1em] text-[#7e8a84]">
+                  {isDe ? 'Was dich ausmacht' : 'What you bring'}
+                </h2>
+                <div className="mt-3 divide-y divide-[#d8ded9] border-t border-[#d8ded9]">
+                  {requirements.map((req: string, idx: number) => (
+                    <div key={idx} className="flex items-start gap-3.5 py-3">
+                      <span className="font-mono text-[11px] text-[#7e8a84] pt-0.5">
+                        {String(idx + 1).padStart(2, '0')}
+                      </span>
+                      <span className="text-[14px] text-[#5a6460] font-light leading-relaxed">{req}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </section>
+              </section>
+            )}
+
+            {/* Description for User Listings */}
+            {job.description && (
+              <section className="mt-6 border-t border-[#d8ded9] pt-6">
+                <h2 className="text-[14px] font-medium uppercase tracking-[0.1em] text-[#7e8a84]">
+                  {isDe ? 'Beschreibung' : 'Description'}
+                </h2>
+                <p className="mt-2 text-[14px] text-[#5a6460] font-light leading-relaxed whitespace-pre-line">
+                  {job.description}
+                </p>
+              </section>
+            )}
+          </>
         )}
 
         {/* Compensation & Working Hours */}
         <section className="mt-6 border-t border-[#d8ded9] pt-6">
-          <h2 className="text-[14px] font-medium uppercase tracking-[0.1em] text-[#7e8a84]">Konditionen</h2>
+          <h2 className="text-[14px] font-medium uppercase tracking-[0.1em] text-[#7e8a84]">
+            {isDe ? 'Konditionen' : 'Conditions'}
+          </h2>
           <div className="mt-3 grid gap-3 sm:grid-cols-2 text-[13px]">
             <div className="rounded-sm border border-[#d8ded9] p-4">
-              <p className="text-[11px] uppercase tracking-[0.15em] text-[#7e8a84]">Stundenlohn / Vergütung</p>
+              <p className="text-[11px] uppercase tracking-[0.15em] text-[#7e8a84]">
+                {isDe ? 'Stundenlohn / Vergütung' : 'Hourly Wage / Compensation'}
+              </p>
               <p className="mt-1 text-[16px] font-normal text-[#202a31] font-mono">{wage}</p>
             </div>
             <div className="rounded-sm border border-[#d8ded9] p-4">
-              <p className="text-[11px] uppercase tracking-[0.15em] text-[#7e8a84]">Arbeitszeit & Schichten</p>
+              <p className="text-[11px] uppercase tracking-[0.15em] text-[#7e8a84]">
+                {isDe ? 'Arbeitszeit & Schichten' : 'Working Hours & Shifts'}
+              </p>
               <p className="mt-1 text-[14px] font-normal text-[#202a31]">{hours}</p>
               <p className="text-[12px] text-[#7e8a84] mt-0.5">{schedule}</p>
             </div>
@@ -280,9 +356,13 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
         {/* Direct Contact & Application Block */}
         <section className="mt-8 rounded-sm border border-[#d8ded9] bg-[#fbfbf8] p-6 text-center sm:text-left sm:flex sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-[15px] font-medium text-[#202a31]">Direkt beim Betrieb bewerben</h2>
+            <h2 className="text-[15px] font-medium text-[#202a31]">
+              {isDe ? 'Direkt beim Betrieb bewerben' : 'Apply directly with employer'}
+            </h2>
             <p className="mt-1 text-[13px] text-[#7e8a84] font-light">
-              100% kostenfrei & ohne Vermittler. Direkter Kontakt zu {job.company}.
+              {isDe
+                ? `100% kostenfrei & ohne Vermittler. Direkter Kontakt zu ${job.company}.`
+                : `100% free & without agencies. Direct contact with ${job.company}.`}
             </p>
           </div>
 
@@ -296,11 +376,11 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
             >
               {job.application?.email ? (
                 <>
-                  <Mail className="size-4 stroke-[1.25]" /> Per E-Mail bewerben
+                  <Mail className="size-4 stroke-[1.25]" /> {isDe ? 'Per E-Mail bewerben' : 'Apply via Email'}
                 </>
               ) : (
                 <>
-                  <ExternalLink className="size-4 stroke-[1.25]" /> Zur Bewerbung &rarr;
+                  <ExternalLink className="size-4 stroke-[1.25]" /> {isDe ? 'Zur Bewerbung →' : 'To Application →'}
                 </>
               )}
             </a>
@@ -310,7 +390,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
         {/* Share Section */}
         <section className="mt-5 pt-4 border-t border-[#d8ded9] flex flex-wrap items-center justify-between gap-3 text-[12px] text-[#7e8a84]">
           <span className="flex items-center gap-1.5 font-medium text-[#202a31]">
-            <Share2 className="size-3.5 stroke-[1.25]" /> Diese Stelle teilen:
+            <Share2 className="size-3.5 stroke-[1.25]" /> {isDe ? 'Diese Stelle teilen:' : 'Share this job:'}
           </span>
           <div className="flex items-center gap-2">
             <button
@@ -327,12 +407,12 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
               {copied ? (
                 <>
                   <Check className="size-3.5 text-emerald-600" />
-                  <span className="text-emerald-700 font-medium">Kopiert!</span>
+                  <span className="text-emerald-700 font-medium">{isDe ? 'Kopiert!' : 'Copied!'}</span>
                 </>
               ) : (
                 <>
                   <Copy className="size-3.5 text-[#7e8a84]" />
-                  <span>Link kopieren</span>
+                  <span>{isDe ? 'Link kopieren' : 'Copy link'}</span>
                 </>
               )}
             </button>
@@ -341,7 +421,11 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
 
         <div className="mt-4 flex items-center justify-center gap-1.5 text-center text-xs text-zinc-400">
           <ShieldCheck className="size-3.5 text-[#1b4332]" />
-          <span>Geprüftes Berliner Stellenangebot &middot; Direktkontakt ohne Zeitarbeit</span>
+          <span>
+            {isDe
+              ? 'Geprüftes Berliner Stellenangebot · Direktkontakt ohne Zeitarbeit'
+              : 'Verified Berlin job opening · Direct employer, no temp agencies'}
+          </span>
         </div>
       </article>
 
@@ -360,11 +444,11 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
         >
           {job.application?.email ? (
             <>
-              <Mail className="size-3.5" /> E-Mail
+              <Mail className="size-3.5" /> {isDe ? 'E-Mail' : 'Email'}
             </>
           ) : (
             <>
-              <span>Bewerben</span> &rarr;
+              <span>{isDe ? 'Bewerben' : 'Apply'}</span> &rarr;
             </>
           )}
         </a>

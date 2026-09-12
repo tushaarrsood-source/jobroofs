@@ -22,6 +22,7 @@ import {
   markFreeJobUsed,
 } from '@/lib/firebase/firestore-service';
 import { useAuth } from '@/lib/firebase/auth-context';
+import { useTranslation } from '@/lib/i18n/language-context';
 import { AuthModal } from '@/components/auth-modal';
 
 const BERLIN_DISTRICTS = [
@@ -50,16 +51,16 @@ const QUICK_DISTRICTS = [
   'Charlottenburg',
 ];
 
-const JOB_TYPES = [
-  'Minijob (bis 538 €)',
+const EMPLOYMENT_TYPES = [
+  'Minijob (bis 603 €)',
   'Teilzeit',
-  'Werkstudent',
+  'Werkstudent:in',
   'Kurzfristige Aushilfe',
   'Event / Wochenende',
   'Vollzeit',
 ];
 
-const WAGE_PRESETS = [
+const QUICK_WAGES = [
   '14,50 € / Std.',
   '15,00 € / Std.',
   '16,00 € / Std.',
@@ -69,6 +70,7 @@ const WAGE_PRESETS = [
 
 export function SimplePostJobForm() {
   const { user } = useAuth();
+  const { isDe } = useTranslation();
   const [authOpen, setAuthOpen] = useState(false);
   const [isFreeEligible, setIsFreeEligible] = useState(true);
   const [lastCreatedJob, setLastCreatedJob] = useState<{ id: string; slug: string; title: string } | null>(null);
@@ -80,7 +82,7 @@ export function SimplePostJobForm() {
     title: '',
     company: '',
     district: 'Mitte',
-    employmentType: 'Minijob (bis 538 €)',
+    employmentType: 'Minijob (bis 603 €)',
     wage: '16,00 € / Std.',
     applyUrl: '',
     contactEmail: '',
@@ -489,30 +491,36 @@ export function SimplePostJobForm() {
         <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4">
           <div>
             <div className="text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#7e8a84] mb-2">
-              EMPLOYER INTAKE &middot; DIRECT LISTINGS
+              {isDe ? 'FÜR ARBEITGEBER · DIREKTE INSERATE' : 'EMPLOYER INTAKE · DIRECT LISTINGS'}
             </div>
             <h1
               className="text-3xl sm:text-4xl font-light sm:font-normal tracking-[-0.025em] text-[#202a31]"
               style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
             >
-              Job jetzt inserieren.
+              {isDe ? 'Job jetzt inserieren.' : 'Post a job now.'}
             </h1>
             <p className="mt-1.5 text-[14.5px] text-[#5a6460] font-light">
-              Erreiche motivierte Studierende, Aushilfen und Fachkräfte direkt in deinem Kiez &mdash; ohne Agenturen.
+              {isDe
+                ? 'Erreiche motivierte Studierende, Aushilfen und Fachkräfte direkt in deinem Kiez — ohne Agenturen.'
+                : 'Reach motivated students, helpers, and local talents directly in your neighborhood — without agencies.'}
             </p>
             <p className="mt-2 text-[12px] text-[#7e8a84] font-light">
               {isFreeEligible ? (
-                <span className="text-emerald-800 font-medium">1. Inserat 100% kostenlos &middot; </span>
+                <span className="text-emerald-800 font-medium">
+                  {isDe ? '1. Inserat 100% kostenlos · ' : '1st listing 100% free · '}
+                </span>
               ) : null}
-              9,99 € für 15 Tage &middot; 14,99 € für 30 Tage &middot; 24,99 € für 60 Tage &middot; Mit dem Fortfahren stimmst du den{' '}
+              {isDe
+                ? '9,99 € für 15 Tage · 14,99 € für 30 Tage · 24,99 € für 60 Tage · Mit dem Fortfahren stimmst du den '
+                : '9.99 € for 15 days · 14.99 € for 30 days · 24.99 € for 60 days · By continuing, you agree to the '}
               <Link href="/agb" className="underline underline-offset-2 hover:text-[#202a31] transition-colors">
-                AGB
+                {isDe ? 'AGB' : 'Terms'}
               </Link>{' '}
-              und{' '}
+              {isDe ? 'und' : 'and'}{' '}
               <Link href="/datenschutz" className="underline underline-offset-2 hover:text-[#202a31] transition-colors">
-                Richtlinien
+                {isDe ? 'Richtlinien' : 'Privacy Policy'}
               </Link>{' '}
-              zu.
+              {isDe ? 'zu.' : '.'}
             </p>
 
             {/* 1st Job Free Welcome Banner */}
@@ -524,10 +532,14 @@ export function SimplePostJobForm() {
                   </div>
                   <div>
                     <div className="text-[12.5px] font-semibold text-emerald-900">
-                      1. Inserat 100% kostenlos für jeden neuen Benutzeraccount
+                      {isDe
+                        ? '1. Inserat 100% kostenlos für jeden neuen Benutzeraccount'
+                        : '1st job listing 100% free for every new user account'}
                     </div>
                     <div className="text-[11.5px] text-emerald-800/80 font-light mt-0.5">
-                      Melde dich kurz an oder erstelle ein kostenloses Konto, um dein 1. Inserat gratis zu schalten.
+                      {isDe
+                        ? 'Melde dich kurz an oder erstelle ein kostenloses Konto, um dein 1. Inserat gratis zu schalten.'
+                        : 'Sign in or create a free account to post your 1st job for free.'}
                     </div>
                   </div>
                 </div>
@@ -536,7 +548,7 @@ export function SimplePostJobForm() {
                   onClick={() => setAuthOpen(true)}
                   className="apple-press shrink-0 inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#202a31] text-[#fbfbf8] text-[11.5px] font-medium hover:bg-[#161D22] transition-colors cursor-pointer"
                 >
-                  <span>Kostenlos anmelden</span>
+                  <span>{isDe ? 'Kostenlos anmelden' : 'Sign in for free'}</span>
                   <ArrowRight className="size-3" />
                 </button>
               </div>
@@ -546,7 +558,15 @@ export function SimplePostJobForm() {
                   <CheckCircle2 className="size-3.5" />
                 </div>
                 <div className="text-[12px] text-emerald-900">
-                  Willkommens-Vorteil aktiv für <span className="font-semibold">{user.email}</span>: Dein 1. Job ist <strong>100% kostenlos</strong> (0 € / 15 Tage)!
+                  {isDe ? (
+                    <>
+                      Willkommens-Vorteil aktiv für <span className="font-semibold">{user.email}</span>: Dein 1. Job ist <strong>100% kostenlos</strong> (0 € / 15 Tage)!
+                    </>
+                  ) : (
+                    <>
+                      Welcome benefit active for <span className="font-semibold">{user.email}</span>: Your 1st job is <strong>100% free</strong> (0 € / 15 days)!
+                    </>
+                  )}
                 </div>
               </div>
             ) : null}
@@ -563,8 +583,8 @@ export function SimplePostJobForm() {
                   : 'text-[#7e8a84] hover:text-[#202a31]'
               }`}
             >
-              <span className="sm:hidden">1. Basis</span>
-              <span className="hidden sm:inline">1. Basisdaten</span>
+              <span className="sm:hidden">1. {isDe ? 'Basis' : 'Basic'}</span>
+              <span className="hidden sm:inline">1. {isDe ? 'Basisdaten' : 'Basic Info'}</span>
             </button>
             <button
               type="button"
@@ -575,8 +595,8 @@ export function SimplePostJobForm() {
                   : 'text-[#7e8a84] hover:text-[#202a31]'
               }`}
             >
-              <span className="sm:hidden">2. Details</span>
-              <span className="hidden sm:inline">2. Konditionen</span>
+              <span className="sm:hidden">2. {isDe ? 'Details' : 'Details'}</span>
+              <span className="hidden sm:inline">2. {isDe ? 'Konditionen' : 'Conditions'}</span>
             </button>
             <button
               type="button"
@@ -587,8 +607,8 @@ export function SimplePostJobForm() {
                   : 'text-[#7e8a84] hover:text-[#202a31]'
               }`}
             >
-              <span className="sm:hidden">3. Kontakt</span>
-              <span className="hidden sm:inline">3. Kontakt & Live</span>
+              <span className="sm:hidden">3. {isDe ? 'Kontakt' : 'Publish'}</span>
+              <span className="hidden sm:inline">3. {isDe ? 'Kontakt & Live' : 'Contact & Publish'}</span>
             </button>
           </div>
         </div>

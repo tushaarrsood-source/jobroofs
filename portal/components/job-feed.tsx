@@ -4,50 +4,49 @@ import { useState, useMemo, useEffect } from 'react';
 import Link from '@/components/ui/link';
 import { Search, MapPin, Euro, Clock, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getMyListings } from '@/lib/storage/my-listings';
+import { useTranslation } from '@/lib/i18n/language-context';
 
 const DISTRICTS = [
-  { id: 'all', label: 'Alle Bezirke' },
-  { id: 'mitte', label: 'Mitte' },
-  { id: 'kreuzberg', label: 'Kreuzberg' },
-  { id: 'friedrichshain', label: 'Friedrichshain' },
-  { id: 'neukölln', label: 'Neukölln' },
-  { id: 'prenzlauer berg', label: 'Prenzlauer Berg' },
-  { id: 'charlottenburg', label: 'Charlottenburg' },
-  { id: 'schöneberg', label: 'Schöneberg' },
-  { id: 'wedding', label: 'Wedding' },
-  { id: 'lichtenberg', label: 'Lichtenberg' },
-];
-
-const TIMEFRAMES = [
-  { id: 'all', label: 'Alle Termine' },
-  { id: 'today', label: '⚡ Heute / Sofort' },
-  { id: 'tomorrow', label: 'Morgen' },
-  { id: 'weekend', label: 'Dieses Wochenende' },
-  { id: 'flexible', label: 'Flexibel' },
+  { id: 'all', labelDe: 'Alle Bezirke', labelEn: 'All Districts' },
+  { id: 'mitte', labelDe: 'Mitte', labelEn: 'Mitte' },
+  { id: 'kreuzberg', labelDe: 'Kreuzberg', labelEn: 'Kreuzberg' },
+  { id: 'friedrichshain', labelDe: 'Friedrichshain', labelEn: 'Friedrichshain' },
+  { id: 'neukölln', labelDe: 'Neukölln', labelEn: 'Neukölln' },
+  { id: 'prenzlauer berg', labelDe: 'Prenzlauer Berg', labelEn: 'Prenzlauer Berg' },
+  { id: 'charlottenburg', labelDe: 'Charlottenburg', labelEn: 'Charlottenburg' },
+  { id: 'schöneberg', labelDe: 'Schöneberg', labelEn: 'Schöneberg' },
+  { id: 'wedding', labelDe: 'Wedding', labelEn: 'Wedding' },
+  { id: 'lichtenberg', labelDe: 'Lichtenberg', labelEn: 'Lichtenberg' },
 ];
 
 const CATEGORIES = [
-  { id: 'all', label: 'Alle Bereiche', keywords: [] },
-  { id: 'aushilfe', label: 'Aushilfe & Minijob', keywords: ['aushilfe', 'minijob', 'helfer', 'allrounder', 'aushilfskraft'] },
-  { id: 'gastro', label: 'Gastro & Bar', keywords: ['gastro', 'kellner', 'barista', 'küche', 'service', 'koch', 'bar', 'restaurant', 'schank'] },
-  { id: 'reinigung', label: 'Reinigung & Haushalt', keywords: ['reinigung', 'putzen', 'haushalt', 'zimmer', 'cleaner', 'housekeeping'] },
-  { id: 'events', label: 'Events & Promo', keywords: ['event', 'promo', 'hostess', 'festival', 'aufbau', 'messe', 'einlass'] },
-  { id: 'lager', label: 'Lager & Logistik', keywords: ['lager', 'logistik', 'kommissionier', 'fahrer', 'kurier', 'packer', 'transport'] },
-  { id: 'retail', label: 'Verkauf & Retail', keywords: ['verkauf', 'kasse', 'retail', 'store', 'laden', 'einzelhandel', 'shop'] },
+  { id: 'all', labelDe: 'Alle Bereiche', labelEn: 'All Categories', keywords: [] },
+  { id: 'aushilfe', labelDe: 'Aushilfe & Minijob', labelEn: 'Temp & Minijob', keywords: ['aushilfe', 'minijob', 'helfer', 'allrounder', 'aushilfskraft'] },
+  { id: 'gastro', labelDe: 'Gastro & Bar', labelEn: 'Gastro & Bar', keywords: ['gastro', 'kellner', 'barista', 'küche', 'service', 'koch', 'bar', 'restaurant', 'schank'] },
+  { id: 'reinigung', labelDe: 'Reinigung & Haushalt', labelEn: 'Cleaning & Household', keywords: ['reinigung', 'putzen', 'haushalt', 'zimmer', 'cleaner', 'housekeeping'] },
+  { id: 'events', labelDe: 'Events & Promo', labelEn: 'Events & Promo', keywords: ['event', 'promo', 'hostess', 'festival', 'aufbau', 'messe', 'einlass'] },
+  { id: 'lager', labelDe: 'Lager & Logistik', labelEn: 'Warehouse & Logistics', keywords: ['lager', 'logistik', 'kommissionier', 'fahrer', 'kurier', 'packer', 'transport'] },
+  { id: 'retail', labelDe: 'Verkauf & Retail', labelEn: 'Sales & Retail', keywords: ['verkauf', 'kasse', 'retail', 'store', 'laden', 'einzelhandel', 'shop'] },
 ];
 
 const JOBS_PER_PAGE = 20;
 
-function formatWage(job: any): string {
+function formatWage(job: any, isDe = true): string {
   if (job.payText) return job.payText;
-  if (job.compensation?.label) {
-    const l = job.compensation.label;
-    if (l.toLowerCase().includes('vereinbarung') || l.toLowerCase().includes('negotiable')) {
-      return 'Vergütung n.V.';
-    }
-    return l;
+  if (job.compensation?.amountMin) {
+    return `${job.compensation.amountMin} €/${isDe ? 'Std.' : 'h'}`;
   }
-  return 'Vergütung n.V.';
+  if (job.compensation?.label) {
+    const l = job.compensation.label.toLowerCase();
+    if (l.includes('tarif')) {
+      return isDe ? 'Tarif / Vereinbarung' : 'Tariff / agreement';
+    }
+    if (l.includes('vereinbarung') || l.includes('negotiable')) {
+      return isDe ? 'Vergütung n.V.' : 'Compensation neg.';
+    }
+    return job.compensation.label;
+  }
+  return isDe ? 'Vergütung n.V.' : 'Compensation neg.';
 }
 
 function parseWageNumber(wageStr: string): number {
@@ -56,11 +55,19 @@ function parseWageNumber(wageStr: string): number {
   return match ? parseFloat(match[1]) : 0;
 }
 
-function formatJobType(job: any): string {
+function formatJobType(job: any, isDe = true): string {
   if (Array.isArray(job.employmentForms) && job.employmentForms.length > 0) {
-    return job.employmentForms[0];
+    const form = job.employmentForms[0];
+    if (!isDe) {
+      if (form.toLowerCase().includes('teilzeit')) return 'Part-time';
+      if (form.toLowerCase().includes('vollzeit')) return 'Full-time';
+      if (form.toLowerCase().includes('aushilfe')) return 'Temp Help';
+      if (form.toLowerCase().includes('werkstudent')) return 'Working Student';
+      if (form.toLowerCase().includes('tagesschicht')) return 'Day Shift';
+    }
+    return form;
   }
-  return 'Aushilfe / Minijob';
+  return isDe ? 'Aushilfe / Minijob' : 'Temp / Minijob';
 }
 
 function isUrgentJob(job: any): boolean {
@@ -74,47 +81,28 @@ function isUrgentJob(job: any): boolean {
   );
 }
 
-function getRelativeTime(job: any, index: number): string {
+function getRelativeTime(job: any, index: number, isDe = true): string {
   if (job.isUserListing && job.postedAt) {
     const diffMs = Date.now() - new Date(job.postedAt).getTime();
     const mins = Math.max(1, Math.floor(diffMs / 60000));
-    if (mins < 60) return `Vor ${mins} Min.`;
+    if (mins < 60) return isDe ? `Vor ${mins} Min.` : `${mins}m ago`;
     const hours = Math.floor(mins / 60);
-    if (hours < 24) return `Vor ${hours} Std.`;
+    if (hours < 24) return isDe ? `Vor ${hours} Std.` : `${hours}h ago`;
     const days = Math.floor(hours / 24);
-    return `Vor ${days} Tagen`;
+    return isDe ? `Vor ${days} Tagen` : `${days}d ago`;
   }
   if (job.firstSeenAt) {
     const diffMs = Date.now() - new Date(job.firstSeenAt).getTime();
     const hours = Math.floor(diffMs / 3600000);
-    if (hours < 1) return 'Vor 40 Min.';
-    if (hours < 24) return `Vor ${hours} Std.`;
+    if (hours < 1) return isDe ? 'Vor 40 Min.' : '40m ago';
+    if (hours < 24) return isDe ? `Vor ${hours} Std.` : `${hours}h ago`;
     const days = Math.floor(hours / 24);
-    if (days === 1) return 'Gestern';
-    if (days < 7) return `Vor ${days} Tagen`;
-    return 'Diese Woche';
+    if (days === 1) return isDe ? 'Gestern' : 'Yesterday';
+    if (days < 7) return isDe ? `Vor ${days} Tagen` : `${days}d ago`;
+    return isDe ? 'Diese Woche' : 'This week';
   }
   const h = (index % 12) + 1;
-  return h === 1 ? 'Vor 45 Min.' : `Vor ${h} Std.`;
-}
-
-function matchesTimeframe(job: any, timeframe: string): boolean {
-  if (timeframe === 'all') return true;
-  const text = `${job.title} ${job.schedule?.summary || ''} ${job.hours?.label || ''} ${job.tags?.join(' ') || ''}`.toLowerCase();
-  
-  if (timeframe === 'today') {
-    return text.includes('sofort') || text.includes('heute') || text.includes('today') || text.includes('dringend');
-  }
-  if (timeframe === 'tomorrow') {
-    return text.includes('morgen') || text.includes('kurzfristig') || text.includes('ab sofort');
-  }
-  if (timeframe === 'weekend') {
-    return text.includes('wochenende') || text.includes('samstag') || text.includes('sonntag') || text.includes('weekend');
-  }
-  if (timeframe === 'flexible') {
-    return text.includes('flexibel') || text.includes('absprache') || text.includes('freie') || text.includes('teilzeit');
-  }
-  return true;
+  return isDe ? (h === 1 ? 'Vor 45 Min.' : `Vor ${h} Std.`) : `${h}h ago`;
 }
 
 function matchesCategory(job: any, catId: string): boolean {
@@ -125,7 +113,7 @@ function matchesCategory(job: any, catId: string): boolean {
   return cat.keywords.some((kw) => text.includes(kw));
 }
 
-function sortJobsList(list: any[], sort: 'newest' | 'urgent' | 'wage'): any[] {
+function sortJobsList(list: any[], sort: 'newest' | 'urgent' | 'wage', isDe = true): any[] {
   return [...list].sort((a, b) => {
     // User listings with spotlight/premium always pin higher
     const aSpotlight = a.tier === 'premium' ? 2 : a.isUserListing ? 1 : 0;
@@ -133,8 +121,8 @@ function sortJobsList(list: any[], sort: 'newest' | 'urgent' | 'wage'): any[] {
     if (aSpotlight !== bSpotlight) return bSpotlight - aSpotlight;
 
     if (sort === 'wage') {
-      const wageA = a.compensation?.amountMin || parseWageNumber(formatWage(a));
-      const wageB = b.compensation?.amountMin || parseWageNumber(formatWage(b));
+      const wageA = a.compensation?.amountMin || parseWageNumber(formatWage(a, isDe));
+      const wageB = b.compensation?.amountMin || parseWageNumber(formatWage(b, isDe));
       return wageB - wageA;
     }
 
@@ -158,12 +146,12 @@ export function JobFeed({
   initialJobs: any[];
   initialDirectJobs?: any[];
 }) {
+  const { isDe } = useTranslation();
   const [jobs, setJobs] = useState<any[]>(initialJobs);
   const [directJobs, setDirectJobs] = useState<any[]>(initialDirectJobs);
   const [query, setQuery] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedTimeframe, setSelectedTimeframe] = useState('all');
   const [sortBy, setSortBy] = useState<'newest' | 'urgent' | 'wage'>('newest');
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -179,10 +167,10 @@ export function JobFeed({
             id: l.id,
             slug: l.linkUrl.replace('/jobs/', '') || l.id,
             title: l.title,
-            company: parts[0] || 'Berliner Betrieb',
+            company: parts[0] || (isDe ? 'Berliner Betrieb' : 'Berlin Employer'),
             district: parts[1] || 'Berlin',
             payText: l.badgeLabel,
-            employmentForms: ['Direktbewerbung'],
+            employmentForms: [isDe ? 'Direktbewerbung' : 'Direct Application'],
             isUserListing: true,
             tier: l.tier,
           };
@@ -202,7 +190,7 @@ export function JobFeed({
     syncDirect();
     window.addEventListener('jobroofs_listings_updated', syncDirect);
     return () => window.removeEventListener('jobroofs_listings_updated', syncDirect);
-  }, [initialDirectJobs]);
+  }, [initialDirectJobs, isDe]);
 
   // Background hydration: Load the full verified Berlin catalog (1,600+ jobs)
   useEffect(() => {
@@ -235,7 +223,10 @@ export function JobFeed({
       const dist = params.get('district');
       if (dist) {
         const found = DISTRICTS.find(
-          (d) => d.id === dist.toLowerCase() || d.label.toLowerCase() === dist.toLowerCase()
+          (d) =>
+            d.id === dist.toLowerCase() ||
+            d.labelDe.toLowerCase() === dist.toLowerCase() ||
+            d.labelEn.toLowerCase() === dist.toLowerCase()
         );
         if (found) setSelectedDistrict(found.id);
       }
@@ -248,10 +239,10 @@ export function JobFeed({
     return () => window.removeEventListener('popstate', syncFromUrl);
   }, []);
 
-  // Reset pagination when search, district, category, timeframe, or sort changes
+  // Reset pagination when search, district, category, or sort changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [query, selectedDistrict, selectedCategory, selectedTimeframe, sortBy]);
+  }, [query, selectedDistrict, selectedCategory, sortBy]);
 
   // Filter direct employer listings
   const filteredDirectJobs = useMemo(() => {
@@ -262,7 +253,6 @@ export function JobFeed({
         if (!dist.includes(selectedDistrict)) return false;
       }
       if (!matchesCategory(job, selectedCategory)) return false;
-      if (!matchesTimeframe(job, selectedTimeframe)) return false;
       if (q) {
         const title = (job.title || '').toLowerCase();
         const company = (job.company || '').toLowerCase();
@@ -271,8 +261,8 @@ export function JobFeed({
       }
       return true;
     });
-    return sortJobsList(res, sortBy);
-  }, [directJobs, query, selectedDistrict, selectedCategory, selectedTimeframe, sortBy]);
+    return sortJobsList(res, sortBy, isDe);
+  }, [directJobs, query, selectedDistrict, selectedCategory, sortBy, isDe]);
 
   // Fast client-side filtering for full catalog
   const filteredJobs = useMemo(() => {
@@ -283,7 +273,6 @@ export function JobFeed({
         if (!dist.includes(selectedDistrict)) return false;
       }
       if (!matchesCategory(job, selectedCategory)) return false;
-      if (!matchesTimeframe(job, selectedTimeframe)) return false;
       if (q) {
         const title = (job.title || '').toLowerCase();
         const company = (job.company || '').toLowerCase();
@@ -298,8 +287,8 @@ export function JobFeed({
       }
       return true;
     });
-    return sortJobsList(res, sortBy);
-  }, [jobs, query, selectedDistrict, selectedCategory, selectedTimeframe, sortBy]);
+    return sortJobsList(res, sortBy, isDe);
+  }, [jobs, query, selectedDistrict, selectedCategory, sortBy, isDe]);
 
   const totalPages = Math.max(1, Math.ceil(filteredJobs.length / JOBS_PER_PAGE));
   const displayedJobs = useMemo(() => {
@@ -318,14 +307,14 @@ export function JobFeed({
           <div className="flex items-center gap-2">
             <span className="size-1.5 rounded-full bg-[#1e4635]" />
             <span className="text-[10px] font-mono font-medium uppercase tracking-[0.18em] text-[#7e8a84]">
-              Direkt vom Berliner Betrieb
+              {isDe ? 'Direkt vom Berliner Betrieb' : 'Direct from Berlin Employer'}
             </span>
           </div>
           <Link
             href="/post-a-job"
             className="apple-press inline-flex items-center gap-1 text-[11.5px] font-medium text-[#7e8a84] hover:text-[#202a31] transition-colors cursor-pointer"
           >
-            <span>+ Inserat aufgeben</span>
+            <span>{isDe ? '+ Inserat aufgeben' : '+ Post a job'}</span>
           </Link>
         </div>
 
@@ -333,11 +322,11 @@ export function JobFeed({
         {filteredDirectJobs.length > 0 ? (
           <div className="space-y-2.5 mt-2.5">
             {filteredDirectJobs.slice(0, 6).map((job, idx) => {
-              const wage = formatWage(job);
-              const jobType = formatJobType(job);
+              const wage = formatWage(job, isDe);
+              const jobType = formatJobType(job, isDe);
               const slug = job.slug || job.id;
               const urgent = isUrgentJob(job);
-              const relTime = getRelativeTime(job, idx);
+              const relTime = getRelativeTime(job, idx, isDe);
 
               return (
                 <Link
@@ -355,15 +344,15 @@ export function JobFeed({
                           {job.title}
                         </h3>
                         {/* Tiny crown — direct employer marker */}
-                        <span className="shrink-0 text-[11px] leading-none" title="Direkt vom Betrieb">👑</span>
+                        <span className="shrink-0 text-[11px] leading-none" title={isDe ? 'Direkt vom Betrieb' : 'Direct from employer'}>👑</span>
                         {job.isUserListing && (
                           <span className="shrink-0 font-mono text-[8.5px] uppercase bg-[#202a31] text-[#fbfbf8] px-1.5 py-0.5 rounded-xs font-medium leading-none">
-                            DEIN INSERAT
+                            {isDe ? 'DEIN INSERAT' : 'YOUR LISTING'}
                           </span>
                         )}
                         {urgent && (
                           <span className="shrink-0 font-mono text-[8.5px] uppercase bg-amber-500/10 text-amber-900 border border-amber-500/30 px-1.5 py-0.5 rounded-xs font-medium leading-none">
-                            ⚡ DRINGEND
+                            {isDe ? '⚡ DRINGEND' : '⚡ URGENT'}
                           </span>
                         )}
                       </div>
@@ -404,17 +393,19 @@ export function JobFeed({
         ) : (
           <div className="py-7 px-4 text-center rounded-xl border border-[#d8ded9] bg-white/70">
             <p className="text-[13.5px] font-medium text-[#202a31]">
-              Noch keine direkten Inserate vorhanden.
+              {isDe ? 'Noch keine direkten Inserate vorhanden.' : 'No direct listings yet.'}
             </p>
             <p className="text-[12px] text-[#7e8a84] font-light mt-1 max-w-md mx-auto">
-              Es gibt aktuell noch keine direkten Stellenanzeigen von Arbeitgebern. Sei der erste Berliner Betrieb!
+              {isDe
+                ? 'Es gibt aktuell noch keine direkten Stellenanzeigen von Arbeitgebern. Sei der erste Berliner Betrieb!'
+                : 'There are currently no direct employer job postings. Be the first Berlin business!'}
             </p>
             <div className="mt-3.5">
               <Link
                 href="/post-a-job"
                 className="apple-press inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#202a31] text-[#fbfbf8] text-[12px] font-medium hover:bg-[#161D22] transition-colors cursor-pointer shadow-2xs"
               >
-                <span>+ Jetzt als erster Betrieb inserieren</span>
+                <span>{isDe ? '+ Jetzt als erster Betrieb inserieren' : '+ Post the first direct listing'}</span>
               </Link>
             </div>
           </div>
@@ -428,7 +419,7 @@ export function JobFeed({
         </div>
         <div className="relative flex justify-center">
           <span className="bg-[#fbfbf8] px-4 text-[10px] sm:text-[10.5px] font-medium uppercase tracking-[0.18em] text-[#7e8a84]">
-            Alle verifizierten Stellen im Kiez durchsuchen
+            {isDe ? 'Alle verifizierten Stellen im Kiez durchsuchen' : 'Search all verified neighborhood jobs'}
           </span>
         </div>
       </div>
@@ -444,7 +435,7 @@ export function JobFeed({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Jobtitel, Firma oder Stichwort suchen..."
+            placeholder={isDe ? 'Jobtitel, Firma oder Stichwort suchen...' : 'Search job title, company or keyword...'}
             className="w-full h-11 pl-10 pr-4 rounded-sm border border-[#d8ded9] bg-white text-base sm:text-[13.5px] text-[#202a31] placeholder:text-[#7e8a84] focus:border-[#202a31] focus:ring-0 outline-none transition-colors"
           />
           {query && (
@@ -452,38 +443,15 @@ export function JobFeed({
               onClick={() => setQuery('')}
               className="apple-press absolute right-3 top-1/2 -translate-y-1/2 text-[11.5px] font-normal text-[#7e8a84] hover:text-[#202a31] px-2 py-1 cursor-pointer"
             >
-              Löschen
+              {isDe ? 'Löschen' : 'Clear'}
             </button>
           )}
-        </div>
-
-        {/* Quick Timeframe Chips (Heute, Morgen, Wochenende, Flexibel) */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[12px]">
-          <span className="text-[10px] uppercase tracking-[0.14em] text-[#7e8a84] font-mono mr-1 shrink-0">
-            Termin:
-          </span>
-          {TIMEFRAMES.map((tf) => {
-            const isActive = selectedTimeframe === tf.id;
-            return (
-              <button
-                key={tf.id}
-                onClick={() => setSelectedTimeframe(tf.id)}
-                className={`apple-press shrink-0 px-2.5 py-1 rounded-sm text-[11.5px] font-normal tracking-[0.01em] transition-colors cursor-pointer ${
-                  isActive
-                    ? 'bg-[#202a31] text-[#fbfbf8]'
-                    : 'bg-white text-[#7e8a84] border border-[#d8ded9] hover:text-[#202a31] hover:border-[#202a31]'
-                }`}
-              >
-                {tf.label}
-              </button>
-            );
-          })}
         </div>
 
         {/* Category Filter Chips */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[12px]">
           <span className="text-[10px] uppercase tracking-[0.14em] text-[#7e8a84] font-mono mr-1 shrink-0">
-            Bereich:
+            {isDe ? 'Bereich:' : 'Category:'}
           </span>
           {CATEGORIES.map((cat) => {
             const isActive = selectedCategory === cat.id;
@@ -497,7 +465,7 @@ export function JobFeed({
                     : 'bg-white text-[#7e8a84] border border-[#d8ded9] hover:text-[#202a31] hover:border-[#202a31]'
                 }`}
               >
-                {cat.label}
+                {isDe ? cat.labelDe : cat.labelEn}
               </button>
             );
           })}
@@ -506,7 +474,7 @@ export function JobFeed({
         {/* District Filter Chips */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[12px]">
           <span className="text-[10px] uppercase tracking-[0.14em] text-[#7e8a84] font-mono mr-1 shrink-0">
-            Bezirk:
+            {isDe ? 'Bezirk:' : 'District:'}
           </span>
           {DISTRICTS.map((d) => {
             const isActive = selectedDistrict === d.id;
@@ -528,7 +496,7 @@ export function JobFeed({
                     : 'bg-white text-[#7e8a84] border border-[#d8ded9] hover:text-[#202a31] hover:border-[#202a31]'
                 }`}
               >
-                {d.label}
+                {isDe ? d.labelDe : d.labelEn}
               </button>
             );
           })}
@@ -539,21 +507,23 @@ export function JobFeed({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#d8ded9] pb-3 mb-5 gap-2 text-[12px] text-[#7e8a84]">
         <span>
           <strong className="text-[#202a31] font-medium">
-            {filteredJobs.length.toLocaleString('de-DE')}
+            {filteredJobs.length.toLocaleString(isDe ? 'de-DE' : 'en-US')}
           </strong>{' '}
-          aktuelle Stellen in Berlin
+          {isDe ? 'aktuelle Stellen in Berlin' : 'active jobs in Berlin'}
         </span>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
-            <span className="text-[11px] uppercase tracking-wider text-[#7e8a84]">Sortieren:</span>
+            <span className="text-[11px] uppercase tracking-wider text-[#7e8a84]">
+              {isDe ? 'Sortieren:' : 'Sort by:'}
+            </span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
               className="bg-transparent text-[#202a31] text-[12px] font-medium border-b border-[#d8ded9] pb-0.5 outline-none cursor-pointer"
             >
-              <option value="newest">Neueste zuerst</option>
-              <option value="urgent">Dringend / Arbeitsdatum</option>
-              <option value="wage">Höchster Lohn</option>
+              <option value="newest">{isDe ? 'Neueste zuerst' : 'Newest first'}</option>
+              <option value="urgent">{isDe ? 'Dringend / Sofort' : 'Urgent / Immediate'}</option>
+              <option value="wage">{isDe ? 'Höchster Lohn' : 'Highest pay'}</option>
             </select>
           </div>
           <span className="text-[#d8ded9] hidden sm:inline">&middot;</span>
@@ -566,12 +536,12 @@ export function JobFeed({
       {/* Job Card Feed */}
       <div className="space-y-2.5">
         {displayedJobs.map((job, idx) => {
-          const wage = formatWage(job);
-          const jobType = formatJobType(job);
+          const wage = formatWage(job, isDe);
+          const jobType = formatJobType(job, isDe);
           const slug = job.slug || job.id;
           const itemIndex = String(idx + 1 + (currentPage - 1) * JOBS_PER_PAGE).padStart(2, '0');
           const urgent = isUrgentJob(job);
-          const relTime = getRelativeTime(job, idx + (currentPage - 1) * JOBS_PER_PAGE);
+          const relTime = getRelativeTime(job, idx + (currentPage - 1) * JOBS_PER_PAGE, isDe);
 
           return (
             <Link
@@ -596,16 +566,16 @@ export function JobFeed({
                         {job.title}
                       </h3>
                       {(job.tier === 'premium' || job.sourceKind === 'direct_employer' || job.isUserListing) && (
-                        <span className="shrink-0 text-[11px] leading-none" title="Direkt vom Betrieb">👑</span>
+                        <span className="shrink-0 text-[11px] leading-none" title={isDe ? 'Direkt vom Betrieb' : 'Direct from employer'}>👑</span>
                       )}
                       {job.isUserListing && (
                         <span className="shrink-0 font-mono text-[8.5px] uppercase bg-[#202a31] text-[#fbfbf8] px-1.5 py-0.5 rounded-xs font-medium leading-none">
-                          DEIN INSERAT
+                          {isDe ? 'DEIN INSERAT' : 'YOUR LISTING'}
                         </span>
                       )}
                       {urgent && (
                         <span className="shrink-0 font-mono text-[8.5px] uppercase bg-amber-500/10 text-amber-900 border border-amber-500/30 px-1.5 py-0.5 rounded-xs font-medium leading-none">
-                          ⚡ DRINGEND
+                          {isDe ? '⚡ DRINGEND' : '⚡ URGENT'}
                         </span>
                       )}
                     </div>
@@ -650,21 +620,24 @@ export function JobFeed({
 
         {displayedJobs.length === 0 && (
           <div className="rounded-sm border border-dashed border-[#d8ded9] bg-white p-12 text-center">
-            <p className="text-[15px] font-normal text-[#202a31]">Keine passenden Stellen gefunden</p>
+            <p className="text-[15px] font-normal text-[#202a31]">
+              {isDe ? 'Keine passenden Stellen gefunden' : 'No matching jobs found'}
+            </p>
             <p className="mt-1 text-[13px] text-[#7e8a84] font-light">
-              Versuche andere Suchbegriffe oder wähle „Alle Bezirke“.
+              {isDe
+                ? 'Versuche andere Suchbegriffe oder wähle „Alle Bezirke“.'
+                : 'Try different search terms or choose "All Districts".'}
             </p>
             <button
               onClick={() => {
                 setQuery('');
                 setSelectedDistrict('all');
                 setSelectedCategory('all');
-                setSelectedTimeframe('all');
                 setSortBy('newest');
               }}
               className="mt-4 inline-flex items-center justify-center rounded-sm bg-[#202a31] px-5 py-2 text-[12.5px] font-normal text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
             >
-              Filter zurücksetzen
+              {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
             </button>
           </div>
         )}
@@ -681,7 +654,7 @@ export function JobFeed({
             disabled={currentPage === 1}
             className="inline-flex items-center gap-1 rounded-sm border border-[#d8ded9] bg-white px-3.5 py-1.5 text-[#202a31] hover:bg-[#f4f4ee] disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
-            <ChevronLeft className="size-3.5 stroke-[1.25]" /> Vorherige
+            <ChevronLeft className="size-3.5 stroke-[1.25]" /> {isDe ? 'Vorherige' : 'Previous'}
           </button>
 
           <div className="flex items-center gap-2 font-mono text-[11px] text-[#202a31]">
@@ -698,7 +671,7 @@ export function JobFeed({
             disabled={currentPage === totalPages}
             className="inline-flex items-center gap-1 rounded-sm border border-[#d8ded9] bg-white px-3.5 py-1.5 text-[#202a31] hover:bg-[#f4f4ee] disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
-            Nächste <ChevronRight className="size-3.5 stroke-[1.25]" />
+            {isDe ? 'Nächste' : 'Next'} <ChevronRight className="size-3.5 stroke-[1.25]" />
           </button>
         </nav>
       )}
