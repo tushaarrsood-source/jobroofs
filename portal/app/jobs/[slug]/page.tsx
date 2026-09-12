@@ -4,11 +4,12 @@ import { SiteFooter } from '@/components/site-footer';
 import { JobPostingJsonLd, BreadcrumbJsonLd } from '@/components/json-ld';
 import { previewJobs } from '@/lib/domain/preview-data';
 import { getJobById, getJobNiches, getJobSourceInfo } from '@/lib/jobs/feeds';
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { getIndustry } from '@/lib/domain/taxonomy';
 import { JobDetailView } from '@/components/job-detail-view';
 import { isJobSuppressed } from '@/lib/sources/suppression-store';
 import { getSourcedJobBySlug, ALL_SOURCED_JOBS } from '@/lib/sources/sourced-jobs';
+import { getJobBySlugFromFirestore } from '@/lib/firebase/firestore-service';
 
 // Dynamic SEO metadata for each job listing
 export async function generateMetadata({
@@ -22,7 +23,10 @@ export async function generateMetadata({
     decodedSlug = decodeURIComponent(slug);
   } catch (e) {}
 
-  if (isJobSuppressed(slug) || isJobSuppressed(decodedSlug)) return { title: 'Job Not Found' };
+  if (isJobSuppressed(slug) || isJobSuppressed(decodedSlug)) {
+    return { title: 'Jobs in Berlin | JOBROOFS — The portal for Temp Jobs' };
+  }
+
   const job =
     getSourcedJobBySlug(slug) ||
     getSourcedJobBySlug(decodedSlug) ||
@@ -52,22 +56,41 @@ export async function generateMetadata({
   }
 
   const dbJob = (await getJobById(slug)) || (await getJobById(decodedSlug));
-  if (!dbJob) return { title: 'Job Not Found' };
+  if (dbJob) {
+    const district = dbJob.district || 'Berlin';
+    const payText = dbJob.payText || '';
+    return {
+      title: `${dbJob.title} — ${dbJob.company} (${district}) | JOBROOFS — The portal for Temp Jobs`,
+      description: `${dbJob.title} — ${payText} in ${district}, Berlin. Direkt bewerben.`,
+      openGraph: {
+        title: `${dbJob.title} — ${dbJob.company} (${district})`,
+        description: `${payText} · ${district}, Berlin. Direkt bewerben.`,
+        url: `/jobs/${slug}`,
+      },
+      alternates: {
+        canonical: `/jobs/${slug}`,
+      },
+    };
+  }
 
-  const district = dbJob.district || 'Berlin';
-  const payText = dbJob.payText || '';
-  return {
-    title: `${dbJob.title} — ${dbJob.company} (${district}) | JOBROOFS — The portal for Temp Jobs`,
-    description: `${dbJob.title} — ${payText} in ${district}, Berlin. Direkt bewerben.`,
-    openGraph: {
-      title: `${dbJob.title} — ${dbJob.company} (${district})`,
-      description: `${payText} · ${district}, Berlin. Direkt bewerben.`,
-      url: `/jobs/${slug}`,
-    },
-    alternates: {
-      canonical: `/jobs/${slug}`,
-    },
-  };
+  const fsJob = (await getJobBySlugFromFirestore(slug)) || (await getJobBySlugFromFirestore(decodedSlug));
+  if (fsJob) {
+    const district = fsJob.district || 'Berlin';
+    return {
+      title: `${fsJob.title} — ${fsJob.company} (${district}) | JOBROOFS — The portal for Temp Jobs`,
+      description: `${fsJob.title} bei ${fsJob.company} in ${district}, Berlin. Jetzt direkt bewerben.`,
+      openGraph: {
+        title: `${fsJob.title} — ${fsJob.company} (${district})`,
+        description: `Stellenangebot in ${district}, Berlin. Jetzt direkt bewerben.`,
+        url: `/jobs/${slug}`,
+      },
+      alternates: {
+        canonical: `/jobs/${slug}`,
+      },
+    };
+  }
+
+  return { title: 'Jobs in Berlin | JOBROOFS — The portal for Temp Jobs' };
 }
 
 export default async function JobDetailPage({
@@ -82,7 +105,7 @@ export default async function JobDetailPage({
   } catch (e) {}
 
   if (isJobSuppressed(slug) || isJobSuppressed(decodedSlug)) {
-    return notFound();
+    redirect('/?expired=true');
   }
   let job: any = null;
 
@@ -150,7 +173,68 @@ export default async function JobDetailPage({
   }
 
   if (!job) {
-    return notFound();
+    const fsJob = (await getJobBySlugFromFirestore(slug)) || (await getJobBySlugFromFirestore(decodedSlug));
+    if (fsJob) {
+      job = {
+        id: fsJob.id,
+        slug: fsJob.slug || fsJob.id,
+        title: fsJob.title,
+        company: fsJob.company,
+        district: fsJob.district || 'Berlin',
+        postcode: fsJob.postcode || '',
+        industryId: 'direct',
+        roleFamilyId: 'direct',
+        employmentForms: [fsJob.employmentType || 'Minijob'],
+        language: 'german_and_english',
+        listingOrigin: 'direct',
+        tier: fsJob.tier || 'free',
+        compensation: {
+          label: fsJob.payText || 'Tarif / VB',
+          amountMin: null,
+          amountMax: null,
+          currency: 'EUR',
+          rateInterval: 'hour',
+          payoutCadence: 'monthly',
+          grossNet: 'gross',
+          extras: null,
+        },
+        hours: {
+          label: fsJob.hoursLabel || 'Flexible Arbeitszeiten',
+          minimum: 10,
+          maximum: 20,
+          period: 'week',
+        },
+        schedule: {
+          summary: fsJob.scheduleSummary || 'Flexible Schichten',
+          workDays: [],
+          timeWindows: [],
+          startDate: null,
+          endDate: null,
+        },
+        workplace: { type: 'on_site', address: fsJob.district ? `${fsJob.district}, Berlin` : 'Berlin' },
+        responsibilities: [fsJob.description || 'Zuverlässige Mitarbeit im Betrieb.'],
+        requirements: [fsJob.requirements || 'Pünktlichkeit & Zuverlässigkeit'],
+        application: {
+          method: fsJob.applyUrl ? 'external_link' : 'email',
+          url: fsJob.applyUrl || null,
+          email: fsJob.contactEmail || null,
+          deadline: null,
+          contactName: null,
+        },
+        contact: {
+          method: fsJob.contactEmail ? 'email' : 'website',
+          value: fsJob.contactEmail || fsJob.applyUrl || 'kontakt@jobroofs.com',
+          instructions: 'Direkte Kontaktaufnahme mit dem Arbeitgeber.',
+        },
+        firstSeenAt: fsJob.createdAt ? new Date(fsJob.createdAt).toISOString() : new Date().toISOString(),
+        lastVerifiedAt: new Date().toISOString(),
+      };
+    }
+  }
+
+  // If a job is genuinely expired/unavailable, smoothly redirect to home feed so crawlers & users never see a 404
+  if (!job) {
+    redirect('/?expired=true');
   }
 
   // Calculate adjacent jobs for instant Jobicco-style Prev/Next navigation

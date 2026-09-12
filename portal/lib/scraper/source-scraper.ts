@@ -808,8 +808,12 @@ export function scrapeAllSources(sources: BerlinSource[] = ALL_BERLIN_SOURCES): 
   const seenSlugs = new Set<string>();
 
   for (const source of sources) {
-    // Only include sources with an active, verified HTTP career URL
-    if (!source.careersUrl || !source.careersUrl.startsWith('http')) {
+    const targetUrl = (source.careersUrl && source.careersUrl.startsWith('http'))
+      ? source.careersUrl
+      : source.url;
+
+    // Must have a valid HTTP URL
+    if (!targetUrl || !targetUrl.startsWith('http')) {
       continue;
     }
 

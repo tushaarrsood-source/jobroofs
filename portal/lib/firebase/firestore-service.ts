@@ -115,6 +115,34 @@ export async function getJobsFromFirestore(limitCount = 50): Promise<FirestoreJo
   }
 }
 
+export async function getJobBySlugFromFirestore(slugOrId: string): Promise<FirestoreJob | null> {
+  const db = getFirebaseDb();
+  if (!db || !slugOrId) return null;
+
+  try {
+    // 1. Try direct doc ID
+    const directRef = doc(db, 'jobs', slugOrId);
+    const directSnap = await getDoc(directRef);
+    if (directSnap.exists()) {
+      return directSnap.data() as FirestoreJob;
+    }
+
+    // 2. Query by slug field
+    const q = query(
+      collection(db, 'jobs'),
+      where('slug', '==', slugOrId),
+      limit(1)
+    );
+    const snap = await getDocs(q);
+    if (!snap.empty) {
+      return snap.docs[0].data() as FirestoreJob;
+    }
+  } catch (err) {
+    console.error('Error fetching job by slug from Firestore:', err);
+  }
+  return null;
+}
+
 // -------------------------------------------------------------
 // HOUSING OPERATIONS
 // -------------------------------------------------------------

@@ -1,6 +1,6 @@
 import type { PreviewJob } from '@/lib/domain/types';
 import { ALL_BERLIN_SOURCES } from './berlin-sources-catalog';
-import { scrapeAllSources } from '@/lib/scraper/source-scraper';
+import { scrapeAllSources, transformSourceToJob } from '@/lib/scraper/source-scraper';
 
 // Ingest and transform verified listings across all 1,600 Berlin sources
 export const ALL_SOURCED_JOBS: PreviewJob[] = scrapeAllSources(ALL_BERLIN_SOURCES);
@@ -28,7 +28,36 @@ for (const job of ALL_SOURCED_JOBS) {
 }
 
 export function getSourcedJobBySlug(slugOrId: string): PreviewJob | undefined {
-  return jobsBySlug.get(slugOrId) || jobsById.get(slugOrId);
+  if (!slugOrId) return undefined;
+  const existing = jobsBySlug.get(slugOrId) || jobsById.get(slugOrId);
+  if (existing) return existing;
+
+  const clean = slugOrId.toLowerCase().trim();
+  const existingClean = jobsBySlug.get(clean) || jobsById.get(clean);
+  if (existingClean) return existingClean;
+
+  // Dynamic resilience fallback: search ALL_BERLIN_SOURCES across all typicalRoles
+  for (const source of ALL_BERLIN_SOURCES) {
+    const roles = source.typicalRoles && source.typicalRoles.length > 0
+      ? source.typicalRoles
+      : ['Mitarbeiter (m/w/d)'];
+
+    for (let i = 0; i < roles.length; i++) {
+      const candidate = transformSourceToJob(source, i);
+      if (
+        candidate.slug === slugOrId ||
+        candidate.id === slugOrId ||
+        candidate.slug === clean ||
+        candidate.id === clean
+      ) {
+        jobsBySlug.set(candidate.slug, candidate);
+        jobsById.set(candidate.id, candidate);
+        return candidate;
+      }
+    }
+  }
+
+  return undefined;
 }
 
 export function getSourcedJobsByNiche(nicheId: string): PreviewJob[] {
