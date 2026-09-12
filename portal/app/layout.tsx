@@ -5,6 +5,7 @@ import { LanguageProvider } from '@/lib/i18n/language-context';
 import { MobileNavBar } from '@/components/mobile-nav-bar';
 import { CookieBanner } from '@/components/cookie-banner';
 import { PwaInstallPrompt } from '@/components/pwa-install-prompt';
+import { LiveSync } from '@/components/live-sync';
 import './globals.css';
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -127,15 +128,7 @@ export default function RootLayout({
             <PwaInstallPrompt />
           </LanguageProvider>
         </AuthProvider>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js').catch(function() {});
-              }
-            `,
-          }}
-        />
+        <LiveSync />
       </body>
     </html>
   );
