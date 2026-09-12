@@ -43,7 +43,7 @@ export const STRIPE_CATALOG: Record<string, StripeProductDefinition> = {
     lookupKey: 'jobroofs_job_premium',
     productId: 'prod_VFIqiXHu3OJa9d',
     priceId: 'price_1UEoEyF7VAvjOqD826PzNB6v',
-    name: 'JOBROOFS Premium Spotlight Job Listing (60 Days)',
+    name: 'JOBROOFS Extended Job Listing (60 Days)',
     amountEur: 24.99,
     type: 'job',
     tier: 'premium',

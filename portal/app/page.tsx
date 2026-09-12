@@ -55,7 +55,7 @@ export default async function Home() {
       <SiteHeader />
 
       <main className="mx-auto max-w-5xl w-full px-6 md:px-8 flex-1">
-        {/* Signature Editorial Hero with Premium Spotlight */}
+        {/* Signature Editorial Hero with Direct Listings */}
         <EditorialHero />
 
         {/* Full Interactive Job Feed with Direct Employer Listings Above Search Bar */}

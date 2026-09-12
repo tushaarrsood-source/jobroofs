@@ -212,7 +212,7 @@ export async function getUserListingsFromFirestore(userId: string): Promise<User
         tier: data.tier || 'standard',
         tierLabel:
           data.tier === 'premium'
-            ? '⭐ Premium Spotlight'
+            ? 'Extended (60 Tage)'
             : data.tier === 'free'
             ? '🎁 Erstinserat (Gratis)'
             : data.tier === 'standard'

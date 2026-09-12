@@ -13,19 +13,19 @@ export function EditorialHero() {
   const router = useRouter();
   const { isDe } = useTranslation();
   const { user } = useAuth();
-  const [userPremiumListings, setUserPremiumListings] = useState<UserListing[]>([]);
+  const [directListings, setDirectListings] = useState<UserListing[]>([]);
   const [authOpen, setAuthOpen] = useState(false);
 
   useEffect(() => {
-    const checkPremium = () => {
+    const checkListings = () => {
       const all = getMyListings();
-      const premiums = all.filter((l) => l.type === 'job' && l.tier === 'premium' && l.status !== 'expired');
-      setUserPremiumListings(premiums);
+      const active = all.filter((l) => l.type === 'job' && l.status !== 'expired');
+      setDirectListings(active);
     };
 
-    checkPremium();
-    window.addEventListener('jobroofs_listings_updated', checkPremium);
-    return () => window.removeEventListener('jobroofs_listings_updated', checkPremium);
+    checkListings();
+    window.addEventListener('jobroofs_listings_updated', checkListings);
+    return () => window.removeEventListener('jobroofs_listings_updated', checkListings);
   }, []);
 
   const handlePostJobClick = () => {
@@ -59,7 +59,7 @@ export function EditorialHero() {
       {/* Hairline Divider */}
       <div className="w-full h-px bg-[#d8ded9] my-7 sm:my-10" />
 
-      {/* Split Grid: Left = Single Clean "Post a Job" Hub, Right = Premium Spotlight Ledger */}
+      {/* Split Grid: Left = Single Clean "Post a Job" Hub, Right = Direct Listings Ledger */}
       <div className="grid gap-8 lg:gap-10 lg:grid-cols-12 lg:items-center">
         {/* Left Column: Ultra-Clean Single "Post a Job" CTA Hub */}
         <div className="lg:col-span-6 space-y-4">
@@ -89,22 +89,22 @@ export function EditorialHero() {
           </div>
         </div>
 
-        {/* Right Column: Dedicated PREMIUM SPOTLIGHT (Display-only ledger, no extra CTA button) */}
+        {/* Right Column: Direct Listings Ledger (Every direct listing is already spotlighted) */}
         <div className="lg:col-span-6 lg:pl-4">
           <div className="flex items-center justify-between text-[10px] sm:text-[10.5px] font-medium uppercase tracking-[0.12em] sm:tracking-[0.2em] text-[#7e8a84] mb-3">
             <span className="flex items-center gap-1.5 text-[#202a31] font-semibold">
               <Sparkles className="size-3 text-[#9e7d3b]" />
-              <span>PREMIUM SPOTLIGHT &middot; BERLIN</span>
+              <span>{isDe ? 'DIREKTE INSERATE · BERLIN' : 'DIRECT LISTINGS · BERLIN'}</span>
             </span>
             <span className="inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-[#202a31] bg-[#ecece4] px-2 py-0.5 rounded-sm font-semibold border border-[#d8ded9]">
-              ★ PREMIUM
+              ★ DIREKT
             </span>
           </div>
 
           {/* Architectural Hairline-Divided Ledger */}
           <div className="border-t border-[#d8ded9]">
-            {/* User-submitted Premium Listings (if active) */}
-            {userPremiumListings.map((userJob) => (
+            {/* User-submitted Direct Listings */}
+            {directListings.map((userJob) => (
               <Link
                 key={userJob.id}
                 href={userJob.linkUrl}
@@ -116,7 +116,7 @@ export function EditorialHero() {
                       {userJob.title}
                     </span>
                     <span className="font-mono text-[9px] uppercase bg-[#202a31] text-[#fbfbf8] px-1.5 py-0.2 rounded-xs font-medium">
-                      ★ SPOTLIGHT
+                      ★ DIREKT
                     </span>
                   </div>
                   <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
@@ -134,15 +134,15 @@ export function EditorialHero() {
               </Link>
             ))}
 
-            {userPremiumListings.length === 0 && (
+            {directListings.length === 0 && (
               <div className="py-7 px-4 text-center">
                 <p className="text-[13.5px] font-medium text-[#202a31]">
-                  {isDe ? 'Aktuell noch keine Spotlight-Inserate.' : 'No spotlight listings yet.'}
+                  {isDe ? 'Aktuell noch keine direkten Inserate.' : 'No direct listings yet.'}
                 </p>
                 <p className="mt-1 text-[12px] text-[#7e8a84] font-light max-w-sm mx-auto">
                   {isDe
-                    ? '60 Tage maximale Sichtbarkeit ganz oben auf JOBROOFS für Berliner Betriebe.'
-                    : '60 days of maximum visibility at the top of JOBROOFS for Berlin businesses.'}
+                    ? 'Inseriere dein Stellenangebot direkt auf JOBROOFS für Berliner Talente.'
+                    : 'Post your job directly on JOBROOFS for Berlin talent.'}
                 </p>
               </div>
             )}
@@ -152,10 +152,10 @@ export function EditorialHero() {
           <div className="flex items-center justify-between pt-3 border-t border-[#d8ded9] text-[11px] text-[#7e8a84] font-light">
             <span className="flex items-center gap-1.5">
               <span className="size-1.5 rounded-full bg-[#202a31]" />
-              <span>{isDe ? 'Berliner Betriebe im Spotlight' : 'Berlin businesses in spotlight'}</span>
+              <span>{isDe ? 'Direktkontakt zu Berliner Betrieben' : 'Direct connection to Berlin businesses'}</span>
             </span>
             <span className="font-mono text-[10px] text-[#7e8a84]">
-              {isDe ? 'Top-Platzierung' : 'Top placement'}
+              {isDe ? 'Sofort live' : 'Instantly live'}
             </span>
           </div>
         </div>

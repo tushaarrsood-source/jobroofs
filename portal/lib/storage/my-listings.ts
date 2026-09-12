@@ -93,7 +93,7 @@ export function upgradeMyListingLocally(id: string): void {
         return {
           ...listing,
           tier: 'premium' as const,
-          tierLabel: '⭐ Premium Spotlight',
+          tierLabel: 'Extended (60 Tage)',
           pricePaidEur: 24.99,
           expiresAt: new Date(Date.now() + 60 * 86400000).toISOString(),
         };

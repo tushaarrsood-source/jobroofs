@@ -118,10 +118,10 @@ function matchesCategory(job: any, catId: string): boolean {
 
 function sortJobsList(list: any[], sort: 'newest' | 'urgent' | 'wage', isDe = true): any[] {
   return [...list].sort((a, b) => {
-    // User listings with spotlight/premium always pin higher
-    const aSpotlight = a.tier === 'premium' ? 2 : a.isUserListing ? 1 : 0;
-    const bSpotlight = b.tier === 'premium' ? 2 : b.isUserListing ? 1 : 0;
-    if (aSpotlight !== bSpotlight) return bSpotlight - aSpotlight;
+    // Direct employer listings always pin to top
+    const aDirect = a.isUserListing ? 1 : 0;
+    const bDirect = b.isUserListing ? 1 : 0;
+    if (aDirect !== bDirect) return bDirect - aDirect;
 
     if (sort === 'wage') {
       const wageA = a.compensation?.amountMin || parseWageNumber(formatWage(a, isDe));

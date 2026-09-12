@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from '@/components/ui/link';
-import { Briefcase, Home, Plus, ExternalLink, Trash2, CheckCircle2, Clock, Sparkles } from 'lucide-react';
-import { getMyListings, removeMyListing, seedDemoListingsIfEmpty, syncUserListingsWithCloud, upgradeMyListingLocally, UserListing } from '@/lib/storage/my-listings';
-import { upgradeJobToSpotlight } from '@/lib/firebase/firestore-service';
+import { Briefcase, Home, Plus, ExternalLink, Trash2, CheckCircle2, Clock } from 'lucide-react';
+import { getMyListings, removeMyListing, seedDemoListingsIfEmpty, syncUserListingsWithCloud, UserListing } from '@/lib/storage/my-listings';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { AuthModal } from '@/components/auth-modal';
@@ -182,45 +181,6 @@ export function MyListings() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    {listing.tier !== 'premium' && listing.type === 'job' && (
-                      <button
-                        type="button"
-                        onClick={async () => {
-                          try {
-                            const res = await fetch('/api/checkout', {
-                              method: 'POST',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({
-                                tier: 'premium',
-                                jobData: {
-                                  slug: listing.linkUrl.replace('/jobs/', ''),
-                                  title: listing.title,
-                                  isUpgrade: true,
-                                },
-                              }),
-                            });
-                            const data = await res.json();
-                            if (data.checkoutUrl) {
-                              window.location.href = data.checkoutUrl;
-                              return;
-                            }
-                            // Direct upgrade fallback
-                            upgradeMyListingLocally(listing.id);
-                            await upgradeJobToSpotlight(listing.id);
-                            setListings(getMyListings());
-                            alert(isDe ? 'Inserat erfolgreich auf Spotlight geupgradet!' : 'Listing successfully upgraded to Spotlight!');
-                          } catch (err: any) {
-                            alert(err.message || 'Upgrade fehlgeschlagen.');
-                          }
-                        }}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 px-2.5 py-1 text-xs font-medium transition cursor-pointer"
-                        title={isDe ? 'Auf Spotlight upgraden (24,99 €)' : 'Upgrade to Spotlight (€24.99)'}
-                      >
-                        <Sparkles className="size-3 text-amber-600" />
-                        <span>{isDe ? 'Auf Spotlight upgraden (24,99 €)' : 'Upgrade to Spotlight (€24.99)'}</span>
-                      </button>
-                    )}
-
                     <button
                       type="button"
                       onClick={async () => {

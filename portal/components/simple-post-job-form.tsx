@@ -76,7 +76,6 @@ export function SimplePostJobForm() {
   const [authOpen, setAuthOpen] = useState(false);
   const [isFreeEligible, setIsFreeEligible] = useState(true);
   const [lastCreatedJob, setLastCreatedJob] = useState<{ id: string; slug: string; title: string } | null>(null);
-  const [upgrading, setUpgrading] = useState(false);
   const [successCopied, setSuccessCopied] = useState(false);
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
@@ -187,39 +186,6 @@ export function SimplePostJobForm() {
     handleSubmit();
   };
 
-  const handleUpgradeToSpotlight = async (slugToUpgrade: string) => {
-    setUpgrading(true);
-    setError(null);
-    try {
-      const checkoutRes = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          tier: 'premium',
-          jobData: {
-            slug: slugToUpgrade,
-            title: formData.title || 'Inserat',
-            company: formData.company || 'Betrieb',
-            isUpgrade: true,
-          },
-        }),
-      });
-      const checkoutData = await checkoutRes.json();
-      if (checkoutData.checkoutUrl) {
-        window.location.href = checkoutData.checkoutUrl;
-        return;
-      }
-      // Offline / fallback mode
-      upgradeMyListingLocally(slugToUpgrade);
-      alert('Inserat wurde erfolgreich auf Premium Spotlight geupgradet!');
-      window.location.href = `/jobs/${slugToUpgrade}`;
-    } catch (err: any) {
-      setError(err.message || 'Upgrade fehlgeschlagen.');
-    } finally {
-      setUpgrading(false);
-    }
-  };
-
   const handleSubmit = async () => {
     if (!formData.applyUrl.trim() && !formData.contactEmail.trim()) {
       setError('Bitte gib mindestens eine Bewerbungsmethode (Link oder E-Mail) an.');
@@ -262,12 +228,12 @@ export function SimplePostJobForm() {
           : 9.99;
       const tierLabel =
         formData.tier === 'premium'
-          ? '⭐ Premium Spotlight'
+          ? 'Extended Inserat (60 Tage)'
           : formData.tier === 'free'
           ? '🎁 Erstinserat (Gratis)'
           : formData.tier === 'standard'
-          ? 'Standard Inserat'
-          : 'Quick Inserat';
+          ? 'Standard Inserat (30 Tage)'
+          : 'Quick Inserat (15 Tage)';
 
       // 1. Save locally so it's safely stored for this employer
       saveMyListing({
@@ -443,37 +409,8 @@ export function SimplePostJobForm() {
         <p className="mt-3 text-[14px] text-[#5a6460] font-light leading-relaxed max-w-md mx-auto">
           Deine Anzeige für <span className="font-medium text-[#202a31]">{formData.title}</span> bei{' '}
           <span className="font-medium text-[#202a31]">{formData.company}</span> ist eingegangen und wird sofort{' '}
-          {formData.tier === 'premium' ? (
-            <span className="font-medium text-[#202a31]">im Premium-Spotlight ganz oben und im Direktbereich</span>
-          ) : (
-            <span className="font-medium text-[#202a31]">im Direktbereich über der Suche</span>
-          )}{' '}
-          geschaltet.
+          <span className="font-medium text-[#202a31]">im Direktbereich über der Suche und im Hero</span> geschaltet.
         </p>
-
-        {/* Spotlight Upgrade Offer */}
-        {formData.tier !== 'premium' && lastCreatedJob && (
-          <div className="mt-6 p-4 rounded-xl border border-amber-500/30 bg-amber-500/10 text-left flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <div className="text-[13px] font-semibold text-amber-900 flex items-center gap-1.5">
-                <Sparkles className="size-4 text-amber-600" />
-                <span>Möchtest du maximale Reichweite in ganz Berlin?</span>
-              </div>
-              <div className="text-[12px] text-amber-800/80 font-light mt-0.5">
-                Hebe dein Inserat jetzt für 24,99 € ins Premium-Spotlight ganz oben auf die Startseite (60 Tage aktiv).
-              </div>
-            </div>
-            <button
-              type="button"
-              disabled={upgrading}
-              onClick={() => handleUpgradeToSpotlight(lastCreatedJob.slug)}
-              className="apple-press shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-[#202a31] text-[#fbfbf8] text-[12px] font-medium hover:bg-[#161D22] transition-colors cursor-pointer shadow-xs"
-            >
-              <span>{upgrading ? 'Weiterleitung...' : 'Auf Spotlight upgraden (24,99 €)'}</span>
-              <ArrowRight className="size-3" />
-            </button>
-          </div>
-        )}
 
         {/* Share Section on Success */}
         {lastCreatedJob && (
@@ -1037,25 +974,24 @@ export function SimplePostJobForm() {
                     </p>
                   </button>
 
-                  {/* Premium Spotlight Tier */}
+                  {/* Extended Tier (60 Days) */}
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, tier: 'premium' })}
-                    className={`p-3 sm:p-3.5 rounded-xl border text-left transition-all cursor-pointer relative ${
+                    className={`p-3 sm:p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
                       formData.tier === 'premium'
-                        ? 'border-[#202a31] bg-[#ecece4]/70 ring-1 ring-[#202a31] shadow-2xs'
+                        ? 'border-[#202a31] bg-[#f4f4ee]/80 shadow-2xs ring-1 ring-[#202a31]'
                         : 'border-[#d8ded9] bg-white hover:border-[#202a31]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-[13px] font-medium text-[#202a31] flex items-center gap-1.5">
-                        <Sparkles className="size-3.5 text-[#9e7d3b]" />
-                        <span>{isFreeEligible ? 'Spotlight Upgrade' : 'Spotlight (60 Tage)'}</span>
+                      <span className="text-[13px] font-medium text-[#202a31]">
+                        <span>Extended (60 Tage)</span>
                       </span>
                       <span className="font-mono text-[12.5px] font-medium text-[#202a31]">24,99 €</span>
                     </div>
-                    <p className="mt-1 text-[11px] text-[#5a6460] font-light leading-relaxed">
-                      60 Tage Laufzeit &middot; Ganz oben im <strong>Spotlight (Hero)</strong> &middot; Maximale Reichweite.
+                    <p className="mt-1 text-[11px] text-[#7e8a84] font-light leading-relaxed">
+                      60 Tage Laufzeit &middot; 2 Monate im Direktbereich &middot; Maximale Reichweite.
                     </p>
                   </button>
                 </div>

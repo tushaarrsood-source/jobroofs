@@ -24,8 +24,6 @@ import { useAuth } from '@/lib/firebase/auth-context';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { AuthModal } from '@/components/auth-modal';
 import { JobroofsMark } from '@/components/brand-logo';
-import { upgradeMyListingLocally } from '@/lib/storage/my-listings';
-import { upgradeJobToSpotlight } from '@/lib/firebase/firestore-service';
 
 interface JobDetailViewProps {
   job: any;
@@ -39,17 +37,12 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [pendingTarget, setPendingTarget] = useState<string | null>(null);
   const [showSuccessBanner, setShowSuccessBanner] = useState(false);
-  const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
-      if (params.get('upgraded') === 'true') {
-        setShowUpgradeBanner(true);
-        upgradeMyListingLocally(job.id || job.slug);
-        upgradeJobToSpotlight(job.id || job.slug).catch(console.error);
-      } else if (params.get('payment_success') === 'true') {
+      if (params.get('payment_success') === 'true') {
         setShowSuccessBanner(true);
       }
     }
@@ -152,31 +145,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
         )}
       </nav>
 
-      {showUpgradeBanner && (
-        <div className="mb-6 rounded-sm border border-emerald-200 bg-emerald-50/80 p-4 text-emerald-950 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <CheckCircle2 className="size-5 text-emerald-600 shrink-0" />
-            <div>
-              <p className="text-[13px] font-medium text-emerald-900">
-                {isDe ? 'Spotlight-Upgrade erfolgreich aktiviert!' : 'Spotlight upgrade successfully activated!'}
-              </p>
-              <p className="text-[12px] text-emerald-700">
-                {isDe
-                  ? 'Deine Anzeige ist jetzt mit höchster Priorität für 60 Tage ganz oben platziert.'
-                  : 'Your listing is now placed at the top with highest priority for 60 days.'}
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => setShowUpgradeBanner(false)}
-            className="text-xs text-emerald-700 hover:text-emerald-900 ml-4 underline cursor-pointer"
-          >
-            {isDe ? 'Schließen' : 'Close'}
-          </button>
-        </div>
-      )}
-
-      {showSuccessBanner && !showUpgradeBanner && (
+      {showSuccessBanner && (
         <div className="mb-6 rounded-sm border border-emerald-200 bg-emerald-50/80 p-4 text-emerald-950 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <CheckCircle2 className="size-5 text-emerald-600 shrink-0" />
