@@ -525,157 +525,85 @@ export function SimplePostJobForm() {
 
   return (
     <div className="space-y-4 sm:space-y-5">
-      {/* Header & Step Tracker - BORDERLESS */}
-      <div className="pb-4 sm:pb-5">
-        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3">
+      {/* Clean Minimal Header */}
+      <div className="pb-2">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <div>
-            <div className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-zinc-600 mb-1.5">
-              {isDe ? 'FÜR ARBEITGEBER · DIREKTE INSERATE' : 'EMPLOYER INTAKE · DIRECT LISTINGS'}
-            </div>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-black">
-              {isDe ? 'Job jetzt inserieren.' : 'Post a job now.'}
-            </h1>
-            <p className="mt-2 text-base sm:text-lg text-zinc-700 font-normal leading-relaxed">
-              {isDe
-                ? 'Erreiche motivierte Studierende, Aushilfen und Fachkräfte direkt in deinem Kiez — ohne Agenturen.'
-                : 'Reach motivated students, helpers, and local talents directly in your neighborhood — without agencies.'}
-            </p>
-            <p className="mt-1.5 text-sm text-zinc-600">
-              {isFreeEligible ? (
-                <span className="text-emerald-800 font-semibold">
-                  {isDe ? '1. Inserat 100% kostenlos · ' : '1st listing 100% free · '}
-                </span>
-              ) : null}
-              {isDe
-                ? '9,99 € für 15 Tage · 14,99 € für 30 Tage · 24,99 € für 60 Tage · Mit dem Fortfahren stimmst du den '
-                : '9.99 € for 15 days · 14.99 € for 30 days · 24.99 € for 60 days · By continuing, you agree to the '}
-              <Link href="/agb" className="underline underline-offset-2 text-black font-medium hover:text-zinc-700 transition-colors">
-                {isDe ? 'AGB' : 'Terms'}
-              </Link>{' '}
-              {isDe ? 'und' : 'and'}{' '}
-              <Link href="/datenschutz" className="underline underline-offset-2 text-black font-medium hover:text-zinc-700 transition-colors">
-                {isDe ? 'Richtlinien' : 'Privacy Policy'}
-              </Link>{' '}
-              {isDe ? 'zu.' : '.'}
-            </p>
-
-            {/* 1st Job Free Welcome Banner - BORDERLESS */}
-            {!user ? (
-              <div className="mt-4 rounded-2xl bg-emerald-50/90 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-emerald-950">
-                <div className="flex items-start gap-3">
-                  <div className="size-7 rounded-xl bg-emerald-700 text-white flex items-center justify-center shrink-0 mt-0.5">
-                    <Gift className="size-3.5" />
-                  </div>
-                  <div>
-                    <div className="text-sm sm:text-base font-bold text-emerald-900">
-                      {isDe
-                        ? '1. Inserat 100% kostenlos für jeden neuen Benutzeraccount'
-                        : '1st job listing 100% free for every new user account'}
-                    </div>
-                    <div className="text-xs sm:text-sm text-emerald-800/90 font-medium mt-0.5">
-                      {isDe
-                        ? 'Melde dich kurz an oder erstelle ein kostenloses Konto, um dein 1. Inserat gratis zu schalten.'
-                        : 'Sign in or create a free account to post your 1st job for free.'}
-                    </div>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setAuthOpen(true)}
-                  className="apple-press shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-black text-white text-xs sm:text-sm font-semibold hover:bg-zinc-800 transition-colors cursor-pointer active:scale-[0.98]"
-                >
-                  <span>{isDe ? 'Kostenlos anmelden' : 'Sign in for free'}</span>
-                  <ArrowRight className="size-3.5" />
-                </button>
-              </div>
-            ) : isFreeEligible ? (
-              <div className="mt-4 rounded-2xl bg-emerald-50/90 p-4 flex items-center gap-3 text-emerald-950">
-                <div className="size-6 rounded-xl bg-emerald-700 text-white flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="size-3.5" />
-                </div>
-                <div className="text-sm sm:text-base text-emerald-900 font-medium">
-                  {isDe ? (
-                    <>
-                      Willkommens-Vorteil aktiv für <span className="font-bold">{user.email}</span>: Dein 1. Job ist <strong>100% kostenlos</strong> (0 € / 15 Tage)!
-                    </>
-                  ) : (
-                    <>
-                      Welcome benefit active for <span className="font-bold">{user.email}</span>: Your 1st job is <strong>100% free</strong> (0 € / 15 days)!
-                    </>
-                  )}
-                </div>
-              </div>
-            ) : null}
+            {isDe ? 'Job inserieren' : 'Post a job'}
+          </h1>
+          <p className="mt-1 text-base sm:text-lg text-zinc-600 font-normal">
+            {isDe
+              ? 'Direkt Bewerber in deiner Stadt ohne Vermittler erreichen.'
+              : 'Reach candidates in your city directly without agencies.'}
+          </p>
           </div>
 
-          {/* Mode Switcher & Segmented Step Indicator - BORDERLESS */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-3">
+          {/* Mode Switcher & Segmented Step Indicator */}
+          <div className="flex flex-wrap items-center gap-2.5 self-start sm:self-auto">
             {/* Mode Switcher */}
-            <div className="inline-flex items-center p-1.5 rounded-2xl bg-zinc-100 shrink-0">
+            <div className="inline-flex items-center p-1 rounded-2xl bg-zinc-100 shrink-0">
               <button
                 type="button"
                 onClick={() => setPostMode('ai')}
-                className={`apple-press inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm sm:text-base font-semibold transition-all cursor-pointer ${
+                className={`apple-press inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                   postMode === 'ai'
                     ? 'bg-black text-white shadow-xs'
                     : 'text-zinc-600 hover:text-black'
                 }`}
               >
-                <MessageSquare className="size-4" />
-                <span>{isDe ? 'Inserat-Assistent' : 'Job Assistant'}</span>
+                <MessageSquare className="size-3.5" />
+                <span>{isDe ? 'Inserat-Assistent' : 'Assistant'}</span>
               </button>
               <button
                 type="button"
                 onClick={() => setPostMode('classic')}
-                className={`apple-press inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm sm:text-base font-semibold transition-all cursor-pointer ${
+                className={`apple-press inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                   postMode === 'classic'
                     ? 'bg-black text-white shadow-xs'
                     : 'text-zinc-600 hover:text-black'
                 }`}
               >
-                <FileText className="size-4" />
+                <FileText className="size-3.5" />
                 <span>{isDe ? 'Klassisches Formular' : 'Standard Form'}</span>
               </button>
             </div>
 
             {/* Step Indicator (visible in classic form mode) */}
             {postMode === 'classic' && (
-              <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-zinc-100 self-start sm:self-auto shrink-0">
+              <div className="flex items-center gap-1 p-1 rounded-2xl bg-zinc-100 shrink-0">
                 <button
                   type="button"
                   onClick={() => goToStep(1)}
-                  className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold tracking-[0.02em] transition-all cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                     step === 1
                       ? 'bg-black text-white shadow-xs'
                       : 'text-zinc-600 hover:text-black'
                   }`}
                 >
-                  <span className="sm:hidden">1. {isDe ? 'Basis' : 'Basic'}</span>
-                  <span className="hidden sm:inline">1. {isDe ? 'Basisdaten' : 'Basic Info'}</span>
+                  <span>1. {isDe ? 'Basis' : 'Basic'}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => goToStep(2)}
-                  className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold tracking-[0.02em] transition-all cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                     step === 2
                       ? 'bg-black text-white shadow-xs'
                       : 'text-zinc-600 hover:text-black'
                   }`}
                 >
-                  <span className="sm:hidden">2. {isDe ? 'Details' : 'Details'}</span>
-                  <span className="hidden sm:inline">2. {isDe ? 'Konditionen' : 'Conditions'}</span>
+                  <span>2. {isDe ? 'Details' : 'Details'}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => goToStep(3)}
-                  className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold tracking-[0.02em] transition-all cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                     step === 3
                       ? 'bg-black text-white shadow-xs'
                       : 'text-zinc-600 hover:text-black'
                   }`}
                 >
-                  <span className="sm:hidden">3. {isDe ? 'Live' : 'Publish'}</span>
-                  <span className="hidden sm:inline">3. {isDe ? 'Kontakt & Live' : 'Contact & Publish'}</span>
+                  <span>3. {isDe ? 'Live' : 'Publish'}</span>
                 </button>
               </div>
             )}
@@ -1237,22 +1165,41 @@ export function SimplePostJobForm() {
           )}
         </form>
 
-        {/* Support & Enquiry Channel */}
-        <div className="mt-12 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-zinc-600">
-          <div className="flex items-center gap-2.5">
-            <span className="size-2 rounded-full bg-emerald-600 shrink-0" />
-            <span className="font-medium text-sm">
-              {isDe
-                ? 'Fragen, Rechnungen oder persönliche Betreuung für dein Inserat?'
-                : 'Questions, billing, or personal assistance for your listing?'}
-            </span>
+        {/* Terms, Conditions & Support Channel - UNDER THE FORM */}
+        <div className="mt-8 pt-6 border-t border-zinc-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-zinc-500">
+          <div>
+            {isFreeEligible ? (
+              <span className="text-emerald-800 font-semibold mr-1.5">
+                {isDe ? '1. Inserat 100% kostenlos ·' : '1st listing 100% free ·'}
+              </span>
+            ) : null}
+            {isDe
+              ? 'Mit dem Inserieren stimmst du unseren '
+              : 'By posting a job, you agree to our '}
+            <Link href="/agb" className="underline underline-offset-2 text-zinc-700 hover:text-black font-medium transition-colors">
+              {isDe ? 'AGB' : 'Terms'}
+            </Link>{' '}
+            {isDe ? 'und der' : 'and'}{' '}
+            <Link href="/datenschutz" className="underline underline-offset-2 text-zinc-700 hover:text-black font-medium transition-colors">
+              {isDe ? 'Datenschutzerklärung' : 'Privacy Policy'}
+            </Link>
+            .{' '}
+            {!user && (
+              <button
+                type="button"
+                onClick={() => setAuthOpen(true)}
+                className="underline hover:text-black ml-1 text-emerald-800 font-semibold cursor-pointer"
+              >
+                {isDe ? 'Kostenlos anmelden für 0 € Inserat' : 'Sign in for free listing'}
+              </button>
+            )}
           </div>
-          <a
-            href="mailto:jobroofs@gmail.com"
-            className="font-mono text-sm text-black font-bold hover:underline shrink-0"
-          >
-            jobroofs@gmail.com
-          </a>
+          <div className="flex items-center gap-2 text-zinc-400 font-mono text-xs shrink-0">
+            <span>Support:</span>
+            <a href="mailto:jobroofs@gmail.com" className="text-zinc-700 hover:text-black font-semibold transition-colors">
+              jobroofs@gmail.com
+            </a>
+          </div>
         </div>
       </div>
       )}
