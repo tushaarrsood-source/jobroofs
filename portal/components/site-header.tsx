@@ -29,9 +29,9 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#d8ded9] bg-[#fbfbf8]/92 backdrop-blur-md transition-all">
+    <header className="sticky top-0 z-50 border-b border-zinc-200/80 bg-white/90 backdrop-blur-md transition-all shadow-2xs">
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6 md:px-8">
-        {/* Left: Brand Logo (Architectural Roof Mark + Wordmark) */}
+        {/* Left: Brand Logo */}
         <div className="shrink-0">
           <BrandLogo variant="full" size="md" />
         </div>
@@ -43,8 +43,8 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
             href="/"
             className={`hidden sm:inline-block text-[13px] tracking-[0.01em] transition-colors cursor-pointer ${
               pathname === '/'
-                ? 'text-[#202a31] font-medium'
-                : 'text-[#7e8a84] hover:text-[#202a31]'
+                ? 'text-black font-semibold'
+                : 'text-zinc-600 hover:text-black font-medium'
             }`}
           >
             {isDe ? 'Alle Jobs' : 'All Jobs'}
@@ -55,8 +55,8 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
             href="/pricing"
             className={`hidden md:inline-block text-[13px] tracking-[0.01em] transition-colors cursor-pointer ${
               pathname === '/pricing'
-                ? 'text-[#202a31] font-medium'
-                : 'text-[#7e8a84] hover:text-[#202a31]'
+                ? 'text-black font-semibold'
+                : 'text-zinc-600 hover:text-black font-medium'
             }`}
           >
             {isDe ? 'Preise' : 'Pricing'}
@@ -66,19 +66,19 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
           <a
             href="mailto:jobroofs@gmail.com"
             title={isDe ? 'Offizielle Anfragen & Support' : 'Official Enquiries & Support'}
-            className="hidden lg:inline-flex items-center gap-1.5 text-[12px] text-[#7e8a84] hover:text-[#202a31] transition-colors font-mono"
+            className="hidden lg:inline-flex items-center gap-1.5 text-[12px] text-zinc-600 hover:text-black transition-colors font-mono font-medium"
           >
-            <Mail className="size-3.5 stroke-[1.25]" />
+            <Mail className="size-3.5 stroke-[1.5]" />
             <span>jobroofs@gmail.com</span>
           </a>
 
-          {/* Post a job CTA - Silent Luxury Deep Slate (Hidden on < sm since mobile nav has prominent center + button) */}
+          {/* Post a job CTA */}
           <button
             type="button"
             onClick={handlePostJobClick}
-            className="apple-press hidden sm:inline-flex items-center gap-1.5 rounded-sm bg-[#202a31] px-3.5 sm:px-4 py-1.5 sm:py-2 text-[12.5px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
+            className="apple-press hidden sm:inline-flex items-center gap-1.5 rounded-lg bg-black px-4 py-2 text-[12.5px] font-medium tracking-[0.02em] text-white hover:bg-zinc-800 transition-all cursor-pointer shadow-xs"
           >
-            <PlusCircle className="size-3.5 stroke-[1.25]" />
+            <PlusCircle className="size-3.5 stroke-[1.5]" />
             <span>{isDe ? 'Job inserieren' : 'Post a Job'}</span>
           </button>
 
@@ -87,9 +87,9 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
             type="button"
             onClick={openAppInstallModal}
             title={isDe ? 'JOBROOFS als App installieren' : 'Install JOBROOFS App'}
-            className="apple-press hidden md:inline-flex items-center gap-1.5 rounded-sm border border-[#d8ded9] bg-transparent px-2.5 py-1.5 text-[12px] font-normal tracking-[0.02em] text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
+            className="apple-press hidden md:inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 text-[12px] font-medium tracking-[0.02em] text-black hover:border-black hover:bg-zinc-50 transition-colors cursor-pointer"
           >
-            <Smartphone className="size-3.5 stroke-[1.25] text-[#7e8a84]" />
+            <Smartphone className="size-3.5 stroke-[1.5] text-zinc-600" />
             <span>App</span>
           </button>
 
@@ -99,24 +99,24 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
           {/* User Auth */}
           {user ? (
             <div className="flex items-center gap-1.5 sm:gap-2">
-              <span className="hidden md:inline-block text-[12px] font-normal text-[#7e8a84] max-w-[120px] truncate">
+              <span className="hidden md:inline-block text-[12px] font-medium text-zinc-700 max-w-[120px] truncate font-mono">
                 {user.email?.split('@')[0]}
               </span>
               <button
                 onClick={() => signOutUser()}
                 title={isDe ? 'Abmelden' : 'Sign out'}
-                className="inline-flex size-8 items-center justify-center rounded-sm border border-[#d8ded9] text-[#7e8a84] hover:text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
+                className="apple-press inline-flex size-8 items-center justify-center rounded-lg border border-zinc-200 text-zinc-600 hover:text-black hover:border-black hover:bg-zinc-50 transition-colors cursor-pointer"
               >
-                <LogOut className="size-3.5 stroke-[1.25]" />
+                <LogOut className="size-3.5 stroke-[1.5]" />
               </button>
             </div>
           ) : (
             <button
               onClick={() => setAuthOpen(true)}
               title={isDe ? 'Anmelden' : 'Sign in'}
-              className="inline-flex size-8 sm:size-auto items-center justify-center gap-1.5 rounded-sm border border-[#d8ded9] bg-transparent sm:px-3 sm:py-1.5 text-[12.5px] font-normal tracking-[0.02em] text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
+              className="apple-press inline-flex size-8 sm:size-auto items-center justify-center gap-1.5 rounded-lg border border-zinc-200 bg-white sm:px-3 sm:py-1.5 text-[12.5px] font-medium tracking-[0.02em] text-black hover:border-black hover:bg-zinc-50 transition-colors cursor-pointer shadow-2xs"
             >
-              <UserIcon className="size-3.5 stroke-[1.25] text-[#7e8a84]" />
+              <UserIcon className="size-3.5 stroke-[1.5] text-black" />
               <span className="hidden sm:inline">{isDe ? 'Anmelden' : 'Sign In'}</span>
             </button>
           )}

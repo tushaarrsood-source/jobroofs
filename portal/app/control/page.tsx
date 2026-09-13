@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function ControlPage() {
   return (
-    <main className="min-h-screen bg-[#fbfbf8] text-[#202a31] flex flex-col justify-between">
+    <main className="min-h-screen bg-[#fafaf9] text-black flex flex-col justify-between">
       <div>
         <SiteHeader control />
         <ControlDashboardContent />

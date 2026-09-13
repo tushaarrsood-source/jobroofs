@@ -100,51 +100,51 @@ export function CookieBanner() {
 
   return (
     <div className="fixed bottom-18 md:bottom-5 left-3 right-3 sm:left-6 sm:right-auto z-[95] max-w-md w-auto animate-in fade-in slide-in-from-bottom-3 duration-250">
-      <div className="rounded-xl border border-[#d8ded9] bg-[#fbfbf8]/98 backdrop-blur-xl p-4 sm:p-5 shadow-[0_12px_36px_rgba(32,42,49,0.1)] text-left">
+      <div className="rounded-2xl border border-zinc-200 bg-white/98 backdrop-blur-xl p-4 sm:p-5 shadow-2xl text-left">
         {/* Header */}
         <div className="flex items-start gap-3 mb-3">
-          <div className="flex size-9 items-center justify-center rounded-lg bg-[#f4f4ee] border border-[#d8ded9] text-[#202a31] shrink-0">
-            <Cookie className="size-4 stroke-[1.5] text-[#202a31]" />
+          <div className="flex size-9 items-center justify-center rounded-xl bg-zinc-100 border border-zinc-200 text-black shrink-0">
+            <Cookie className="size-4 stroke-[2] text-black" />
           </div>
           <div className="min-w-0">
-            <h3 className="text-[13.5px] font-medium tracking-tight text-[#202a31]">
+            <h3 className="text-[14px] font-bold tracking-tight text-black">
               {isDe ? 'Privatsphäre & Cookies' : 'Privacy & Cookies'}
             </h3>
-            <p className="text-[11.5px] text-[#7e8a84] mt-0.5 leading-relaxed font-light">
+            <p className="text-[12px] text-zinc-600 mt-0.5 leading-relaxed font-normal">
               {isDe
-                ? 'Wir nutzen Cookies für eine sichere Anmeldung, Kiez-Filter und schnelle Ladezeiten.'
-                : 'We use cookies to provide secure authentication, district filters, and fast performance.'}
+                ? 'Wir nutzen Cookies für eine sichere Anmeldung, Filter und schnelle Ladezeiten.'
+                : 'We use cookies to provide secure authentication, filters, and fast performance.'}
             </p>
           </div>
         </div>
 
         {/* Detailed customization accordion */}
         {customizing && (
-          <div className="mt-3 mb-3 space-y-2.5 rounded-lg border border-[#d8ded9] bg-white p-3 text-xs animate-in fade-in duration-200">
+          <div className="mt-3 mb-3 space-y-2.5 rounded-xl border border-zinc-200 bg-zinc-50 p-3.5 text-xs animate-in fade-in duration-200">
             {/* Necessary */}
             <div className="flex items-center justify-between gap-3">
               <div>
-                <div className="font-medium text-[#202a31]">
+                <div className="font-bold text-black">
                   {isDe ? 'Notwendig & Sicherheit' : 'Necessary & Security'}
                 </div>
-                <div className="text-[10.5px] text-[#7e8a84] font-light">
+                <div className="text-[11px] text-zinc-600 font-normal">
                   {isDe
                     ? 'Authentifizierung, Session-Schutz & Grundeinstellungen.'
                     : 'Authentication, session protection & core settings.'}
                 </div>
               </div>
-              <span className="rounded-sm bg-[#f4f4ee] border border-[#d8ded9] px-2 py-0.5 text-[9.5px] font-mono text-[#7e8a84] shrink-0">
+              <span className="rounded-md bg-zinc-200/70 border border-zinc-300 px-2 py-0.5 text-[10px] font-mono text-zinc-700 font-semibold shrink-0">
                 {isDe ? 'Immer aktiv' : 'Always active'}
               </span>
             </div>
 
             {/* Functional */}
-            <div className="flex items-center justify-between gap-3 pt-2.5 border-t border-[#d8ded9]">
+            <div className="flex items-center justify-between gap-3 pt-2.5 border-t border-zinc-200">
               <div>
-                <div className="font-medium text-[#202a31]">
+                <div className="font-bold text-black">
                   {isDe ? 'Funktional & Filter' : 'Functional & Preferences'}
                 </div>
-                <div className="text-[10.5px] text-[#7e8a84] font-light">
+                <div className="text-[11px] text-zinc-600 font-normal">
                   {isDe
                     ? 'Merkt sich Kiez-Filter und gespeicherte Angebote.'
                     : 'Remembers district filters and saved listings.'}
@@ -154,7 +154,7 @@ export function CookieBanner() {
                 type="button"
                 onClick={() => setFunctional((prev) => !prev)}
                 className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                  functional ? 'bg-[#202a31]' : 'bg-[#d8ded9]'
+                  functional ? 'bg-black' : 'bg-zinc-300'
                 }`}
                 aria-label="Toggle functional cookies"
               >
@@ -167,12 +167,12 @@ export function CookieBanner() {
             </div>
 
             {/* Analytics */}
-            <div className="flex items-center justify-between gap-3 pt-2.5 border-t border-[#d8ded9]">
+            <div className="flex items-center justify-between gap-3 pt-2.5 border-t border-zinc-200">
               <div>
-                <div className="font-medium text-[#202a31]">
+                <div className="font-bold text-black">
                   {isDe ? 'Statistiken & Performance' : 'Statistics & Performance'}
                 </div>
-                <div className="text-[10.5px] text-[#7e8a84] font-light">
+                <div className="text-[11px] text-zinc-600 font-normal">
                   {isDe
                     ? 'Anonyme Ladezeitmessung zur Beschleunigung von JOBROOFS.'
                     : 'Anonymous latency metrics to speed up page delivery.'}
@@ -182,7 +182,7 @@ export function CookieBanner() {
                 type="button"
                 onClick={() => setAnalytics((prev) => !prev)}
                 className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                  analytics ? 'bg-[#202a31]' : 'bg-[#d8ded9]'
+                  analytics ? 'bg-black' : 'bg-zinc-300'
                 }`}
                 aria-label="Toggle analytics cookies"
               >
@@ -197,19 +197,19 @@ export function CookieBanner() {
         )}
 
         {/* Legal Links */}
-        <div className="flex items-center gap-2.5 text-[11px] text-[#7e8a84] mb-3">
-          <Link href="/datenschutz" className="hover:text-[#202a31] transition-colors underline underline-offset-2">
+        <div className="flex items-center gap-2.5 text-[11.5px] text-zinc-500 mb-3">
+          <Link href="/datenschutz" className="hover:text-black transition-colors underline underline-offset-2">
             {isDe ? 'Datenschutz' : 'Privacy'}
           </Link>
           <span>&middot;</span>
-          <Link href="/impressum" className="hover:text-[#202a31] transition-colors underline underline-offset-2">
+          <Link href="/impressum" className="hover:text-black transition-colors underline underline-offset-2">
             {isDe ? 'Impressum' : 'Legal'}
           </Link>
           <span>&middot;</span>
           <button
             type="button"
             onClick={() => setCustomizing((prev) => !prev)}
-            className="hover:text-[#202a31] font-medium transition-colors inline-flex items-center gap-1 cursor-pointer"
+            className="hover:text-black font-semibold transition-colors inline-flex items-center gap-1 cursor-pointer"
           >
             <span>{customizing ? (isDe ? 'Weniger' : 'Less') : (isDe ? 'Einstellungen' : 'Settings')}</span>
             {customizing ? <ChevronUp className="size-3" /> : <ChevronDown className="size-3" />}
@@ -222,7 +222,7 @@ export function CookieBanner() {
             <button
               type="button"
               onClick={handleSaveCustom}
-              className="apple-press flex-1 rounded-sm bg-[#202a31] py-2 text-xs font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer text-center justify-center"
+              className="apple-press flex-1 rounded-xl bg-black py-2.5 text-xs font-semibold tracking-[0.02em] text-white hover:bg-zinc-800 transition-colors cursor-pointer text-center justify-center active:scale-[0.98]"
             >
               <span>{isDe ? 'Auswahl speichern' : 'Save preferences'}</span>
             </button>
@@ -231,14 +231,14 @@ export function CookieBanner() {
               <button
                 type="button"
                 onClick={handleAcceptNecessary}
-                className="apple-press flex-1 rounded-sm border border-[#d8ded9] bg-white py-2 text-xs font-normal text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer text-center justify-center"
+                className="apple-press flex-1 rounded-xl border border-zinc-200 bg-white py-2.5 text-xs font-semibold text-black hover:bg-zinc-50 transition-colors cursor-pointer text-center justify-center active:scale-[0.98]"
               >
                 <span>{isDe ? 'Nur Notwendige' : 'Essential Only'}</span>
               </button>
               <button
                 type="button"
                 onClick={handleAcceptAll}
-                className="apple-press flex-1 rounded-sm bg-[#202a31] py-2 text-xs font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer text-center justify-center"
+                className="apple-press flex-1 rounded-xl bg-black py-2.5 text-xs font-semibold tracking-[0.02em] text-white hover:bg-zinc-800 transition-colors cursor-pointer text-center justify-center active:scale-[0.98]"
               >
                 <span>{isDe ? 'Alle akzeptieren' : 'Accept All'}</span>
               </button>

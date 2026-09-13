@@ -24,8 +24,8 @@ export function JobroofsMark({
   className?: string;
 }) {
   const isDark = variant === 'dark';
-  const strokeColor = isDark ? '#FBFBF8' : '#202A31';
-  const accentColor = isDark ? '#A0AAA4' : '#7E8A84';
+  const strokeColor = isDark ? '#FFFFFF' : '#000000';
+  const accentColor = isDark ? '#A1A1AA' : '#3F3F46';
 
   return (
     <svg
@@ -84,8 +84,8 @@ export function BrandLogo({
         <div className="flex flex-col">
           <div className="flex items-baseline">
             <span
-              className={`${textSize} font-medium tracking-[0.14em] uppercase ${
-                isDark ? 'text-[#FBFBF8]' : 'text-[#202A31]'
+              className={`${textSize} font-semibold tracking-[0.14em] uppercase ${
+                isDark ? 'text-white' : 'text-black'
               }`}
               style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
             >
@@ -95,8 +95,8 @@ export function BrandLogo({
 
           {variant === 'full' && (
             <span
-              className={`hidden sm:block text-[8.5px] font-normal uppercase tracking-[0.22em] -mt-0.5 ${
-                isDark ? 'text-[#A0AAA4]' : 'text-[#7E8A84]'
+              className={`hidden sm:block text-[8.5px] font-medium uppercase tracking-[0.22em] -mt-0.5 ${
+                isDark ? 'text-zinc-400' : 'text-zinc-600'
               }`}
               style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
             >

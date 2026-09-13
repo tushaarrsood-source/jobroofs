@@ -53,7 +53,7 @@ export default async function Home() {
   const initialDirectJobs: any[] = [];
 
   return (
-    <div className="min-h-screen text-[#202a31] flex flex-col justify-between relative z-10">
+    <div className="min-h-screen text-black flex flex-col justify-between relative z-10 bg-[#fafaf9]">
       <WebSiteJsonLd />
       <LocalBusinessJsonLd />
       <SiteHeader />
