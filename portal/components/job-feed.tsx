@@ -372,7 +372,7 @@ export function JobFeed({
 
   return (
     <section className="w-full">
-      {/* 100% Independent German Listers Assurance */}
+      {/* 100% Independent German Listings Assurance */}
       <div className="flex items-center justify-between pb-3 border-b border-zinc-200 mb-5 text-[11.5px] text-zinc-600 font-medium">
         <div className="flex items-center gap-2">
           <span className="size-2 rounded-full bg-emerald-600" />
@@ -385,147 +385,150 @@ export function JobFeed({
         </span>
       </div>
 
-      {/* Search & Filter Section */}
-      <div className="mb-8 space-y-3.5">
-        {/* Sleek Modern Interactive Search Bar */}
+      {/* Search & Filter Toolbar: Clean, Compact, Zero Shelves of Buttons */}
+      <div className="mb-6 space-y-2.5">
+        {/* Sleek Search Bar */}
         <div className="relative group">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 stroke-[2] text-zinc-500 group-focus-within:text-black transition-colors" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 stroke-[2] text-zinc-400 group-focus-within:text-black transition-colors" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={
               isDe
-                ? 'Jobtitel, Firma, Stadt oder Stichwort suchen...'
-                : 'Search job title, company, city or keyword...'
+                ? 'Jobtitel, Betrieb, Stadt oder Stichwort suchen...'
+                : 'Search job title, employer, city or keyword...'
             }
-            className="w-full h-12 pl-10 pr-4 rounded-xl border border-zinc-300 bg-white text-base sm:text-[14px] text-black font-medium placeholder:text-zinc-400 placeholder:font-normal focus:border-black focus:ring-2 focus:ring-black/10 outline-none shadow-xs transition-all"
+            className="w-full h-11 pl-10 pr-4 rounded-xl border border-zinc-200 bg-white text-[14px] text-black font-medium placeholder:text-zinc-400 focus:border-black focus:ring-1 focus:ring-black outline-none transition-all shadow-2xs"
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="apple-press absolute right-3.5 top-1/2 -translate-y-1/2 text-[12px] font-semibold text-zinc-600 hover:text-black px-2.5 py-1 rounded-md bg-zinc-100 cursor-pointer transition-colors"
+              className="apple-press absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-zinc-600 hover:text-black px-2 py-0.5 rounded bg-zinc-100 cursor-pointer"
             >
               {isDe ? 'Löschen' : 'Clear'}
             </button>
           )}
         </div>
 
-        {/* 1. City Filter Chips (Nationwide Focus) */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[12px]">
-          <span className="text-[10.5px] uppercase tracking-[0.16em] text-zinc-600 font-mono font-bold mr-1 shrink-0">
-            {isDe ? 'Stadt:' : 'City:'}
-          </span>
-          {CITY_OPTIONS.map((city) => {
-            const isActive = selectedCity === city.id;
-            return (
-              <button
-                key={city.id}
-                onClick={() => handleCityChange(city.id)}
-                className={`apple-press shrink-0 px-3 py-1.5 rounded-lg text-[12px] tracking-[0.01em] transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-black text-white font-semibold shadow-xs'
-                    : 'bg-white text-zinc-800 border border-zinc-200 hover:text-black hover:border-black hover:bg-zinc-50 font-medium'
-                }`}
-              >
-                {isDe ? city.labelDe : city.labelEn}
-              </button>
-            );
-          })}
-        </div>
+        {/* Compact Dropdown Toolbar: City & District side-by-side */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[12.5px]">
+          {/* City Dropdown */}
+          <div>
+            <label className="block text-[10px] font-mono font-semibold uppercase tracking-[0.14em] text-zinc-500 mb-1">
+              {isDe ? 'Stadt' : 'City'}
+            </label>
+            <select
+              value={selectedCity}
+              onChange={(e) => handleCityChange(e.target.value)}
+              className="w-full h-9 px-2.5 rounded-lg border border-zinc-200 bg-white text-[12.5px] font-medium text-black focus:border-black outline-none cursor-pointer hover:border-zinc-400 transition-colors"
+            >
+              {CITY_OPTIONS.map((city) => (
+                <option key={city.id} value={city.id}>
+                  {isDe ? city.labelDe : city.labelEn}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* 2. District Filter Chips */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[12px]">
-          <span className="text-[10.5px] uppercase tracking-[0.16em] text-zinc-600 font-mono font-bold mr-1 shrink-0">
-            {selectedCity === 'koeln'
-              ? (isDe ? 'Veedel:' : 'District:')
-              : (isDe ? 'Bezirk:' : 'District:')}
-          </span>
-          {currentDistricts.map((d) => {
-            const isActive = selectedDistrict === d.id;
-            return (
-              <button
-                key={d.id}
-                onClick={() => handleDistrictChange(d.id)}
-                className={`apple-press shrink-0 px-3 py-1.5 rounded-lg text-[12px] tracking-[0.01em] transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-black text-white font-semibold shadow-xs'
-                    : 'bg-white text-zinc-800 border border-zinc-200 hover:text-black hover:border-black hover:bg-zinc-50 font-medium'
-                }`}
-              >
-                {isDe ? d.labelDe : d.labelEn}
-              </button>
-            );
-          })}
-        </div>
+          {/* District Dropdown (Right next to City) */}
+          <div>
+            <label className="block text-[10px] font-mono font-semibold uppercase tracking-[0.14em] text-zinc-500 mb-1">
+              {selectedCity === 'koeln'
+                ? (isDe ? 'Veedel' : 'District')
+                : (isDe ? 'Bezirk / Viertel' : 'District')}
+            </label>
+            <select
+              value={selectedDistrict}
+              onChange={(e) => handleDistrictChange(e.target.value)}
+              className="w-full h-9 px-2.5 rounded-lg border border-zinc-200 bg-white text-[12.5px] font-medium text-black focus:border-black outline-none cursor-pointer hover:border-zinc-400 transition-colors"
+            >
+              {currentDistricts.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {isDe ? d.labelDe : d.labelEn}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* 3. Category Filter Chips */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[12px]">
-          <span className="text-[10.5px] uppercase tracking-[0.16em] text-zinc-600 font-mono font-bold mr-1 shrink-0">
-            {isDe ? 'Bereich:' : 'Category:'}
-          </span>
-          {CATEGORIES.map((cat) => {
-            const isActive = selectedCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`apple-press shrink-0 px-3 py-1.5 rounded-lg text-[12px] tracking-[0.01em] transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-black text-white font-semibold shadow-xs'
-                    : 'bg-white text-zinc-800 border border-zinc-200 hover:text-black hover:border-black hover:bg-zinc-50 font-medium'
-                }`}
-              >
-                {isDe ? cat.labelDe : cat.labelEn}
-              </button>
-            );
-          })}
+          {/* Category Dropdown */}
+          <div>
+            <label className="block text-[10px] font-mono font-semibold uppercase tracking-[0.14em] text-zinc-500 mb-1">
+              {isDe ? 'Bereich' : 'Category'}
+            </label>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full h-9 px-2.5 rounded-lg border border-zinc-200 bg-white text-[12.5px] font-medium text-black focus:border-black outline-none cursor-pointer hover:border-zinc-400 transition-colors"
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {isDe ? cat.labelDe : cat.labelEn}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Sort Dropdown */}
+          <div>
+            <label className="block text-[10px] font-mono font-semibold uppercase tracking-[0.14em] text-zinc-500 mb-1">
+              {isDe ? 'Sortierung' : 'Sort'}
+            </label>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as any)}
+              className="w-full h-9 px-2.5 rounded-lg border border-zinc-200 bg-white text-[12.5px] font-medium text-black focus:border-black outline-none cursor-pointer hover:border-zinc-400 transition-colors"
+            >
+              <option value="newest">{isDe ? 'Neueste zuerst' : 'Newest first'}</option>
+              <option value="urgent">{isDe ? 'Dringend' : 'Urgent'}</option>
+              <option value="wage">{isDe ? 'Höchster Lohn' : 'Highest pay'}</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      {/* Counter & Status Header with Sort Option */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-200 pb-3 mb-5 gap-2 text-[12.5px] text-zinc-600">
+      {/* Counter & Status Header */}
+      <div className="flex items-center justify-between border-b border-zinc-200 pb-2.5 mb-3 text-[12px] text-zinc-600">
         <span>
           <strong className="text-black font-bold">
             {filteredJobs.length.toLocaleString(isDe ? 'de-DE' : 'en-US')}
           </strong>{' '}
-          <span className="font-medium">
+          <span className="font-normal">
             {selectedCity === 'all'
-              ? (isDe ? 'aktuelle Stellen in ganz Deutschland' : 'active jobs across Germany')
+              ? (isDe ? 'Inserate in ganz Deutschland' : 'listings across Germany')
               : (isDe
-                  ? `aktuelle Stellen in ${getCityById(selectedCity)?.name || selectedCity}`
-                  : `active jobs in ${getCityById(selectedCity)?.name || selectedCity}`)}
+                  ? `Inserate in ${getCityById(selectedCity)?.name || selectedCity}`
+                  : `listings in ${getCityById(selectedCity)?.name || selectedCity}`)}
           </span>
         </span>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5">
-            <span className="text-[11px] uppercase tracking-wider text-zinc-600 font-semibold">
-              {isDe ? 'Sortieren:' : 'Sort by:'}
-            </span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="bg-white text-black text-[12.5px] font-semibold border border-zinc-300 rounded-md px-2 py-1 outline-none cursor-pointer hover:border-black transition-colors"
-            >
-              <option value="newest">{isDe ? 'Neueste zuerst' : 'Newest first'}</option>
-              <option value="urgent">{isDe ? 'Dringend / Sofort' : 'Urgent / Immediate'}</option>
-              <option value="wage">{isDe ? 'Höchster Lohn' : 'Highest pay'}</option>
-            </select>
-          </div>
-          <span className="text-zinc-300 hidden sm:inline">&middot;</span>
-          <span className="font-mono text-[11.5px] text-zinc-600 font-semibold">
-            {String(currentPage).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
-          </span>
-        </div>
+        {(query || selectedCity !== 'all' || selectedDistrict !== 'all' || selectedCategory !== 'all') && (
+          <button
+            onClick={() => {
+              setQuery('');
+              setSelectedCity('all');
+              setSelectedDistrict('all');
+              setSelectedCategory('all');
+              setSortBy('newest');
+              if (typeof window !== 'undefined') {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('city');
+                url.searchParams.delete('district');
+                window.history.replaceState({}, '', url.toString());
+              }
+            }}
+            className="text-[11.5px] font-medium text-black underline hover:text-zinc-600 cursor-pointer"
+          >
+            {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
+          </button>
+        )}
       </div>
 
-      {/* Job Card Feed */}
-      <div className="space-y-3">
+      {/* Unified Job List (Clean Modern Stream, Not Chunky Isolated Cards) */}
+      <div className="rounded-xl border border-zinc-200 bg-white divide-y divide-zinc-200 overflow-hidden shadow-2xs">
         {displayedJobs.map((job, idx) => {
           const wage = formatWage(job, isDe);
           const jobType = formatJobType(job, isDe);
           const slug = job.slug || job.id;
-          const itemIndex = String(idx + 1 + (currentPage - 1) * JOBS_PER_PAGE).padStart(2, '0');
           const urgent = isUrgentJob(job);
           const relTime = getRelativeTime(job, idx + (currentPage - 1) * JOBS_PER_PAGE, isDe);
 
@@ -541,85 +544,66 @@ export function JobFeed({
             <Link
               key={slug || idx}
               href={`/jobs/${slug}`}
-              style={{ animationDelay: `${Math.min(idx, 8) * 30}ms` }}
-              className="silent-card stagger-in group block rounded-xl border border-zinc-200 bg-white p-5 sm:p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-black/40 hover:shadow-md active:scale-[0.99] cursor-pointer shadow-2xs"
+              className="group block p-3.5 sm:px-4 sm:py-3.5 hover:bg-zinc-50/80 transition-colors cursor-pointer"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex items-start gap-4 min-w-0 flex-1">
-                  {/* Monospaced Item Number */}
-                  <span className="hidden sm:inline-block font-mono text-[12px] font-bold text-zinc-500 group-hover:text-black transition-colors pt-0.5 w-6">
-                    {itemIndex}
-                  </span>
-
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h3
-                        className="text-[16px] sm:text-[17.5px] font-bold text-black group-hover:text-zinc-900 transition-colors line-clamp-1 tracking-tight"
-                        style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
-                      >
-                        {job.title}
-                      </h3>
-                      {(job.tier === 'premium' || job.sourceKind === 'direct_employer' || job.isUserListing || job.isIndependentLister) && (
-                        <span className="shrink-0 text-[12px] leading-none" title={isDe ? 'Direkt vom Betrieb' : 'Direct from employer'}>👑</span>
-                      )}
-                      {job.isIndependentLister && (
-                        <span className="shrink-0 font-mono text-[9px] uppercase bg-black text-white px-2 py-0.5 rounded-sm font-bold leading-none">
-                          {isDe ? '★ UNABHÄNGIG' : '★ INDEPENDENT'}
-                        </span>
-                      )}
-                      {job.isUserListing && (
-                        <span className="shrink-0 font-mono text-[9px] uppercase bg-zinc-800 text-white px-2 py-0.5 rounded-sm font-bold leading-none">
-                          {isDe ? 'DEIN INSERAT' : 'YOUR LISTING'}
-                        </span>
-                      )}
-                      {urgent && (
-                        <span className="shrink-0 font-mono text-[9px] uppercase bg-amber-50 text-amber-950 border border-amber-300 px-2 py-0.5 rounded-sm font-bold leading-none">
-                          {isDe ? '⚡ DRINGEND' : '⚡ URGENT'}
-                        </span>
-                      )}
-                    </div>
-                    <div className="mt-1 flex items-center justify-between text-[13.5px] font-medium text-zinc-800">
-                      <span>{job.company}</span>
-                      <span className="font-mono text-[11.5px] text-zinc-500 font-semibold shrink-0 ml-2">
-                        {relTime}
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3
+                      className="text-[15px] sm:text-[16px] font-bold text-black group-hover:text-zinc-800 transition-colors line-clamp-1 tracking-tight"
+                      style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
+                    >
+                      {job.title}
+                    </h3>
+                    {job.isIndependentLister && (
+                      <span className="shrink-0 font-mono text-[9px] uppercase bg-black text-white px-1.5 py-0.5 rounded font-bold leading-none">
+                        ★ UNABHÄNGIG
                       </span>
-                    </div>
-
-                    <div className="mt-3 flex flex-wrap items-center gap-3 text-[12.5px]">
-                      <span className="inline-flex items-center gap-1 text-zinc-700 font-normal">
-                        <MapPin className="size-3.5 stroke-[1.5] text-zinc-500" />
-                        {locationDisplay}
+                    )}
+                    {job.isUserListing && (
+                      <span className="shrink-0 font-mono text-[9px] uppercase bg-zinc-800 text-white px-1.5 py-0.5 rounded font-bold leading-none">
+                        {isDe ? 'DEIN INSERAT' : 'YOUR LISTING'}
                       </span>
-
-                      <span className="text-zinc-300">&middot;</span>
-
-                      <span className="inline-flex items-center gap-1 text-black font-bold font-mono">
-                        <Euro className="size-3.5 stroke-[1.5] text-zinc-700" />
-                        {wage}
+                    )}
+                    {urgent && (
+                      <span className="shrink-0 font-mono text-[9px] uppercase bg-amber-50 text-amber-950 border border-amber-300 px-1.5 py-0.5 rounded font-bold leading-none">
+                        {isDe ? '⚡ DRINGEND' : '⚡ URGENT'}
                       </span>
-
-                      <span className="text-zinc-300">&middot;</span>
-
-                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-600">
-                        <Clock className="size-3.5 stroke-[1.5] text-zinc-500" />
-                        {jobType}
+                    )}
+                    {job.whatsapp && (
+                      <span className="shrink-0 font-mono text-[9px] font-semibold text-emerald-900 bg-emerald-50 border border-emerald-300 px-1.5 py-0.5 rounded">
+                        💬 WhatsApp
                       </span>
+                    )}
+                  </div>
 
-                      {job.whatsapp && (
-                        <>
-                          <span className="text-zinc-300">&middot;</span>
-                          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-900 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-md">
-                            💬 WhatsApp
-                          </span>
-                        </>
-                      )}
-                    </div>
+                  <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-[12.5px] text-zinc-600 font-normal">
+                    <span className="font-semibold text-black">{job.company}</span>
+                    <span className="text-zinc-300">&middot;</span>
+                    <span className="inline-flex items-center gap-1 text-zinc-700">
+                      <MapPin className="size-3 text-zinc-400 shrink-0" />
+                      {locationDisplay}
+                    </span>
+                    <span className="text-zinc-300">&middot;</span>
+                    <span className="inline-flex items-center gap-1 text-zinc-700">
+                      <Clock className="size-3 text-zinc-400 shrink-0" />
+                      {jobType}
+                    </span>
                   </div>
                 </div>
 
-                {/* Right Arrow Button */}
-                <div className="shrink-0 self-center size-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 group-hover:text-black group-hover:border-black group-hover:translate-x-0.5 transition-all">
-                  <ArrowRight className="size-4 stroke-[1.75]" />
+                <div className="shrink-0 text-right flex items-center gap-3">
+                  <div>
+                    <div className="text-[13.5px] sm:text-[14.5px] font-bold font-mono text-black">
+                      {wage}
+                    </div>
+                    <div className="text-[11px] font-mono text-zinc-500 font-medium">
+                      {relTime}
+                    </div>
+                  </div>
+                  <div className="hidden sm:flex size-7 rounded-full border border-zinc-200 items-center justify-center text-zinc-400 group-hover:text-black group-hover:border-black group-hover:translate-x-0.5 transition-all">
+                    <ArrowRight className="size-3.5 stroke-[2]" />
+                  </div>
                 </div>
               </div>
             </Link>
@@ -627,47 +611,44 @@ export function JobFeed({
         })}
 
         {displayedJobs.length === 0 && (
-          <div className="rounded-2xl border border-zinc-200 bg-white p-8 sm:p-12 text-center shadow-xs">
+          <div className="p-8 sm:p-12 text-center">
             {jobs.length === 0 && directJobs.length === 0 ? (
               <div className="max-w-md mx-auto space-y-3">
-                <div className="mx-auto size-12 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center">
-                  <span className="text-xl">✨</span>
-                </div>
                 <h3
-                  className="text-lg sm:text-xl font-bold text-black"
+                  className="text-base sm:text-lg font-bold text-black"
                   style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
                 >
                   {isDe ? 'Noch keine Stellenanzeigen online' : 'No job listings online yet'}
                 </h3>
-                <p className="text-[14px] text-zinc-700 font-normal leading-relaxed">
+                <p className="text-[13.5px] text-zinc-600 font-normal leading-relaxed">
                   {isDe
-                    ? 'Sei der erste Betrieb in deiner Stadt! Erhalte direkte WhatsApp-Bewerbungen von über 500+ Jobsuchenden in ganz Deutschland.'
-                    : 'Be the first employer in your city! Receive direct WhatsApp applications from 500+ job seekers across Germany.'}
+                    ? 'Sei der erste Betrieb in deiner Stadt! Schalte dein Inserat mit direktem WhatsApp-Kontakt online.'
+                    : 'Be the first employer in your city! Publish your listing with direct WhatsApp contact.'}
                 </p>
                 <div className="pt-2">
                   <Link
                     href="/post-a-job"
-                    className="apple-press inline-flex items-center justify-center gap-2 rounded-xl bg-black hover:bg-zinc-800 text-white px-6 py-3 text-[14px] font-semibold tracking-[0.02em] transition-all cursor-pointer shadow-sm hover:shadow-md"
+                    className="apple-press inline-flex items-center justify-center gap-2 rounded-xl bg-black hover:bg-zinc-800 text-white px-5 py-2.5 text-[13px] font-semibold tracking-[0.02em] transition-all cursor-pointer shadow-xs active:scale-[0.98]"
                   >
                     <span>{isDe ? 'Jetzt 1. Job kostenlos inserieren' : 'Post 1st job for free'}</span>
-                    <ArrowRight className="size-4 stroke-[2]" />
+                    <ArrowRight className="size-3.5 stroke-[2]" />
                   </Link>
-                  <p className="mt-2 text-[12px] text-zinc-600 font-medium">
+                  <p className="mt-2 text-[11.5px] text-zinc-500 font-medium">
                     {isDe ? '100% kostenfrei · In 60 Sekunden live' : '100% free · Live in 60 seconds'}
                   </p>
                 </div>
               </div>
             ) : (
-              <div className="max-w-md mx-auto space-y-3">
-                <p className="text-[16px] font-bold text-black">
+              <div className="max-w-md mx-auto space-y-2">
+                <p className="text-[15px] font-bold text-black">
                   {isDe ? 'Keine passenden Stellen gefunden' : 'No matching jobs found'}
                 </p>
-                <p className="text-[13.5px] text-zinc-600 font-normal">
+                <p className="text-[13px] text-zinc-600 font-normal">
                   {isDe
                     ? 'Versuche andere Suchbegriffe oder wähle eine andere Stadt.'
                     : 'Try different search terms or select another city.'}
                 </p>
-                <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+                <div className="pt-2">
                   <button
                     onClick={() => {
                       setQuery('');
@@ -682,16 +663,10 @@ export function JobFeed({
                         window.history.replaceState({}, '', url.toString());
                       }
                     }}
-                    className="apple-press inline-flex items-center justify-center rounded-lg bg-black px-4 py-2 text-[13px] font-semibold text-white hover:bg-zinc-800 transition-colors cursor-pointer"
+                    className="apple-press inline-flex items-center justify-center rounded-lg bg-black px-4 py-2 text-[12.5px] font-semibold text-white hover:bg-zinc-800 transition-colors cursor-pointer"
                   >
                     {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
                   </button>
-                  <Link
-                    href="/post-a-job"
-                    className="apple-press inline-flex items-center justify-center rounded-lg border border-zinc-300 bg-white px-4 py-2 text-[13px] font-semibold text-black hover:border-black hover:bg-zinc-50 transition-colors cursor-pointer"
-                  >
-                    {isDe ? 'Job inserieren' : 'Post a job'}
-                  </Link>
                 </div>
               </div>
             )}

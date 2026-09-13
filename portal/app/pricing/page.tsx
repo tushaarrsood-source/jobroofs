@@ -35,9 +35,6 @@ export default function PricingPage() {
         <div className="mx-auto max-w-5xl px-6 py-12 md:px-8 md:py-16">
           {/* Header */}
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-[11px] font-medium text-emerald-800">
-              <span>Trusted by 50+ employers and over 500+ workers</span>
-            </div>
             <h1
               className="text-3xl sm:text-4xl md:text-5xl font-light sm:font-normal tracking-[-0.025em] text-black leading-tight"
               style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}

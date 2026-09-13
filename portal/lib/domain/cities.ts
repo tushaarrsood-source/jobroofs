@@ -1,6 +1,6 @@
 /**
  * Supported German Cities and District Breakdowns
- * Empowers independent listers across entire Germany.
+ * Empowers independent listings across entire Germany.
  */
 
 export interface CityDefinition {
