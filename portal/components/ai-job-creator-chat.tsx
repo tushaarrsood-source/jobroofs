@@ -8,12 +8,6 @@ import {
   AlertCircle,
   ArrowRight,
   RefreshCw,
-  MessageSquare,
-  FileText,
-  Building2,
-  MapPin,
-  Phone,
-  Mail,
   Loader2,
 } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
@@ -41,7 +35,7 @@ interface Message {
   timestamp: string;
 }
 
-interface AiJobCreatorChatProps {
+export interface AiJobCreatorChatProps {
   onApplyToForm: (data: ExtractedJobData, targetStep?: 1 | 2 | 3) => void;
   onSwitchToClassic: () => void;
   initialJobData?: Partial<ExtractedJobData>;
@@ -74,8 +68,8 @@ export function AiJobCreatorChat({
       id: 'welcome',
       role: 'assistant',
       content: isDe
-        ? 'Guten Tag! Ich unterstütze dich bei der schnellen Erstellung deines Stelleninserats. Beschreibe kurz, wen du suchst (z. B. "Suche Barista in Kreuzberg für 16 €/Std") oder füge einfach deine Notizen hier ein. Ich bereite das Inserat direkt strukturiert für dich vor.'
-        : 'Welcome! I will help you craft your job listing in moments. Simply describe who you are looking for (e.g. "Looking for a barista in Kreuzberg, 16 €/hr") or paste your notes here. I will organize everything into a live listing for you.',
+        ? 'Hi! Beschreibe kurz, wen du suchst – zum Beispiel Berufsbezeichnung, Bezirk und Stundenlohn. Du kannst auch einfach deine Notizen einfügen. Ich erstelle daraus dein fertiges Inserat.'
+        : 'Hi! Simply tell me who you are looking for — for example job title, district, and hourly wage. You can also paste existing notes or drafts.',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -127,7 +121,12 @@ export function AiJobCreatorChat({
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || (isDe ? 'Verbindungsfehler beim Verarbeiten des Inserats.' : 'Connection error while processing listing.'));
+        throw new Error(
+          errData.error ||
+            (isDe
+              ? 'Verbindungsfehler beim Verarbeiten des Inserats.'
+              : 'Connection error while processing listing.')
+        );
       }
 
       const data = await res.json();
@@ -149,7 +148,12 @@ export function AiJobCreatorChat({
         setQuickReplies(data.suggestedQuickReplies);
       }
     } catch (err: any) {
-      setError(err.message || (isDe ? 'Verbindung fehlgeschlagen. Bitte versuche es erneut.' : 'Connection failed. Please try again.'));
+      setError(
+        err.message ||
+          (isDe
+            ? 'Verbindung fehlgeschlagen. Bitte versuche es erneut.'
+            : 'Connection failed. Please try again.')
+      );
     } finally {
       setLoading(false);
       setTimeout(() => inputRef.current?.focus(), 100);
@@ -162,8 +166,8 @@ export function AiJobCreatorChat({
         id: 'welcome-' + Date.now(),
         role: 'assistant',
         content: isDe
-          ? 'Neuer Dialog gestartet. Welche Position möchtest du besetzen?'
-          : 'New conversation started. Which position would you like to post?',
+          ? 'Neuer Dialog gestartet. Wen möchtest du einstellen?'
+          : 'New conversation started. Who would you like to hire?',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       },
     ]);
@@ -172,332 +176,225 @@ export function AiJobCreatorChat({
     setError(null);
   };
 
-  const completeness = extractedJob.completeness || 0;
   const isReady = extractedJob.isReady || false;
+  const hasExtractedInfo = Boolean(extractedJob.title || extractedJob.company);
 
   return (
-    <div className="space-y-6">
-      {/* Top Banner: Minimalist, Open Executive Header - ZERO BOX BOUNDARIES */}
-      <div className="py-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-3.5">
-          <div className="size-12 rounded-2xl bg-black text-white flex items-center justify-center shrink-0">
-            <MessageSquare className="size-6 stroke-[2.2]" />
-          </div>
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-black">
-              {isDe ? 'Jobroofs Inserat-Assistent' : 'Jobroofs Job Assistant'}
-            </h2>
-            <p className="text-base text-zinc-600 font-normal mt-0.5 leading-normal">
-              {isDe
-                ? 'Erstelle dein Inserat im direkten Dialog oder füge einfach deine Notizen ein.'
-                : 'Draft your listing through quick conversation or paste your raw notes.'}
-            </p>
-          </div>
+    <div className="max-w-2xl mx-auto space-y-6">
+      {/* Subtle Status & Action Bar */}
+      <div className="flex items-center justify-between px-1 text-xs text-zinc-500">
+        <div className="flex items-center gap-2">
+          <span className="size-2 rounded-full bg-emerald-500" />
+          <span className="font-medium text-zinc-700">
+            {isDe ? 'Direkt-Assistent aktiv' : 'Direct Assistant Active'}
+          </span>
         </div>
-
-        <div className="flex items-center gap-2.5 self-start sm:self-auto">
-          <button
-            type="button"
-            onClick={handleReset}
-            className="apple-press inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-zinc-100 hover:bg-zinc-200 text-sm font-medium text-zinc-700 hover:text-black transition cursor-pointer"
-            title={isDe ? 'Neu starten' : 'Start over'}
-          >
-            <RefreshCw className="size-3.5" />
-            <span>{isDe ? 'Neu starten' : 'Start over'}</span>
-          </button>
-          <button
-            type="button"
-            onClick={onSwitchToClassic}
-            className="apple-press inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-zinc-100 hover:bg-zinc-200 text-sm font-semibold text-black transition cursor-pointer"
-          >
-            <FileText className="size-4" />
-            <span>{isDe ? 'Klassisches Formular' : 'Standard Form'}</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleReset}
+          className="apple-press inline-flex items-center gap-1.5 text-zinc-500 hover:text-black transition-colors cursor-pointer py-1"
+          title={isDe ? 'Neu starten' : 'Start over'}
+        >
+          <RefreshCw className="size-3" />
+          <span>{isDe ? 'Neu starten' : 'Reset'}</span>
+        </button>
       </div>
 
-      {/* Grid: Left Chat Column | Right Live Preview Card Column */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Chat Pane (7 cols on desktop) - OPEN & BORDERLESS */}
-        <div className="lg:col-span-7 flex flex-col rounded-2xl sm:rounded-3xl bg-zinc-50 overflow-hidden h-[580px] sm:h-[660px]">
-          {/* Chat Messages Scroll Area */}
-          <div className="flex-1 overflow-y-auto p-3.5 sm:p-6 space-y-4">
-            {messages.map((msg) => (
+      {/* Main Chat Stream - Open Canvas, Zero Enclosing Box */}
+      <div className="space-y-4 sm:space-y-5 min-h-[300px]">
+        {messages.map((msg) => (
+          <div
+            key={msg.id}
+            className={`flex items-start gap-3 ${
+              msg.role === 'user' ? 'flex-row-reverse' : ''
+            }`}
+          >
+            {/* Avatar / Role Indicator */}
+            <div
+              className={`size-8 rounded-full flex items-center justify-center shrink-0 text-xs font-semibold ${
+                msg.role === 'user'
+                  ? 'bg-zinc-900 text-white'
+                  : 'bg-zinc-200 text-zinc-800'
+              }`}
+            >
+              {msg.role === 'user' ? (
+                <User className="size-4" />
+              ) : (
+                <span className="font-bold tracking-tighter">JR</span>
+              )}
+            </div>
+
+            {/* Bubble */}
+            <div
+              className={`max-w-[85%] sm:max-w-[80%] rounded-2xl px-4.5 py-3 text-[15px] sm:text-[16px] leading-relaxed ${
+                msg.role === 'user'
+                  ? 'bg-black text-white rounded-tr-xs shadow-xs'
+                  : 'bg-zinc-100/80 text-zinc-900 rounded-tl-xs'
+              }`}
+            >
+              <p className="whitespace-pre-wrap">{msg.content}</p>
               <div
-                key={msg.id}
-                className={`flex items-start gap-2.5 sm:gap-3.5 ${
-                  msg.role === 'user' ? 'flex-row-reverse' : ''
+                className={`mt-1 text-[11px] ${
+                  msg.role === 'user' ? 'text-zinc-400 text-right' : 'text-zinc-400'
                 }`}
               >
-                <div
-                  className={`size-8 sm:size-9 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 text-sm font-bold ${
-                    msg.role === 'user'
-                      ? 'bg-zinc-800 text-white'
-                      : 'bg-black text-white'
-                  }`}
-                >
-                  {msg.role === 'user' ? (
-                    <User className="size-4 sm:size-4.5" />
-                  ) : (
-                    <span className="font-bold text-xs tracking-wider">JR</span>
-                  )}
-                </div>
-
-                <div
-                  className={`max-w-[88%] sm:max-w-[82%] rounded-2xl px-4 py-3 sm:px-5 sm:py-4 text-base leading-relaxed ${
-                    msg.role === 'user'
-                      ? 'bg-black text-white rounded-tr-xs'
-                      : 'bg-white text-zinc-900 rounded-tl-xs font-normal'
-                  }`}
-                >
-                  <p className="whitespace-pre-wrap">{msg.content}</p>
-                  <div
-                    className={`mt-1.5 text-xs ${
-                      msg.role === 'user' ? 'text-zinc-400 text-right' : 'text-zinc-500'
-                    }`}
-                  >
-                    {msg.timestamp}
-                  </div>
-                </div>
+                {msg.timestamp}
               </div>
-            ))}
-
-            {loading && (
-              <div className="flex items-start gap-2.5 sm:gap-3.5">
-                <div className="size-8 sm:size-9 rounded-xl sm:rounded-2xl bg-black text-white flex items-center justify-center shrink-0">
-                  <span className="font-bold text-xs tracking-wider">JR</span>
-                </div>
-                <div className="bg-white rounded-2xl rounded-tl-xs px-4 py-3 sm:px-5 sm:py-4 flex items-center gap-2.5 text-zinc-700 text-sm sm:text-base font-medium">
-                  <Loader2 className="size-4.5 animate-spin text-zinc-800" />
-                  <span>{isDe ? 'Inserat wird formuliert...' : 'Drafting listing...'}</span>
-                </div>
-              </div>
-            )}
-
-            <div ref={messagesEndRef} />
+            </div>
           </div>
+        ))}
 
-          {/* Quick Suggestion Chips - Borderless Soft Pills */}
-          {quickReplies.length > 0 && !loading && (
-            <div className="px-3.5 sm:px-6 py-2.5 bg-zinc-50 flex flex-wrap gap-2">
-              {quickReplies.map((qr, i) => (
+        {/* Loading Indicator */}
+        {loading && (
+          <div className="flex items-start gap-3">
+            <div className="size-8 rounded-full bg-zinc-200 text-zinc-800 flex items-center justify-center shrink-0 text-xs font-bold">
+              <span className="tracking-tighter">JR</span>
+            </div>
+            <div className="bg-zinc-100/80 rounded-2xl rounded-tl-xs px-4 py-3 flex items-center gap-2 text-zinc-600 text-sm">
+              <Loader2 className="size-4 animate-spin text-zinc-800" />
+              <span>{isDe ? 'Formuliert...' : 'Composing...'}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Ready Action Banner - Appears Naturally in Flow When Listing is Formed */}
+        {(isReady || hasExtractedInfo) && (
+          <div className="rounded-2xl border border-zinc-200 bg-white p-4 sm:p-5 shadow-xs space-y-3 mt-4 transition-all">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-700">
+                  <CheckCircle2 className="size-4" />
+                  <span>
+                    {isReady
+                      ? isDe
+                        ? 'Inserat ist startklar'
+                        : 'Listing is ready'
+                      : isDe
+                        ? 'Erfasste Angaben'
+                        : 'Captured details'}
+                  </span>
+                </div>
+                <h4 className="text-base sm:text-lg font-bold text-black mt-1">
+                  {extractedJob.title || (isDe ? 'Stelle in Bearbeitung' : 'Job in progress')}
+                </h4>
+                <p className="text-xs sm:text-sm text-zinc-600 mt-0.5">
+                  {[
+                    extractedJob.company,
+                    extractedJob.district || extractedJob.city,
+                    extractedJob.wage,
+                    extractedJob.employmentType,
+                  ]
+                    .filter(Boolean)
+                    .join(' • ')}
+                </p>
+              </div>
+
+              {extractedJob.completeness && (
+                <span className="text-xs font-mono font-bold text-zinc-700 bg-zinc-100 px-2.5 py-1 rounded-full shrink-0">
+                  {extractedJob.completeness}%
+                </span>
+              )}
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 pt-1">
+              <button
+                type="button"
+                onClick={() => onApplyToForm(extractedJob, isReady ? 3 : 1)}
+                className="apple-press flex-1 py-3 px-5 rounded-xl bg-black hover:bg-zinc-800 text-white text-sm font-semibold flex items-center justify-center gap-2 shadow-xs transition active:scale-[0.98] cursor-pointer"
+              >
+                <span>
+                  {isReady
+                    ? isDe
+                      ? 'Inserat prüfen & live schalten'
+                      : 'Review & Publish Listing'
+                    : isDe
+                      ? 'Daten ins Formular übernehmen'
+                      : 'Apply data to standard form'}
+                </span>
+                <ArrowRight className="size-4" />
+              </button>
+
+              {isReady && (
                 <button
-                  key={i}
                   type="button"
-                  onClick={() => handleSendMessage(qr)}
-                  className="apple-press text-xs sm:text-sm font-medium bg-zinc-200/80 hover:bg-zinc-300 text-zinc-800 rounded-full px-3.5 py-1.5 sm:px-4 sm:py-2 transition-all cursor-pointer active:scale-[0.97]"
+                  onClick={() => onApplyToForm(extractedJob, 1)}
+                  className="apple-press py-3 px-4 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-xs sm:text-sm font-semibold text-zinc-800 transition cursor-pointer text-center"
                 >
-                  {qr}
+                  {isDe ? 'Im Formular bearbeiten' : 'Edit in standard form'}
                 </button>
-              ))}
+              )}
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Error notice */}
-          {error && (
-            <div className="px-4 py-3 bg-red-50 text-red-800 text-sm flex items-center gap-2">
-              <AlertCircle className="size-4 shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
+        <div ref={messagesEndRef} />
+      </div>
 
-          {/* Input Form with Borderless Soft Input */}
-          <div className="p-3 sm:p-4 bg-white">
-            <form
-              onSubmit={(e) => {
+      {/* Error Notice */}
+      {error && (
+        <div className="p-3.5 rounded-2xl bg-red-50 text-red-900 text-sm flex items-center gap-2.5">
+          <AlertCircle className="size-4.5 shrink-0 text-red-600" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {/* Interactive Bottom Area: Starter Prompts + Input Bar */}
+      <div className="space-y-3 pt-1">
+        {/* Quick Suggestion Chips */}
+        {quickReplies.length > 0 && !loading && (
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
+            {quickReplies.map((qr, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => handleSendMessage(qr)}
+                className="apple-press text-xs sm:text-[13px] font-medium bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-700 rounded-full px-3.5 py-1.5 transition-all shadow-2xs hover:border-zinc-300 active:scale-[0.97] cursor-pointer"
+              >
+                {qr}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Text Input Bar - High-Craft Rounded Pill */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSendMessage();
+          }}
+          className="relative rounded-2xl sm:rounded-3xl border border-zinc-200 bg-white shadow-xs hover:border-zinc-300 focus-within:border-zinc-400 focus-within:shadow-md transition-all p-2 sm:p-2.5 flex items-end gap-2"
+        >
+          <textarea
+            ref={inputRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 handleSendMessage();
-              }}
-              className="flex items-center gap-2"
-            >
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSendMessage();
-                  }
-                }}
-                placeholder={
-                  isDe
-                    ? 'Beschreibe die Stelle oder antworte hier... (Enter zum Senden)'
-                    : 'Describe the job or reply here... (Enter to send)'
-                }
-                rows={1}
-                className="flex-1 max-h-28 min-h-[48px] sm:min-h-[52px] px-4 py-3 text-base text-black placeholder:text-zinc-400 rounded-2xl bg-zinc-100 focus:bg-white focus:ring-2 focus:ring-black outline-none resize-none transition-colors"
-              />
-              <button
-                type="submit"
-                disabled={!input.trim() || loading}
-                className="apple-press size-11 sm:size-12 rounded-2xl bg-black hover:bg-zinc-800 text-white flex items-center justify-center shrink-0 disabled:opacity-40 transition cursor-pointer active:scale-[0.96]"
-                title={isDe ? 'Nachricht senden' : 'Send message'}
-              >
-                <Send className="size-4.5" />
-              </button>
-            </form>
-            <div className="mt-1.5 px-1 flex items-center justify-between text-xs text-zinc-500 font-normal">
-              <span>{isDe ? 'Du kannst auch ganze Stellenbeschreibungen oder WhatsApp-Notizen einfügen.' : 'You can paste full job drafts or WhatsApp notes.'}</span>
-              <span className="hidden sm:inline font-mono text-[11px] text-zinc-400">Shift+Enter = {isDe ? 'Zeilenumbruch' : 'New line'}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Live Ad Preview & Review (5 cols on desktop) - FLAT, OPEN, ZERO NESTED BOXES */}
-        <div className="lg:col-span-5 space-y-3">
-          {/* Header with Completeness Progress */}
-          <div className="flex items-center justify-between pb-1">
-            <div className="flex items-center gap-2">
-              <span className="size-2 rounded-full bg-emerald-500" />
-              <h3 className="text-xs sm:text-sm font-bold uppercase tracking-[0.16em] text-zinc-800">
-                {isDe ? 'Live Inserat-Vorschau' : 'Live Listing Preview'}
-              </h3>
-            </div>
-            <span className="text-sm sm:text-base font-bold text-black font-mono">
-              {completeness}% {isDe ? 'fertig' : 'ready'}
-            </span>
-          </div>
-
-          {/* Progress bar */}
-          <div className="w-full h-1.5 bg-zinc-100 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-emerald-600 transition-all duration-500 rounded-full"
-              style={{ width: `${completeness}%` }}
-            />
-          </div>
-
-          {/* Simulated Job Card - SINGLE CLEAN SURFACE (NO NESTED BOXES) */}
-          <div className="rounded-2xl sm:rounded-3xl bg-zinc-50 p-4 sm:p-6 space-y-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-lg bg-black text-white px-3 py-1 text-xs font-mono font-bold uppercase tracking-wider">
-                Job
-              </span>
-              <span className="rounded-lg bg-white px-3 py-1 text-xs font-mono font-semibold text-zinc-800">
-                {extractedJob.employmentType || (isDe ? 'Minijob (bis 603 €)' : 'Minijob / Part-Time')}
-              </span>
-              {extractedJob.wage && (
-                <span className="rounded-lg bg-emerald-100 text-emerald-950 px-3 py-1 text-xs font-mono font-bold">
-                  {extractedJob.wage}
-                </span>
-              )}
-            </div>
-
-            <div>
-              <h4 className="text-xl sm:text-2xl font-bold text-black tracking-tight leading-snug">
-                {extractedJob.title || (
-                  <span className="text-zinc-400 italic font-normal">
-                    {isDe ? 'Stellenbezeichnung (z. B. Barista m/w/d)' : 'Job Title (e.g. Barista m/w/d)'}
-                  </span>
-                )}
-              </h4>
-              <div className="mt-1.5 flex items-center gap-2 text-sm sm:text-base text-zinc-700 font-medium">
-                <span className="flex items-center gap-1.5">
-                  <Building2 className="size-4 text-zinc-500" />
-                  {extractedJob.company || (
-                    <span className="text-zinc-400 italic font-normal">{isDe ? 'Betrieb / Name' : 'Company Name'}</span>
-                  )}
-                </span>
-                <span>&middot;</span>
-                <span className="flex items-center gap-1.5">
-                  <MapPin className="size-4 text-zinc-500" />
-                  {extractedJob.district || extractedJob.city || 'Berlin'}
-                </span>
-              </div>
-            </div>
-
-            {/* Description preview - CLEAN TEXT DIRECTLY ON CARD */}
-            <div className="text-base text-zinc-800 leading-relaxed font-normal min-h-[70px]">
-              {extractedJob.description ? (
-                <p className="whitespace-pre-wrap">{extractedJob.description}</p>
-              ) : (
-                <p className="text-zinc-500 italic">
-                  {isDe
-                    ? 'Die Aufgaben- und Profilbeschreibung wird automatisch aus deinen Angaben erstellt...'
-                    : 'Responsibilities and requirements will be composed automatically from your conversation...'}
-                </p>
-              )}
-            </div>
-
-            {/* Contact Channels Badge */}
-            <div className="pt-1 flex flex-wrap gap-2 text-xs sm:text-sm font-medium text-zinc-800">
-              {extractedJob.whatsapp && (
-                <span className="inline-flex items-center gap-1.5 text-emerald-950 bg-emerald-100/70 px-3 py-1.5 rounded-xl font-medium">
-                  <Phone className="size-3.5 text-emerald-800" />
-                  WhatsApp: {extractedJob.whatsapp}
-                </span>
-              )}
-              {extractedJob.contactEmail && (
-                <span className="inline-flex items-center gap-1.5 text-zinc-900 bg-white px-3 py-1.5 rounded-xl font-medium">
-                  <Mail className="size-3.5 text-zinc-500" />
-                  {extractedJob.contactEmail}
-                </span>
-              )}
-              {!extractedJob.whatsapp && !extractedJob.contactEmail && !extractedJob.phone && (
-                <span className="text-zinc-500 text-xs sm:text-sm italic">
-                  {isDe
-                    ? 'Noch kein Direktkontakt (WhatsApp oder E-Mail) hinterlegt'
-                    : 'No direct contact (WhatsApp or Email) added yet'}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Action Card when Ready */}
-          <div className="pt-1">
-            {isReady ? (
-              <div className="space-y-3">
-                <div className="rounded-2xl bg-emerald-50 p-4 flex items-start gap-3 text-emerald-950">
-                  <CheckCircle2 className="size-5 text-emerald-700 shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-bold text-sm sm:text-base">
-                      {isDe ? 'Inserat ist startklar' : 'Listing is ready'}
-                    </p>
-                    <p className="text-emerald-900 text-xs sm:text-sm mt-0.5 font-normal leading-normal">
-                      {isDe
-                        ? 'Alle Kernangaben sind erfasst. Du kannst das Inserat jetzt prüfen und freischalten.'
-                        : 'All essential information has been recorded. Review and publish your ad.'}
-                    </p>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => onApplyToForm(extractedJob, 3)}
-                  className="apple-press w-full py-4 px-6 rounded-2xl bg-black hover:bg-zinc-800 text-white text-base font-bold tracking-[0.02em] transition cursor-pointer flex items-center justify-center gap-2 shadow-xs active:scale-[0.98]"
-                >
-                  <span>{isDe ? 'Inserat prüfen & live schalten' : 'Review & Publish Listing'}</span>
-                  <ArrowRight className="size-4.5" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onApplyToForm(extractedJob, 1)}
-                  className="apple-press w-full py-3 px-4 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-sm font-semibold text-zinc-800 transition cursor-pointer text-center"
-                >
-                  {isDe ? 'Im Formular anpassen (Schritt 1)' : 'Customize in standard form (Step 1)'}
-                </button>
-              </div>
+              }
+            }}
+            placeholder={
+              isDe
+                ? 'Beschreibe deine Stelle oder füge Notizen ein...'
+                : 'Describe the position or paste your notes...'
+            }
+            rows={1}
+            className="flex-1 max-h-32 min-h-[44px] py-2.5 px-3 text-[15px] sm:text-base text-zinc-900 placeholder:text-zinc-400 bg-transparent outline-none resize-none leading-relaxed"
+          />
+          <button
+            type="submit"
+            disabled={!input.trim() || loading}
+            className="apple-press size-10 sm:size-11 rounded-full bg-black hover:bg-zinc-800 disabled:bg-zinc-100 text-white disabled:text-zinc-400 flex items-center justify-center shrink-0 transition-all cursor-pointer disabled:cursor-not-allowed active:scale-95 mb-0.5"
+            title={isDe ? 'Nachricht senden' : 'Send'}
+          >
+            {loading ? (
+              <Loader2 className="size-4 animate-spin" />
             ) : (
-              <div className="space-y-2.5">
-                <button
-                  type="button"
-                  disabled={!extractedJob.title}
-                  onClick={() => onApplyToForm(extractedJob, 1)}
-                  className="apple-press w-full py-3 px-4 rounded-xl bg-zinc-100 hover:bg-zinc-200 disabled:opacity-40 text-sm font-semibold text-black transition cursor-pointer flex items-center justify-center gap-2"
-                >
-                  <span>{isDe ? 'Bisherige Daten ins Formular übernehmen' : 'Apply current data to standard form'}</span>
-                  <ArrowRight className="size-3.5" />
-                </button>
-                <p className="text-xs sm:text-sm text-zinc-500 text-center font-normal">
-                  {isDe
-                    ? 'Nenne einfach noch kurz deinen Betrieb und deine WhatsApp-Nummer im Dialog.'
-                    : 'Simply mention your business name and WhatsApp number in the chat.'}
-                </p>
-              </div>
+              <Send className="size-4 sm:size-4.5" />
             )}
-          </div>
-        </div>
+          </button>
+        </form>
       </div>
     </div>
   );
