@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
-import { ALL_SOURCED_JOBS } from '@/lib/sources/sourced-jobs';
-import { isJobSuppressed } from '@/lib/sources/suppression-store';
+import { getJobsFromFirestore } from '@/lib/firebase/firestore-service';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET(request: Request) {
   try {
@@ -9,12 +11,15 @@ export async function GET(request: Request) {
     const city = (url.searchParams.get('city') || 'all').toLowerCase();
     const district = (url.searchParams.get('district') || 'all').toLowerCase();
     const niche = url.searchParams.get('niche') || 'all';
-    const limit = Math.min(2000, Math.max(1, parseInt(url.searchParams.get('limit') || '25', 10)));
+    const limit = Math.min(2000, Math.max(1, parseInt(url.searchParams.get('limit') || '50', 10)));
     const offset = Math.max(0, parseInt(url.searchParams.get('offset') || '0', 10));
 
-    const filtered = ALL_SOURCED_JOBS.filter((job) => {
-      if (isJobSuppressed(job.id) || (job.slug && isJobSuppressed(job.slug))) return false;
-      if (niche !== 'all' && job.industryId !== niche) return false;
+    // Fetch authentic active jobs from Firestore
+    const firestoreJobs = await getJobsFromFirestore(limit);
+
+    const filtered = firestoreJobs.filter((job) => {
+      if (job.status !== 'active' && job.status !== 'published') return false;
+      if (niche !== 'all' && (job as any).industryId !== niche) return false;
       if (city !== 'all' && !(job.city || 'berlin').toLowerCase().includes(city)) return false;
       if (district !== 'all' && !(job.district || '').toLowerCase().includes(district)) return false;
       if (q) {
@@ -29,27 +34,35 @@ export async function GET(request: Request) {
 
     const paged = filtered.slice(offset, offset + limit).map((j: any) => ({
       id: j.id,
-      slug: j.slug,
+      slug: j.slug || j.id,
       title: j.title,
       company: j.company,
       city: j.city || 'Berlin',
       district: j.district,
       postcode: j.postcode,
-      industryId: j.industryId,
-      employmentForms: j.employmentForms,
-      compensation: j.compensation,
+      industryId: j.industryId || 'other',
+      employmentForms: j.employmentForms || [j.employmentType || 'Minijob'],
+      compensation: j.compensation || { label: j.payText },
       hours: j.hours,
       hoursLabel: j.hoursLabel || j.hours?.label,
       schedule: j.schedule,
       scheduleSummary: j.scheduleSummary || j.schedule?.summary,
       tier: j.tier,
-      isFeatured: j.isFeatured,
-      listingOrigin: j.listingOrigin,
-      tags: j.tags,
-      isIndependentLister: j.isIndependentLister,
-      isUserListing: j.isUserListing,
+      isFeatured: j.tier === 'premium',
+      listingOrigin: 'employer_posted',
+      tags: j.tags || [],
+      isIndependentLister: true,
+      isUserListing: true,
       whatsapp: j.whatsapp,
-      phone: j.phone,
+      phone: j.contactPhone || j.phone,
+      contactEmail: j.contactEmail,
+      applyUrl: j.applyUrl,
+      payText: j.payText,
+      postedAt: j.createdAt
+        ? typeof j.createdAt.toDate === 'function'
+          ? j.createdAt.toDate().toISOString()
+          : j.createdAt
+        : undefined,
     }));
 
     return NextResponse.json({

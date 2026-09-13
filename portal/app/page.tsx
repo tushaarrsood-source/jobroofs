@@ -3,28 +3,20 @@ import { JobFeed } from '@/components/job-feed';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { WebSiteJsonLd, LocalBusinessJsonLd } from '@/components/json-ld';
-import { previewJobs } from '@/lib/domain/preview-data';
-import { ALL_SOURCED_JOBS } from '@/lib/sources/sourced-jobs';
-import { isJobSuppressed } from '@/lib/sources/suppression-store';
+import { getJobsFromFirestore } from '@/lib/firebase/firestore-service';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function Home() {
-  const map = new Map<string, any>();
-
-  // Add initial preview jobs
-  for (const j of previewJobs) {
-    if (!isJobSuppressed(j.id) && (!j.slug || !isJobSuppressed(j.slug))) {
-      map.set(j.slug || j.id, j);
-    }
+  let firestoreJobs: any[] = [];
+  try {
+    firestoreJobs = await getJobsFromFirestore(50);
+  } catch (e) {
+    console.error('Error fetching jobs for Home page:', e);
   }
 
-  // Complement with verified sourced jobs (up to 40 for lightweight initial RSC payload)
-  for (const j of ALL_SOURCED_JOBS.slice(0, 40)) {
-    if (!map.has(j.slug || j.id) && !isJobSuppressed(j.id) && !isJobSuppressed(j.slug)) {
-      map.set(j.slug || j.id, j);
-    }
-  }
-
-  const initialJobs = Array.from(map.values()).map((job) => ({
+  const initialJobs = firestoreJobs.map((job) => ({
     id: job.id,
     slug: job.slug || job.id,
     title: job.title,
@@ -32,22 +24,29 @@ export default async function Home() {
     city: job.city || 'Berlin',
     district: job.district,
     postcode: job.postcode,
-    industryId: job.industryId,
-    employmentForms: job.employmentForms,
-    compensation: job.compensation,
+    industryId: job.industryId || 'other',
+    employmentForms: job.employmentForms || [job.employmentType || 'Minijob'],
+    compensation: job.compensation || { label: job.payText },
     hours: job.hours,
     hoursLabel: job.hoursLabel || job.hours?.label,
     schedule: job.schedule,
     scheduleSummary: job.scheduleSummary || job.schedule?.summary,
     tier: job.tier,
-    isFeatured: job.isFeatured,
-    listingOrigin: job.listingOrigin,
-    tags: job.tags,
+    isFeatured: job.tier === 'premium',
+    listingOrigin: 'employer_posted',
+    tags: job.tags || [],
     payText: job.payText,
-    isIndependentLister: job.isIndependentLister,
-    isUserListing: job.isUserListing,
+    isIndependentLister: true,
+    isUserListing: true,
     whatsapp: job.whatsapp,
-    phone: job.phone,
+    phone: job.contactPhone || job.phone,
+    contactEmail: job.contactEmail,
+    applyUrl: job.applyUrl,
+    postedAt: job.createdAt
+      ? typeof job.createdAt.toDate === 'function'
+        ? job.createdAt.toDate().toISOString()
+        : job.createdAt
+      : undefined,
   }));
 
   // Initial verified direct employer jobs (only real submissions, no scraped jobs)

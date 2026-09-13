@@ -22,6 +22,8 @@ import {
   Phone,
   Store,
   Sparkles,
+  Lock,
+  User as UserIcon,
 } from 'lucide-react';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { useTranslation } from '@/lib/i18n/language-context';
@@ -62,7 +64,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
   const handleWhatsAppShare = () => {
     if (typeof window !== 'undefined') {
       const text = encodeURIComponent(
-        `Job in Berlin: ${job.title} bei ${job.company}\n${window.location.href}`
+        `Job in ${job.city || 'Deutschland'}: ${job.title} bei ${job.company}\n${window.location.href}`
       );
       window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
     }
@@ -187,8 +189,8 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
               </p>
               <p className="text-[12px] text-emerald-700">
                 {isDe
-                  ? 'Deine Stellenanzeige ist nun live geschaltet und für Berliner Jobsuchende sichtbar.'
-                  : 'Your job listing is now live and visible to Berlin job seekers.'}
+                  ? `Deine Stellenanzeige ist nun live geschaltet und für Jobsuchende in ${job.city || 'Deutschland'} sichtbar.`
+                  : `Your job listing is now live and visible to job seekers in ${job.city || 'Germany'}.`}
               </p>
             </div>
           </div>
@@ -209,7 +211,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
             <JobroofsMark size={20} />
             <span className="text-[#202a31] font-medium">{job.company}</span>
             <span className="text-[#d8ded9]">&middot;</span>
-            <span>{job.district || 'Berlin'}</span>
+            <span>{job.district ? `${job.district}, ` : ''}{job.city || 'Deutschland'}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -234,7 +236,7 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
           <div className="mt-4 flex flex-wrap items-center gap-3 text-[12px]">
             <span className="inline-flex items-center gap-1 text-[#5a6460]">
               <MapPin className="size-3 stroke-[1.25] text-[#7e8a84]" />
-              {job.district || 'Berlin'} {job.postcode ? `(${job.postcode})` : ''}
+              {job.district ? `${job.district}, ` : ''}{job.city || 'Deutschland'} {job.postcode ? `(${job.postcode})` : ''}
             </span>
             <span className="text-[#d8ded9]">&middot;</span>
             <span className="inline-flex items-center gap-1 text-[#202a31] font-mono">
@@ -267,124 +269,160 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
             </div>
           </div>
 
-          {/* Contact Action Cards */}
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            {waUrl && (
-              <button
-                type="button"
-                onClick={(e) => handleActionClick(waUrl, e)}
-                className="apple-press flex items-center justify-between gap-3 p-3.5 rounded-lg border border-emerald-300 bg-emerald-50/70 hover:bg-emerald-100/70 text-emerald-950 transition-colors text-left cursor-pointer"
-              >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="p-2 rounded-md bg-emerald-600 text-white shrink-0">
-                    <MessageCircle className="size-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[13px] font-medium text-emerald-950">
-                      {isDe ? 'Per WhatsApp schreiben' : 'Chat via WhatsApp'}
-                    </div>
-                    <div className="text-[11px] text-emerald-700 truncate font-mono">
-                      {job.whatsapp || cleanWa}
-                    </div>
-                  </div>
-                </div>
-                <span className="text-[11px] font-medium text-emerald-800 bg-emerald-200/60 px-2 py-0.5 rounded-sm shrink-0">
-                  1-Klick &rarr;
-                </span>
-              </button>
-            )}
-
-            {emailUrl && (
-              <button
-                type="button"
-                onClick={(e) => handleActionClick(emailUrl, e)}
-                className="apple-press flex items-center justify-between gap-3 p-3.5 rounded-lg border border-[#d8ded9] bg-white hover:bg-[#f4f4ee] text-[#202a31] transition-colors text-left cursor-pointer"
-              >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="p-2 rounded-md bg-[#202a31] text-white shrink-0">
-                    <Mail className="size-4 stroke-[1.5]" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[13px] font-medium text-[#202a31]">
-                      {isDe ? 'E-Mail schreiben' : 'Send Email'}
-                    </div>
-                    <div className="text-[11px] text-[#7e8a84] truncate font-mono">
-                      {emailContact}
-                    </div>
-                  </div>
-                </div>
-                <span className="text-[11px] font-medium text-[#202a31] bg-[#f4f4ee] px-2 py-0.5 rounded-sm shrink-0">
-                  E-Mail &rarr;
-                </span>
-              </button>
-            )}
-
-            {phoneUrl && (
-              <button
-                type="button"
-                onClick={(e) => handleActionClick(phoneUrl, e)}
-                className="apple-press flex items-center justify-between gap-3 p-3.5 rounded-lg border border-[#d8ded9] bg-white hover:bg-[#f4f4ee] text-[#202a31] transition-colors text-left cursor-pointer"
-              >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="p-2 rounded-md bg-[#202a31] text-white shrink-0">
-                    <Phone className="size-4 stroke-[1.5]" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[13px] font-medium text-[#202a31]">
-                      {isDe ? 'Direkt anrufen' : 'Call Employer'}
-                    </div>
-                    <div className="text-[11px] text-[#7e8a84] truncate font-mono">
-                      {job.phone}
-                    </div>
-                  </div>
-                </div>
-                <span className="text-[11px] font-medium text-[#202a31] bg-[#f4f4ee] px-2 py-0.5 rounded-sm shrink-0">
-                  Anrufen &rarr;
-                </span>
-              </button>
-            )}
-
-            {job.address && (
-              <div className="flex items-center gap-2.5 p-3.5 rounded-lg border border-[#d8ded9] bg-white text-[#202a31]">
-                <div className="p-2 rounded-md bg-[#f4f4ee] text-[#202a31] shrink-0">
-                  <Store className="size-4 stroke-[1.5]" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-[13px] font-medium text-[#202a31]">
-                    {isDe ? 'Vor Ort vorbeikommen' : 'Walk-in / Address'}
-                  </div>
-                  <div className="text-[11px] text-[#7e8a84] truncate">
-                    {job.address}
-                  </div>
-                </div>
+          {/* Contact Action Cards / Auth Gate */}
+          {!user ? (
+            <div className="mt-5 rounded-xl border border-[#d8ded9] bg-white p-6 sm:p-8 text-center space-y-4 shadow-2xs">
+              <div className="mx-auto size-12 rounded-full bg-[#202a31] text-[#fbfbf8] flex items-center justify-center shadow-xs">
+                <Lock className="size-5 stroke-[1.5]" />
               </div>
-            )}
+              <div className="max-w-md mx-auto space-y-1.5">
+                <h3
+                  className="text-lg sm:text-xl font-medium text-[#202a31] tracking-tight"
+                  style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
+                >
+                  {isDe ? 'Kontaktdaten & Direktbewerbung geschützt' : 'Contact Details & Direct Application Gated'}
+                </h3>
+                <p className="text-[13px] sm:text-[13.5px] text-[#5a6460] font-light leading-relaxed">
+                  {isDe
+                    ? `Melde dich kostenlos an, um die direkte WhatsApp-Nummer, Telefonnummer und E-Mail-Adresse von ${job.company} freizuschalten und dich direkt zu bewerben.`
+                    : `Sign in for free to reveal the direct WhatsApp, phone number, and email of ${job.company} and apply instantly.`}
+                </p>
+              </div>
 
-            {websiteUrl && (
-              <button
-                type="button"
-                onClick={(e) => handleActionClick(websiteUrl, e)}
-                className="apple-press flex items-center justify-between gap-3 p-3.5 rounded-lg border border-[#d8ded9] bg-white hover:bg-[#f4f4ee] text-[#202a31] transition-colors text-left cursor-pointer"
-              >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="p-2 rounded-md bg-[#ecece4] text-[#202a31] shrink-0">
-                    <ExternalLink className="size-4 stroke-[1.5]" />
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => setAuthModalOpen(true)}
+                  className="apple-press inline-flex items-center justify-center gap-2 rounded-xl bg-[#202a31] hover:bg-[#161D22] text-[#fbfbf8] px-6 py-3 text-[13.5px] font-medium tracking-[0.02em] transition-all cursor-pointer shadow-xs w-full sm:w-auto min-w-[220px]"
+                >
+                  <UserIcon className="size-4 stroke-[1.5]" />
+                  <span>{isDe ? 'Kostenlos anmelden & bewerben' : 'Sign in for free & apply'}</span>
+                  <ArrowRight className="size-3.5 stroke-[1.5]" />
+                </button>
+                <p className="mt-2 text-[11px] text-[#7e8a84] font-light">
+                  {isDe ? '100% kostenlos für Bewerber:innen · In 10 Sekunden registriert' : '100% free for applicants · Instant access'}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {waUrl && (
+                <button
+                  type="button"
+                  onClick={(e) => handleActionClick(waUrl, e)}
+                  className="apple-press flex items-center justify-between gap-3 p-3.5 rounded-lg border border-emerald-300 bg-emerald-50/70 hover:bg-emerald-100/70 text-emerald-950 transition-colors text-left cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="p-2 rounded-md bg-emerald-600 text-white shrink-0">
+                      <MessageCircle className="size-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[13px] font-medium text-emerald-950">
+                        {isDe ? 'Per WhatsApp schreiben' : 'Chat via WhatsApp'}
+                      </div>
+                      <div className="text-[11px] text-emerald-700 truncate font-mono">
+                        {job.whatsapp || cleanWa}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-[11px] font-medium text-emerald-800 bg-emerald-200/60 px-2 py-0.5 rounded-sm shrink-0">
+                    1-Klick &rarr;
+                  </span>
+                </button>
+              )}
+
+              {emailUrl && (
+                <button
+                  type="button"
+                  onClick={(e) => handleActionClick(emailUrl, e)}
+                  className="apple-press flex items-center justify-between gap-3 p-3.5 rounded-lg border border-[#d8ded9] bg-white hover:bg-[#f4f4ee] text-[#202a31] transition-colors text-left cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="p-2 rounded-md bg-[#202a31] text-white shrink-0">
+                      <Mail className="size-4 stroke-[1.5]" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[13px] font-medium text-[#202a31]">
+                        {isDe ? 'E-Mail schreiben' : 'Send Email'}
+                      </div>
+                      <div className="text-[11px] text-[#7e8a84] truncate font-mono">
+                        {emailContact}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-[11px] font-medium text-[#202a31] bg-[#f4f4ee] px-2 py-0.5 rounded-sm shrink-0">
+                    E-Mail &rarr;
+                  </span>
+                </button>
+              )}
+
+              {phoneUrl && (
+                <button
+                  type="button"
+                  onClick={(e) => handleActionClick(phoneUrl, e)}
+                  className="apple-press flex items-center justify-between gap-3 p-3.5 rounded-lg border border-[#d8ded9] bg-white hover:bg-[#f4f4ee] text-[#202a31] transition-colors text-left cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="p-2 rounded-md bg-[#202a31] text-white shrink-0">
+                      <Phone className="size-4 stroke-[1.5]" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[13px] font-medium text-[#202a31]">
+                        {isDe ? 'Direkt anrufen' : 'Call Employer'}
+                      </div>
+                      <div className="text-[11px] text-[#7e8a84] truncate font-mono">
+                        {job.phone}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-[11px] font-medium text-[#202a31] bg-[#f4f4ee] px-2 py-0.5 rounded-sm shrink-0">
+                    Anrufen &rarr;
+                  </span>
+                </button>
+              )}
+
+              {job.address && (
+                <div className="flex items-center gap-2.5 p-3.5 rounded-lg border border-[#d8ded9] bg-white text-[#202a31]">
+                  <div className="p-2 rounded-md bg-[#f4f4ee] text-[#202a31] shrink-0">
+                    <Store className="size-4 stroke-[1.5]" />
                   </div>
                   <div className="min-w-0">
                     <div className="text-[13px] font-medium text-[#202a31]">
-                      {isDe ? 'Offizielle Website' : 'Official Website'}
+                      {isDe ? 'Vor Ort vorbeikommen' : 'Walk-in / Address'}
                     </div>
                     <div className="text-[11px] text-[#7e8a84] truncate">
-                      {job.company}
+                      {job.address}
                     </div>
                   </div>
                 </div>
-                <span className="text-[11px] font-medium text-[#202a31] bg-[#f4f4ee] px-2 py-0.5 rounded-sm shrink-0">
-                  Öffnen &rarr;
-                </span>
-              </button>
-            )}
-          </div>
+              )}
+
+              {websiteUrl && (
+                <button
+                  type="button"
+                  onClick={(e) => handleActionClick(websiteUrl, e)}
+                  className="apple-press flex items-center justify-between gap-3 p-3.5 rounded-lg border border-[#d8ded9] bg-white hover:bg-[#f4f4ee] text-[#202a31] transition-colors text-left cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="p-2 rounded-md bg-[#ecece4] text-[#202a31] shrink-0">
+                      <ExternalLink className="size-4 stroke-[1.5]" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[13px] font-medium text-[#202a31]">
+                        {isDe ? 'Offizielle Website' : 'Official Website'}
+                      </div>
+                      <div className="text-[11px] text-[#7e8a84] truncate">
+                        {job.company}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-[11px] font-medium text-[#202a31] bg-[#f4f4ee] px-2 py-0.5 rounded-sm shrink-0">
+                    Öffnen &rarr;
+                  </span>
+                </button>
+              )}
+            </div>
+          )}
         </section>
 
         {/* Responsibilities */}
@@ -463,47 +501,61 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
         <section className="mt-8 rounded-sm border border-[#d8ded9] bg-[#fbfbf8] p-6 text-center sm:text-left sm:flex sm:items-center sm:justify-between gap-4">
           <div>
             <h2 className="text-[15px] font-medium text-[#202a31]">
-              {isDe ? 'Direkt beim Berliner Betrieb melden' : 'Contact Berlin employer directly'}
+              {isDe ? 'Direkt beim Betrieb bewerben' : 'Apply directly with employer'}
             </h2>
             <p className="mt-1 text-[13px] text-[#7e8a84] font-light">
               {isDe
-                ? `100% kostenfrei & ohne Vermittler. Direkter Kontakt zu ${job.company}.`
-                : `100% free & without agencies. Direct contact with ${job.company}.`}
+                ? (!user ? 'Melde dich kostenlos an, um Kontaktdaten & Bewerbungswege freizuschalten.' : `100% kostenfrei & ohne Vermittler. Direkter Kontakt zu ${job.company}.`)
+                : (!user ? 'Sign in for free to unlock direct contact details and apply.' : `100% free & without agencies. Direct contact with ${job.company}.`)}
             </p>
           </div>
 
-          <div className="mt-4 sm:mt-0 shrink-0 flex flex-wrap items-center gap-2">
-            {waUrl && (
+          <div className="mt-4 sm:mt-0 shrink-0 flex flex-wrap items-center justify-center sm:justify-end gap-2">
+            {!user ? (
               <button
                 type="button"
-                onClick={(e) => handleActionClick(waUrl, e)}
-                className="apple-press inline-flex items-center gap-2 rounded-sm bg-emerald-600 px-5 py-2.5 text-[13px] font-medium tracking-[0.02em] text-white hover:bg-emerald-700 transition-colors cursor-pointer"
+                onClick={() => setAuthModalOpen(true)}
+                className="apple-press inline-flex items-center gap-2 rounded-xl bg-[#202a31] hover:bg-[#161D22] text-[#fbfbf8] px-5 py-2.5 text-[13px] font-medium tracking-[0.02em] transition-all cursor-pointer shadow-xs"
               >
-                <MessageCircle className="size-4" />
-                <span>WhatsApp</span>
+                <Lock className="size-4 stroke-[1.5]" />
+                <span>{isDe ? 'Anmelden zum Bewerben' : 'Sign in to apply'}</span>
+                <ArrowRight className="size-3.5 stroke-[1.5]" />
               </button>
-            )}
+            ) : (
+              <>
+                {waUrl && (
+                  <button
+                    type="button"
+                    onClick={(e) => handleActionClick(waUrl, e)}
+                    className="apple-press inline-flex items-center gap-2 rounded-sm bg-emerald-600 px-5 py-2.5 text-[13px] font-medium tracking-[0.02em] text-white hover:bg-emerald-700 transition-colors cursor-pointer"
+                  >
+                    <MessageCircle className="size-4" />
+                    <span>WhatsApp</span>
+                  </button>
+                )}
 
-            {emailUrl && (
-              <button
-                type="button"
-                onClick={(e) => handleActionClick(emailUrl, e)}
-                className="apple-press inline-flex items-center gap-2 rounded-sm bg-[#202a31] px-5 py-2.5 text-[13px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
-              >
-                <Mail className="size-4 stroke-[1.25]" />
-                <span>{isDe ? 'E-Mail schreiben' : 'Send Email'}</span>
-              </button>
-            )}
+                {emailUrl && (
+                  <button
+                    type="button"
+                    onClick={(e) => handleActionClick(emailUrl, e)}
+                    className="apple-press inline-flex items-center gap-2 rounded-sm bg-[#202a31] px-5 py-2.5 text-[13px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
+                  >
+                    <Mail className="size-4 stroke-[1.25]" />
+                    <span>{isDe ? 'E-Mail schreiben' : 'Send Email'}</span>
+                  </button>
+                )}
 
-            {!waUrl && !emailUrl && primaryActionUrl !== '#' && (
-              <button
-                type="button"
-                onClick={(e) => handleActionClick(primaryActionUrl, e)}
-                className="apple-press inline-flex items-center gap-2 rounded-sm bg-[#202a31] px-5 py-2.5 text-[13px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
-              >
-                <ExternalLink className="size-4 stroke-[1.25]" />
-                <span>{isDe ? 'Kontakt aufnehmen' : 'Get in Touch'} &rarr;</span>
-              </button>
+                {!waUrl && !emailUrl && primaryActionUrl !== '#' && (
+                  <button
+                    type="button"
+                    onClick={(e) => handleActionClick(primaryActionUrl, e)}
+                    className="apple-press inline-flex items-center gap-2 rounded-sm bg-[#202a31] px-5 py-2.5 text-[13px] font-normal tracking-[0.02em] text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
+                  >
+                    <ExternalLink className="size-4 stroke-[1.25]" />
+                    <span>{isDe ? 'Kontakt aufnehmen' : 'Get in Touch'} &rarr;</span>
+                  </button>
+                )}
+              </>
             )}
           </div>
         </section>
@@ -544,8 +596,8 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
           <ShieldCheck className="size-3.5 text-[#1b4332]" />
           <span>
             {isDe
-              ? 'Unabhängiges Berliner Inserat · 100% Direktkontakt ohne Zeitarbeit'
-              : 'Independent Berlin listing · 100% direct contact, no temp agencies'}
+              ? `Unabhängiges Inserat in ${job.city || 'Deutschland'} · 100% Direktkontakt ohne Zeitarbeit`
+              : `Independent listing in ${job.city || 'Germany'} · 100% direct contact, no temp agencies`}
           </span>
         </div>
       </article>
@@ -557,35 +609,48 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
           <p className="text-[11px] text-[#7e8a84] truncate">{job.company} &middot; {wage}</p>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
-          {waUrl && (
+          {!user ? (
             <button
               type="button"
-              onClick={(e) => handleActionClick(waUrl, e)}
-              className="apple-press inline-flex items-center gap-1 rounded-sm bg-emerald-600 px-3 py-2 text-[12px] font-medium text-white hover:bg-emerald-700 transition-colors cursor-pointer"
+              onClick={() => setAuthModalOpen(true)}
+              className="apple-press inline-flex items-center gap-1.5 rounded-lg bg-[#202a31] px-4 py-2 text-[12px] font-medium text-[#fbfbf8] hover:bg-[#161D22] transition-colors cursor-pointer shadow-xs"
             >
-              <MessageCircle className="size-3.5" />
-              <span>WhatsApp</span>
+              <Lock className="size-3.5 stroke-[1.5]" />
+              <span>{isDe ? 'Anmelden zum Bewerben' : 'Sign in to apply'}</span>
             </button>
+          ) : (
+            <>
+              {waUrl && (
+                <button
+                  type="button"
+                  onClick={(e) => handleActionClick(waUrl, e)}
+                  className="apple-press inline-flex items-center gap-1 rounded-sm bg-emerald-600 px-3 py-2 text-[12px] font-medium text-white hover:bg-emerald-700 transition-colors cursor-pointer"
+                >
+                  <MessageCircle className="size-3.5" />
+                  <span>WhatsApp</span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={(e) => handleActionClick(emailUrl || phoneUrl || primaryActionUrl, e)}
+                className="apple-press inline-flex items-center gap-1.5 rounded-sm bg-[#202a31] px-3.5 py-2 text-[12px] font-medium text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
+              >
+                {emailUrl ? (
+                  <>
+                    <Mail className="size-3.5" /> {isDe ? 'E-Mail' : 'Email'}
+                  </>
+                ) : phoneUrl ? (
+                  <>
+                    <Phone className="size-3.5" /> {isDe ? 'Anrufen' : 'Call'}
+                  </>
+                ) : (
+                  <>
+                    <span>{isDe ? 'Kontakt' : 'Contact'}</span> &rarr;
+                  </>
+                )}
+              </button>
+            </>
           )}
-          <button
-            type="button"
-            onClick={(e) => handleActionClick(emailUrl || phoneUrl || primaryActionUrl, e)}
-            className="apple-press inline-flex items-center gap-1.5 rounded-sm bg-[#202a31] px-3.5 py-2 text-[12px] font-medium text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
-          >
-            {emailUrl ? (
-              <>
-                <Mail className="size-3.5" /> {isDe ? 'E-Mail' : 'Email'}
-              </>
-            ) : phoneUrl ? (
-              <>
-                <Phone className="size-3.5" /> {isDe ? 'Anrufen' : 'Call'}
-              </>
-            ) : (
-              <>
-                <span>{isDe ? 'Kontakt' : 'Contact'}</span> &rarr;
-              </>
-            )}
-          </button>
         </div>
       </div>
 

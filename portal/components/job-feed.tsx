@@ -625,33 +625,74 @@ export function JobFeed({
         })}
 
         {displayedJobs.length === 0 && (
-          <div className="rounded-sm border border-dashed border-[#d8ded9] bg-white p-12 text-center">
-            <p className="text-[15px] font-normal text-[#202a31]">
-              {isDe ? 'Keine passenden Stellen gefunden' : 'No matching jobs found'}
-            </p>
-            <p className="mt-1 text-[13px] text-[#7e8a84] font-light">
-              {isDe
-                ? 'Versuche andere Suchbegriffe oder wähle „Ganz Deutschland“.'
-                : 'Try different search terms or choose "All Germany".'}
-            </p>
-            <button
-              onClick={() => {
-                setQuery('');
-                setSelectedCity('all');
-                setSelectedDistrict('all');
-                setSelectedCategory('all');
-                setSortBy('newest');
-                if (typeof window !== 'undefined') {
-                  const url = new URL(window.location.href);
-                  url.searchParams.delete('city');
-                  url.searchParams.delete('district');
-                  window.history.replaceState({}, '', url.toString());
-                }
-              }}
-              className="mt-4 inline-flex items-center justify-center rounded-sm bg-[#202a31] px-5 py-2 text-[12.5px] font-normal text-[#fbfbf8] hover:bg-[#2d3a43] transition-colors cursor-pointer"
-            >
-              {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
-            </button>
+          <div className="rounded-xl border border-[#d8ded9] bg-white p-8 sm:p-12 text-center shadow-2xs">
+            {jobs.length === 0 && directJobs.length === 0 ? (
+              <div className="max-w-md mx-auto space-y-3">
+                <div className="mx-auto size-12 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center">
+                  <span className="text-xl">✨</span>
+                </div>
+                <h3
+                  className="text-lg sm:text-xl font-medium text-[#202a31]"
+                  style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
+                >
+                  {isDe ? 'Noch keine Stellenanzeigen online' : 'No job listings online yet'}
+                </h3>
+                <p className="text-[13.5px] text-[#5a6460] font-light leading-relaxed">
+                  {isDe
+                    ? 'Sei der erste Betrieb in deiner Stadt! Erhalte direkte WhatsApp-Bewerbungen von über 500+ Jobsuchenden in ganz Deutschland.'
+                    : 'Be the first employer in your city! Receive direct WhatsApp applications from 500+ job seekers across Germany.'}
+                </p>
+                <div className="pt-2">
+                  <Link
+                    href="/post-a-job"
+                    className="apple-press inline-flex items-center justify-center gap-2 rounded-xl bg-[#202a31] hover:bg-[#161D22] text-[#fbfbf8] px-6 py-3 text-[13.5px] font-medium tracking-[0.02em] transition-all cursor-pointer shadow-xs"
+                  >
+                    <span>{isDe ? 'Jetzt 1. Job kostenlos inserieren' : 'Post 1st job for free'}</span>
+                    <ArrowRight className="size-4 stroke-[1.5]" />
+                  </Link>
+                  <p className="mt-2 text-[11px] text-[#7e8a84] font-light">
+                    {isDe ? '100% kostenfrei · In 60 Sekunden live' : '100% free · Live in 60 seconds'}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="max-w-md mx-auto space-y-3">
+                <p className="text-[15px] font-medium text-[#202a31]">
+                  {isDe ? 'Keine passenden Stellen gefunden' : 'No matching jobs found'}
+                </p>
+                <p className="text-[13px] text-[#7e8a84] font-light">
+                  {isDe
+                    ? 'Versuche andere Suchbegriffe oder wähle eine andere Stadt.'
+                    : 'Try different search terms or select another city.'}
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+                  <button
+                    onClick={() => {
+                      setQuery('');
+                      setSelectedCity('all');
+                      setSelectedDistrict('all');
+                      setSelectedCategory('all');
+                      setSortBy('newest');
+                      if (typeof window !== 'undefined') {
+                        const url = new URL(window.location.href);
+                        url.searchParams.delete('city');
+                        url.searchParams.delete('district');
+                        window.history.replaceState({}, '', url.toString());
+                      }
+                    }}
+                    className="apple-press inline-flex items-center justify-center rounded-lg bg-[#202a31] px-4 py-2 text-[12.5px] font-medium text-[#fbfbf8] hover:bg-[#161D22] transition-colors cursor-pointer"
+                  >
+                    {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
+                  </button>
+                  <Link
+                    href="/post-a-job"
+                    className="apple-press inline-flex items-center justify-center rounded-lg border border-[#d8ded9] bg-white px-4 py-2 text-[12.5px] font-medium text-[#202a31] hover:bg-[#f4f4ee] transition-colors cursor-pointer"
+                  >
+                    {isDe ? 'Job inserieren' : 'Post a job'}
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

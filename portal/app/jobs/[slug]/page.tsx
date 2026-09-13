@@ -211,7 +211,12 @@ export default async function JobDetailPage({
           startDate: null,
           endDate: null,
         },
-        workplace: { type: 'on_site', address: fsJob.district ? `${fsJob.district}, Berlin` : 'Berlin' },
+        workplace: {
+          type: 'on_site',
+          address: fsJob.district
+            ? `${fsJob.district}, ${fsJob.city || 'Berlin'}`
+            : fsJob.city || 'Berlin',
+        },
         responsibilities: [fsJob.description || 'Zuverlässige Mitarbeit im Betrieb.'],
         requirements: [fsJob.requirements || 'Pünktlichkeit & Zuverlässigkeit'],
         application: {
@@ -221,9 +226,14 @@ export default async function JobDetailPage({
           deadline: null,
           contactName: null,
         },
+        city: fsJob.city || 'Berlin',
+        whatsapp: fsJob.whatsapp,
+        phone: fsJob.contactPhone || (fsJob as any).phone,
+        contactEmail: fsJob.contactEmail,
+        applyUrl: fsJob.applyUrl,
         contact: {
           method: fsJob.contactEmail ? 'email' : 'website',
-          value: fsJob.contactEmail || fsJob.applyUrl || 'kontakt@jobroofs.com',
+          value: fsJob.contactEmail || fsJob.applyUrl || 'jobroofs@gmail.com',
           instructions: 'Direkte Kontaktaufnahme mit dem Arbeitgeber.',
         },
         firstSeenAt: fsJob.createdAt ? new Date(fsJob.createdAt).toISOString() : new Date().toISOString(),
