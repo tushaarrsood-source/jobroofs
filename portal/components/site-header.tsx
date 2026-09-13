@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from '@/components/ui/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { PlusCircle, User as UserIcon, LogOut, Smartphone, Mail } from 'lucide-react';
+import { PlusCircle, User as UserIcon, LogOut, Smartphone } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { AuthModal } from '@/components/auth-modal';
@@ -62,16 +62,6 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
             {isDe ? 'Preise' : 'Pricing'}
           </Link>
 
-          {/* Official Enquiry Email */}
-          <a
-            href="mailto:jobroofs@gmail.com"
-            title={isDe ? 'Offizielle Anfragen & Support' : 'Official Enquiries & Support'}
-            className="hidden lg:inline-flex items-center gap-1.5 text-[12px] text-zinc-600 hover:text-black transition-colors font-mono font-medium"
-          >
-            <Mail className="size-3.5 stroke-[1.5]" />
-            <span>jobroofs@gmail.com</span>
-          </a>
-
           {/* Post a job CTA */}
           <button
             type="button"
@@ -79,7 +69,7 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
             className="apple-press hidden sm:inline-flex items-center gap-1.5 rounded-lg bg-black px-4 py-2 text-[12.5px] font-medium tracking-[0.02em] text-white hover:bg-zinc-800 transition-all cursor-pointer shadow-xs"
           >
             <PlusCircle className="size-3.5 stroke-[1.5]" />
-            <span>{isDe ? 'Job inserieren' : 'Post a Job'}</span>
+            <span>{isDe ? 'Job kostenlos inserieren' : 'Post your job (free)'}</span>
           </button>
 
           {/* App Install Trigger */}

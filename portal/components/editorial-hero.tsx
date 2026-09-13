@@ -46,7 +46,7 @@ export function EditorialHero() {
             onClick={handlePostJobClick}
             className="apple-press group inline-flex items-center justify-center gap-2.5 rounded-xl bg-black hover:bg-zinc-800 text-white px-5 py-3 text-[14px] font-semibold tracking-[0.01em] transition-all cursor-pointer shadow-xs active:scale-[0.98]"
           >
-            <span>{isDe ? 'Job inserieren' : 'Post a Job'}</span>
+            <span>{isDe ? 'Job kostenlos inserieren' : 'Post your job (free)'}</span>
             <ArrowRight className="size-4 stroke-[2] group-hover:translate-x-0.5 transition-transform" />
           </button>
 
@@ -56,10 +56,6 @@ export function EditorialHero() {
           >
             <span>{isDe ? 'Preise & Tarife' : 'Pricing'}</span>
           </Link>
-
-          <span className="text-[12.5px] text-zinc-600 font-medium sm:ml-2">
-            {isDe ? '1. Job kostenlos · Danach ab 14,99 €' : '1st job free · Then from €14.99'}
-          </span>
         </div>
       </div>
 

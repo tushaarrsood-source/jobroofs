@@ -372,19 +372,6 @@ export function JobFeed({
 
   return (
     <section className="w-full">
-      {/* 100% Independent German Listings Assurance */}
-      <div className="flex items-center justify-between pb-3 border-b border-zinc-200 mb-5 text-[11.5px] text-zinc-600 font-medium">
-        <div className="flex items-center gap-2">
-          <span className="size-2 rounded-full bg-emerald-600" />
-          <span className="font-mono uppercase tracking-[0.18em] text-black font-bold text-[10.5px]">
-            {isDe ? '100% Unabhängige Inserate in ganz Deutschland' : '100% Independent Listings across Germany'}
-          </span>
-        </div>
-        <span className="font-mono text-[11px] text-zinc-600 hidden sm:inline font-semibold">
-          {isDe ? 'Kein Scraping · 1-Klick Direktkontakt' : 'No Scraping · 1-Click Direct Contact'}
-        </span>
-      </div>
-
       {/* Search & Filter Toolbar: Clean, Compact, Zero Shelves of Buttons */}
       <div className="mb-6 space-y-2.5">
         {/* Sleek Search Bar */}
