@@ -8,7 +8,7 @@ import {
   CheckCircle2,
   AlertCircle,
   ShieldCheck,
-  Sparkles,
+  MessageSquare,
   Gift,
   Share2,
   Copy,
@@ -528,21 +528,21 @@ export function SimplePostJobForm() {
   return (
     <div className="space-y-4 sm:space-y-5">
       {/* Header & Step Tracker */}
-      <div className="border-b border-zinc-200 pb-3 sm:pb-4">
+      <div className="border-b border-zinc-200 pb-4 sm:pb-5">
         <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3">
           <div>
-            <div className="text-[10px] sm:text-[10.5px] font-bold uppercase tracking-[0.22em] text-zinc-600 mb-1 sm:mb-1.5">
+            <div className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-zinc-600 mb-1.5">
               {isDe ? 'FÜR ARBEITGEBER · DIREKTE INSERATE' : 'EMPLOYER INTAKE · DIRECT LISTINGS'}
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-black">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-black">
               {isDe ? 'Job jetzt inserieren.' : 'Post a job now.'}
             </h1>
-            <p className="mt-1 text-[14px] text-zinc-800 font-normal">
+            <p className="mt-2 text-base sm:text-lg text-zinc-700 font-normal leading-relaxed">
               {isDe
                 ? 'Erreiche motivierte Studierende, Aushilfen und Fachkräfte direkt in deinem Kiez — ohne Agenturen.'
                 : 'Reach motivated students, helpers, and local talents directly in your neighborhood — without agencies.'}
             </p>
-            <p className="mt-1 text-[12px] text-zinc-600">
+            <p className="mt-1.5 text-sm text-zinc-600">
               {isFreeEligible ? (
                 <span className="text-emerald-800 font-semibold">
                   {isDe ? '1. Inserat 100% kostenlos · ' : '1st listing 100% free · '}
@@ -563,18 +563,18 @@ export function SimplePostJobForm() {
 
             {/* 1st Job Free Welcome Banner */}
             {!user ? (
-              <div className="mt-2.5 rounded-xl border border-emerald-600/30 bg-emerald-500/10 p-2.5 sm:p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-emerald-950">
-                <div className="flex items-start gap-2">
-                  <div className="size-6 rounded-lg bg-emerald-700 text-white flex items-center justify-center shrink-0 mt-0.5">
-                    <Gift className="size-3" />
+              <div className="mt-3 rounded-2xl border border-emerald-600/30 bg-emerald-500/10 p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-emerald-950">
+                <div className="flex items-start gap-3">
+                  <div className="size-7 rounded-xl bg-emerald-700 text-white flex items-center justify-center shrink-0 mt-0.5">
+                    <Gift className="size-3.5" />
                   </div>
                   <div>
-                    <div className="text-[12px] font-bold text-emerald-900">
+                    <div className="text-sm font-bold text-emerald-900">
                       {isDe
                         ? '1. Inserat 100% kostenlos für jeden neuen Benutzeraccount'
                         : '1st job listing 100% free for every new user account'}
                     </div>
-                    <div className="text-[11.5px] text-emerald-800/90 font-medium mt-0.5">
+                    <div className="text-xs sm:text-sm text-emerald-800/90 font-medium mt-0.5">
                       {isDe
                         ? 'Melde dich kurz an oder erstelle ein kostenloses Konto, um dein 1. Inserat gratis zu schalten.'
                         : 'Sign in or create a free account to post your 1st job for free.'}
@@ -584,18 +584,18 @@ export function SimplePostJobForm() {
                 <button
                   type="button"
                   onClick={() => setAuthOpen(true)}
-                  className="apple-press shrink-0 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-black text-white text-[11.5px] font-semibold hover:bg-zinc-800 transition-colors cursor-pointer active:scale-[0.98]"
+                  className="apple-press shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-black text-white text-xs sm:text-sm font-semibold hover:bg-zinc-800 transition-colors cursor-pointer active:scale-[0.98]"
                 >
                   <span>{isDe ? 'Kostenlos anmelden' : 'Sign in for free'}</span>
-                  <ArrowRight className="size-3" />
+                  <ArrowRight className="size-3.5" />
                 </button>
               </div>
             ) : isFreeEligible ? (
-              <div className="mt-2.5 rounded-xl border border-emerald-600/30 bg-emerald-500/10 p-2.5 flex items-center gap-2 text-emerald-950">
-                <div className="size-5 rounded-lg bg-emerald-700 text-white flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="size-3" />
+              <div className="mt-3 rounded-2xl border border-emerald-600/30 bg-emerald-500/10 p-3 flex items-center gap-2.5 text-emerald-950">
+                <div className="size-6 rounded-xl bg-emerald-700 text-white flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="size-3.5" />
                 </div>
-                <div className="text-[12px] text-emerald-900 font-medium">
+                <div className="text-sm text-emerald-900 font-medium">
                   {isDe ? (
                     <>
                       Willkommens-Vorteil aktiv für <span className="font-bold">{user.email}</span>: Dein 1. Job ist <strong>100% kostenlos</strong> (0 € / 15 Tage)!
@@ -611,42 +611,42 @@ export function SimplePostJobForm() {
           </div>
 
           {/* Mode Switcher & Segmented Step Indicator */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 pt-1">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2">
             {/* Mode Switcher */}
-            <div className="inline-flex items-center p-1 rounded-xl bg-zinc-100 border border-zinc-200 shadow-2xs shrink-0">
+            <div className="inline-flex items-center p-1.5 rounded-2xl bg-zinc-100 border border-zinc-200 shadow-2xs shrink-0">
               <button
                 type="button"
                 onClick={() => setPostMode('ai')}
-                className={`apple-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                className={`apple-press inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm sm:text-base font-semibold transition-all cursor-pointer ${
                   postMode === 'ai'
                     ? 'bg-black text-white shadow-xs'
                     : 'text-zinc-600 hover:text-black'
                 }`}
               >
-                <Sparkles className="size-3.5 text-amber-300 stroke-[2]" />
-                <span>{isDe ? '✨ KI-Assistent' : '✨ AI Assistant'}</span>
+                <MessageSquare className="size-4" />
+                <span>{isDe ? 'Inserat-Assistent' : 'Job Assistant'}</span>
               </button>
               <button
                 type="button"
                 onClick={() => setPostMode('classic')}
-                className={`apple-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                className={`apple-press inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm sm:text-base font-semibold transition-all cursor-pointer ${
                   postMode === 'classic'
                     ? 'bg-black text-white shadow-xs'
                     : 'text-zinc-600 hover:text-black'
                 }`}
               >
-                <FileText className="size-3.5" />
-                <span>{isDe ? '📝 Formular' : '📝 Classic Form'}</span>
+                <FileText className="size-4" />
+                <span>{isDe ? 'Klassisches Formular' : 'Standard Form'}</span>
               </button>
             </div>
 
             {/* Step Indicator (visible in classic form mode) */}
             {postMode === 'classic' && (
-              <div className="flex items-center gap-1 p-1 rounded-xl border border-zinc-200 bg-zinc-100/70 self-start sm:self-auto shrink-0 shadow-2xs">
+              <div className="flex items-center gap-1.5 p-1.5 rounded-2xl border border-zinc-200 bg-zinc-100/70 self-start sm:self-auto shrink-0 shadow-2xs">
                 <button
                   type="button"
                   onClick={() => goToStep(1)}
-                  className={`px-3 py-1.5 rounded-lg text-[11.5px] font-semibold tracking-[0.02em] transition-all cursor-pointer ${
+                  className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold tracking-[0.02em] transition-all cursor-pointer ${
                     step === 1
                       ? 'bg-black text-white shadow-xs'
                       : 'text-zinc-600 hover:text-black'
@@ -658,7 +658,7 @@ export function SimplePostJobForm() {
                 <button
                   type="button"
                   onClick={() => goToStep(2)}
-                  className={`px-3 py-1.5 rounded-lg text-[11.5px] font-semibold tracking-[0.02em] transition-all cursor-pointer ${
+                  className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold tracking-[0.02em] transition-all cursor-pointer ${
                     step === 2
                       ? 'bg-black text-white shadow-xs'
                       : 'text-zinc-600 hover:text-black'
@@ -670,7 +670,7 @@ export function SimplePostJobForm() {
                 <button
                   type="button"
                   onClick={() => goToStep(3)}
-                  className={`px-3 py-1.5 rounded-lg text-[11.5px] font-semibold tracking-[0.02em] transition-all cursor-pointer ${
+                  className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold tracking-[0.02em] transition-all cursor-pointer ${
                     step === 3
                       ? 'bg-black text-white shadow-xs'
                       : 'text-zinc-600 hover:text-black'
@@ -722,22 +722,22 @@ export function SimplePostJobForm() {
           {/* STEP 1: Basisdaten */}
           {step === 1 && (
             <div className="border border-zinc-200 bg-white p-5 sm:p-7 rounded-2xl shadow-xs space-y-4">
-              <div className="border-b border-zinc-200 pb-3">
-                <h2 className="text-base sm:text-lg font-bold text-black tracking-tight">
+              <div className="border-b border-zinc-200 pb-3.5">
+                <h2 className="text-lg sm:text-xl font-bold text-black tracking-tight">
                   1. Basisdaten der Stelle
                 </h2>
-                <p className="text-[12.5px] text-zinc-600 font-normal mt-0.5">
+                <p className="text-sm sm:text-base text-zinc-600 font-normal mt-1">
                   Worum geht es und wer sucht Verstärkung?
                 </p>
               </div>
 
               {/* Title Input */}
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 <div className="flex items-baseline justify-between">
-                  <label className="block text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-700">
+                  <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-zinc-700">
                     Stellenbezeichnung *
                   </label>
-                  <span className="text-[10px] text-zinc-600 font-medium">
+                  <span className="text-xs text-zinc-500 font-medium">
                     AGG-konform (m/w/d)
                   </span>
                 </div>
@@ -747,9 +747,9 @@ export function SimplePostJobForm() {
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="z. B. Specialty Barista (m/w/d), Servicekraft (m/w/d)"
-                  className="w-full h-10 px-3 text-base sm:text-[13.5px] text-black placeholder:text-zinc-400 border border-zinc-200 rounded-xl bg-white focus:border-black focus:ring-1 focus:ring-black outline-none transition-colors shadow-2xs"
+                  className="w-full h-11 px-4 text-base sm:text-[15px] text-black placeholder:text-zinc-400 border border-zinc-200 rounded-xl bg-white focus:border-black focus:ring-1 focus:ring-black outline-none transition-colors shadow-2xs"
                 />
-                <p className="text-[11px] text-zinc-600 font-light">
+                <p className="text-xs sm:text-sm text-zinc-500 font-normal">
                   {isDe
                     ? 'Hinweis nach AGG: Bitte diskriminierungsfreie Bezeichnungen wählen oder den Zusatz (m/w/d) ergänzen.'
                     : 'Equal treatment notice: Please use gender-neutral job titles or include (m/w/d).'}
@@ -757,8 +757,8 @@ export function SimplePostJobForm() {
               </div>
 
               {/* Company Input */}
-              <div className="space-y-1.5">
-                <label className="block text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-700">
+              <div className="space-y-2">
+                <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-zinc-700">
                   Arbeitgeber / Unternehmen *
                 </label>
                 <input
@@ -767,16 +767,16 @@ export function SimplePostJobForm() {
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                   placeholder="z. B. Café Morgenstern GmbH"
-                  className="w-full h-10 px-3 text-base sm:text-[13.5px] text-black placeholder:text-zinc-400 border border-zinc-200 rounded-xl bg-white focus:border-black focus:ring-1 focus:ring-black outline-none transition-colors shadow-2xs"
+                  className="w-full h-11 px-4 text-base sm:text-[15px] text-black placeholder:text-zinc-400 border border-zinc-200 rounded-xl bg-white focus:border-black focus:ring-1 focus:ring-black outline-none transition-colors shadow-2xs"
                 />
               </div>
 
               {/* City Selection (Nationwide) */}
-              <div className="space-y-1.5">
-                <label className="block text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-700">
+              <div className="space-y-2">
+                <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-zinc-700">
                   Stadt in Deutschland *
                 </label>
-                <div className="flex flex-wrap gap-1.5 mb-1.5">
+                <div className="flex flex-wrap gap-2 mb-1.5">
                   {QUICK_CITIES.map((c) => {
                     const isSelected = formData.city.toLowerCase() === c.toLowerCase();
                     return (
@@ -784,7 +784,7 @@ export function SimplePostJobForm() {
                         key={c}
                         type="button"
                         onClick={() => handleFormCityChange(c)}
-                        className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all cursor-pointer active:scale-[0.97] ${
+                        className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer active:scale-[0.97] ${
                           isSelected
                             ? 'bg-black text-white font-semibold shadow-xs'
                             : 'border border-zinc-200 text-zinc-800 hover:text-black hover:border-black bg-white'
@@ -798,7 +798,7 @@ export function SimplePostJobForm() {
                 <select
                   value={formData.city}
                   onChange={(e) => handleFormCityChange(e.target.value)}
-                  className="w-full h-10 px-3 text-[13px] text-black font-medium border border-zinc-200 rounded-xl bg-white cursor-pointer focus:border-black outline-none transition-colors shadow-2xs"
+                  className="w-full h-11 px-4 text-sm sm:text-base text-black font-medium border border-zinc-200 rounded-xl bg-white cursor-pointer focus:border-black outline-none transition-colors shadow-2xs"
                 >
                   {SUPPORTED_CITIES.map((c) => (
                     <option key={c.id} value={c.name}>
@@ -809,13 +809,13 @@ export function SimplePostJobForm() {
               </div>
 
               {/* District Selection Chips */}
-              <div className="space-y-1.5">
-                <label className="block text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-700">
+              <div className="space-y-2">
+                <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-zinc-700">
                   {formData.city.toLowerCase().includes('köln') || formData.city.toLowerCase().includes('koeln')
                     ? 'Veedel / Stadtteil *'
                     : 'Bezirk / Stadtteil *'}
                 </label>
-                <div className="flex flex-wrap gap-1.5 mb-1.5">
+                <div className="flex flex-wrap gap-2 mb-1.5">
                   {currentFormPopularDistricts.map((d) => {
                     const isSelected = formData.district === d;
                     return (
@@ -823,7 +823,7 @@ export function SimplePostJobForm() {
                         key={d}
                         type="button"
                         onClick={() => setFormData({ ...formData, district: d })}
-                        className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all cursor-pointer active:scale-[0.97] ${
+                        className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer active:scale-[0.97] ${
                           isSelected
                             ? 'bg-black text-white font-semibold shadow-xs'
                             : 'border border-zinc-200 text-zinc-800 hover:text-black hover:border-black bg-white'
@@ -839,7 +839,7 @@ export function SimplePostJobForm() {
                 <select
                   value={formData.district}
                   onChange={(e) => setFormData({ ...formData, district: e.target.value })}
-                  className="w-full h-10 px-3 text-[13px] text-black font-medium border border-zinc-200 rounded-xl bg-white cursor-pointer focus:border-black outline-none transition-colors shadow-2xs"
+                  className="w-full h-11 px-4 text-sm sm:text-base text-black font-medium border border-zinc-200 rounded-xl bg-white cursor-pointer focus:border-black outline-none transition-colors shadow-2xs"
                 >
                   {currentFormDistricts.map((d) => (
                     <option key={d} value={d}>
@@ -849,13 +849,13 @@ export function SimplePostJobForm() {
                 </select>
               </div>
 
-              <div className="pt-3 border-t border-zinc-200 flex justify-end">
+              <div className="pt-3.5 border-t border-zinc-200 flex justify-end">
                 <button
                   type="submit"
-                  className="apple-press inline-flex items-center gap-2 rounded-xl bg-black px-5 py-2.5 text-[13px] font-semibold tracking-[0.02em] text-white hover:bg-zinc-800 transition-colors cursor-pointer shadow-xs active:scale-[0.98]"
+                  className="apple-press inline-flex items-center gap-2 rounded-xl bg-black px-6 py-3 text-sm sm:text-base font-semibold tracking-[0.02em] text-white hover:bg-zinc-800 transition-colors cursor-pointer shadow-xs active:scale-[0.98]"
                 >
                   <span>Weiter zu Konditionen</span>
-                  <ArrowRight className="size-3.5 stroke-[2]" />
+                  <ArrowRight className="size-4 stroke-[2]" />
                 </button>
               </div>
             </div>
@@ -1068,7 +1068,7 @@ export function SimplePostJobForm() {
                 {isMaster && (
                   <div className="mb-3 rounded-xl border border-amber-300 bg-amber-50/80 p-3.5 flex items-center justify-between text-[12px] text-amber-950 shadow-2xs">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="size-4 text-amber-600 shrink-0" />
+                      <ShieldCheck className="size-4 text-amber-700 shrink-0" />
                       <div>
                         <p className="font-bold">👑 Master-Zugang aktiv ({user?.email})</p>
                         <p className="text-[11.5px] text-amber-800">
