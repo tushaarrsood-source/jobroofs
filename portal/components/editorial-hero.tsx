@@ -63,37 +63,6 @@ export function EditorialHero() {
         </div>
       </div>
 
-      {/* Signature Dark Brand Banner Section with Pure Black BG & Crisp White Text */}
-      <div className="mt-8 rounded-2xl bg-black text-white p-5 sm:p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-5 border border-black">
-        <div className="space-y-1.5">
-          <div className="inline-flex items-center gap-1.5 text-[10px] font-mono font-semibold uppercase tracking-[0.2em] text-zinc-400">
-            <Sparkles className="size-3 text-amber-400" />
-            <span>JOBROOFS · BUNDESWEIT</span>
-          </div>
-          <p className="text-[16px] sm:text-[18px] font-bold tracking-tight text-white">
-            {isDe
-              ? 'Unabhängig inserieren. Einfach, günstig und direkt.'
-              : 'Independent hiring. Fast, affordable, and direct.'}
-          </p>
-          <p className="text-[13px] sm:text-[13.5px] text-zinc-300 font-normal leading-relaxed max-w-2xl">
-            {isDe
-              ? 'Kein Abo-Zwang, keine Personalvermittler. Ob Kiez-Café, Handwerksbetrieb oder private Nachbarschaftshilfe – schalte deine Anzeige in 2 Minuten live.'
-              : 'No subscriptions, zero agency markups. Whether for a local café, workshop, or private help — publish your listing live in 2 minutes.'}
-          </p>
-        </div>
-
-        <div className="shrink-0 flex items-center gap-3">
-          <button
-            type="button"
-            onClick={handlePostJobClick}
-            className="apple-press inline-flex items-center gap-2 rounded-xl bg-white text-black px-4 py-2.5 text-[13px] font-semibold hover:bg-zinc-100 transition-all cursor-pointer shadow-xs active:scale-[0.98]"
-          >
-            <span>{isDe ? 'Jetzt inserieren' : 'Post a Job'}</span>
-            <ArrowRight className="size-3.5 stroke-[2]" />
-          </button>
-        </div>
-      </div>
-
       <AuthModal
         isOpen={authOpen}
         onClose={() => setAuthOpen(false)}

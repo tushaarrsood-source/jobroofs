@@ -10,7 +10,7 @@ export function SiteFooter() {
 
   return (
     <footer className="bg-black text-zinc-400 border-t border-zinc-800 mt-24">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 md:px-8 py-16">
+      <div className="mx-auto max-w-5xl px-3.5 sm:px-4 md:px-5 py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand Col */}
           <div className="sm:col-span-2 lg:col-span-1">

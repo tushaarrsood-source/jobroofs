@@ -32,7 +32,7 @@ export default function PricingPage() {
         />
         <SiteHeader />
 
-        <div className="mx-auto max-w-5xl px-6 py-12 md:px-8 md:py-16">
+        <div className="mx-auto max-w-5xl px-4 sm:px-5 md:px-6 py-10 md:py-14">
           {/* Header */}
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <h1

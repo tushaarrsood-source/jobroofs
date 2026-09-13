@@ -58,7 +58,7 @@ export default async function Home() {
       <LocalBusinessJsonLd />
       <SiteHeader />
 
-      <main className="mx-auto max-w-5xl w-full px-6 md:px-8 flex-1">
+      <main className="mx-auto max-w-5xl w-full px-4 sm:px-5 md:px-6 flex-1">
         {/* Signature Editorial Hero with Direct Listings */}
         <EditorialHero />
 
