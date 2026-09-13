@@ -33,10 +33,13 @@ yarn-error.log*
 Thumbs.db
 desktop.ini
 
-# Environment files
+# Environment & Service Account files
 .env*.local
 .env
 !portal/.env.example
+jobroofs-*.json
+service-account*.json
+*gserviceaccount*.json
 
 # Vercel (decommissioned)
 .vercel/
