@@ -127,7 +127,10 @@ export function ControlDashboardContent() {
     try {
       const res = await fetch('/api/admin/delete-job', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer Himanshu@0010',
+        },
         body: JSON.stringify({
           jobId: job.id,
           email: user?.email || 'tushaarrsood@gmail.com',
@@ -155,7 +158,10 @@ export function ControlDashboardContent() {
     try {
       const res = await fetch('/api/admin/delete-job', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer Himanshu@0010',
+        },
         body: JSON.stringify({
           jobId: job.id,
           email: user?.email || 'tushaarrsood@gmail.com',

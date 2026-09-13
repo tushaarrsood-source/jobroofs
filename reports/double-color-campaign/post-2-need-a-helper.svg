@@ -1,0 +1,41 @@
+<svg width="1080" height="1350" viewBox="0 0 1080 1350" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Solid Color 1 (Background) -->
+  <rect width="1080" height="1350" fill="#385542" />
+
+  <!-- Top Header Subtitle -->
+  <g transform="translate(540, 160)">
+    <text x="0" y="0" text-anchor="middle" fill="#F6F4EB" fill-opacity="0.8" font-family="ui-monospace, monospace" font-size="14" font-weight="600" letter-spacing="4">JOBROOFS.COM</text>
+    <line x1="-35" y1="25" x2="35" y2="25" stroke="#F6F4EB" stroke-opacity="0.45" stroke-width="1.5" />
+  </g>
+
+  <!-- Massive Hero Typography (Exact Reference Style: Huge, Ultra-Bold Grotesk) -->
+  <g transform="translate(540, 480)">
+    <!-- Line 1 -->
+    <text x="0" y="0" text-anchor="middle" fill="#F6F4EB" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="124" font-weight="900" letter-spacing="-2.5" line-height="0.95">NEED A</text>
+    <!-- Line 2 -->
+    <text x="0" y="125" text-anchor="middle" fill="#F6F4EB" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="124" font-weight="900" letter-spacing="-2.5" line-height="0.95">HELPER?</text>
+
+    <!-- Subtitle below hero -->
+    <text x="0" y="225" text-anchor="middle" fill="#F6F4EB" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="700" letter-spacing="4.5">MINIJOB &amp; ALLROUNDER</text>
+
+    <!-- Keyword Tags Row -->
+    <text x="0" y="325" text-anchor="middle" fill="#F6F4EB" fill-opacity="0.85" font-family="ui-monospace, monospace" font-size="14" font-weight="600" letter-spacing="3.5">0 € ERSTINSERAT   |   1-KLICK WHATSAPP   |   KEIN ABO</text>
+  </g>
+
+  <!-- Pill Button (Matching the Kiel inspiration button) -->
+  <g transform="translate(540, 990)">
+    <rect x="-240" y="0" width="480" height="78" rx="39" fill="#F6F4EB" />
+    <text x="0" y="48" text-anchor="middle" fill="#385542" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="800" letter-spacing="4">POST AT JOBROOFS</text>
+  </g>
+
+  <!-- Bottom Brand Footer: Logo + Tagline -->
+  <g transform="translate(540, 1220)">
+    <g transform="translate(-165, -12) scale(1.4)">
+      <path d="M5 19L16 7L27 19" stroke="#F6F4EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M9.5 19H22.5" stroke="#F6F4EB" stroke-opacity="0.8" stroke-width="1.2" stroke-linecap="round" />
+      <circle cx="16" cy="13.5" r="1.5" fill="#F6F4EB" />
+    </g>
+    <line x1="-120" y1="-1" x2="-120" y2="21" stroke="#F6F4EB" stroke-opacity="0.4" stroke-width="1.5" />
+    <text x="-105" y="15" fill="#F6F4EB" fill-opacity="0.85" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" letter-spacing="3">DAS PORTAL FÜR TEMPORÄRE JOBS</text>
+  </g>
+</svg>

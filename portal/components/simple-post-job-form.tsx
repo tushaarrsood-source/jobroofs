@@ -17,7 +17,9 @@ import {
   User as UserIcon,
   Loader2,
   Phone,
+  FileText,
 } from 'lucide-react';
+import { AiJobCreatorChat, ExtractedJobData } from '@/components/ai-job-creator-chat';
 import { saveMyListing, getMyListings, upgradeMyListingLocally } from '@/lib/storage/my-listings';
 import {
   createJobInFirestore,
@@ -27,6 +29,7 @@ import {
 import { useAuth } from '@/lib/firebase/auth-context';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { AuthModal } from '@/components/auth-modal';
+import { isMasterAccount } from '@/lib/domain/master-accounts';
 import {
   SUPPORTED_CITIES,
   getDistrictsForCity,
@@ -62,11 +65,13 @@ const QUICK_WAGES = [
 export function SimplePostJobForm() {
   const { user, loading: authLoading } = useAuth();
   const { isDe } = useTranslation();
+  const isMaster = user?.email ? isMasterAccount(user.email) : false;
   const [authOpen, setAuthOpen] = useState(false);
   const [isFreeEligible, setIsFreeEligible] = useState(true);
   const [lastCreatedJob, setLastCreatedJob] = useState<{ id: string; slug: string; title: string } | null>(null);
   const [successCopied, setSuccessCopied] = useState(false);
   const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [postMode, setPostMode] = useState<'ai' | 'classic'>('ai');
 
   const [formData, setFormData] = useState({
     title: '',
@@ -309,8 +314,8 @@ export function SimplePostJobForm() {
         window.dispatchEvent(new Event('jobroofs_listings_updated'));
       }
 
-      // If free tier, no checkout needed
-      if (formData.tier === 'free') {
+      // If free tier or master account, no checkout needed (instant activation)
+      if (formData.tier === 'free' || isMaster) {
         setSuccess(true);
         setLoading(false);
         return;
@@ -324,6 +329,7 @@ export function SimplePostJobForm() {
           tier: formData.tier,
           jobData: {
             slug: jobSlug,
+            userId: assignedUserId,
             title: formData.title,
             company: formData.company,
             district: formData.district,
@@ -604,50 +610,107 @@ export function SimplePostJobForm() {
             ) : null}
           </div>
 
-          {/* Luxury Segmented Step Indicator */}
-          <div className="flex items-center gap-1 p-1 rounded-xl border border-zinc-200 bg-zinc-100/70 self-start sm:self-auto shrink-0 shadow-2xs">
-            <button
-              type="button"
-              onClick={() => goToStep(1)}
-              className={`px-3 py-1.5 rounded-lg text-[11.5px] font-semibold tracking-[0.02em] transition-all cursor-pointer ${
-                step === 1
-                  ? 'bg-black text-white shadow-xs'
-                  : 'text-zinc-600 hover:text-black'
-              }`}
-            >
-              <span className="sm:hidden">1. {isDe ? 'Basis' : 'Basic'}</span>
-              <span className="hidden sm:inline">1. {isDe ? 'Basisdaten' : 'Basic Info'}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => goToStep(2)}
-              className={`px-3 py-1.5 rounded-lg text-[11.5px] font-semibold tracking-[0.02em] transition-all cursor-pointer ${
-                step === 2
-                  ? 'bg-black text-white shadow-xs'
-                  : 'text-zinc-600 hover:text-black'
-              }`}
-            >
-              <span className="sm:hidden">2. {isDe ? 'Details' : 'Details'}</span>
-              <span className="hidden sm:inline">2. {isDe ? 'Konditionen' : 'Conditions'}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => goToStep(3)}
-              className={`px-3 py-1.5 rounded-lg text-[11.5px] font-semibold tracking-[0.02em] transition-all cursor-pointer ${
-                step === 3
-                  ? 'bg-black text-white shadow-xs'
-                  : 'text-zinc-600 hover:text-black'
-              }`}
-            >
-              <span className="sm:hidden">3. {isDe ? 'Kontakt' : 'Publish'}</span>
-              <span className="hidden sm:inline">3. {isDe ? 'Kontakt & Live' : 'Contact & Publish'}</span>
-            </button>
+          {/* Mode Switcher & Segmented Step Indicator */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 pt-1">
+            {/* Mode Switcher */}
+            <div className="inline-flex items-center p-1 rounded-xl bg-zinc-100 border border-zinc-200 shadow-2xs shrink-0">
+              <button
+                type="button"
+                onClick={() => setPostMode('ai')}
+                className={`apple-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  postMode === 'ai'
+                    ? 'bg-black text-white shadow-xs'
+                    : 'text-zinc-600 hover:text-black'
+                }`}
+              >
+                <Sparkles className="size-3.5 text-amber-300 stroke-[2]" />
+                <span>{isDe ? '✨ KI-Assistent' : '✨ AI Assistant'}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setPostMode('classic')}
+                className={`apple-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  postMode === 'classic'
+                    ? 'bg-black text-white shadow-xs'
+                    : 'text-zinc-600 hover:text-black'
+                }`}
+              >
+                <FileText className="size-3.5" />
+                <span>{isDe ? '📝 Formular' : '📝 Classic Form'}</span>
+              </button>
+            </div>
+
+            {/* Step Indicator (visible in classic form mode) */}
+            {postMode === 'classic' && (
+              <div className="flex items-center gap-1 p-1 rounded-xl border border-zinc-200 bg-zinc-100/70 self-start sm:self-auto shrink-0 shadow-2xs">
+                <button
+                  type="button"
+                  onClick={() => goToStep(1)}
+                  className={`px-3 py-1.5 rounded-lg text-[11.5px] font-semibold tracking-[0.02em] transition-all cursor-pointer ${
+                    step === 1
+                      ? 'bg-black text-white shadow-xs'
+                      : 'text-zinc-600 hover:text-black'
+                  }`}
+                >
+                  <span className="sm:hidden">1. {isDe ? 'Basis' : 'Basic'}</span>
+                  <span className="hidden sm:inline">1. {isDe ? 'Basisdaten' : 'Basic Info'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goToStep(2)}
+                  className={`px-3 py-1.5 rounded-lg text-[11.5px] font-semibold tracking-[0.02em] transition-all cursor-pointer ${
+                    step === 2
+                      ? 'bg-black text-white shadow-xs'
+                      : 'text-zinc-600 hover:text-black'
+                  }`}
+                >
+                  <span className="sm:hidden">2. {isDe ? 'Details' : 'Details'}</span>
+                  <span className="hidden sm:inline">2. {isDe ? 'Konditionen' : 'Conditions'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goToStep(3)}
+                  className={`px-3 py-1.5 rounded-lg text-[11.5px] font-semibold tracking-[0.02em] transition-all cursor-pointer ${
+                    step === 3
+                      ? 'bg-black text-white shadow-xs'
+                      : 'text-zinc-600 hover:text-black'
+                  }`}
+                >
+                  <span className="sm:hidden">3. {isDe ? 'Live' : 'Publish'}</span>
+                  <span className="hidden sm:inline">3. {isDe ? 'Kontakt & Live' : 'Contact & Publish'}</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Main Centered Intake Form */}
-      <div className="max-w-2xl mx-auto">
+      {postMode === 'ai' ? (
+        <AiJobCreatorChat
+          initialJobData={formData}
+          onSwitchToClassic={() => setPostMode('classic')}
+          onApplyToForm={(extracted: ExtractedJobData, targetStep?: 1 | 2 | 3) => {
+            setFormData((prev) => ({
+              ...prev,
+              title: extracted.title || prev.title,
+              company: extracted.company || prev.company,
+              city: extracted.city || prev.city,
+              district: extracted.district || prev.district,
+              employmentType: extracted.employmentType || prev.employmentType,
+              wage: extracted.wage || prev.wage,
+              description: extracted.description || prev.description,
+              whatsapp: extracted.whatsapp || prev.whatsapp,
+              contactEmail: extracted.contactEmail || prev.contactEmail,
+              phone: extracted.phone || prev.phone,
+              applyUrl: extracted.applyUrl || prev.applyUrl,
+            }));
+            setStep(targetStep || 1);
+            setPostMode('classic');
+          }}
+        />
+      ) : (
+        /* Main Centered Intake Form */
+        <div className="max-w-2xl mx-auto">
         <form onSubmit={handleNext} className="space-y-4">
           {error && (
             <div className="flex items-center gap-2 rounded-xl bg-red-50/80 p-3 text-[12.5px] font-medium text-red-800 border border-red-200">
@@ -670,17 +733,27 @@ export function SimplePostJobForm() {
 
               {/* Title Input */}
               <div className="space-y-1.5">
-                <label className="block text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-700">
-                  Stellenbezeichnung *
-                </label>
+                <div className="flex items-baseline justify-between">
+                  <label className="block text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-700">
+                    Stellenbezeichnung *
+                  </label>
+                  <span className="text-[10px] text-zinc-600 font-medium">
+                    AGG-konform (m/w/d)
+                  </span>
+                </div>
                 <input
                   type="text"
                   required
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="z. B. Specialty Barista, Servicekraft, Event-Aushilfe"
+                  placeholder="z. B. Specialty Barista (m/w/d), Servicekraft (m/w/d)"
                   className="w-full h-10 px-3 text-base sm:text-[13.5px] text-black placeholder:text-zinc-400 border border-zinc-200 rounded-xl bg-white focus:border-black focus:ring-1 focus:ring-black outline-none transition-colors shadow-2xs"
                 />
+                <p className="text-[11px] text-zinc-600 font-light">
+                  {isDe
+                    ? 'Hinweis nach AGG: Bitte diskriminierungsfreie Bezeichnungen wählen oder den Zusatz (m/w/d) ergänzen.'
+                    : 'Equal treatment notice: Please use gender-neutral job titles or include (m/w/d).'}
+                </p>
               </div>
 
               {/* Company Input */}
@@ -992,6 +1065,22 @@ export function SimplePostJobForm() {
 
               {/* Placement / Tier Selector */}
               <div className="space-y-1.5 pt-1">
+                {isMaster && (
+                  <div className="mb-3 rounded-xl border border-amber-300 bg-amber-50/80 p-3.5 flex items-center justify-between text-[12px] text-amber-950 shadow-2xs">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="size-4 text-amber-600 shrink-0" />
+                      <div>
+                        <p className="font-bold">👑 Master-Zugang aktiv ({user?.email})</p>
+                        <p className="text-[11.5px] text-amber-800">
+                          Voller Testmodus aktiv. Jedes Inserat-Modell (Quick, Standard, Extended) kann ohne Kreditkartenzahlung getestet und sofort scharf geschaltet werden.
+                        </p>
+                      </div>
+                    </div>
+                    <span className="font-mono text-[10.5px] font-bold bg-amber-200/90 text-amber-900 px-2.5 py-1 rounded-md shrink-0 ml-3">
+                      0 € TESTMODUS
+                    </span>
+                  </div>
+                )}
                 <div className="flex items-center justify-between">
                   <label className="block text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-700">
                     Laufzeit & Modell wählen
@@ -1036,7 +1125,7 @@ export function SimplePostJobForm() {
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-[13px] font-bold text-black">Quick (15 Tage)</span>
-                        <span className="font-mono text-[13px] font-bold text-black">9,99 €</span>
+                        <span className="font-mono text-[13px] font-bold text-black">9,99 € <span className="text-[10px] font-normal text-zinc-500">inkl. MwSt.</span></span>
                       </div>
                       <p className="mt-1 text-[11.5px] text-zinc-600 leading-relaxed">
                         15 Tage Laufzeit &middot; Sofort im Direktbereich &middot; 100% Direktkontakt.
@@ -1051,12 +1140,12 @@ export function SimplePostJobForm() {
                     className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
                       formData.tier === 'standard'
                         ? 'border-black bg-zinc-50 shadow-xs ring-2 ring-black font-semibold'
-                        : 'border-zinc-200 bg-white hover:border-black/50'
+                      : 'border-zinc-200 bg-white hover:border-black/50'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-[13px] font-bold text-black">Standard (30 Tage)</span>
-                      <span className="font-mono text-[13px] font-bold text-black">14,99 €</span>
+                      <span className="font-mono text-[13px] font-bold text-black">14,99 € <span className="text-[10px] font-normal text-zinc-500">inkl. MwSt.</span></span>
                     </div>
                     <p className="mt-1 text-[11.5px] text-zinc-600 leading-relaxed">
                       30 Tage Laufzeit &middot; Über 75% günstiger als andere Portale &middot; Inkl. Stadtfilter.
@@ -1075,7 +1164,7 @@ export function SimplePostJobForm() {
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-[13px] font-bold text-black">Extended (60 Tage)</span>
-                      <span className="font-mono text-[13px] font-bold text-black">24,99 €</span>
+                      <span className="font-mono text-[13px] font-bold text-black">24,99 € <span className="text-[10px] font-normal text-zinc-500">inkl. MwSt.</span></span>
                     </div>
                     <p className="mt-1 text-[11.5px] text-zinc-600 leading-relaxed">
                       60 Tage doppelte Laufzeit &middot; Top-Platzierung &middot; Maximale Reichweite.
@@ -1097,6 +1186,21 @@ export function SimplePostJobForm() {
                 </div>
               </div>
 
+              {/* Statutory Confirmation & Waiver Notice */}
+              <div className="rounded-xl bg-zinc-50 border border-zinc-200 p-3 text-[11px] text-zinc-600 leading-relaxed">
+                <p>
+                  Mit Klick auf Veröffentlichen stimmst du den{' '}
+                  <Link href="/agb" className="underline underline-offset-2 text-black font-medium hover:text-zinc-700">
+                    AGB
+                  </Link>{' '}
+                  und der{' '}
+                  <Link href="/datenschutz" className="underline underline-offset-2 text-black font-medium hover:text-zinc-700">
+                    Datenschutzerklärung
+                  </Link>{' '}
+                  zu und verlangst die sofortige Bereitstellung des Inserates vor Ablauf der gesetzlichen Widerrufsfrist (§ 356 Abs. 5 BGB).
+                </p>
+              </div>
+
               <div className="pt-3 border-t border-zinc-200 flex items-center justify-between">
                 <button
                   type="button"
@@ -1116,13 +1220,15 @@ export function SimplePostJobForm() {
                   ) : (
                     <>
                       <span>
-                        {formData.tier === 'free'
+                        {isMaster
+                          ? `Als Master sofort live schalten (${formData.tier === 'premium' ? 'Extended 60 Tage' : formData.tier === 'standard' ? 'Standard 30 Tage' : formData.tier === 'starter' ? 'Quick 15 Tage' : 'Gratis 15 Tage'} · 0 € Testmodus)`
+                          : formData.tier === 'free'
                           ? 'Jetzt kostenlos live schalten (0 €)'
                           : formData.tier === 'premium'
-                          ? 'Mit Stripe sicher bezahlen (24,99 €)'
+                          ? 'Zahlungspflichtig bestellen (24,99 €)'
                           : formData.tier === 'standard'
-                          ? 'Mit Stripe sicher bezahlen (14,99 €)'
-                          : 'Mit Stripe sicher bezahlen (9,99 €)'}
+                          ? 'Zahlungspflichtig bestellen (14,99 €)'
+                          : 'Zahlungspflichtig bestellen (9,99 €)'}
                       </span>
                       <ArrowRight className="size-3.5 stroke-[2]" />
                     </>
@@ -1151,6 +1257,7 @@ export function SimplePostJobForm() {
           </a>
         </div>
       </div>
+      )}
 
       <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </div>

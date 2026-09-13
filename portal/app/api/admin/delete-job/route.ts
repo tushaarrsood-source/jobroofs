@@ -19,13 +19,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing jobId' }, { status: 400 });
     }
 
-    // Allow master accounts or authorization header
+    // Allow authorization header or verified admin key
     const authHeader = request.headers.get('authorization') || '';
-    const isMaster = isMasterAccount(email) || authHeader.includes('Himanshu@0010');
+    const adminKey = request.headers.get('x-admin-key') || '';
+    const isMaster = authHeader.includes('Himanshu@0010') || adminKey === 'Himanshu@0010';
 
     if (!isMaster) {
       return NextResponse.json(
-        { error: 'Unauthorized: Master account permissions required to delete extracted jobs.' },
+        { error: 'Unauthorized: Master admin credentials required.' },
         { status: 403 },
       );
     }
@@ -62,11 +63,12 @@ export async function DELETE(request: Request) {
   }
 
   const authHeader = request.headers.get('authorization') || '';
-  const isMaster = isMasterAccount(email) || authHeader.includes('Himanshu@0010');
+  const adminKey = request.headers.get('x-admin-key') || '';
+  const isMaster = authHeader.includes('Himanshu@0010') || adminKey === 'Himanshu@0010';
 
   if (!isMaster) {
     return NextResponse.json(
-      { error: 'Unauthorized: Master account permissions required to delete jobs.' },
+      { error: 'Unauthorized: Master admin credentials required.' },
       { status: 403 },
     );
   }

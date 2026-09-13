@@ -77,6 +77,9 @@ export function CookieBanner() {
     };
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(consent));
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('cookie_consent_updated', { detail: consent }));
+      }
     } catch (e) {
       console.error('Failed to save cookie consent', e);
     }

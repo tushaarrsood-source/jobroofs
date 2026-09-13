@@ -112,7 +112,7 @@ export default function PricingPage() {
                   >
                     14,99 €
                   </span>
-                  <span className="text-xs text-zinc-600 font-light">einmalig (über 75% günstiger als andere Portale)</span>
+                  <span className="text-xs text-zinc-600 font-light">einmalig inkl. MwSt. (über 75% günstiger als andere Portale)</span>
                 </div>
                 <p className="mt-2 text-[13px] text-zinc-700 font-light leading-relaxed">
                   Ideal für Cafés, Bars, Kiez-Läden, Handwerker und Ateliers mit regulärem Einstellungsbedarf.
@@ -161,7 +161,7 @@ export default function PricingPage() {
                   >
                     24,99 €
                   </span>
-                  <span className="text-xs text-zinc-600 font-light">einmalig (60 Tage)</span>
+                  <span className="text-xs text-zinc-600 font-light">einmalig inkl. MwSt. (60 Tage)</span>
                 </div>
                 <p className="mt-2 text-[13px] text-zinc-700 font-light leading-relaxed">
                   Für maximale Sichtbarkeit und langfristig suchende Betriebe.

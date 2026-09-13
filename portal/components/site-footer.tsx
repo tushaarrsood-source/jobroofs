@@ -4,6 +4,7 @@ import Link from '@/components/ui/link';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { BrandLogo } from '@/components/brand-logo';
 import { openAppInstallModal } from '@/components/pwa-install-prompt';
+import { openCookieSettings } from '@/components/cookie-banner';
 
 export function SiteFooter() {
   const { isDe } = useTranslation();
@@ -89,6 +90,11 @@ export function SiteFooter() {
             </h4>
             <ul className="space-y-2.5 text-[13px] font-medium">
               <li>
+                <Link href="/impressum" className="hover:text-white transition-colors">
+                  Impressum (§ 5 DDG)
+                </Link>
+              </li>
+              <li>
                 <Link href="/datenschutz" className="hover:text-white transition-colors">
                   Datenschutzerklärung
                 </Link>
@@ -102,6 +108,15 @@ export function SiteFooter() {
                 <Link href="/disclaimer" className="hover:text-white transition-colors">
                   Haftungsausschluss
                 </Link>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={openCookieSettings}
+                  className="hover:text-white transition-colors text-left cursor-pointer text-zinc-400"
+                >
+                  {isDe ? 'Cookie-Einstellungen' : 'Cookie Preferences'}
+                </button>
               </li>
             </ul>
           </div>

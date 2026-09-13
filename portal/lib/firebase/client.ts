@@ -30,16 +30,46 @@ export function getFirebaseApp(): FirebaseApp | null {
   const config = getFirebaseConfig();
   appInstance = getApps().length > 0 ? getApp() : initializeApp(config);
 
-  // Initialize analytics safely if supported in browser
+  // Initialize analytics strictly with user opt-in consent (DSGVO / TDDDG § 25 compliant)
   if (typeof window !== 'undefined' && config.measurementId) {
-    isSupported().then((supported) => {
-      if (supported && appInstance) {
-        analyticsInstance = getAnalytics(appInstance);
-      }
-    }).catch(() => {});
+    attachConsentListener();
+    if (hasAnalyticsConsent()) {
+      isSupported().then((supported) => {
+        if (supported && appInstance) {
+          analyticsInstance = getAnalytics(appInstance);
+        }
+      }).catch(() => {});
+    }
   }
 
   return appInstance;
+}
+
+function hasAnalyticsConsent(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const raw = localStorage.getItem('jobroofs_cookie_consent_v1');
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    return Boolean(parsed.analytics);
+  } catch {
+    return false;
+  }
+}
+
+let listenerAttached = false;
+function attachConsentListener() {
+  if (typeof window === 'undefined' || listenerAttached) return;
+  listenerAttached = true;
+  window.addEventListener('cookie_consent_updated', (e: any) => {
+    if (e.detail?.analytics && appInstance && !analyticsInstance) {
+      isSupported().then((supported) => {
+        if (supported && appInstance) {
+          analyticsInstance = getAnalytics(appInstance);
+        }
+      }).catch(() => {});
+    }
+  });
 }
 
 export function getFirebaseAuth(): Auth | null {

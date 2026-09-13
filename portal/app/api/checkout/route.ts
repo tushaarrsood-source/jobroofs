@@ -39,9 +39,13 @@ export async function POST(request: Request) {
       'metadata[title]': title,
       'metadata[company]': company,
       'metadata[jobSlug]': jobSlug,
-      success_url: `${appUrl}/jobs/${jobSlug}?payment_success=true${jobData?.isUpgrade ? '&upgraded=true' : ''}`,
+      success_url: `${appUrl}/jobs/${jobSlug}?payment_success=true&session_id={CHECKOUT_SESSION_ID}${jobData?.isUpgrade ? '&upgraded=true' : ''}`,
       cancel_url: `${appUrl}/post-a-job?canceled=true`,
     });
+
+    if (jobData?.userId) {
+      sessionBody.append('metadata[userId]', jobData.userId);
+    }
 
     if (jobData?.isUpgrade) {
       sessionBody.append('metadata[isUpgrade]', 'true');
