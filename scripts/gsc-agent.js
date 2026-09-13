@@ -218,9 +218,43 @@ async function main() {
       const res = await notifyIndex(token, url, 'URL_UPDATED');
       console.log(JSON.stringify(res, null, 2));
 
+    } else if (cmd === 'index-all') {
+      console.log(`⚡ Fetching live sitemap to push all URLs to Google Instant Indexing API...`);
+      const smRes = await fetch('https://jobroofs.com/sitemap.xml');
+      const xml = await smRes.text();
+      const urls = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => m[1]);
+      console.log(`Found ${urls.length} URLs to push.\n`);
+
+      let successCount = 0;
+      let errorCount = 0;
+
+      for (let i = 0; i < urls.length; i++) {
+        const u = urls[i];
+        process.stdout.write(`[${i + 1}/${urls.length}] Pushing ${u}... `);
+        try {
+          const res = await notifyIndex(token, u, 'URL_UPDATED');
+          if (res.urlNotificationMetadata) {
+            console.log('✅ Queued for Googlebot');
+            successCount++;
+          } else {
+            console.log('❌ ' + (res.error?.message || JSON.stringify(res)));
+            errorCount++;
+          }
+        } catch (e) {
+          console.log('❌ Error:', e.message);
+          errorCount++;
+        }
+        await new Promise(r => setTimeout(r, 250));
+      }
+
+      console.log('\n--- ⚡ INSTANT INDEXING REPORT ---');
+      console.log(`✅ Successfully pushed: ${successCount}`);
+      console.log(`❌ Failed: ${errorCount}`);
+      console.log(`Googlebot will now crawl these URLs in priority mode.\n`);
+
     } else {
       console.log(`Unknown command: ${cmd}`);
-      console.log('Available commands: status, sitemaps, submit-sitemap, performance, inspect [url], inspect-all, index-url [url]');
+      console.log('Available commands: status, sitemaps, submit-sitemap, performance, inspect [url], inspect-all, index-url [url], index-all');
     }
   } catch (err) {
     console.error('❌ Error executing command:', err.message);
