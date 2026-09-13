@@ -297,7 +297,14 @@ export function SimplePostJobForm() {
         setIsFreeEligible(false);
       }
 
-      // 4. Dispatch update event
+      // 4. Automatically notify Googlebot Instant Indexing API in real-time
+      fetch('/api/jobs/notify-index', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobSlug }),
+      }).catch((err) => console.warn('[Google Indexing] Notify error:', err));
+
+      // 5. Dispatch update event
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new Event('jobroofs_listings_updated'));
       }
