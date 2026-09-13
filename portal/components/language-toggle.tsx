@@ -7,17 +7,17 @@ export function LanguageToggle({ className = '' }: { className?: string }) {
 
   return (
     <div
-      className={`inline-flex items-center rounded-lg border border-zinc-200 bg-white p-0.5 text-xs font-medium shadow-2xs ${className}`}
+      className={`inline-flex items-center rounded-full bg-zinc-100 p-1 text-xs font-semibold ${className}`}
       role="group"
       aria-label="Language selector"
     >
       <button
         type="button"
         onClick={() => setLocale('de')}
-        className={`rounded-md px-2 sm:px-2.5 py-1 text-[11px] font-mono tracking-tight cursor-pointer transition-all duration-150 ${
+        className={`rounded-full px-3 py-1 text-xs font-mono tracking-tight cursor-pointer transition-all duration-150 ${
           locale === 'de'
             ? 'bg-black text-white font-bold shadow-xs'
-            : 'text-zinc-500 hover:text-black font-semibold'
+            : 'text-zinc-600 hover:text-black font-semibold'
         }`}
         aria-pressed={locale === 'de'}
       >
@@ -26,10 +26,10 @@ export function LanguageToggle({ className = '' }: { className?: string }) {
       <button
         type="button"
         onClick={() => setLocale('en')}
-        className={`rounded-md px-2 sm:px-2.5 py-1 text-[11px] font-mono tracking-tight cursor-pointer transition-all duration-150 ${
+        className={`rounded-full px-3 py-1 text-xs font-mono tracking-tight cursor-pointer transition-all duration-150 ${
           locale === 'en'
             ? 'bg-black text-white font-bold shadow-xs'
-            : 'text-zinc-500 hover:text-black font-semibold'
+            : 'text-zinc-600 hover:text-black font-semibold'
         }`}
         aria-pressed={locale === 'en'}
       >

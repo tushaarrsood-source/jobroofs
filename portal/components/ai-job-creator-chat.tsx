@@ -219,7 +219,7 @@ export function AiJobCreatorChat({
       {/* Grid: Left Chat Column | Right Live Preview Card Column */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Chat Pane (7 cols on desktop) - OPEN & BORDERLESS */}
-        <div className="lg:col-span-7 flex flex-col rounded-2xl sm:rounded-3xl bg-[#fafaf9] overflow-hidden h-[580px] sm:h-[660px]">
+        <div className="lg:col-span-7 flex flex-col rounded-2xl sm:rounded-3xl bg-zinc-50 overflow-hidden h-[580px] sm:h-[660px]">
           {/* Chat Messages Scroll Area */}
           <div className="flex-1 overflow-y-auto p-3.5 sm:p-6 space-y-4">
             {messages.map((msg) => (
@@ -244,7 +244,7 @@ export function AiJobCreatorChat({
                 </div>
 
                 <div
-                  className={`max-w-[88%] sm:max-w-[82%] rounded-2xl px-4 py-3 sm:px-5 sm:py-4 text-[15px] sm:text-base leading-relaxed ${
+                  className={`max-w-[88%] sm:max-w-[82%] rounded-2xl px-4 py-3 sm:px-5 sm:py-4 text-base leading-relaxed ${
                     msg.role === 'user'
                       ? 'bg-black text-white rounded-tr-xs'
                       : 'bg-white text-zinc-900 rounded-tl-xs font-normal'
@@ -279,7 +279,7 @@ export function AiJobCreatorChat({
 
           {/* Quick Suggestion Chips - Borderless Soft Pills */}
           {quickReplies.length > 0 && !loading && (
-            <div className="px-3.5 sm:px-6 py-2.5 bg-[#fafaf9] flex flex-wrap gap-2">
+            <div className="px-3.5 sm:px-6 py-2.5 bg-zinc-50 flex flex-wrap gap-2">
               {quickReplies.map((qr, i) => (
                 <button
                   key={i}
@@ -326,7 +326,7 @@ export function AiJobCreatorChat({
                     : 'Describe the job or reply here... (Enter to send)'
                 }
                 rows={1}
-                className="flex-1 max-h-28 min-h-[48px] sm:min-h-[52px] px-4 py-3 text-base text-black placeholder:text-zinc-400 rounded-2xl bg-[#f4f4f3] focus:bg-white focus:ring-2 focus:ring-black outline-none resize-none transition-colors"
+                className="flex-1 max-h-28 min-h-[48px] sm:min-h-[52px] px-4 py-3 text-base text-black placeholder:text-zinc-400 rounded-2xl bg-zinc-100 focus:bg-white focus:ring-2 focus:ring-black outline-none resize-none transition-colors"
               />
               <button
                 type="submit"
@@ -368,7 +368,7 @@ export function AiJobCreatorChat({
           </div>
 
           {/* Simulated Job Card - SINGLE CLEAN SURFACE (NO NESTED BOXES) */}
-          <div className="rounded-2xl sm:rounded-3xl bg-[#f7f7f6] p-4 sm:p-6 space-y-4">
+          <div className="rounded-2xl sm:rounded-3xl bg-zinc-50 p-4 sm:p-6 space-y-4">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-lg bg-black text-white px-3 py-1 text-xs font-mono font-bold uppercase tracking-wider">
                 Job
@@ -407,7 +407,7 @@ export function AiJobCreatorChat({
             </div>
 
             {/* Description preview - CLEAN TEXT DIRECTLY ON CARD */}
-            <div className="text-[14.5px] sm:text-[15px] text-zinc-800 leading-relaxed font-normal min-h-[70px]">
+            <div className="text-base text-zinc-800 leading-relaxed font-normal min-h-[70px]">
               {extractedJob.description ? (
                 <p className="whitespace-pre-wrap">{extractedJob.description}</p>
               ) : (

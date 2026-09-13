@@ -25,7 +25,7 @@ export default function StadtHubPage() {
   const types = Object.values(PROGRAMMATIC_JOB_TYPES).filter((t) => t.key !== 'stadt');
 
   return (
-    <main className="min-h-screen bg-[#fafaf9] text-zinc-900 flex flex-col justify-between">
+    <main className="min-h-screen bg-white text-[#222222] flex flex-col justify-between">
       <BreadcrumbJsonLd
         items={[
           { name: 'JOBROOFS', href: '/' },
@@ -35,10 +35,10 @@ export default function StadtHubPage() {
       <div>
         <SiteHeader />
 
-        <section className="border-b border-zinc-200/80 bg-white">
+        <section className="border-b border-zinc-200 bg-white">
           <div className="mx-auto max-w-[1180px] px-5 py-12 md:px-10 md:py-16">
-            <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-700">
-              <Building2 className="size-3 text-zinc-600" />
+            <div className="inline-flex items-center gap-2 rounded-full bg-zinc-100 px-3.5 py-1 text-sm font-semibold text-zinc-800">
+              <Building2 className="size-3.5 text-zinc-700" />
               <span>14 Großstädte deutschlandweit</span>
             </div>
             <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-zinc-950 sm:text-5xl md:text-6xl">
@@ -55,48 +55,48 @@ export default function StadtHubPage() {
             {SUPPORTED_CITIES.map((c) => (
               <div
                 key={c.id}
-                className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs flex flex-col justify-between hover:border-zinc-900 transition-all"
+                className="rounded-3xl bg-zinc-50 hover:bg-zinc-100/80 p-6 sm:p-7 flex flex-col justify-between transition-colors"
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-bold text-zinc-950">{c.name}</h2>
-                    <span className="text-[10px] font-mono uppercase bg-zinc-100 px-2 py-0.5 rounded text-zinc-600">
+                    <h2 className="text-2xl font-bold text-black">{c.name}</h2>
+                    <span className="text-xs font-mono font-bold uppercase bg-zinc-200/80 px-2.5 py-1 rounded-full text-zinc-800">
                       {c.state}
                     </span>
                   </div>
-                  <p className="mt-2 text-xs text-zinc-600 leading-relaxed">
+                  <p className="mt-2.5 text-sm sm:text-base text-zinc-600 leading-relaxed font-normal">
                     {c.description}
                   </p>
 
-                  <div className="mt-4 flex flex-wrap gap-1.5">
+                  <div className="mt-4 flex flex-wrap gap-2">
                     {c.popularDistricts.slice(0, 4).map((d) => (
                       <span
                         key={d}
-                        className="rounded bg-zinc-50 border border-zinc-200/80 px-2 py-0.5 text-[10px] text-zinc-600"
+                        className="rounded-full bg-white px-3 py-1 text-xs font-medium text-zinc-800"
                       >
                         {d}
                       </span>
                     ))}
                   </div>
 
-                  <div className="mt-5 border-t border-zinc-100 pt-4 space-y-1.5">
+                  <div className="mt-6 border-t border-zinc-200/80 pt-4 space-y-2">
                     {types.map((t) => (
                       <Link
                         key={t.key}
                         href={`/${t.slug}/${c.id}`}
-                        className="flex items-center justify-between text-xs font-medium text-zinc-700 hover:text-black py-0.5 transition-colors"
+                        className="flex items-center justify-between text-sm sm:text-base font-semibold text-zinc-800 hover:text-black py-1 transition-colors"
                       >
                         <span>{t.namePlural} {c.name}</span>
-                        <ArrowRight className="size-3 text-zinc-400" />
+                        <ArrowRight className="size-4 text-zinc-400" />
                       </Link>
                     ))}
                   </div>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-zinc-100">
+                <div className="mt-6 pt-4 border-t border-zinc-200/80">
                   <Link
                     href={`/stadt/${c.id}`}
-                    className="inline-flex w-full items-center justify-center rounded-xl bg-zinc-900 py-2.5 text-xs font-semibold text-white hover:bg-black transition-colors"
+                    className="apple-press inline-flex w-full items-center justify-center rounded-2xl bg-black py-3.5 px-4 text-sm sm:text-base font-semibold text-white hover:bg-zinc-800 transition-colors"
                   >
                     <span>Alle Jobs in {c.name} ansehen</span>
                   </Link>

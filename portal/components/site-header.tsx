@@ -37,11 +37,11 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
         </div>
 
         {/* Right: Actions */}
-        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+        <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
           {/* Jobs link */}
           <Link
             href="/"
-            className={`hidden sm:inline-block text-[13px] tracking-[0.01em] transition-colors cursor-pointer ${
+            className={`hidden sm:inline-block text-sm sm:text-base tracking-[0.01em] transition-colors cursor-pointer ${
               pathname === '/'
                 ? 'text-black font-semibold'
                 : 'text-zinc-600 hover:text-black font-medium'
@@ -53,7 +53,7 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
           {/* Pricing link */}
           <Link
             href="/pricing"
-            className={`hidden md:inline-block text-[13px] tracking-[0.01em] transition-colors cursor-pointer ${
+            className={`hidden md:inline-block text-sm sm:text-base tracking-[0.01em] transition-colors cursor-pointer ${
               pathname === '/pricing'
                 ? 'text-black font-semibold'
                 : 'text-zinc-600 hover:text-black font-medium'
@@ -66,9 +66,9 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
           <button
             type="button"
             onClick={handlePostJobClick}
-            className="apple-press hidden sm:inline-flex items-center gap-1.5 rounded-lg bg-black px-4 py-2 text-[12.5px] font-medium tracking-[0.02em] text-white hover:bg-zinc-800 transition-all cursor-pointer shadow-xs"
+            className="apple-press hidden sm:inline-flex items-center gap-2 rounded-xl bg-black px-4 sm:px-5 py-2.5 text-sm sm:text-base font-semibold tracking-[0.01em] text-white hover:bg-zinc-800 transition-all cursor-pointer shadow-xs"
           >
-            <PlusCircle className="size-3.5 stroke-[1.5]" />
+            <PlusCircle className="size-4 stroke-[2]" />
             <span>{isDe ? 'Job kostenlos inserieren' : 'Post your job (free)'}</span>
           </button>
 
@@ -77,10 +77,10 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
             type="button"
             onClick={openAppInstallModal}
             title={isDe ? 'App installieren' : 'Install App'}
-            className="apple-press hidden md:inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 text-[12px] font-medium tracking-[0.02em] text-black hover:border-black hover:bg-zinc-50 transition-colors cursor-pointer"
+            className="apple-press hidden md:inline-flex items-center gap-2 rounded-xl bg-zinc-100 px-3 py-2 text-sm font-medium text-black hover:bg-zinc-200 transition-colors cursor-pointer"
           >
-            <Smartphone className="size-3.5 stroke-[1.5] text-zinc-600" />
-            <span>{isDe ? 'App installieren' : 'Install App'}</span>
+            <Smartphone className="size-4 stroke-[1.5] text-zinc-600" />
+            <span>{isDe ? 'App' : 'App'}</span>
           </button>
 
           {/* Language Toggle */}
@@ -88,25 +88,25 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
 
           {/* User Auth */}
           {user ? (
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <span className="hidden md:inline-block text-[12px] font-medium text-zinc-700 max-w-[120px] truncate font-mono">
+            <div className="flex items-center gap-2">
+              <span className="hidden md:inline-block text-sm font-medium text-zinc-700 max-w-[120px] truncate font-mono">
                 {user.email?.split('@')[0]}
               </span>
               <button
                 onClick={() => signOutUser()}
                 title={isDe ? 'Abmelden' : 'Sign out'}
-                className="apple-press inline-flex size-8 items-center justify-center rounded-lg border border-zinc-200 text-zinc-600 hover:text-black hover:border-black hover:bg-zinc-50 transition-colors cursor-pointer"
+                className="apple-press inline-flex size-9 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600 hover:text-black hover:bg-zinc-200 transition-colors cursor-pointer"
               >
-                <LogOut className="size-3.5 stroke-[1.5]" />
+                <LogOut className="size-4 stroke-[1.5]" />
               </button>
             </div>
           ) : (
             <button
               onClick={() => setAuthOpen(true)}
               title={isDe ? 'Anmelden' : 'Sign in'}
-              className="apple-press inline-flex size-8 sm:size-auto items-center justify-center gap-1.5 rounded-lg border border-zinc-200 bg-white sm:px-3 sm:py-1.5 text-[12.5px] font-medium tracking-[0.02em] text-black hover:border-black hover:bg-zinc-50 transition-colors cursor-pointer shadow-2xs"
+              className="apple-press inline-flex size-9 sm:size-auto items-center justify-center gap-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 sm:px-4 sm:py-2 text-sm sm:text-base font-semibold text-black transition-colors cursor-pointer"
             >
-              <UserIcon className="size-3.5 stroke-[1.5] text-black" />
+              <UserIcon className="size-4 stroke-[2] text-black" />
               <span className="hidden sm:inline">{isDe ? 'Anmelden' : 'Sign In'}</span>
             </button>
           )}

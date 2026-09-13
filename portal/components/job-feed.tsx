@@ -372,11 +372,11 @@ export function JobFeed({
 
   return (
     <section className="w-full">
-      {/* Search & Filter Toolbar: Clean, Compact, Zero Shelves of Buttons */}
-      <div className="mb-6 space-y-2.5">
+      {/* Search & Filter Toolbar: Clean, Borderless, Airbnb-style */}
+      <div className="mb-6 space-y-3">
         {/* Sleek Search Bar */}
         <div className="relative group">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 stroke-[2] text-zinc-400 group-focus-within:text-black transition-colors" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-5 stroke-[2] text-zinc-400 group-focus-within:text-black transition-colors" />
           <input
             type="text"
             value={query}
@@ -386,12 +386,12 @@ export function JobFeed({
                 ? 'Jobtitel, Betrieb, Stadt oder Stichwort suchen...'
                 : 'Search job title, employer, city or keyword...'
             }
-            className="w-full h-11 pl-10 pr-4 rounded-xl border border-zinc-200 bg-white text-[14px] text-black font-medium placeholder:text-zinc-400 focus:border-black focus:ring-1 focus:ring-black outline-none transition-all shadow-2xs"
+            className="w-full h-13 pl-12 pr-12 rounded-2xl bg-zinc-100 hover:bg-zinc-200/60 focus:bg-white text-base text-black font-medium placeholder:text-zinc-500 focus:ring-2 focus:ring-black outline-none transition-all shadow-xs"
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="apple-press absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-zinc-600 hover:text-black px-2 py-0.5 rounded bg-zinc-100 cursor-pointer"
+              className="apple-press absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-zinc-600 hover:text-black px-2.5 py-1 rounded-full bg-zinc-200 cursor-pointer"
             >
               {isDe ? 'Löschen' : 'Clear'}
             </button>
@@ -399,16 +399,16 @@ export function JobFeed({
         </div>
 
         {/* Compact Dropdown Toolbar: City & District side-by-side */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[12.5px]">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-sm">
           {/* City Dropdown */}
           <div>
-            <label className="block text-[10px] font-mono font-semibold uppercase tracking-[0.14em] text-zinc-500 mb-1">
+            <label className="block text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 mb-1.5">
               {isDe ? 'Stadt' : 'City'}
             </label>
             <select
               value={selectedCity}
               onChange={(e) => handleCityChange(e.target.value)}
-              className="w-full h-9 px-2.5 rounded-lg border border-zinc-200 bg-white text-[12.5px] font-medium text-black focus:border-black outline-none cursor-pointer hover:border-zinc-400 transition-colors"
+              className="w-full h-11 px-3 rounded-xl bg-zinc-100 hover:bg-zinc-200/60 focus:bg-white text-sm sm:text-base font-medium text-black focus:ring-2 focus:ring-black outline-none cursor-pointer transition-colors"
             >
               {CITY_OPTIONS.map((city) => (
                 <option key={city.id} value={city.id}>
@@ -420,7 +420,7 @@ export function JobFeed({
 
           {/* District Dropdown (Right next to City) */}
           <div>
-            <label className="block text-[10px] font-mono font-semibold uppercase tracking-[0.14em] text-zinc-500 mb-1">
+            <label className="block text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 mb-1.5">
               {selectedCity === 'koeln'
                 ? (isDe ? 'Veedel' : 'District')
                 : (isDe ? 'Bezirk / Viertel' : 'District')}
@@ -428,7 +428,7 @@ export function JobFeed({
             <select
               value={selectedDistrict}
               onChange={(e) => handleDistrictChange(e.target.value)}
-              className="w-full h-9 px-2.5 rounded-lg border border-zinc-200 bg-white text-[12.5px] font-medium text-black focus:border-black outline-none cursor-pointer hover:border-zinc-400 transition-colors"
+              className="w-full h-11 px-3 rounded-xl bg-zinc-100 hover:bg-zinc-200/60 focus:bg-white text-sm sm:text-base font-medium text-black focus:ring-2 focus:ring-black outline-none cursor-pointer transition-colors"
             >
               {currentDistricts.map((d) => (
                 <option key={d.id} value={d.id}>
@@ -440,13 +440,13 @@ export function JobFeed({
 
           {/* Category Dropdown */}
           <div>
-            <label className="block text-[10px] font-mono font-semibold uppercase tracking-[0.14em] text-zinc-500 mb-1">
+            <label className="block text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 mb-1.5">
               {isDe ? 'Bereich' : 'Category'}
             </label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full h-9 px-2.5 rounded-lg border border-zinc-200 bg-white text-[12.5px] font-medium text-black focus:border-black outline-none cursor-pointer hover:border-zinc-400 transition-colors"
+              className="w-full h-11 px-3 rounded-xl bg-zinc-100 hover:bg-zinc-200/60 focus:bg-white text-sm sm:text-base font-medium text-black focus:ring-2 focus:ring-black outline-none cursor-pointer transition-colors"
             >
               {CATEGORIES.map((cat) => (
                 <option key={cat.id} value={cat.id}>
@@ -458,13 +458,13 @@ export function JobFeed({
 
           {/* Sort Dropdown */}
           <div>
-            <label className="block text-[10px] font-mono font-semibold uppercase tracking-[0.14em] text-zinc-500 mb-1">
+            <label className="block text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500 mb-1.5">
               {isDe ? 'Sortierung' : 'Sort'}
             </label>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="w-full h-9 px-2.5 rounded-lg border border-zinc-200 bg-white text-[12.5px] font-medium text-black focus:border-black outline-none cursor-pointer hover:border-zinc-400 transition-colors"
+              className="w-full h-11 px-3 rounded-xl bg-zinc-100 hover:bg-zinc-200/60 focus:bg-white text-sm sm:text-base font-medium text-black focus:ring-2 focus:ring-black outline-none cursor-pointer transition-colors"
             >
               <option value="newest">{isDe ? 'Neueste zuerst' : 'Newest first'}</option>
               <option value="urgent">{isDe ? 'Dringend' : 'Urgent'}</option>
@@ -475,7 +475,7 @@ export function JobFeed({
       </div>
 
       {/* Counter & Status Header */}
-      <div className="flex items-center justify-between border-b border-zinc-200 pb-2.5 mb-3 text-[12px] text-zinc-600">
+      <div className="flex items-center justify-between border-b border-zinc-200 pb-3 mb-4 text-sm sm:text-base text-zinc-600">
         <span>
           <strong className="text-black font-bold">
             {filteredJobs.length.toLocaleString(isDe ? 'de-DE' : 'en-US')}
@@ -503,15 +503,15 @@ export function JobFeed({
                 window.history.replaceState({}, '', url.toString());
               }
             }}
-            className="text-[11.5px] font-medium text-black underline hover:text-zinc-600 cursor-pointer"
+            className="text-sm font-semibold text-black underline hover:text-zinc-600 cursor-pointer"
           >
             {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
           </button>
         )}
       </div>
 
-      {/* Unified Job List (Clean Modern Stream, Not Chunky Isolated Cards) */}
-      <div className="rounded-xl border border-zinc-200 bg-white divide-y divide-zinc-200 overflow-hidden shadow-2xs">
+      {/* Open, Borderless Job Stream on White Canvas */}
+      <div className="divide-y divide-zinc-200 border-y border-zinc-200">
         {displayedJobs.map((job, idx) => {
           const wage = formatWage(job, isDe);
           const jobType = formatJobType(job, isDe);
@@ -531,65 +531,65 @@ export function JobFeed({
             <Link
               key={slug || idx}
               href={`/jobs/${slug}`}
-              className="group block p-3.5 sm:px-4 sm:py-3.5 hover:bg-zinc-50/80 transition-colors cursor-pointer"
+              className="group block py-4 sm:py-5 px-1 sm:px-2 hover:bg-zinc-50 transition-colors cursor-pointer"
             >
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <h3
-                      className="text-[15px] sm:text-[16px] font-bold text-black group-hover:text-zinc-800 transition-colors line-clamp-1 tracking-tight"
+                      className="text-base sm:text-lg font-bold text-black group-hover:text-zinc-800 transition-colors line-clamp-1 tracking-tight"
                       style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
                     >
                       {job.title}
                     </h3>
                     {job.isIndependentLister && (
-                      <span className="shrink-0 font-mono text-[9px] uppercase bg-black text-white px-1.5 py-0.5 rounded font-bold leading-none">
+                      <span className="shrink-0 text-xs uppercase bg-black text-white px-2 py-0.5 rounded-full font-bold leading-none">
                         ★ UNABHÄNGIG
                       </span>
                     )}
                     {job.isUserListing && (
-                      <span className="shrink-0 font-mono text-[9px] uppercase bg-zinc-800 text-white px-1.5 py-0.5 rounded font-bold leading-none">
+                      <span className="shrink-0 text-xs uppercase bg-zinc-800 text-white px-2 py-0.5 rounded-full font-bold leading-none">
                         {isDe ? 'DEIN INSERAT' : 'YOUR LISTING'}
                       </span>
                     )}
                     {urgent && (
-                      <span className="shrink-0 font-mono text-[9px] uppercase bg-amber-50 text-amber-950 border border-amber-300 px-1.5 py-0.5 rounded font-bold leading-none">
+                      <span className="shrink-0 text-xs uppercase bg-amber-100 text-amber-950 px-2 py-0.5 rounded-full font-bold leading-none">
                         {isDe ? '⚡ DRINGEND' : '⚡ URGENT'}
                       </span>
                     )}
                     {job.whatsapp && (
-                      <span className="shrink-0 font-mono text-[9px] font-semibold text-emerald-900 bg-emerald-50 border border-emerald-300 px-1.5 py-0.5 rounded">
+                      <span className="shrink-0 text-xs font-semibold text-emerald-950 bg-emerald-100/80 px-2 py-0.5 rounded-full">
                         💬 WhatsApp
                       </span>
                     )}
                   </div>
 
-                  <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-[12.5px] text-zinc-600 font-normal">
+                  <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm sm:text-base text-zinc-600 font-normal">
                     <span className="font-semibold text-black">{job.company}</span>
                     <span className="text-zinc-300">&middot;</span>
                     <span className="inline-flex items-center gap-1 text-zinc-700">
-                      <MapPin className="size-3 text-zinc-400 shrink-0" />
+                      <MapPin className="size-3.5 text-zinc-400 shrink-0" />
                       {locationDisplay}
                     </span>
                     <span className="text-zinc-300">&middot;</span>
                     <span className="inline-flex items-center gap-1 text-zinc-700">
-                      <Clock className="size-3 text-zinc-400 shrink-0" />
+                      <Clock className="size-3.5 text-zinc-400 shrink-0" />
                       {jobType}
                     </span>
                   </div>
                 </div>
 
-                <div className="shrink-0 text-right flex items-center gap-3">
+                <div className="shrink-0 text-right flex items-center gap-4">
                   <div>
-                    <div className="text-[13.5px] sm:text-[14.5px] font-bold font-mono text-black">
+                    <div className="text-base sm:text-lg font-bold font-mono text-black">
                       {wage}
                     </div>
-                    <div className="text-[11px] font-mono text-zinc-500 font-medium">
+                    <div className="text-xs sm:text-sm font-mono text-zinc-500 font-medium mt-0.5">
                       {relTime}
                     </div>
                   </div>
-                  <div className="hidden sm:flex size-7 rounded-full border border-zinc-200 items-center justify-center text-zinc-400 group-hover:text-black group-hover:border-black group-hover:translate-x-0.5 transition-all">
-                    <ArrowRight className="size-3.5 stroke-[2]" />
+                  <div className="hidden sm:flex size-8 rounded-full bg-zinc-100 items-center justify-center text-zinc-400 group-hover:text-black group-hover:bg-zinc-200 group-hover:translate-x-0.5 transition-all">
+                    <ArrowRight className="size-4 stroke-[2]" />
                   </div>
                 </div>
               </div>
@@ -598,44 +598,44 @@ export function JobFeed({
         })}
 
         {displayedJobs.length === 0 && (
-          <div className="p-8 sm:p-12 text-center">
+          <div className="py-12 sm:py-16 text-center">
             {jobs.length === 0 && directJobs.length === 0 ? (
               <div className="max-w-md mx-auto space-y-3">
                 <h3
-                  className="text-base sm:text-lg font-bold text-black"
+                  className="text-lg sm:text-xl font-bold text-black"
                   style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
                 >
                   {isDe ? 'Noch keine Stellenanzeigen online' : 'No job listings online yet'}
                 </h3>
-                <p className="text-[13.5px] text-zinc-600 font-normal leading-relaxed">
+                <p className="text-base text-zinc-600 font-normal leading-relaxed">
                   {isDe
                     ? 'Sei der erste Betrieb in deiner Stadt! Schalte dein Inserat mit direktem WhatsApp-Kontakt online.'
                     : 'Be the first employer in your city! Publish your listing with direct WhatsApp contact.'}
                 </p>
-                <div className="pt-2">
+                <div className="pt-3">
                   <Link
                     href="/post-a-job"
-                    className="apple-press inline-flex items-center justify-center gap-2 rounded-xl bg-black hover:bg-zinc-800 text-white px-5 py-2.5 text-[13px] font-semibold tracking-[0.02em] transition-all cursor-pointer shadow-xs active:scale-[0.98]"
+                    className="apple-press inline-flex items-center justify-center gap-2 rounded-2xl bg-black hover:bg-zinc-800 text-white px-6 py-3.5 text-base font-semibold tracking-[0.02em] transition-all cursor-pointer shadow-xs active:scale-[0.98]"
                   >
                     <span>{isDe ? 'Jetzt 1. Job kostenlos inserieren' : 'Post 1st job for free'}</span>
-                    <ArrowRight className="size-3.5 stroke-[2]" />
+                    <ArrowRight className="size-4 stroke-[2]" />
                   </Link>
-                  <p className="mt-2 text-[11.5px] text-zinc-500 font-medium">
+                  <p className="mt-2.5 text-sm text-zinc-500 font-medium">
                     {isDe ? '100% kostenfrei · In 60 Sekunden live' : '100% free · Live in 60 seconds'}
                   </p>
                 </div>
               </div>
             ) : (
-              <div className="max-w-md mx-auto space-y-2">
-                <p className="text-[15px] font-bold text-black">
+              <div className="max-w-md mx-auto space-y-3">
+                <p className="text-lg font-bold text-black">
                   {isDe ? 'Keine passenden Stellen gefunden' : 'No matching jobs found'}
                 </p>
-                <p className="text-[13px] text-zinc-600 font-normal">
+                <p className="text-base text-zinc-600 font-normal">
                   {isDe
                     ? 'Versuche andere Suchbegriffe oder wähle eine andere Stadt.'
                     : 'Try different search terms or select another city.'}
                 </p>
-                <div className="pt-2">
+                <div className="pt-3">
                   <button
                     onClick={() => {
                       setQuery('');
@@ -650,7 +650,7 @@ export function JobFeed({
                         window.history.replaceState({}, '', url.toString());
                       }
                     }}
-                    className="apple-press inline-flex items-center justify-center rounded-lg bg-black px-4 py-2 text-[12.5px] font-semibold text-white hover:bg-zinc-800 transition-colors cursor-pointer"
+                    className="apple-press inline-flex items-center justify-center rounded-2xl bg-black px-6 py-3 text-base font-semibold text-white hover:bg-zinc-800 transition-colors cursor-pointer"
                   >
                     {isDe ? 'Filter zurücksetzen' : 'Reset filters'}
                   </button>
@@ -663,19 +663,19 @@ export function JobFeed({
 
       {/* Editorial Pagination Controls */}
       {totalPages > 1 && (
-        <nav className="mt-8 flex items-center justify-between border-t border-zinc-200 pt-5 text-[12.5px]">
+        <nav className="mt-8 flex items-center justify-between border-t border-zinc-200 pt-5 text-base">
           <button
             onClick={() => {
               setCurrentPage((p) => Math.max(1, p - 1));
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             disabled={currentPage === 1}
-            className="apple-press inline-flex items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-4 py-2 text-black font-semibold hover:border-black hover:bg-zinc-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer shadow-2xs"
+            className="apple-press inline-flex items-center gap-2 rounded-2xl bg-zinc-100 hover:bg-zinc-200 px-5 py-3 text-black font-semibold disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
           >
             <ChevronLeft className="size-4 stroke-[2]" /> {isDe ? 'Vorherige' : 'Previous'}
           </button>
 
-          <div className="flex items-center gap-2 font-mono text-[12px] text-black font-bold">
+          <div className="flex items-center gap-2 font-mono text-sm sm:text-base text-black font-bold">
             <span>{String(currentPage).padStart(2, '0')}</span>
             <span className="text-zinc-300">/</span>
             <span className="text-zinc-600">{String(totalPages).padStart(2, '0')}</span>
@@ -687,7 +687,7 @@ export function JobFeed({
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             disabled={currentPage === totalPages}
-            className="apple-press inline-flex items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-4 py-2 text-black font-semibold hover:border-black hover:bg-zinc-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer shadow-2xs"
+            className="apple-press inline-flex items-center gap-2 rounded-2xl bg-zinc-100 hover:bg-zinc-200 px-5 py-3 text-black font-semibold disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
           >
             {isDe ? 'Nächste' : 'Next'} <ChevronRight className="size-4 stroke-[2]" />
           </button>

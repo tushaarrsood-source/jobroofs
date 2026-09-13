@@ -258,7 +258,7 @@ export default async function JobDetailPage({
       : null;
 
   return (
-    <main className="min-h-screen bg-[#fafaf9] text-black flex flex-col justify-between">
+    <main className="min-h-screen bg-white text-[#222222] flex flex-col justify-between">
       <div>
         <JobPostingJsonLd job={job} />
         <BreadcrumbJsonLd

@@ -6,7 +6,7 @@ import { BreadcrumbJsonLd } from '@/components/json-ld';
 import { SUPPORTED_CITIES } from '@/lib/domain/cities';
 import { PROGRAMMATIC_JOB_TYPES } from '@/lib/seo/programmatic-content';
 import { getProgrammaticJobs } from '@/lib/jobs/programmatic-fetcher';
-import { ArrowRight, MapPin, Euro, Clock3, Sparkles } from 'lucide-react';
+import { ArrowRight, MapPin, Euro, Clock3 } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Minijobs in Deutschland (bis 603 €) — Alle Städte | JOBROOFS',
@@ -26,7 +26,7 @@ export default async function MinijobHubPage() {
   const jobs = await getProgrammaticJobs('minijob', 'all');
 
   return (
-    <main className="min-h-screen bg-[#fafaf9] text-zinc-900 flex flex-col justify-between">
+    <main className="min-h-screen bg-white text-[#222222] flex flex-col justify-between">
       <BreadcrumbJsonLd
         items={[
           { name: 'JOBROOFS', href: '/' },
@@ -36,10 +36,9 @@ export default async function MinijobHubPage() {
       <div>
         <SiteHeader />
 
-        <section className="border-b border-zinc-200/80 bg-white">
+        <section className="border-b border-zinc-200 bg-white">
           <div className="mx-auto max-w-[1180px] px-5 py-12 md:px-10 md:py-16">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-800">
-              <Sparkles className="size-3 text-emerald-600" />
+            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3.5 py-1 text-sm font-semibold text-emerald-900">
               <span>Gesetzliche Minijob-Grenze 2026: 603 € steuerfrei</span>
             </div>
             <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-zinc-950 sm:text-5xl md:text-6xl">
@@ -49,9 +48,9 @@ export default async function MinijobHubPage() {
               Finde flexible 603-Euro-Jobs, Wochenendschichten und Nebenjobs in den 14 größten deutschen Metropolen. 1-Klick-Kontakt direkt mit den Arbeitgebern vor Ort.
             </p>
 
-            {/* City Grid */}
+            {/* City Grid - Borderless Soft Surfaces */}
             <div className="mt-8">
-              <h2 className="text-xs font-mono uppercase tracking-wider text-zinc-400 mb-3">
+              <h2 className="text-xs font-mono uppercase tracking-wider text-zinc-500 mb-3">
                 Wähle deine Stadt
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2.5">
@@ -59,12 +58,12 @@ export default async function MinijobHubPage() {
                   <Link
                     key={c.id}
                     href={`/minijob/${c.id}`}
-                    className="flex flex-col items-center justify-center p-3 rounded-xl border border-zinc-200 bg-zinc-50 hover:bg-white hover:border-zinc-950 hover:shadow-xs transition-all text-center group"
+                    className="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-zinc-100 hover:bg-zinc-200 transition-colors text-center group"
                   >
-                    <span className="text-sm font-bold text-zinc-900 group-hover:text-black">
+                    <span className="text-sm sm:text-base font-bold text-zinc-900 group-hover:text-black">
                       {c.name}
                     </span>
-                    <span className="text-[10px] text-zinc-500 mt-0.5">
+                    <span className="text-xs text-zinc-500 mt-0.5">
                       Minijobs ansehen
                     </span>
                   </Link>
@@ -74,42 +73,54 @@ export default async function MinijobHubPage() {
           </div>
         </section>
 
-        {/* Listings */}
+        {/* Listings - Open Stream (No Boxes) */}
         <section className="mx-auto max-w-[1180px] px-5 py-10 md:px-10 md:py-14">
-          <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-xl font-bold text-zinc-950">Neueste Minijob-Angebote</h2>
-            <span className="text-xs text-zinc-500">{jobs.length} Angebote</span>
+          <div className="mb-6 flex items-center justify-between border-b border-zinc-200 pb-4">
+            <div>
+              <h2 className="text-2xl font-bold text-black">Neueste Minijob-Angebote</h2>
+              <p className="text-sm sm:text-base text-zinc-600 mt-1">
+                {jobs.length} {jobs.length === 1 ? 'Angebot gefunden' : 'Angebote gefunden'} · Geprüfte Stellen
+              </p>
+            </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="divide-y divide-zinc-200 border-y border-zinc-200">
             {jobs.map((job: any) => (
               <Link
                 key={job.id}
                 href={`/jobs/${job.slug || job.id}`}
-                className="group grid gap-4 rounded-xl border border-zinc-200 bg-white p-5 transition hover:border-zinc-950 hover:shadow-xs md:grid-cols-[minmax(0,1fr)_repeat(3,150px)_auto] md:items-center cursor-pointer"
+                className="group block py-5 px-2 hover:bg-zinc-50 transition-colors cursor-pointer"
               >
-                <div>
-                  <span className="rounded bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold text-zinc-700 border border-zinc-200">
-                    Minijob
-                  </span>
-                  <h3 className="mt-2 text-base font-bold text-zinc-900 group-hover:text-black">
-                    {job.title}
-                  </h3>
-                  <p className="mt-0.5 text-xs text-zinc-500">{job.company}</p>
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-semibold text-zinc-800">
+                        Minijob
+                      </span>
+                      <h3 className="text-lg font-bold text-black group-hover:text-zinc-800">
+                        {job.title}
+                      </h3>
+                    </div>
+                    <p className="mt-1 text-sm sm:text-base text-zinc-600 font-medium">
+                      {job.company}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-4 text-sm sm:text-base text-zinc-600">
+                    <span className="flex items-center gap-1.5 font-semibold text-black font-mono">
+                      <Euro className="size-4 shrink-0 text-zinc-500" />
+                      {job.compensation?.label || job.payText || 'Tarif / VB'}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Clock3 className="size-4 shrink-0 text-zinc-500" />
+                      {job.hours?.label || job.hoursLabel || 'Flexibel'}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <MapPin className="size-4 shrink-0 text-zinc-500" />
+                      {job.district || job.city || 'Deutschland'}
+                    </span>
+                    <ArrowRight className="size-4 text-zinc-400 transition group-hover:translate-x-1 group-hover:text-zinc-950 hidden md:inline" />
+                  </div>
                 </div>
-                <span className="flex items-center gap-1.5 text-xs font-medium text-zinc-600">
-                  <Euro className="size-3.5 shrink-0 text-zinc-400" />
-                  {job.compensation?.label || job.payText || 'Tarif / VB'}
-                </span>
-                <span className="flex items-center gap-1.5 text-xs font-medium text-zinc-600">
-                  <Clock3 className="size-3.5 shrink-0 text-zinc-400" />
-                  {job.hours?.label || job.hoursLabel || 'Flexibel'}
-                </span>
-                <span className="flex items-center gap-1.5 text-xs font-medium text-zinc-600">
-                  <MapPin className="size-3.5 shrink-0 text-zinc-400" />
-                  {job.district || job.city || 'Deutschland'}
-                </span>
-                <ArrowRight className="size-4 text-zinc-400 transition group-hover:translate-x-1 group-hover:text-zinc-950" />
               </Link>
             ))}
           </div>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Download, Share, PlusSquare, Sparkles, Check, Smartphone } from 'lucide-react';
+import { X, Download, Share, PlusSquare, Check, Smartphone } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { JobroofsMark } from '@/components/brand-logo';
 
@@ -163,10 +163,10 @@ export function PwaInstallPrompt() {
         </p>
 
         {/* Features Matrix */}
-        <div className="mb-6 space-y-2 rounded-xl border border-zinc-200 bg-zinc-50 p-3.5 text-left text-[12.5px]">
-          <div className="flex items-center gap-2.5 text-black">
+        <div className="mb-6 space-y-2 rounded-2xl bg-zinc-100 p-4 text-left text-sm">
+          <div className="flex items-center gap-3 text-black">
             <div className="grid size-5 place-items-center rounded-full bg-black text-white shrink-0">
-              <Sparkles className="size-3 stroke-[2]" />
+              <Smartphone className="size-3 stroke-[2]" />
             </div>
             <span className="font-medium">
               {isDe ? '1-Klick Zugriff vom Home-Screen' : 'Instant 1-click home screen launch'}

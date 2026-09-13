@@ -14,11 +14,11 @@ export const metadata: Metadata = {
 
 export default function ProfilePage() {
   return (
-    <main className="min-h-screen bg-[#fafaf9] text-black flex flex-col justify-between">
+    <main className="min-h-screen bg-white text-black flex flex-col justify-between">
       <div>
         <SiteHeader />
         
-        <div className="mx-auto max-w-2xl px-4 sm:px-6 py-4 sm:py-6 space-y-4">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 py-6 sm:py-8 space-y-6">
           {/* User Account & Privacy Card */}
           <ProfileAccountCard />
 
@@ -26,61 +26,61 @@ export default function ProfilePage() {
           <MyListings />
 
           {/* Quick actions */}
-          <div className="space-y-2.5">
-            <h2 className="text-[10.5px] font-mono font-medium uppercase tracking-[0.2em] text-zinc-600 px-1">
+          <div className="space-y-3 pt-2">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 px-1">
               Aktionen & Services
             </h2>
 
-            <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white divide-y divide-zinc-200 shadow-xs">
+            <div className="divide-y divide-zinc-200 border-y border-zinc-200">
               {/* App Install Trigger */}
               <ProfileAppTrigger />
 
               <Link
                 href="/post-a-job"
-                className="apple-press flex items-center justify-between p-4 text-sm font-medium text-black hover:bg-zinc-50 transition-colors cursor-pointer"
+                className="apple-press flex items-center justify-between py-4.5 px-2 text-base font-medium text-black hover:bg-zinc-50 transition-colors cursor-pointer"
               >
-                <div className="flex items-center gap-3.5">
-                  <div className="flex size-9 items-center justify-center rounded-xl bg-zinc-100 border border-zinc-200 text-black">
-                    <Briefcase className="size-4.5" />
+                <div className="flex items-center gap-4">
+                  <div className="flex size-11 items-center justify-center rounded-2xl bg-zinc-100 text-black">
+                    <Briefcase className="size-5" />
                   </div>
                   <div>
-                    <div className="text-black font-semibold text-sm">Job inserieren</div>
-                    <div className="text-xs text-zinc-600 font-light">Aushilfe, Minijob 603 €, Teilzeit</div>
+                    <div className="text-black font-bold text-base">Job inserieren</div>
+                    <div className="text-sm text-zinc-600 font-normal">Aushilfe, Minijob 603 €, Teilzeit</div>
                   </div>
                 </div>
-                <ChevronRight className="size-4 text-zinc-400" />
+                <ChevronRight className="size-5 text-zinc-400" />
               </Link>
 
               <a
                 href="mailto:jobroofs@gmail.com"
-                className="apple-press flex items-center justify-between p-4.5 text-sm font-medium text-black hover:bg-zinc-50 transition-colors cursor-pointer"
+                className="apple-press flex items-center justify-between py-4.5 px-2 text-base font-medium text-black hover:bg-zinc-50 transition-colors cursor-pointer"
               >
-                <div className="flex items-center gap-3.5">
-                  <div className="flex size-10 items-center justify-center rounded-xl bg-zinc-100 border border-zinc-200 text-black">
+                <div className="flex items-center gap-4">
+                  <div className="flex size-11 items-center justify-center rounded-2xl bg-zinc-100 text-black">
                     <HelpCircle className="size-5" />
                   </div>
                   <div>
-                    <div className="text-black font-semibold">Hilfe & Support</div>
-                    <div className="text-xs text-zinc-600 font-light">jobroofs@gmail.com</div>
+                    <div className="text-black font-bold text-base">Hilfe & Support</div>
+                    <div className="text-sm text-zinc-600 font-normal">jobroofs@gmail.com</div>
                   </div>
                 </div>
-                <ArrowRight className="size-4 text-zinc-400" />
+                <ArrowRight className="size-5 text-zinc-400" />
               </a>
 
               <Link
                 href="/impressum"
-                className="apple-press flex items-center justify-between p-4.5 text-sm font-medium text-black hover:bg-zinc-50 transition-colors cursor-pointer"
+                className="apple-press flex items-center justify-between py-4.5 px-2 text-base font-medium text-black hover:bg-zinc-50 transition-colors cursor-pointer"
               >
-                <div className="flex items-center gap-3.5">
-                  <div className="flex size-10 items-center justify-center rounded-xl bg-zinc-100 border border-zinc-200 text-black">
+                <div className="flex items-center gap-4">
+                  <div className="flex size-11 items-center justify-center rounded-2xl bg-zinc-100 text-black">
                     <Shield className="size-5" />
                   </div>
                   <div>
-                    <div className="text-black font-semibold">Impressum & Datenschutz</div>
-                    <div className="text-xs text-zinc-600 font-light">Rechtliche Angaben und Richtlinien</div>
+                    <div className="text-black font-bold text-base">Impressum & Datenschutz</div>
+                    <div className="text-sm text-zinc-600 font-normal">Rechtliche Angaben und Richtlinien</div>
                   </div>
                 </div>
-                <ChevronRight className="size-4 text-zinc-400" />
+                <ChevronRight className="size-5 text-zinc-400" />
               </Link>
             </div>
           </div>

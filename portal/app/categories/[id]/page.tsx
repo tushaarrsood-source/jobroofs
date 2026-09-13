@@ -55,7 +55,7 @@ export default async function CategoryPage({
 
   if (!niche)
     return (
-      <main className="min-h-screen bg-[#fafafa] flex flex-col justify-between">
+      <main className="min-h-screen bg-white text-[#222222] flex flex-col justify-between">
         <div>
           <SiteHeader />
           <div className="mx-auto max-w-3xl px-5 py-24 text-center">
@@ -73,7 +73,7 @@ export default async function CategoryPage({
     );
 
   return (
-    <main className="min-h-screen bg-[#fafafa] text-zinc-900 flex flex-col justify-between">
+    <main className="min-h-screen bg-white text-[#222222] flex flex-col justify-between">
       <div>
         <BreadcrumbJsonLd
           items={[
@@ -82,75 +82,81 @@ export default async function CategoryPage({
           ]}
         />
         <SiteHeader />
-        <section className="border-b border-zinc-200/80 bg-white">
+        <section className="border-b border-zinc-200 bg-white">
           <div className="mx-auto max-w-[1180px] px-5 py-10 md:px-10 md:py-14">
             <Link
               href="/#niches"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-zinc-950 transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-600 hover:text-black transition-colors"
             >
-              <ArrowLeft className="size-3.5" /> Alle Kategorien
+              <ArrowLeft className="size-4" /> Alle Kategorien
             </Link>
-            <p className="mt-6 text-xs font-mono uppercase tracking-wider text-zinc-400">
+            <p className="mt-6 text-xs font-mono uppercase tracking-wider text-zinc-500">
               {niche.labelDe}
             </p>
-            <h1 className="mt-1 text-3xl font-bold tracking-tight text-zinc-950 md:text-5xl">
+            <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-zinc-950 md:text-5xl">
               {niche.label}
             </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-600">
+            <p className="mt-3 max-w-2xl text-base sm:text-lg leading-relaxed text-zinc-600">
               {niche.description}
             </p>
           </div>
         </section>
 
-        <section className="bg-[#fafafa]">
-          <div className="mx-auto max-w-[1180px] px-5 py-8 md:px-10 md:py-12">
-            <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-zinc-950">Verfügbare Stellen</h2>
-              <span className="text-xs text-zinc-500">
-                {categoryJobs.length} {categoryJobs.length === 1 ? 'Angebot' : 'Angebote'}
+        <section className="bg-white">
+          <div className="mx-auto max-w-[1180px] px-5 py-10 md:px-10 md:py-14">
+            <div className="mb-6 flex items-center justify-between border-b border-zinc-200 pb-4">
+              <h2 className="text-2xl font-bold text-black">Verfügbare Stellen</h2>
+              <span className="text-sm sm:text-base text-zinc-600">
+                {categoryJobs.length} {categoryJobs.length === 1 ? 'Angebot gefunden' : 'Angebote gefunden'}
               </span>
             </div>
 
             {categoryJobs.length > 0 ? (
-              <div className="space-y-3">
+              <div className="divide-y divide-zinc-200 border-y border-zinc-200">
                 {categoryJobs.map((job: any) => (
                   <Link
                     key={job.id}
                     href={`/jobs/${job.slug || job.id}`}
-                    className="group grid gap-4 rounded-xl border border-zinc-200 bg-white p-5 transition hover:border-zinc-950 hover:shadow-2xs md:grid-cols-[minmax(0,1fr)_repeat(3,150px)_auto] md:items-center cursor-pointer"
+                    className="group block py-5 px-2 hover:bg-zinc-50 transition-colors cursor-pointer"
                   >
-                    <div>
-                      <span className="rounded bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold text-zinc-700 border border-zinc-200">
-                        {job.listingOrigin === 'employer_posted'
-                          ? 'Direktkontakt'
-                          : 'Verifiziert'}
-                      </span>
-                      <h3 className="mt-2 text-base font-bold text-zinc-900 group-hover:text-black">
-                        {job.title}
-                      </h3>
-                      <p className="mt-0.5 text-xs text-zinc-500">
-                        {job.company}
-                      </p>
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-semibold text-zinc-800">
+                            {job.listingOrigin === 'employer_posted'
+                              ? 'Direktkontakt'
+                              : 'Verifiziert'}
+                          </span>
+                          <h3 className="text-lg font-bold text-black group-hover:text-zinc-800">
+                            {job.title}
+                          </h3>
+                        </div>
+                        <p className="mt-1 text-sm sm:text-base text-zinc-600 font-medium">
+                          {job.company}
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-4 text-sm sm:text-base text-zinc-600">
+                        <Fact icon={Euro} value={job.compensation?.label || job.payText || 'Tarif / VB'} />
+                        <Fact icon={Clock3} value={job.hours?.label || job.hoursLabel || 'Flexibel'} />
+                        <Fact icon={MapPin} value={`${job.district || 'Berlin'}, Berlin`} />
+                        <ArrowRight className="size-4 text-zinc-400 transition group-hover:translate-x-1 group-hover:text-zinc-950 hidden md:inline" />
+                      </div>
                     </div>
-                    <Fact icon={Euro} value={job.compensation?.label || job.payText || 'Tarif / VB'} />
-                    <Fact icon={Clock3} value={job.hours?.label || job.hoursLabel || 'Flexibel'} />
-                    <Fact icon={MapPin} value={`${job.district || 'Berlin'}, Berlin`} />
-                    <ArrowRight className="size-4 text-zinc-400 transition group-hover:translate-x-1 group-hover:text-zinc-950" />
                   </Link>
                 ))}
               </div>
             ) : (
-              <div className="rounded-xl border border-dashed border-zinc-300 bg-white p-10 md:p-14 text-center">
-                <p className="font-bold text-sm md:text-base text-zinc-900">
+              <div className="rounded-3xl bg-zinc-50 p-10 md:p-14 text-center">
+                <p className="font-bold text-lg text-black">
                   Noch keine Angebote in dieser Kategorie.
                 </p>
-                <p className="mt-1 text-xs text-zinc-500 max-w-sm mx-auto">
+                <p className="mt-2 text-sm sm:text-base text-zinc-600 max-w-sm mx-auto">
                   Sobald neue Inserate geprüft sind, erscheinen sie hier. Sei der Erste und inseriere eine Stelle!
                 </p>
-                <div className="mt-5">
+                <div className="mt-6">
                   <Link
                     href="/post-a-job"
-                    className="apple-btn-primary inline-flex !h-9 !px-4 !text-xs"
+                    className="apple-press inline-flex items-center justify-center rounded-2xl bg-black px-7 py-4 text-base font-semibold text-white hover:bg-zinc-800 transition-colors cursor-pointer"
                   >
                     <span>+ Job in dieser Kategorie inserieren</span>
                   </Link>
@@ -168,8 +174,8 @@ export default async function CategoryPage({
 
 function Fact({ icon: Icon, value }: { icon: typeof Euro; value: string }) {
   return (
-    <span className="flex items-center gap-1.5 text-xs font-medium text-zinc-600">
-      <Icon className="size-3.5 shrink-0 text-zinc-400" /> {value}
+    <span className="flex items-center gap-1.5 font-medium text-zinc-600">
+      <Icon className="size-4 shrink-0 text-zinc-500" /> {value}
     </span>
   );
 }

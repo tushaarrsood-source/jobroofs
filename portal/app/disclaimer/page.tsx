@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function DisclaimerPage() {
   return (
-    <div className="min-h-screen bg-[#fafafa] flex flex-col justify-between">
+    <div className="min-h-screen bg-white text-[#222222] flex flex-col justify-between">
       <div>
         <SiteHeader />
 

@@ -145,7 +145,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${plusJakarta.variable} antialiased selection:bg-black selection:text-white pb-24 md:pb-0 font-sans bg-[#fafaf9] text-black relative min-h-screen overflow-x-clip max-w-full`}
+        className={`${plusJakarta.variable} antialiased selection:bg-black selection:text-white pb-24 md:pb-0 font-sans bg-white text-[#222222] relative min-h-screen overflow-x-clip max-w-full`}
       >
         <AuthProvider>
           <LanguageProvider>

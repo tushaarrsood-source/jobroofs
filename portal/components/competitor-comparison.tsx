@@ -1,7 +1,7 @@
 'use client';
 
 import Link from '@/components/ui/link';
-import { ArrowRight, Mail, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
 
 export function CompetitorComparison() {
@@ -53,64 +53,65 @@ export function CompetitorComparison() {
   ];
 
   return (
-    <section className="my-10">
+    <section className="my-12 sm:my-16">
       {/* Header */}
-      <div className="max-w-2xl mb-6">
-        <div className="inline-flex items-center gap-1.5 text-[10.5px] font-mono uppercase tracking-[0.2em] font-bold text-zinc-600 mb-2">
-          <Sparkles className="size-3 text-amber-500" />
-          <span>{isDe ? 'JOBROOFS VS. ANDERE PLATTFORMEN' : 'JOBROOFS VS. OTHER PLATFORMS'}</span>
-        </div>
+      <div className="max-w-3xl mb-8">
+        <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.16em] text-zinc-500 mb-2">
+          {isDe ? 'JOBROOFS IM VERGLEICH' : 'JOBROOFS IN COMPARISON'}
+        </p>
         <h2
-          className="text-2xl sm:text-3xl font-bold text-black tracking-tight leading-snug"
+          className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black tracking-tight leading-tight"
           style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
         >
-          {isDe
-            ? 'Der Unterschied im Detail.'
-            : 'The difference in detail.'}
+          {isDe ? 'Der Unterschied im Detail.' : 'The difference in detail.'}
         </h2>
-        <p className="mt-1.5 text-[14px] text-zinc-600 font-normal leading-relaxed">
+        <p className="mt-3 text-base sm:text-lg text-zinc-600 font-normal leading-relaxed">
           {isDe
             ? 'Ein transparenter, faktenbasierter Vergleich der Konditionen, Vermittlungsmodelle und Bewerbungswege in Deutschland.'
             : 'A transparent, fact-based comparison of pricing, hiring models, and applicant communication in Germany.'}
         </p>
       </div>
 
-      {/* Responsive Clean Table */}
-      <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white shadow-2xs">
-        <table className="w-full border-collapse text-left text-[13px] min-w-[620px]">
+      {/* Open, Borderless Table on White Canvas */}
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-left min-w-[620px]">
           <thead>
-            <tr className="border-b border-zinc-200 bg-zinc-50/70">
-              <th className="py-3 px-4 font-mono text-[10.5px] font-bold text-zinc-600 uppercase tracking-wider w-1/4">
+            <tr className="border-b border-zinc-200">
+              <th className="py-3.5 px-3 text-xs sm:text-sm font-semibold text-zinc-500 uppercase tracking-wider w-1/4">
                 {isDe ? 'Kriterium' : 'Feature'}
               </th>
-              <th className="py-3 px-4 font-bold text-black bg-zinc-100/70 border-x border-zinc-200 w-2/5">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[14px] font-extrabold text-black">JOBROOFS</span>
-                  <span className="font-mono text-[9px] bg-black text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">
+              <th className="py-3.5 px-4 text-base font-bold text-black w-2/5">
+                <div className="flex items-center gap-2">
+                  <span className="font-extrabold tracking-tight">JOBROOFS</span>
+                  <span className="text-[11px] bg-black text-white px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
                     DIREKT
                   </span>
                 </div>
               </th>
-              <th className="py-3 px-4 font-semibold text-zinc-600 w-1/3">
+              <th className="py-3.5 px-4 text-xs sm:text-sm font-semibold text-zinc-500 uppercase tracking-wider w-1/3">
                 {isDe ? 'Andere Plattformen' : 'Other Platforms'}
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-200">
             {comparisonData.map((row, idx) => (
-              <tr key={idx} className="hover:bg-zinc-50/50 transition-colors">
-                <td className="py-3.5 px-4 font-semibold text-black">
+              <tr key={idx} className="hover:bg-zinc-50/70 transition-colors">
+                <td className="py-4 sm:py-5 px-3 text-base font-semibold text-black align-top">
                   {row.feature}
                 </td>
-                <td className="py-3.5 px-4 font-medium text-black bg-zinc-50/40 border-x border-zinc-200">
-                  <div className="font-semibold text-black">{row.jobroofs}</div>
-                  <div className="text-[11px] text-emerald-800 font-mono font-medium mt-0.5">
+                <td className="py-4 sm:py-5 px-4 align-top">
+                  <div className="text-base sm:text-[17px] font-semibold text-black leading-snug">
+                    {row.jobroofs}
+                  </div>
+                  <div className="text-sm text-emerald-800 font-medium mt-1">
                     ✓ {row.jobroofsNote}
                   </div>
                 </td>
-                <td className="py-3.5 px-4 text-zinc-700 font-normal">
-                  <div>{row.otherPlatforms}</div>
-                  <div className="text-[11px] text-zinc-500 font-mono mt-0.5">
+                <td className="py-4 sm:py-5 px-4 text-zinc-700 align-top">
+                  <div className="text-base sm:text-[17px] font-normal leading-snug text-zinc-700">
+                    {row.otherPlatforms}
+                  </div>
+                  <div className="text-sm text-zinc-500 mt-1">
                     — {row.otherNote}
                   </div>
                 </td>
@@ -120,8 +121,8 @@ export function CompetitorComparison() {
         </table>
       </div>
 
-      {/* Minimal Footer Row */}
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-[12.5px] text-zinc-600">
+      {/* Minimal Open Footer Row */}
+      <div className="mt-6 pt-4 border-t border-zinc-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-base text-zinc-600">
         <div>
           <span>{isDe ? 'Fragen oder individueller Bedarf?' : 'Questions or custom requests?'} </span>
           <a
@@ -134,10 +135,10 @@ export function CompetitorComparison() {
 
         <Link
           href="/post-a-job"
-          className="apple-press inline-flex items-center gap-1.5 rounded-lg bg-black px-4 py-2 text-[12.5px] font-semibold text-white hover:bg-zinc-800 transition-colors cursor-pointer shadow-2xs"
+          className="apple-press inline-flex items-center justify-center gap-2 rounded-2xl bg-black px-6 py-3.5 text-base font-semibold text-white hover:bg-zinc-800 transition-colors cursor-pointer active:scale-[0.98]"
         >
-          <span>{isDe ? 'Job inserieren' : 'Post a Job'}</span>
-          <ArrowRight className="size-3.5 stroke-[2]" />
+          <span>{isDe ? 'Job jetzt inserieren' : 'Post a Job'}</span>
+          <ArrowRight className="size-4 stroke-[2]" />
         </Link>
       </div>
     </section>
