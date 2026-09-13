@@ -54,3 +54,4 @@ portal/.vercel/
 *.sln
 *.sw?
 scratch/
+reports/instagram-connected.json
