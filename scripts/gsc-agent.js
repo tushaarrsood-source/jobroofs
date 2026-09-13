@@ -175,6 +175,43 @@ async function main() {
       const res = await inspectUrl(token, siteUrl, url);
       console.log(JSON.stringify(res, null, 2));
 
+    } else if (cmd === 'inspect-all') {
+      const siteUrl = args[1] || 'sc-domain:jobroofs.com';
+      console.log(`🔍 Fetching live sitemap to inspect all URLs...`);
+      const smRes = await fetch('https://jobroofs.com/sitemap.xml');
+      const xml = await smRes.text();
+      const urls = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => m[1]);
+      console.log(`Found ${urls.length} URLs in live sitemap.\n`);
+
+      const summary = { indexed: 0, discovered: 0, unknown: 0, other: 0, details: [] };
+
+      for (let i = 0; i < urls.length; i++) {
+        const u = urls[i];
+        process.stdout.write(`[${i + 1}/${urls.length}] Inspecting ${u}... `);
+        try {
+          const res = await inspectUrl(token, siteUrl, u);
+          const status = res.inspectionResult ? res.inspectionResult.indexStatusResult : null;
+          const state = status ? status.coverageState : 'ERROR';
+          console.log(state);
+          summary.details.push({ url: u, state, verdict: status ? status.verdict : 'FAIL' });
+          if (state && state.includes('indexed')) summary.indexed++;
+          else if (state && state.includes('Discovered')) summary.discovered++;
+          else if (state && state.includes('unknown')) summary.unknown++;
+          else summary.other++;
+        } catch (e) {
+          console.log('FAILED');
+          summary.other++;
+        }
+        // Small rate limit delay
+        await new Promise(r => setTimeout(r, 400));
+      }
+
+      console.log('\n--- 📊 INDEXING SUMMARY ---');
+      console.log(`✅ Indexed: ${summary.indexed}`);
+      console.log(`⏳ Discovered / In Queue: ${summary.discovered}`);
+      console.log(`🆕 Submitted & Pending: ${summary.unknown + summary.other}`);
+      console.log(`Total URLs: ${urls.length}\n`);
+
     } else if (cmd === 'index-url') {
       const url = args[1] || 'https://jobroofs.com/';
       console.log(`⚡ Sending instant index notification for ${url}...`);
@@ -183,7 +220,7 @@ async function main() {
 
     } else {
       console.log(`Unknown command: ${cmd}`);
-      console.log('Available commands: status, sitemaps, submit-sitemap, performance, inspect [url], index-url [url]');
+      console.log('Available commands: status, sitemaps, submit-sitemap, performance, inspect [url], inspect-all, index-url [url]');
     }
   } catch (err) {
     console.error('❌ Error executing command:', err.message);
