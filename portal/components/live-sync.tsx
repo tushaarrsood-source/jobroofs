@@ -11,42 +11,23 @@ import { useEffect } from 'react';
  */
 export function LiveSync() {
   useEffect(() => {
-    // 1. Purge stale browser CacheStorage
-    if (typeof window !== 'undefined' && 'caches' in window) {
-      caches.keys().then((names) => {
-        names.forEach((name) => {
-          caches.delete(name).catch(() => {});
-        });
-      });
-    }
-
-    // 2. Service Worker registration with updateViaCache: 'none'
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/sw.js', { updateViaCache: 'none' })
-        .then((reg) => {
-          reg.update().catch(() => {});
-
-          reg.addEventListener('updatefound', () => {
-            const installing = reg.installing;
-            if (installing) {
-              installing.addEventListener('statechange', () => {
-                if (installing.state === 'installed' && navigator.serviceWorker.controller) {
-                  installing.postMessage({ type: 'SKIP_WAITING' });
-                }
-              });
-            }
+    // 1. Purge all browser caches and unregister service workers immediately
+    if (typeof window !== 'undefined') {
+      if ('caches' in window) {
+        caches.keys().then((names) => {
+          names.forEach((name) => {
+            caches.delete(name).catch(() => {});
           });
-        })
-        .catch(() => {});
+        });
+      }
 
-      let refreshing = false;
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (!refreshing) {
-          refreshing = true;
-          window.location.reload();
-        }
-      });
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+          for (const registration of registrations) {
+            registration.unregister().catch(() => {});
+          }
+        });
+      }
     }
 
     // 3. Background server version synchronization
