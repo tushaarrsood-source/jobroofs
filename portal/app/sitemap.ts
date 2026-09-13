@@ -1,8 +1,9 @@
 import type { MetadataRoute } from 'next';
 import { industryNiches } from '@/lib/domain/taxonomy';
-import { previewJobs } from '@/lib/domain/preview-data';
-import { ALL_SOURCED_JOBS } from '@/lib/sources/sourced-jobs';
-import { getD1 } from '@/db';
+import { getJobsFromFirestore } from '@/lib/firebase/firestore-service';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://jobroofs.com';
@@ -23,7 +24,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'];
   }> = [
     { path: '', priority: 1.0, changeFrequency: 'hourly' },
-    { path: '/post-a-job', priority: 0.9, changeFrequency: 'weekly' },
+    { path: '/post-a-job', priority: 0.95, changeFrequency: 'daily' },
+    { path: '/pricing', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/impressum', priority: 0.3, changeFrequency: 'monthly' },
     { path: '/datenschutz', priority: 0.3, changeFrequency: 'monthly' },
     { path: '/agb', priority: 0.3, changeFrequency: 'monthly' },
@@ -38,6 +40,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     alternates: makeAlternates(r.path),
   }));
 
+  // Major German Metros programmatic landing pages
+  const GERMAN_CITIES = [
+    'berlin',
+    'muenchen',
+    'hamburg',
+    'koeln',
+    'frankfurt',
+    'duesseldorf',
+    'leipzig',
+    'stuttgart',
+    'dortmund',
+    'essen',
+    'bremen',
+    'dresden',
+    'hannover',
+    'nuernberg',
+  ];
+
+  const cityPages: MetadataRoute.Sitemap = GERMAN_CITIES.map((city) => ({
+    url: `${baseUrl}/?city=${city}`,
+    lastModified: now,
+    changeFrequency: 'daily' as const,
+    priority: 0.85,
+    alternates: makeAlternates(`/?city=${city}`),
+  }));
+
   // All category pages
   const categoryPages: MetadataRoute.Sitemap = industryNiches.map((niche) => ({
     url: `${baseUrl}/categories/${niche.id}`,
@@ -47,35 +75,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     alternates: makeAlternates(`/categories/${niche.id}`),
   }));
 
-  // Job detail pages (Curated + Sourced + DB)
-  const jobIds = new Map<string, Date>();
-  previewJobs.forEach((job) => {
-    const key = job.slug || job.id;
-    jobIds.set(key, now);
-  });
-  ALL_SOURCED_JOBS.forEach((job) => {
-    const key = job.slug || job.id;
-    if (!jobIds.has(key)) {
-      jobIds.set(key, now);
-    }
-  });
+  // Live active job pages from Firestore
+  const jobMap = new Map<string, Date>();
 
   try {
-    const d1 = getD1();
-    const rows = await d1
-      .prepare(`SELECT id, last_verified_at FROM jobs WHERE publication_state = 'published' LIMIT 500`)
-      .all<any>();
-    if (rows && rows.results) {
-      rows.results.forEach((row: any) => {
-        const date = row.last_verified_at ? new Date(row.last_verified_at) : now;
-        jobIds.set(row.id, date);
-      });
-    }
-  } catch {
-    // Graceful fallback
+    const firestoreJobs = await getJobsFromFirestore(500);
+    firestoreJobs.forEach((job: any) => {
+      const key = job.slug || job.id;
+      let date = now;
+      if (job.updatedAt?.toDate) {
+        date = job.updatedAt.toDate();
+      } else if (job.createdAt?.toDate) {
+        date = job.createdAt.toDate();
+      } else if (job.createdAt) {
+        date = new Date(job.createdAt);
+      }
+      jobMap.set(key, date);
+    });
+  } catch (e) {
+    console.error('Error fetching jobs for sitemap:', e);
   }
 
-  const jobPages: MetadataRoute.Sitemap = Array.from(jobIds.entries()).map(
+  const jobPages: MetadataRoute.Sitemap = Array.from(jobMap.entries()).map(
     ([id, date]) => ({
       url: `${baseUrl}/jobs/${id}`,
       lastModified: date,
@@ -85,5 +106,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   );
 
-  return [...staticPages, ...categoryPages, ...jobPages];
+  return [...staticPages, ...cityPages, ...categoryPages, ...jobPages];
 }

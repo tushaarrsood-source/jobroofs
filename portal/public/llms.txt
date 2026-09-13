@@ -1,65 +1,73 @@
-# JOBROOFS — Berlin's Flexible Work & Housing Portal
+# JOBROOFS — Das Portal für unabhängige Inserate in ganz Deutschland
 
-> JOBROOFS is Berlin's dedicated portal for flexible employment — Minijobs (603€ limit / 13,90€ minimum wage), part-time work (Teilzeit), student jobs (Werkstudent), temporary gigs, and neighborhood housing / rooms — across all 12 Berlin districts in German and English.
+> JOBROOFS (https://jobroofs.com) ist Deutschlands unabhängiges Jobportal für Minijobs (603 € Grenze / 13,90 € Mindestlohn), Teilzeitstellen, Aushilfen, Nebenjobs und flexible Arbeit — ohne Zeitarbeit, ohne Personalvermittler, mit 100% Direktkontakt zu echten Betrieben.
 
 ## Core Pages
 
-- [Homepage](https://jobroofs.com/): Browse all flexible work opportunities and rooms in Berlin with interactive OpenStreetMap view
-- [Housing & Sublets](https://jobroofs.com/wohnen): Direct neighborhood housing listings, WG rooms, Zwischenmiete, and apartments
-- [Post a Job](https://jobroofs.com/post-a-job): Employers post job listings for €29 single or €499/year unlimited
-- [Direct from Employers](https://jobroofs.com/direct-employers): All jobs posted directly by verified Berlin employers
-- [Latest Verified Jobs](https://jobroofs.com/latest-jobs): Freshly sourced and verified job opportunities
+- [Homepage](https://jobroofs.com/): Alle unabhängigen Stellenangebote in ganz Deutschland mit City- & Bezirksauswahl
+- [Job inserieren (kostenlos)](https://jobroofs.com/post-a-job): 1. Jobanzeige 100% kostenlos schalten in unter 2 Minuten
+- [Preise & Tarife](https://jobroofs.com/pricing): Transparente Festpreise ohne Abo-Falle (1. Job 0 €, Standard 14,99 €, Premium 29,99 €)
+- [Impressum](https://jobroofs.com/impressum): Rechtliche Anbieterkennzeichnung
+- [Datenschutz](https://jobroofs.com/datenschutz): DSGVO-konforme Datenschutzerklärung
 
-## Job Categories (30 Berlin Niches)
+## Städte & Wirtschaftsregionen in Deutschland
 
-- [Gastronomy & Cafés](https://jobroofs.com/categories/gastronomy): Restaurants, cafés, bakeries and catering teams
-- [Hotels & Accommodation](https://jobroofs.com/categories/hotels): Hotels, hostels, serviced apartments and guest houses
-- [Events & Venues](https://jobroofs.com/categories/events): Event crews, venues, trade fairs and temporary productions
-- [Retail & Shops](https://jobroofs.com/categories/retail): Independent shops, chains, fashion and specialty retail
-- [Supermarkets & Food Retail](https://jobroofs.com/categories/food-retail): Supermarkets, organic stores, kiosks and food counters
-- [Warehousing & Fulfilment](https://jobroofs.com/categories/warehousing): Order picking, packing, stock and distribution centre roles
-- [Logistics & Delivery](https://jobroofs.com/categories/logistics): Bicycle couriers, van drivers and last-mile delivery
-- [Cleaning & Facilities](https://jobroofs.com/categories/cleaning): Office, commercial and residential cleaning teams
-- [Office & Administration](https://jobroofs.com/categories/office-admin): Reception, data entry, filing and general office support
-- [Customer Support](https://jobroofs.com/categories/customer-support): Call centres, live chat and email support desks
-- [Sales & Promotion](https://jobroofs.com/categories/sales-promotion): In-store promotion, brand ambassadors, street marketing
-- [Tourism & Visitor Services](https://jobroofs.com/categories/tourism): Tour guides, museum staff, visitor information and travel agencies
-- [Culture, Museums & Theatres](https://jobroofs.com/categories/culture): Galleries, theatres, cinemas and cultural institutions
-- [Nightlife & Clubs](https://jobroofs.com/categories/nightlife): Bars, clubs, door staff and late-night hospitality
-- [Sports, Fitness & Recreation](https://jobroofs.com/categories/sports-fitness): Gyms, pools, coaching and leisure centres
-- [Childcare & Education](https://jobroofs.com/categories/childcare-education): After-school care, holiday programmes and tutoring
-- [Healthcare Support](https://jobroofs.com/categories/healthcare-support): Clinics, pharmacies, care assistants and patient transport
-- [Elder Care & Social Services](https://jobroofs.com/categories/elder-care): Home care, nursing support and social work assistants
-- [Security & Crowd Services](https://jobroofs.com/categories/security): Door supervision, event security and mobile patrols
-- [Construction & Trades](https://jobroofs.com/categories/construction-trades): Helpers for electricians, painters, plumbers and site crews
-- [Manufacturing & Production](https://jobroofs.com/categories/manufacturing): Assembly, machine operation and quality control
-- [Moving & Transport Help](https://jobroofs.com/categories/moving-transport): Furniture movers, van assistants and transport helpers
-- [Universities & Research](https://jobroofs.com/categories/universities-research): Student assistant (HiWi) and lab helper positions
-- [NGOs & Associations](https://jobroofs.com/categories/ngo-associations): Charities, community projects and volunteer coordination
-- [Media & Creative](https://jobroofs.com/categories/media-creative): Photography, video, design and content creation gigs
-- [Beauty & Wellness](https://jobroofs.com/categories/beauty-wellness): Salons, spas, massage and cosmetics
-- [Pet Care](https://jobroofs.com/categories/pet-care): Dog walking, pet sitting and veterinary assistance
-- [Gardening & Outdoor](https://jobroofs.com/categories/gardening-outdoor): Parks, landscaping and urban gardening projects
-- [Seasonal & Markets](https://jobroofs.com/categories/seasonal-markets): Christmas markets, summer festivals and pop-up stands
-- [Local Services](https://jobroofs.com/categories/local-services): Handyman, errands, personal assistance and odd jobs
+- [Jobs in Berlin](https://jobroofs.com/?city=berlin): Minijobs, Gastronomie, Retail, Event & Aushilfen in allen 12 Bezirken
+- [Jobs in München](https://jobroofs.com/?city=muenchen): Stellenangebote in Schwabing, Maxvorstadt, Glockenbach & Umland
+- [Jobs in Hamburg](https://jobroofs.com/?city=hamburg): Hafen, Schanze, Altona, Innenstadt & Speicherstadt
+- [Jobs in Köln](https://jobroofs.com/?city=koeln): Jobs in Ehrenfeld, Belgisches Viertel, Innenstadt & allen Veedeln
+- [Jobs in Frankfurt am Main](https://jobroofs.com/?city=frankfurt): Sachsenhausen, Bornheim, Westend & City
+- [Jobs in Düsseldorf](https://jobroofs.com/?city=duesseldorf): Altstadt, Medienhafen, Pempelfort & Bilk
+- [Jobs in Leipzig](https://jobroofs.com/?city=leipzig): Plagwitz, Südvorstadt, Connewitz & Zentrum
+- [Jobs in Stuttgart](https://jobroofs.com/?city=stuttgart): Mitte, Bad Cannstatt, Vaihingen & Region
+- [Jobs in Dortmund](https://jobroofs.com/?city=dortmund): Ruhrgebiet Minijobs, Logistik & Handwerk
+- [Jobs in Essen](https://jobroofs.com/?city=essen): Rüttenscheid, City & Ruhrgebiet Stellenangebote
+- [Jobs in Bremen](https://jobroofs.com/?city=bremen): Viertel, Neustadt, Überseestadt
+- [Jobs in Dresden](https://jobroofs.com/?city=dresden): Neustadt, Altstadt & Elbflorenz
+- [Jobs in Hannover](https://jobroofs.com/?city=hannover): Linden, Nordstadt & City
+- [Jobs in Nürnberg](https://jobroofs.com/?city=nuernberg): Franken Metropolregion & Altstadt
 
-## Berlin District Coverage
+## 30 Branchen & Tätigkeitsbereiche
 
-All 12 Berlin districts (Bezirke): Mitte, Friedrichshain-Kreuzberg, Pankow (Prenzlauer Berg), Charlottenburg-Wilmersdorf, Spandau, Steglitz-Zehlendorf, Tempelhof-Schöneberg, Neukölln, Treptow-Köpenick, Marzahn-Hellersdorf, Lichtenberg, Reinickendorf.
+- [Gastronomie & Cafés](https://jobroofs.com/categories/gastronomy): Servicekräfte, Baristas, Köche, Küchenhilfen, Spüler
+- [Hotels & Beherbergung](https://jobroofs.com/categories/hotels): Rezeption, Night Audit, Housekeeping, Guest Relations
+- [Events & Veranstaltungen](https://jobroofs.com/categories/events): Messepersonal, Stagehands, Einlass, Cateringcrew
+- [Einzelhandel & Shops](https://jobroofs.com/categories/retail): Verkäufer, Kassenkräfte, Store Assistants
+- [Supermärkte & Food Retail](https://jobroofs.com/categories/food-retail): Verräumer, Kasse, Bäckereitheke, Frischetheke
+- [Lager & Fulfilment](https://jobroofs.com/categories/warehousing): Kommissionierer, Packer, Staplerfahrer
+- [Logistik & Kurierdienste](https://jobroofs.com/categories/logistics): Fahrradkuriere, Auslieferungsfahrer, Tourenbegleiter
+- [Reinigung & Facility](https://jobroofs.com/categories/cleaning): Unterhaltsreinigung, Glasreinigung, Hausmeisterservice
+- [Büro & Verwaltung](https://jobroofs.com/categories/office-admin): Datenerfassung, Empfang, Telefonzentrale, Backoffice
+- [Kundenservice & Support](https://jobroofs.com/categories/customer-support): Inbound, Live-Chat, E-Mail-Support
+- [Promotion & Sales](https://jobroofs.com/categories/sales-promotion): Flyerverteiler, Promoter, Markenbotschafter
+- [Tourismus & Gästeführung](https://jobroofs.com/categories/tourism): Stadtführer, Infopoints, Reisebegleiter
+- [Kultur, Theater & Museen](https://jobroofs.com/categories/culture): Aufsicht, Kasse, Garderobe, Kinopersonal
+- [Nightlife & Bars](https://jobroofs.com/categories/nightlife): Barkeeper, Barbacks, Garderobe, Einlass
+- [Sport & Fitness](https://jobroofs.com/categories/sports-fitness): Trainer, Kurstrainer, Servicekräfte, Bademeister
+- [Betreuung & Nachhilfe](https://jobroofs.com/categories/childcare-education): Babysitter, Nachhilfelehrer, Ferienbetreuung
+- [Gesundheit & Pflegehilfe](https://jobroofs.com/categories/healthcare-support): Praxishelfer, Apothekenkuriere, Pflegeassistenz
+- [Seniorenhilfe & Soziales](https://jobroofs.com/categories/elder-care): Alltagsbegleiter, Einkaufshilfe, soziale Betreuung
+- [Sicherheitsdienste](https://jobroofs.com/categories/security): Objektschutz, Veranstaltungsschutz, Doormen
+- [Handwerk & Montage](https://jobroofs.com/categories/construction-trades): Bauhelfer, Malerhilfen, Montagehelfer
+- [Produktion & Fertigung](https://jobroofs.com/categories/manufacturing): Montage, Maschinenbedienung, Qualitätskontrolle
+- [Umzug & Transport](https://jobroofs.com/categories/moving-transport): Möbelträger, Umzugshelfer, Beifahrer
+- [Universität & Forschung](https://jobroofs.com/categories/universities-research): Studentische Hilfskräfte (HiWi), Labormitarbeit
+- [NGO & Verbände](https://jobroofs.com/categories/ngo-associations): Fundraiser, Vereinsassistenz, Kampagnenhelfer
+- [Medien & Kreatives](https://jobroofs.com/categories/media-creative): Fotografie, Videoschnitt, Social Media Assistenz
+- [Beauty & Wellness](https://jobroofs.com/categories/beauty-wellness): Kosmetik, Nageldesign, Spa-Assistenz
+- [Tierbetreuung](https://jobroofs.com/categories/pet-care): Dogsitting, Gassi-Service, Tierpflegerhelfer
+- [Gartenbau & Außenanlagen](https://jobroofs.com/categories/gardening-outdoor): Gartenpflege, Landschaftsbauhelfer
+- [Saisongeschäft & Märkte](https://jobroofs.com/categories/seasonal-markets): Weihnachtsmarktstände, Pop-Up Stores
+- [Nachbarschaft & Lokales](https://jobroofs.com/categories/local-services): Allround-Hilfen, Kurierdienste, Botengänge
 
-## Key Features
+## Wichtigste Vorteile
 
-- Interactive OpenStreetMap with live wage & rent pin badges across Berlin
-- Direct Google Maps navigation from job and housing listings
-- Instant 1-click apply & direct host/employer contact
-- Verified employer profiles and verified room listings
-- Free for job seekers and room seekers, always
-- Full LLM knowledge base available at: https://jobroofs.com/llms-full.txt
+1. **0% Zeitarbeit**: Nur echte Betriebe und private Inserenten. Keine Vermittlungsagenturen.
+2. **Direktkontakt per Klick**: Telefonnummer, WhatsApp oder Direkt-Link zum Betrieb ohne ATS-Hürden.
+3. **Faire Festpreise**: 1. Anzeige 100% gratis, Standard 14,99 € (30 Tage), Premium 29,99 € (60 Tage).
+4. **Kein Abo-Zwang**: Einmalige Zahlung, automatische Beendigung ohne Kündigungsfristen.
+5. **Kostenlos für Bewerber**: Vollständiger Zugriff, keine Registrierungsgebühren.
 
-## Pricing (Employers & Landlords)
-
-- Standard Listing (Job or Housing): €29 (30 days active)
-- Premium Listing (Job or Housing): €49 (60 days active, top placement & badge)
-- Annual Unlimited Employer Pass: €499/year (Unlimited postings, featured company profile)
+Full LLM Knowledge Base: https://jobroofs.com/llms-full.txt
 
 
