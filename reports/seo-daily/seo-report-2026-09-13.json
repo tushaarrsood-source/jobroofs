@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-09-13T12:24:13.083Z",
+  "sitemap": {
+    "path": "https://jobroofs.com/sitemap.xml",
+    "lastSubmitted": "2026-09-13T12:19:22.447Z",
+    "isPending": false,
+    "isSitemapsIndex": false,
+    "type": "sitemap",
+    "lastDownloaded": "2026-09-13T12:19:23.830Z",
+    "warnings": "0",
+    "errors": "0",
+    "contents": [
+      {
+        "type": "web",
+        "submitted": "53",
+        "indexed": "0"
+      }
+    ]
+  },
+  "keywordCount": 0,
+  "topQueries": [],
+  "coreUrls": [
+    {
+      "url": "https://jobroofs.com/",
+      "coverage": "Submitted and indexed"
+    },
+    {
+      "url": "https://jobroofs.com/?city=berlin",
+      "coverage": "URL is unknown to Google"
+    },
+    {
+      "url": "https://jobroofs.com/?city=muenchen",
+      "coverage": "URL is unknown to Google"
+    },
+    {
+      "url": "https://jobroofs.com/pricing",
+      "coverage": "Discovered - currently not indexed"
+    }
+  ]
+}
