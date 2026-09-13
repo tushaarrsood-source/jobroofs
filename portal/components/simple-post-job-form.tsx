@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from '@/components/ui/link';
 import {
   ArrowRight,
@@ -16,6 +16,7 @@ import {
   MessageCircle,
   User as UserIcon,
   Loader2,
+  Phone,
 } from 'lucide-react';
 import { saveMyListing, getMyListings, upgradeMyListingLocally } from '@/lib/storage/my-listings';
 import {
@@ -26,31 +27,19 @@ import {
 import { useAuth } from '@/lib/firebase/auth-context';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { AuthModal } from '@/components/auth-modal';
+import {
+  SUPPORTED_CITIES,
+  getDistrictsForCity,
+  getPopularDistrictsForCity,
+} from '@/lib/domain/cities';
 
-const BERLIN_DISTRICTS = [
-  'Mitte',
-  'Kreuzberg',
-  'Friedrichshain',
-  'Neukölln',
-  'Prenzlauer Berg',
-  'Charlottenburg',
-  'Schöneberg',
-  'Wedding',
-  'Lichtenberg',
-  'Treptow',
-  'Pankow',
-  'Steglitz',
-  'Tempelhof',
-  'Moabit',
-];
-
-const QUICK_DISTRICTS = [
-  'Mitte',
-  'Kreuzberg',
-  'Friedrichshain',
-  'Neukölln',
-  'Prenzlauer Berg',
-  'Charlottenburg',
+const QUICK_CITIES = [
+  'Berlin',
+  'Hamburg',
+  'München',
+  'Köln',
+  'Frankfurt am Main',
+  'Leipzig',
 ];
 
 const EMPLOYMENT_TYPES = [
@@ -82,14 +71,35 @@ export function SimplePostJobForm() {
   const [formData, setFormData] = useState({
     title: '',
     company: '',
+    city: 'Berlin',
     district: 'Mitte',
     employmentType: 'Minijob (bis 603 €)',
     wage: '16,00 € / Std.',
     applyUrl: '',
     contactEmail: '',
+    whatsapp: '',
+    phone: '',
     description: '',
     tier: 'free' as 'free' | 'starter' | 'standard' | 'premium',
   });
+
+  const currentFormDistricts = useMemo(() => {
+    return getDistrictsForCity(formData.city);
+  }, [formData.city]);
+
+  const currentFormPopularDistricts = useMemo(() => {
+    return getPopularDistrictsForCity(formData.city);
+  }, [formData.city]);
+
+  const handleFormCityChange = (cityName: string) => {
+    const dists = getDistrictsForCity(cityName);
+    const firstDist = dists[0] || 'Zentrum';
+    setFormData((prev) => ({
+      ...prev,
+      city: cityName,
+      district: firstDist,
+    }));
+  };
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -187,8 +197,13 @@ export function SimplePostJobForm() {
   };
 
   const handleSubmit = async () => {
-    if (!formData.applyUrl.trim() && !formData.contactEmail.trim()) {
-      setError('Bitte gib mindestens eine Bewerbungsmethode (Link oder E-Mail) an.');
+    if (
+      !formData.applyUrl.trim() &&
+      !formData.contactEmail.trim() &&
+      !formData.whatsapp.trim() &&
+      !formData.phone.trim()
+    ) {
+      setError('Bitte gib mindestens eine Kontaktmethode an (WhatsApp, E-Mail, Telefon oder Link).');
       return;
     }
 
@@ -240,7 +255,7 @@ export function SimplePostJobForm() {
         id: submissionId,
         type: 'job',
         title: formData.title,
-        subtitle: `${formData.company} · ${formData.district}`,
+        subtitle: `${formData.company} · ${formData.district}, ${formData.city}`,
         badgeLabel: formData.wage,
         tier: formData.tier,
         tierLabel: tierLabel,
@@ -260,12 +275,15 @@ export function SimplePostJobForm() {
           userId: assignedUserId,
           title: formData.title,
           company: formData.company,
+          city: formData.city,
           district: formData.district,
           description: formData.description,
           payText: formData.wage,
           employmentType: formData.employmentType,
-          contactEmail: formData.contactEmail,
-          applyUrl: formData.applyUrl,
+          contactEmail: formData.contactEmail || undefined,
+          contactPhone: formData.phone || undefined,
+          whatsapp: formData.whatsapp || undefined,
+          applyUrl: formData.applyUrl || undefined,
           tier: formData.tier,
           status: 'active',
           slug: jobSlug,
@@ -304,6 +322,8 @@ export function SimplePostJobForm() {
             district: formData.district,
             wage: formData.wage,
             contactEmail: formData.contactEmail || undefined,
+            contactPhone: formData.phone || undefined,
+            whatsapp: formData.whatsapp || undefined,
             applyUrl: formData.applyUrl || undefined,
           },
         }),
@@ -477,11 +497,14 @@ export function SimplePostJobForm() {
               setFormData({
                 title: '',
                 company: '',
+                city: 'Berlin',
                 district: 'Mitte',
-                employmentType: 'Minijob (bis 538 €)',
+                employmentType: 'Minijob (bis 603 €)',
                 wage: '16,00 € / Std.',
                 applyUrl: '',
                 contactEmail: '',
+                whatsapp: '',
+                phone: '',
                 description: '',
                 tier: isFreeEligible ? 'free' : 'starter',
               });
@@ -680,13 +703,52 @@ export function SimplePostJobForm() {
                 />
               </div>
 
+              {/* City Selection (Nationwide) */}
+              <div className="space-y-1.5">
+                <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+                  Stadt in Deutschland *
+                </label>
+                <div className="flex flex-wrap gap-1.5 mb-1.5">
+                  {QUICK_CITIES.map((c) => {
+                    const isSelected = formData.city.toLowerCase() === c.toLowerCase();
+                    return (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => handleFormCityChange(c)}
+                        className={`px-2.5 py-1 rounded-lg text-[11.5px] font-normal transition-colors cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#202a31] text-[#fbfbf8]'
+                            : 'border border-[#d8ded9] text-[#7e8a84] hover:text-[#202a31] hover:border-[#202a31] bg-white'
+                        }`}
+                      >
+                        {c}
+                      </button>
+                    );
+                  })}
+                </div>
+                <select
+                  value={formData.city}
+                  onChange={(e) => handleFormCityChange(e.target.value)}
+                  className="w-full h-9 px-3 text-[12.5px] text-[#202a31] border border-[#d8ded9] rounded-xl bg-white cursor-pointer focus:border-[#202a31] outline-none transition-colors"
+                >
+                  {SUPPORTED_CITIES.map((c) => (
+                    <option key={c.id} value={c.name}>
+                      {c.name} ({c.state})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {/* District Selection Chips */}
               <div className="space-y-1.5">
                 <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
-                  Berliner Bezirk *
+                  {formData.city.toLowerCase().includes('köln') || formData.city.toLowerCase().includes('koeln')
+                    ? 'Veedel / Stadtteil *'
+                    : 'Bezirk / Stadtteil *'}
                 </label>
                 <div className="flex flex-wrap gap-1.5 mb-1.5">
-                  {QUICK_DISTRICTS.map((d) => {
+                  {currentFormPopularDistricts.map((d) => {
                     const isSelected = formData.district === d;
                     return (
                       <button
@@ -705,15 +767,15 @@ export function SimplePostJobForm() {
                   })}
                 </div>
 
-                {/* Dropdown for All Districts */}
+                {/* Dropdown for All Districts in Selected City */}
                 <select
                   value={formData.district}
                   onChange={(e) => setFormData({ ...formData, district: e.target.value })}
                   className="w-full h-9 px-3 text-[12.5px] text-[#202a31] border border-[#d8ded9] rounded-xl bg-white cursor-pointer focus:border-[#202a31] outline-none transition-colors"
                 >
-                  {BERLIN_DISTRICTS.map((d) => (
+                  {currentFormDistricts.map((d) => (
                     <option key={d} value={d}>
-                      {d} (Berlin)
+                      {d} ({formData.city})
                     </option>
                   ))}
                 </select>
@@ -867,28 +929,30 @@ export function SimplePostJobForm() {
 
               {/* Direct Application Options */}
               <div className="space-y-3">
-                <div className="space-y-1.5">
-                  <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
-                    Direkt-Bewerbungslink (Website / Karriereportal)
-                  </label>
+                {/* 1. WhatsApp Instant Chat (Recommended) */}
+                <div className="space-y-1.5 p-3.5 rounded-xl border border-emerald-300 bg-emerald-50/50">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-emerald-900 flex items-center gap-1.5">
+                      <MessageCircle className="size-3.5 text-emerald-600" />
+                      <span>WhatsApp-Nummer (Empfohlen für 1-Klick-Bewerbung)</span>
+                    </label>
+                    <span className="text-[10px] font-medium text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-sm">
+                      Top-Rücklauf
+                    </span>
+                  </div>
                   <input
                     type="text"
-                    value={formData.applyUrl}
-                    onChange={(e) => setFormData({ ...formData, applyUrl: e.target.value })}
-                    placeholder="https://deine-firma.de/jobs/barista"
-                    className="w-full h-9 px-3 text-base sm:text-[13px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] focus:ring-1 focus:ring-[#202a31] outline-none transition-colors"
+                    value={formData.whatsapp}
+                    onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                    placeholder="+49 176 12345678"
+                    className="w-full h-9 px-3 text-base sm:text-[13px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-emerald-300 bg-white rounded-lg focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 outline-none transition-colors"
                   />
+                  <p className="text-[11px] text-emerald-800 font-light">
+                    Bewerber können dir direkt mit 1 Klick auf WhatsApp schreiben. Ideal für Berliner Cafés, Gastro, Kiez-Läden & Aushilfen.
+                  </p>
                 </div>
 
-                <div className="relative my-1 flex items-center justify-center">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-[#d8ded9]" />
-                  </div>
-                  <span className="relative bg-[#fbfbf8] px-2.5 text-[10px] uppercase tracking-[0.2em] text-[#7e8a84]">
-                    oder
-                  </span>
-                </div>
-
+                {/* 2. Email Contact */}
                 <div className="space-y-1.5">
                   <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
                     Bewerbungs-E-Mail / Ansprechpartner
@@ -904,13 +968,49 @@ export function SimplePostJobForm() {
                     Kandidaten senden ihre Kurzbewerbung direkt an diese Adresse.
                   </p>
                 </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* 3. Phone */}
+                  <div className="space-y-1.5">
+                    <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84] flex items-center gap-1">
+                      <Phone className="size-3" />
+                      <span>Telefon (optional)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      placeholder="030 1234567"
+                      className="w-full h-9 px-3 text-base sm:text-[13px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] outline-none transition-colors"
+                    />
+                  </div>
+
+                  {/* 4. Apply URL */}
+                  <div className="space-y-1.5">
+                    <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+                      Website / Link (optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.applyUrl}
+                      onChange={(e) => setFormData({ ...formData, applyUrl: e.target.value })}
+                      placeholder="https://dein-betrieb.berlin"
+                      className="w-full h-9 px-3 text-base sm:text-[13px] text-[#202a31] placeholder:text-[#7e8a84]/50 border border-[#d8ded9] rounded-xl bg-white focus:border-[#202a31] outline-none transition-colors"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Placement / Tier Selector */}
               <div className="space-y-1.5 pt-1">
-                <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
-                  Platzierung & Sichtbarkeit wählen
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="block text-[10.5px] font-medium uppercase tracking-[0.16em] text-[#7e8a84]">
+                    Laufzeit & Modell wählen
+                  </label>
+                  <span className="text-[10px] text-[#7e8a84]">
+                    Über 75% günstiger als herkömmliche Portale
+                  </span>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   {isFreeEligible ? (
                     /* Free 1st Job Tier */
@@ -970,7 +1070,7 @@ export function SimplePostJobForm() {
                       <span className="font-mono text-[12.5px] font-medium text-[#202a31]">14,99 €</span>
                     </div>
                     <p className="mt-1 text-[11px] text-[#7e8a84] font-light leading-relaxed">
-                      30 Tage Laufzeit &middot; Voller Monat im Direktbereich &middot; Inkl. Kiez-Filter.
+                      30 Tage Laufzeit &middot; Über 75% günstiger als andere Portale &middot; Inkl. Kiez-Filter.
                     </p>
                   </button>
 
@@ -991,21 +1091,21 @@ export function SimplePostJobForm() {
                       <span className="font-mono text-[12.5px] font-medium text-[#202a31]">24,99 €</span>
                     </div>
                     <p className="mt-1 text-[11px] text-[#7e8a84] font-light leading-relaxed">
-                      60 Tage Laufzeit &middot; 2 Monate im Direktbereich &middot; Maximale Reichweite.
+                      60 Tage doppelte Laufzeit &middot; Top-Kiez-Platzierung &middot; Maximale Reichweite.
                     </p>
                   </button>
                 </div>
               </div>
 
-              {/* Trust Badge */}
-              <div className="rounded-xl border border-[#d8ded9] bg-[#f4f4ee]/60 p-3 flex items-start gap-2.5 text-[12px] text-[#5a6460]">
+              {/* Trust Badge with Social Proof */}
+              <div className="rounded-xl border border-[#d8ded9] bg-[#f4f4ee]/60 p-3.5 flex items-start gap-3 text-[12px] text-[#5a6460]">
                 <ShieldCheck className="size-4 text-[#202a31] shrink-0 mt-0.5 stroke-[1.5]" />
                 <div>
                   <p className="font-medium text-[#202a31]">
-                    100% Direktkontakt Garantie
+                    Trusted by 50+ employers and over 500+ workers
                   </p>
                   <p className="mt-0.5 font-light leading-relaxed">
-                    Deine Anzeige wird ohne Zwischenhändler und ohne Zeitarbeitsagenturen auf JOBROOFS gelistet. Talente treten unmittelbar mit dir in Kontakt.
+                    100% Unabhängig · Keine Zeitarbeitsfirmen, keine Scraper, keine veralteten Tabellen. Direkter Kontakt über WhatsApp, Telefon oder E-Mail.
                   </p>
                 </div>
               </div>
@@ -1045,6 +1145,24 @@ export function SimplePostJobForm() {
             </div>
           )}
         </form>
+
+        {/* Support & Enquiry Channel */}
+        <div className="mt-8 p-4 rounded-xl border border-[#d8ded9] bg-white flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] text-[#5a6460]">
+          <div className="flex items-center gap-2">
+            <span className="size-2 rounded-full bg-emerald-600 shrink-0" />
+            <span>
+              {isDe
+                ? 'Fragen, Rechnungen oder persönliche Betreuung für dein Inserat?'
+                : 'Questions, billing, or personal assistance for your listing?'}
+            </span>
+          </div>
+          <a
+            href="mailto:jobroofs@gmail.com"
+            className="font-mono text-[12.5px] text-[#202a31] font-medium hover:underline shrink-0"
+          >
+            jobroofs@gmail.com
+          </a>
+        </div>
       </div>
 
       <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />

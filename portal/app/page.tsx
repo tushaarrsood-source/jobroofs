@@ -29,6 +29,7 @@ export default async function Home() {
     slug: job.slug || job.id,
     title: job.title,
     company: job.company,
+    city: job.city || 'Berlin',
     district: job.district,
     postcode: job.postcode,
     industryId: job.industryId,
@@ -43,6 +44,10 @@ export default async function Home() {
     listingOrigin: job.listingOrigin,
     tags: job.tags,
     payText: job.payText,
+    isIndependentLister: job.isIndependentLister,
+    isUserListing: job.isUserListing,
+    whatsapp: job.whatsapp,
+    phone: job.phone,
   }));
 
   // Initial verified direct employer jobs (only real submissions, no scraped jobs)

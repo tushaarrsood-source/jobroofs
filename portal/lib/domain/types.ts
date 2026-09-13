@@ -88,4 +88,10 @@ export type PreviewJob = {
   tags: string[];
   evidenceNotes: string[];
   isDemo?: boolean;
+  city?: string;
+  whatsapp?: string;
+  phone?: string;
+  isUserListing?: boolean;
+  isIndependentLister?: boolean;
+  tier?: string;
 };

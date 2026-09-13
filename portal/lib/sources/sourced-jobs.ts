@@ -1,9 +1,8 @@
 import type { PreviewJob } from '@/lib/domain/types';
-import { ALL_BERLIN_SOURCES } from './berlin-sources-catalog';
-import { scrapeAllSources, transformSourceToJob } from '@/lib/scraper/source-scraper';
+import { INDEPENDENT_BERLIN_LISTINGS } from './independent-listings';
 
-// Ingest and transform verified listings across all 1,600 Berlin sources
-export const ALL_SOURCED_JOBS: PreviewJob[] = scrapeAllSources(ALL_BERLIN_SOURCES);
+// 100% Independent Berlin Employer & Private Listings (NO SCRAPING)
+export const ALL_SOURCED_JOBS: PreviewJob[] = INDEPENDENT_BERLIN_LISTINGS;
 
 // Pre-indexed lookups for O(1) performance
 const jobsBySlug = new Map<string, PreviewJob>();
@@ -36,27 +35,6 @@ export function getSourcedJobBySlug(slugOrId: string): PreviewJob | undefined {
   const existingClean = jobsBySlug.get(clean) || jobsById.get(clean);
   if (existingClean) return existingClean;
 
-  // Dynamic resilience fallback: search ALL_BERLIN_SOURCES across all typicalRoles
-  for (const source of ALL_BERLIN_SOURCES) {
-    const roles = source.typicalRoles && source.typicalRoles.length > 0
-      ? source.typicalRoles
-      : ['Mitarbeiter (m/w/d)'];
-
-    for (let i = 0; i < roles.length; i++) {
-      const candidate = transformSourceToJob(source, i);
-      if (
-        candidate.slug === slugOrId ||
-        candidate.id === slugOrId ||
-        candidate.slug === clean ||
-        candidate.id === clean
-      ) {
-        jobsBySlug.set(candidate.slug, candidate);
-        jobsById.set(candidate.id, candidate);
-        return candidate;
-      }
-    }
-  }
-
   return undefined;
 }
 
@@ -67,6 +45,14 @@ export function getSourcedJobsByNiche(nicheId: string): PreviewJob[] {
 export function getSourcedJobsByDistrict(district: string): PreviewJob[] {
   const norm = district.trim().toLowerCase();
   return ALL_SOURCED_JOBS.filter((j) => j.district.toLowerCase().includes(norm));
+}
+
+export function getSourcedJobsByCity(city: string): PreviewJob[] {
+  const norm = city.trim().toLowerCase();
+  if (!norm || norm === 'all' || norm === 'alle' || norm === 'deutschland') {
+    return ALL_SOURCED_JOBS;
+  }
+  return ALL_SOURCED_JOBS.filter((j) => (j.city?.toLowerCase() || 'berlin').includes(norm));
 }
 
 export function getDirectEmployerJobs(limit = 6): PreviewJob[] {

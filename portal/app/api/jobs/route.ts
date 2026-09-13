@@ -6,6 +6,7 @@ export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
     const q = (url.searchParams.get('q') || '').trim().toLowerCase();
+    const city = (url.searchParams.get('city') || 'all').toLowerCase();
     const district = (url.searchParams.get('district') || 'all').toLowerCase();
     const niche = url.searchParams.get('niche') || 'all';
     const limit = Math.min(2000, Math.max(1, parseInt(url.searchParams.get('limit') || '25', 10)));
@@ -14,12 +15,14 @@ export async function GET(request: Request) {
     const filtered = ALL_SOURCED_JOBS.filter((job) => {
       if (isJobSuppressed(job.id) || (job.slug && isJobSuppressed(job.slug))) return false;
       if (niche !== 'all' && job.industryId !== niche) return false;
+      if (city !== 'all' && !(job.city || 'berlin').toLowerCase().includes(city)) return false;
       if (district !== 'all' && !(job.district || '').toLowerCase().includes(district)) return false;
       if (q) {
         const title = (job.title || '').toLowerCase();
         const company = (job.company || '').toLowerCase();
         const dist = (job.district || '').toLowerCase();
-        return title.includes(q) || company.includes(q) || dist.includes(q);
+        const c = (job.city || 'berlin').toLowerCase();
+        return title.includes(q) || company.includes(q) || dist.includes(q) || c.includes(q);
       }
       return true;
     });
@@ -29,6 +32,7 @@ export async function GET(request: Request) {
       slug: j.slug,
       title: j.title,
       company: j.company,
+      city: j.city || 'Berlin',
       district: j.district,
       postcode: j.postcode,
       industryId: j.industryId,
@@ -42,6 +46,10 @@ export async function GET(request: Request) {
       isFeatured: j.isFeatured,
       listingOrigin: j.listingOrigin,
       tags: j.tags,
+      isIndependentLister: j.isIndependentLister,
+      isUserListing: j.isUserListing,
+      whatsapp: j.whatsapp,
+      phone: j.phone,
     }));
 
     return NextResponse.json({

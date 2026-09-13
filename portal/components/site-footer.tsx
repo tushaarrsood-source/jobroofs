@@ -11,14 +11,14 @@ export function SiteFooter() {
   return (
     <footer className="bg-[#182026] text-[#a0aaa4] border-t border-[#2a363f] mt-24">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 md:px-8 py-16">
-        <div className="grid gap-12 sm:grid-cols-3">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand Col */}
-          <div className="sm:col-span-1">
+          <div className="sm:col-span-2 lg:col-span-1">
             <BrandLogo variant="dark" size="md" />
             <p className="mt-4 text-[12.5px] leading-relaxed text-[#8fa099] font-light">
               {isDe
-                ? 'Das Berliner Portal für Minijobs, Aushilfen und flexible Schichten. 100% Direktkontakt zum Betrieb ohne Vermittlungsgebühren.'
-                : 'The Berlin portal for temp jobs, minijobs, and flexible shifts. 100% direct contact with local employers without middlemen.'}
+                ? 'Das Portal für unabhängige Betriebe, Macher und Minijobs in ganz Deutschland. 100% Direktkontakt ohne Vermittler.'
+                : 'The platform for independent businesses, creators, and temp jobs across Germany. 100% direct contact with zero middlemen.'}
             </p>
           </div>
 
@@ -30,12 +30,17 @@ export function SiteFooter() {
             <ul className="space-y-2.5 text-[12.5px] font-light">
               <li>
                 <Link href="/" className="hover:text-[#fbfbf8] transition-colors">
-                  Alle 1.600 Stellenangebote
+                  {isDe ? 'Alle Jobs in Deutschland' : 'All Jobs in Germany'}
                 </Link>
               </li>
               <li>
                 <Link href="/post-a-job" className="text-[#fbfbf8] hover:underline underline-offset-4">
-                  Job in Berlin inserieren
+                  {isDe ? 'Job inserieren (1. Job 0 €)' : 'Post a Job (1st free)'}
+                </Link>
+              </li>
+              <li>
+                <Link href="/pricing" className="hover:text-[#fbfbf8] transition-colors">
+                  {isDe ? 'Preise & Tarife' : 'Pricing & Plans'}
                 </Link>
               </li>
               <li>
@@ -44,12 +49,34 @@ export function SiteFooter() {
                   onClick={openAppInstallModal}
                   className="hover:text-[#fbfbf8] transition-colors text-left cursor-pointer"
                 >
-                  {isDe ? 'JOBROOFS als App laden (PWA)' : 'Install JOBROOFS WebApp'}
+                  {isDe ? 'JOBROOFS als App laden (PWA)' : 'Install JOBROOFS App (PWA)'}
                 </button>
               </li>
+            </ul>
+          </div>
+
+          {/* Contact & Support Col */}
+          <div>
+            <h4 className="text-[10px] font-medium text-[#fbfbf8] uppercase tracking-[0.2em] mb-4">
+              {isDe ? 'Kontakt & Support' : 'Contact & Support'}
+            </h4>
+            <ul className="space-y-2.5 text-[12.5px] font-light">
               <li>
+                <a
+                  href="mailto:jobroofs@gmail.com"
+                  className="text-[#fbfbf8] hover:underline font-mono text-[12px]"
+                >
+                  jobroofs@gmail.com
+                </a>
+              </li>
+              <li className="text-[11.5px] text-[#7e8a84] font-light">
+                {isDe
+                  ? 'Offizielle Anfragen, Inserate & Partnerbetreuung'
+                  : 'Official inquiries, listings & employer support'}
+              </li>
+              <li className="pt-1">
                 <Link href="/impressum" className="hover:text-[#fbfbf8] transition-colors">
-                  Kontakt & Impressum
+                  {isDe ? 'Kontakt & Impressum' : 'Contact & Legal Notice'}
                 </Link>
               </li>
             </ul>
@@ -81,10 +108,10 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-14 border-t border-[#2a363f] pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#7e8a84] font-light gap-2">
-          <p>© {new Date().getFullYear()} JOBROOFS Berlin &middot; The portal for Temp Jobs.</p>
+          <p>© {new Date().getFullYear()} JOBROOFS Deutschland &middot; The Independent Job Portal.</p>
           <div className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-[#7e8a84]" />
-            <span>1.600+ verifizierte Berliner Kiez-Jobs aktiv</span>
+            <span className="size-1.5 rounded-full bg-emerald-500" />
+            <span>100% Unabhängige Betriebe · Bundesweit</span>
           </div>
         </div>
       </div>

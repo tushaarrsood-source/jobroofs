@@ -38,6 +38,14 @@ export function EditorialHero() {
 
   return (
     <section className="relative pt-8 pb-10 sm:pt-14 sm:pb-16">
+      {/* Social Proof Trust Badge */}
+      <div className="inline-flex items-center gap-2 rounded-full border border-[#d8ded9] bg-white px-3.5 py-1 text-[11.5px] font-medium text-[#202a31] shadow-2xs mb-4 sm:mb-5">
+        <span className="size-2 rounded-full bg-emerald-600 animate-pulse" />
+        <span>Trusted by 50+ employers and over 500+ workers</span>
+        <span className="text-[#d8ded9]">&middot;</span>
+        <span className="text-[#7e8a84] font-light">{isDe ? 'Deutschlandweites Netzwerk' : 'Nationwide Network'}</span>
+      </div>
+
       {/* Top Headline Section */}
       <div className="max-w-4xl">
         {/* Slender Editorial Headline */}
@@ -45,14 +53,14 @@ export function EditorialHero() {
           className="text-3xl sm:text-6xl lg:text-[70px] font-light sm:font-normal tracking-[-0.025em] text-[#202a31] leading-[1.1] sm:leading-[1.08] break-words"
           style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
         >
-          {isDe ? 'Das Portal für flexible Jobs.' : 'The portal for temp jobs.'}
+          {isDe ? 'Das Portal für unabhängige Betriebe & Macher.' : 'The portal for independent listers.'}
         </h1>
 
         {/* Crisp Single-Sentence Subtitle */}
         <p className="mt-3 sm:mt-4 text-base sm:text-lg text-[#5a6460] font-light max-w-2xl leading-relaxed tracking-[-0.01em]">
           {isDe
-            ? 'Direktkontakt zu Berliner Betrieben — Minijobs, flexible Schichten und Aushilfen ohne Vermittler.'
-            : 'Direct connection to Berlin businesses — minijobs, flexible shifts and temp work without agencies.'}
+            ? '100% Direktkontakt zu Cafés, Boutiquen, Werkstätten & Machern in Berlin, Hamburg, München, Köln & ganz Deutschland — ohne Zeitarbeitsfirmen, ohne Scraper.'
+            : '100% direct contact with cafés, boutiques, studios & creators across Germany — no staffing agencies, no scrapers.'}
         </p>
       </div>
 
@@ -64,15 +72,21 @@ export function EditorialHero() {
         {/* Left Column: Ultra-Clean Single "Post a Job" CTA Hub */}
         <div className="lg:col-span-6 space-y-4">
           <div className="text-[10px] font-mono font-medium uppercase tracking-[0.16em] sm:tracking-[0.24em] text-[#7e8a84]">
-            {isDe ? 'FÜR ARBEITGEBER · DIREKTE INSERATE' : 'FOR EMPLOYERS · DIRECT LISTINGS'}
+            {isDe ? 'FÜR UNABHÄNGIGE BETRIEBE & MACHER' : 'FOR INDEPENDENT LISTERS & EMPLOYERS'}
           </div>
 
           <h2
             className="text-3xl sm:text-5xl lg:text-[56px] font-light sm:font-normal text-[#202a31] tracking-[-0.025em] leading-[1.1] sm:leading-[1.08]"
             style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
           >
-            {isDe ? 'Job inserieren.' : 'Post a job.'}
+            {isDe ? 'Jetzt dein Team verstärken.' : 'Hire for your team.'}
           </h2>
+
+          <p className="text-[13.5px] sm:text-[15px] text-[#5a6460] font-light leading-relaxed max-w-lg">
+            {isDe
+              ? 'Für Cafés, Läden, Handwerk, Ateliers oder private Nachbarschaftshilfe. 1-Klick WhatsApp Direktkontakt, faire Konditionen und kein Abo-Zwang.'
+              : 'For cafés, shops, craft studios, or private gigs. 1-click WhatsApp direct contact, fair pricing, and zero subscriptions.'}
+          </p>
 
           <div className="pt-2">
             <button
@@ -84,7 +98,9 @@ export function EditorialHero() {
               <ArrowRight className="size-4 stroke-[1.5] group-hover:translate-x-0.5 transition-transform" />
             </button>
             <p className="mt-2 text-[12px] text-[#7e8a84] font-light">
-              {isDe ? 'In wenigen Schritten online inserieren' : 'Online in just a few steps'}
+              {isDe
+                ? '1. Inserat 100% gratis · Danach ab 14,99 € (über 75% günstiger als andere Plattformen)'
+                : '1st job 100% free · Then from 14.99 € (over 75% cheaper than other platforms)'}
             </p>
           </div>
         </div>
@@ -96,12 +112,12 @@ export function EditorialHero() {
               <Sparkles className="size-3 text-[#9e7d3b]" />
               <span>
                 {directListings.length > 0
-                  ? (isDe ? 'DIREKTE INSERATE · BERLIN' : 'DIRECT LISTINGS · BERLIN')
-                  : (isDe ? 'DIREKTKONTAKT · BERLIN' : 'DIRECT HIRING · BERLIN')}
+                  ? (isDe ? 'UNABHÄNGIGE INSERATE · BUNDESWEIT' : 'INDEPENDENT LISTINGS · NATIONWIDE')
+                  : (isDe ? 'UNABHÄNGIGE BETRIEBE · DEUTSCHLAND' : 'INDEPENDENT LISTERS · GERMANY')}
               </span>
             </span>
             <span className="inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-[#202a31] bg-[#ecece4] px-2 py-0.5 rounded-sm font-semibold border border-[#d8ded9]">
-              {directListings.length > 0 ? '★ DIREKT' : '100% DIREKT'}
+              ★ UNABHÄNGIG
             </span>
           </div>
 
@@ -120,7 +136,7 @@ export function EditorialHero() {
                       {userJob.title}
                     </span>
                     <span className="font-mono text-[9px] uppercase bg-[#202a31] text-[#fbfbf8] px-1.5 py-0.2 rounded-xs font-medium">
-                      ★ DIREKT
+                      ★ UNABHÄNGIG
                     </span>
                   </div>
                   <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
@@ -144,14 +160,14 @@ export function EditorialHero() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31]">
-                        {isDe ? 'Direktanstellung ohne Vermittler' : 'Direct employment without agencies'}
+                        {isDe ? '1-Tap Direktkontakt (WhatsApp & Tel.)' : '1-Tap Direct Contact (WhatsApp & Phone)'}
                       </span>
-                      <span className="font-mono text-[9px] uppercase bg-[#202a31] text-[#fbfbf8] px-1.5 py-0.2 rounded-xs font-medium">
-                        0 € GEBÜHR
+                      <span className="font-mono text-[9px] uppercase bg-[#1e4635] text-[#fbfbf8] px-1.5 py-0.2 rounded-xs font-medium">
+                        WHATSAPP
                       </span>
                     </div>
                     <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
-                      {isDe ? 'Keine Zeitarbeitsfirmen oder Zwischenagenturen' : 'No staffing agencies or middlemen'}
+                      {isDe ? 'Direkter Chat oder Anruf beim Betrieb — ohne Zwischenagentur' : 'Direct chat or call with shop owners — no middleman'}
                     </div>
                   </div>
                   <div className="text-right shrink-0 pl-3">
@@ -168,22 +184,22 @@ export function EditorialHero() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31]">
-                        {isDe ? 'Faire & transparente Konditionen' : 'Fair & transparent terms'}
+                        {isDe ? 'Echte unabhängige Betriebe & Macher' : 'Real independent businesses & creators'}
                       </span>
-                      <span className="font-mono text-[9px] uppercase bg-[#1e4635] text-[#fbfbf8] px-1.5 py-0.2 rounded-xs font-medium">
-                        FAIR PAY
+                      <span className="font-mono text-[9px] uppercase bg-[#202a31] text-[#fbfbf8] px-1.5 py-0.2 rounded-xs font-medium">
+                        KEIN SCRAPING
                       </span>
                     </div>
                     <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
-                      {isDe ? 'Verifizierte Stundenlöhne ab 14,00 € bis über 22 €' : 'Verified hourly wages from €14.00 to over €22'}
+                      {isDe ? 'Nur verifizierte Kiez-Cafés, Läden, Werkstätten & Privatinserate' : 'Only verified neighborhood cafés, shops, studios & private ads'}
                     </div>
                   </div>
                   <div className="text-right shrink-0 pl-3">
                     <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
-                      ab 14 €/h
+                      0 € Scraper
                     </div>
                     <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
-                      {isDe ? 'Stundenlohn' : 'Hourly Wage'}
+                      {isDe ? 'Echte Jobs' : 'Real Jobs'}
                     </div>
                   </div>
                 </div>
@@ -192,22 +208,22 @@ export function EditorialHero() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-[14px] sm:text-[14.5px] font-normal text-[#202a31]">
-                        {isDe ? 'Sofortige Sichtbarkeit im Kiez' : 'Instant neighborhood visibility'}
+                        {isDe ? 'Faire Stundenlöhne ab 15 €/h' : 'Fair hourly wages from €15/h'}
                       </span>
                       <span className="font-mono text-[9px] uppercase bg-[#9e7d3b] text-[#fbfbf8] px-1.5 py-0.2 rounded-xs font-medium">
-                        TOP-PLATZ
+                        FAIR PAY
                       </span>
                     </div>
                     <div className="text-[12px] text-[#7e8a84] font-light mt-0.5">
-                      {isDe ? 'Direkte Arbeitgeber-Inserate stehen immer an 1. Stelle' : 'Direct employer postings always pin to #1 spot'}
+                      {isDe ? 'Transparente Konditionen & Trinkgeld-Boni im Kiez' : 'Transparent conditions & tips directly in your Kiez'}
                     </div>
                   </div>
                   <div className="text-right shrink-0 pl-3">
                     <div className="text-[13.5px] font-normal text-[#202a31] font-mono">
-                      Top Feed
+                      ab 15 €/h
                     </div>
                     <div className="text-[9.5px] uppercase tracking-[0.14em] text-[#7e8a84] mt-0.5">
-                      {isDe ? 'Priorität' : 'Priority'}
+                      {isDe ? 'Vergütung' : 'Pay'}
                     </div>
                   </div>
                 </div>
@@ -218,8 +234,8 @@ export function EditorialHero() {
           {/* Minimal Ledger Sub-meta */}
           <div className="flex items-center justify-between pt-3 border-t border-[#d8ded9] text-[11px] text-[#7e8a84] font-light">
             <span className="flex items-center gap-1.5">
-              <span className="size-1.5 rounded-full bg-[#202a31]" />
-              <span>{isDe ? 'Direktkontakt zu Berliner Betrieben' : 'Direct connection to Berlin businesses'}</span>
+              <span className="size-1.5 rounded-full bg-[#1e4635]" />
+              <span>{isDe ? 'Direktkontakt zu Betrieben & Machern in ganz Deutschland' : 'Direct contact to independent businesses across Germany'}</span>
             </span>
             <span className="font-mono text-[10px] text-[#7e8a84]">
               {isDe ? 'Sofort live' : 'Instantly live'}

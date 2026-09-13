@@ -237,7 +237,7 @@ export default async function JobDetailPage({
     redirect('/?expired=true');
   }
 
-  // Calculate adjacent jobs for instant Jobicco-style Prev/Next navigation
+  // Calculate adjacent jobs for instant smooth Prev/Next navigation
   const currentIndex = ALL_SOURCED_JOBS.findIndex(
     (j) => j.slug === job.slug || j.id === job.id,
   );

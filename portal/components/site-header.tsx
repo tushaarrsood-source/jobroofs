@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from '@/components/ui/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { PlusCircle, User as UserIcon, LogOut, Smartphone } from 'lucide-react';
+import { PlusCircle, User as UserIcon, LogOut, Smartphone, Mail } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { AuthModal } from '@/components/auth-modal';
@@ -49,6 +49,28 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
           >
             {isDe ? 'Alle Jobs' : 'All Jobs'}
           </Link>
+
+          {/* Pricing link */}
+          <Link
+            href="/pricing"
+            className={`hidden md:inline-block text-[13px] tracking-[0.01em] transition-colors cursor-pointer ${
+              pathname === '/pricing'
+                ? 'text-[#202a31] font-medium'
+                : 'text-[#7e8a84] hover:text-[#202a31]'
+            }`}
+          >
+            {isDe ? 'Preise' : 'Pricing'}
+          </Link>
+
+          {/* Official Enquiry Email */}
+          <a
+            href="mailto:jobroofs@gmail.com"
+            title={isDe ? 'Offizielle Anfragen & Support' : 'Official Enquiries & Support'}
+            className="hidden lg:inline-flex items-center gap-1.5 text-[12px] text-[#7e8a84] hover:text-[#202a31] transition-colors font-mono"
+          >
+            <Mail className="size-3.5 stroke-[1.25]" />
+            <span>jobroofs@gmail.com</span>
+          </a>
 
           {/* Post a job CTA - Silent Luxury Deep Slate (Hidden on < sm since mobile nav has prominent center + button) */}
           <button
