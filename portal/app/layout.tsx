@@ -117,6 +117,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de" className="overflow-x-clip max-w-full">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if ('serviceWorker' in navigator) {
+                  navigator.serviceWorker.getRegistrations().then(function(regs) {
+                    for (var i = 0; i < regs.length; i++) { regs[i].unregister(); }
+                  });
+                }
+                if ('caches' in window) {
+                  caches.keys().then(function(names) {
+                    for (var i = 0; i < names.length; i++) { caches.delete(names[i]); }
+                  });
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${plusJakarta.variable} antialiased selection:bg-black selection:text-white pb-24 md:pb-0 font-sans bg-[#fafaf9] text-black relative min-h-screen overflow-x-clip max-w-full`}
       >
