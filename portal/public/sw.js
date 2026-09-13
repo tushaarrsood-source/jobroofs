@@ -1,48 +1,22 @@
-// JOBROOFS PWA Service Worker — Always live, zero stale caching
-self.addEventListener('install', () => {
+// JOBROOFS Self-Clearing Service Worker
+// Automatically flushes all stale cache storage and unregisters itself across all client browsers.
+self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    Promise.all([
-      self.clients.claim(),
-      // Purge all caches to guarantee always live sync
-      caches.keys().then((keys) => Promise.all(keys.map((k) => caches.delete(k)))),
-    ])
-  );
-});
-
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
-
-// Network-first with no-store navigation, never serving stale HTML
-self.addEventListener('fetch', (event) => {
-  // Never intercept API routes
-  if (event.request.url.includes('/api/')) {
-    return;
-  }
-
-  // For HTML navigation: always force fresh network request
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request, { cache: 'no-store' }).catch(() => {
-        return new Response('JOBROOFS ist offline. Bitte überprüfe deine Internetverbindung.', {
-          headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-        });
-      })
-    );
-    return;
-  }
-
-  event.respondWith(
-    fetch(event.request).catch(() => {
-      return new Response('JOBROOFS ist offline.', {
-        headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-      });
+    caches.keys().then((keys) => {
+      return Promise.all(keys.map((key) => caches.delete(key)));
+    }).then(() => {
+      return self.registration.unregister();
+    }).then(() => {
+      return self.clients.claim();
     })
   );
+});
+
+// Pass-through fetch with zero cache interception
+self.addEventListener('fetch', (event) => {
+  event.respondWith(fetch(event.request));
 });
