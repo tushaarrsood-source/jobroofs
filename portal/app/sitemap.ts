@@ -58,6 +58,39 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'nuernberg',
   ];
 
+  // Programmatic high-intent SEO job types
+  const PROGRAMMATIC_TYPES = [
+    'minijob',
+    'studentenjob',
+    'teilzeit',
+    'werkstudent',
+    'aushilfe',
+    'stadt',
+  ];
+
+  // National hubs for each job type
+  const programmaticHubPages: MetadataRoute.Sitemap = PROGRAMMATIC_TYPES.map((type) => ({
+    url: `${baseUrl}/${type}`,
+    lastModified: now,
+    changeFrequency: 'daily' as const,
+    priority: 0.9,
+    alternates: makeAlternates(`/${type}`),
+  }));
+
+  // Programmatic Type + City combinations (e.g. /minijob/berlin, /studentenjob/muenchen)
+  const programmaticCityPages: MetadataRoute.Sitemap = [];
+  for (const type of PROGRAMMATIC_TYPES) {
+    for (const city of GERMAN_CITIES) {
+      programmaticCityPages.push({
+        url: `${baseUrl}/${type}/${city}`,
+        lastModified: now,
+        changeFrequency: 'daily' as const,
+        priority: 0.88,
+        alternates: makeAlternates(`/${type}/${city}`),
+      });
+    }
+  }
+
   const cityPages: MetadataRoute.Sitemap = GERMAN_CITIES.map((city) => ({
     url: `${baseUrl}/?city=${city}`,
     lastModified: now,
@@ -106,5 +139,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   );
 
-  return [...staticPages, ...cityPages, ...categoryPages, ...jobPages];
+  return [
+    ...staticPages,
+    ...programmaticHubPages,
+    ...programmaticCityPages,
+    ...cityPages,
+    ...categoryPages,
+    ...jobPages,
+  ];
 }
