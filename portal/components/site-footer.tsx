@@ -49,7 +49,7 @@ export function SiteFooter() {
                   onClick={openAppInstallModal}
                   className="hover:text-white transition-colors text-left cursor-pointer"
                 >
-                  {isDe ? 'JOBROOFS als App laden (PWA)' : 'Install JOBROOFS App (PWA)'}
+                  {isDe ? 'App installieren' : 'Install App'}
                 </button>
               </li>
             </ul>

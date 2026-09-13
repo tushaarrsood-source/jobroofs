@@ -147,10 +147,10 @@ export function PwaInstallPrompt() {
           </div>
           <div>
             <div className="font-mono text-[9.5px] uppercase tracking-[0.24em] text-zinc-600 font-bold">
-              JOBROOFS // WEBAPP
+              JOBROOFS // APP
             </div>
             <h2 className="text-[17px] sm:text-[19px] font-bold text-black tracking-tight leading-tight">
-              {isDe ? 'JOBROOFS als App nutzen' : 'Get the JOBROOFS App'}
+              {isDe ? 'App installieren' : 'Install App'}
             </h2>
           </div>
         </div>
@@ -238,7 +238,7 @@ export function PwaInstallPrompt() {
               className="apple-press flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-black hover:bg-zinc-800 py-3 text-[13px] font-semibold tracking-[0.02em] text-white transition-all cursor-pointer shadow-xs active:scale-[0.98]"
             >
               <Download className="size-4 stroke-[2]" />
-              <span>{isDe ? 'Jetzt App installieren' : 'Install App Now'}</span>
+              <span>{isDe ? 'App installieren' : 'Install App'}</span>
             </button>
           ) : isIOS && !showIOSGuide ? (
             <button

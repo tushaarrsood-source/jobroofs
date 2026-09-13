@@ -76,11 +76,11 @@ export function SiteHeader({ control = false }: { control?: boolean } = {}) {
           <button
             type="button"
             onClick={openAppInstallModal}
-            title={isDe ? 'JOBROOFS als App installieren' : 'Install JOBROOFS App'}
+            title={isDe ? 'App installieren' : 'Install App'}
             className="apple-press hidden md:inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 text-[12px] font-medium tracking-[0.02em] text-black hover:border-black hover:bg-zinc-50 transition-colors cursor-pointer"
           >
             <Smartphone className="size-3.5 stroke-[1.5] text-zinc-600" />
-            <span>App</span>
+            <span>{isDe ? 'App installieren' : 'Install App'}</span>
           </button>
 
           {/* Language Toggle */}
