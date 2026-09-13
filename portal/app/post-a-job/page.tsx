@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function PostAJobPage() {
   return (
-    <div className="min-h-screen text-black bg-[#fafaf9] flex flex-col justify-between relative z-10">
+    <div className="min-h-screen text-black bg-white flex flex-col justify-between relative z-10">
       <BreadcrumbJsonLd
         items={[
           { name: 'JOBROOFS', href: '/' },
@@ -30,7 +30,7 @@ export default function PostAJobPage() {
       />
       <SiteHeader />
 
-      <main className="mx-auto max-w-6xl w-full px-3 sm:px-6 lg:px-8 flex-1 py-4 sm:py-8">
+      <main className="mx-auto max-w-5xl w-full px-4 sm:px-6 lg:px-8 flex-1 py-4 sm:py-8">
         <SimplePostJobForm />
       </main>
 

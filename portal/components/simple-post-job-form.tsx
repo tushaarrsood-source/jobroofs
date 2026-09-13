@@ -378,46 +378,44 @@ export function SimplePostJobForm() {
 
   if (!user) {
     return (
-      <div className="max-w-md mx-auto my-3 sm:my-6">
-        <div className="rounded-3xl bg-white p-6 sm:p-8 text-center shadow-sm">
-          <div className="size-12 rounded-full bg-zinc-100 flex items-center justify-center mx-auto text-black mb-4">
-            <UserIcon className="size-6 stroke-[2]" />
-          </div>
-
-          <h2 className="text-xl sm:text-2xl font-bold text-black tracking-tight">
-            {isDe ? 'Anmelden zum Inserieren' : 'Sign in to post a job'}
-          </h2>
-
-          <p className="mt-2 text-sm sm:text-base text-zinc-600 leading-relaxed max-w-sm mx-auto">
-            {isDe
-              ? 'Um eine Stelle zu inserieren und Bewerbungen zu empfangen, erstelle bitte ein kostenloses Konto oder melde dich an.'
-              : 'To post a job and receive direct candidate applications, please sign in or create a free account.'}
-          </p>
-
-          <div className="my-6 space-y-3 text-left max-w-xs mx-auto">
-            <div className="flex items-center gap-3 text-sm text-black font-medium">
-              <span className="size-2 rounded-full bg-emerald-600 shrink-0" />
-              <span>{isDe ? '1. Stellenanzeige 100% kostenlos' : '1st job posting 100% free'}</span>
-            </div>
-            <div className="flex items-center gap-3 text-sm text-black font-medium">
-              <span className="size-2 rounded-full bg-emerald-600 shrink-0" />
-              <span>{isDe ? 'Direkter Kontakt zu Bewerbern deutschlandweit' : 'Direct contact with candidates nationwide'}</span>
-            </div>
-            <div className="flex items-center gap-3 text-sm text-black font-medium">
-              <span className="size-2 rounded-full bg-emerald-600 shrink-0" />
-              <span>{isDe ? 'Jederzeit im Profil verwalten' : 'Manage anytime in your profile'}</span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setAuthOpen(true)}
-            className="apple-press inline-flex items-center justify-center gap-2 w-full sm:w-auto min-w-[240px] px-6 py-3.5 rounded-2xl bg-black text-white text-sm sm:text-base font-semibold tracking-[0.02em] hover:bg-zinc-800 transition-all cursor-pointer shadow-sm active:scale-[0.98]"
-          >
-            <span>{isDe ? 'Jetzt anmelden / registrieren' : 'Sign in / Register now'}</span>
-            <ArrowRight className="size-4 stroke-[2]" />
-          </button>
+      <div className="max-w-xl mx-auto py-8 sm:py-16 text-center px-3 sm:px-4">
+        <div className="size-14 rounded-full bg-zinc-100 flex items-center justify-center mx-auto text-black mb-5">
+          <UserIcon className="size-7 stroke-[2]" />
         </div>
+
+        <h2 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
+          {isDe ? 'Anmelden zum Inserieren' : 'Sign in to post a job'}
+        </h2>
+
+        <p className="mt-3 text-base sm:text-lg text-zinc-600 leading-relaxed max-w-md mx-auto">
+          {isDe
+            ? 'Um eine Stelle zu inserieren und Bewerbungen zu empfangen, erstelle bitte ein kostenloses Konto oder melde dich an.'
+            : 'To post a job and receive direct candidate applications, please sign in or create a free account.'}
+        </p>
+
+        <div className="my-8 space-y-3.5 text-left max-w-sm mx-auto">
+          <div className="flex items-center gap-3 text-sm sm:text-base text-black font-medium">
+            <span className="size-2 rounded-full bg-emerald-600 shrink-0" />
+            <span>{isDe ? '1. Stellenanzeige 100% kostenlos' : '1st job posting 100% free'}</span>
+          </div>
+          <div className="flex items-center gap-3 text-sm sm:text-base text-black font-medium">
+            <span className="size-2 rounded-full bg-emerald-600 shrink-0" />
+            <span>{isDe ? 'Direkter Kontakt zu Bewerbern deutschlandweit' : 'Direct contact with candidates nationwide'}</span>
+          </div>
+          <div className="flex items-center gap-3 text-sm sm:text-base text-black font-medium">
+            <span className="size-2 rounded-full bg-emerald-600 shrink-0" />
+            <span>{isDe ? 'Jederzeit im Profil verwalten' : 'Manage anytime in your profile'}</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setAuthOpen(true)}
+          className="apple-press inline-flex items-center justify-center gap-2 w-full sm:w-auto min-w-[260px] px-8 py-4 rounded-2xl bg-black text-white text-base font-semibold tracking-[0.02em] hover:bg-zinc-800 transition-all cursor-pointer shadow-sm active:scale-[0.98]"
+        >
+          <span>{isDe ? 'Jetzt anmelden / registrieren' : 'Sign in / Register now'}</span>
+          <ArrowRight className="size-4 stroke-[2]" />
+        </button>
 
         <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
       </div>
@@ -426,14 +424,14 @@ export function SimplePostJobForm() {
 
   if (success) {
     return (
-      <div className="bg-white p-8 sm:p-14 text-center max-w-xl mx-auto rounded-3xl shadow-sm">
+      <div className="max-w-xl mx-auto py-8 sm:py-16 text-center px-3 sm:px-4">
         <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-black text-white shadow-xs">
           <CheckCircle2 className="size-7 stroke-[2]" />
         </div>
         <h2 className="mt-6 text-2xl sm:text-3xl font-bold text-black tracking-tight">
           {formData.tier === 'free' ? 'Job erfolgreich kostenlos inseriert!' : 'Job erfolgreich inseriert.'}
         </h2>
-        <p className="mt-3 text-base text-zinc-700 leading-relaxed max-w-md mx-auto">
+        <p className="mt-3 text-base sm:text-lg text-zinc-700 leading-relaxed max-w-md mx-auto">
           Deine Anzeige für <span className="font-bold text-black">{formData.title}</span> bei{' '}
           <span className="font-bold text-black">{formData.company}</span> ist eingegangen und wird sofort{' '}
           <span className="font-bold text-black">im Direktbereich über der Suche und im Hero</span> geschaltet.
@@ -441,12 +439,12 @@ export function SimplePostJobForm() {
 
         {/* Share Section on Success */}
         {lastCreatedJob && (
-          <div className="mt-6 p-5 rounded-2xl bg-zinc-100/70 text-left">
+          <div className="mt-8 text-left space-y-3">
             <div className="text-sm font-bold text-black flex items-center gap-2">
               <Share2 className="size-4 text-black" />
               <span>Inserat sofort mit deinem Netzwerk oder Helfern teilen:</span>
             </div>
-            <div className="mt-3.5 flex flex-wrap items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-2.5">
               <button
                 type="button"
                 onClick={() => {
@@ -456,7 +454,7 @@ export function SimplePostJobForm() {
                     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
                   }
                 }}
-                className="apple-press inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs sm:text-sm font-semibold text-black hover:bg-zinc-50 transition-all cursor-pointer shadow-xs active:scale-[0.98]"
+                className="apple-press inline-flex items-center gap-2 rounded-xl bg-zinc-100 px-4 py-2.5 text-xs sm:text-sm font-semibold text-black hover:bg-zinc-200 transition-all cursor-pointer active:scale-[0.98]"
               >
                 <MessageCircle className="size-4 text-emerald-600" />
                 <span>Per WhatsApp teilen</span>
@@ -471,7 +469,7 @@ export function SimplePostJobForm() {
                     setTimeout(() => setSuccessCopied(false), 2000);
                   }
                 }}
-                className="apple-press inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs sm:text-sm font-semibold text-black hover:bg-zinc-50 transition-all cursor-pointer shadow-xs active:scale-[0.98]"
+                className="apple-press inline-flex items-center gap-2 rounded-xl bg-zinc-100 px-4 py-2.5 text-xs sm:text-sm font-semibold text-black hover:bg-zinc-200 transition-all cursor-pointer active:scale-[0.98]"
               >
                 {successCopied ? (
                   <>
@@ -489,10 +487,10 @@ export function SimplePostJobForm() {
           </div>
         )}
 
-        <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
+        <div className="mt-10 flex flex-col sm:flex-row justify-center gap-3">
           <Link
             href={lastCreatedJob ? `/jobs/${lastCreatedJob.slug}` : '/'}
-            className="apple-press inline-flex items-center justify-center rounded-2xl bg-black px-6 py-3.5 text-sm sm:text-base font-semibold tracking-[0.02em] text-white hover:bg-zinc-800 transition-colors cursor-pointer shadow-sm active:scale-[0.98]"
+            className="apple-press inline-flex items-center justify-center rounded-2xl bg-black px-7 py-4 text-base font-semibold tracking-[0.02em] text-white hover:bg-zinc-800 transition-colors cursor-pointer shadow-sm active:scale-[0.98]"
           >
             Inserat ansehen
           </Link>
@@ -516,7 +514,7 @@ export function SimplePostJobForm() {
                 tier: isFreeEligible ? 'free' : 'starter',
               });
             }}
-            className="apple-press inline-flex items-center justify-center rounded-2xl bg-zinc-100 px-6 py-3.5 text-sm sm:text-base font-semibold text-black hover:bg-zinc-200 transition-colors cursor-pointer active:scale-[0.98]"
+            className="apple-press inline-flex items-center justify-center rounded-2xl bg-zinc-100 px-7 py-4 text-base font-semibold text-black hover:bg-zinc-200 transition-colors cursor-pointer active:scale-[0.98]"
           >
             Weiteren Job inserieren
           </button>
@@ -709,11 +707,11 @@ export function SimplePostJobForm() {
           }}
         />
       ) : (
-        /* Main Centered Intake Form */
         <div className="max-w-2xl mx-auto">
-        <form onSubmit={handleNext} className="space-y-4">
+          {/* Main Centered Intake Form */}
+          <form onSubmit={handleNext} className="space-y-6">
           {error && (
-            <div className="flex items-center gap-2.5 rounded-2xl bg-red-50 p-4 text-sm font-medium text-red-900 shadow-xs">
+            <div className="flex items-center gap-2.5 rounded-2xl bg-red-50 p-4 text-sm font-medium text-red-900">
               <AlertCircle className="size-5 shrink-0 text-red-600" />
               <span>{error}</span>
             </div>
@@ -721,7 +719,7 @@ export function SimplePostJobForm() {
 
           {/* STEP 1: Basisdaten */}
           {step === 1 && (
-            <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm space-y-5">
+            <div className="space-y-6">
               <div className="pb-1">
                 <h2 className="text-xl sm:text-2xl font-bold text-black tracking-tight">
                   1. Basisdaten der Stelle
@@ -863,7 +861,7 @@ export function SimplePostJobForm() {
 
           {/* STEP 2: Konditionen */}
           {step === 2 && (
-            <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm space-y-5">
+            <div className="space-y-6">
               <div className="pb-1">
                 <h2 className="text-xl sm:text-2xl font-bold text-black tracking-tight">
                   2. Konditionen & Aufgaben
@@ -979,7 +977,7 @@ export function SimplePostJobForm() {
 
           {/* STEP 3: Kontakt & Live */}
           {step === 3 && (
-            <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm space-y-5">
+            <div className="space-y-6">
               <div className="pb-1">
                 <h2 className="text-xl sm:text-2xl font-bold text-black tracking-tight">
                   3. Bewerbungsmethode & Veröffentlichung
@@ -992,7 +990,7 @@ export function SimplePostJobForm() {
               {/* Direct Application Options */}
               <div className="space-y-3.5">
                 {/* 1. WhatsApp Instant Chat (Recommended) */}
-                <div className="space-y-2 p-5 rounded-2xl bg-emerald-50/80">
+                <div className="space-y-2 p-4 sm:p-5 rounded-2xl bg-emerald-50/70">
                   <div className="flex items-center justify-between">
                     <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-emerald-950 flex items-center gap-2">
                       <MessageCircle className="size-4 text-emerald-600" />
@@ -1145,7 +1143,7 @@ export function SimplePostJobForm() {
                   >
                     <div className="flex items-center justify-between">
                       <span className={`text-sm sm:text-base font-bold ${formData.tier === 'standard' ? 'text-white' : 'text-black'}`}>Standard (30 Tage)</span>
-                      <span className={`font-mono text-sm sm:text-base font-bold ${formData.tier === 'standard' ? 'text-white' : 'text-black'}`}>14,99 € <span className={`text-xs font-normal ${formData.tier === 'standard' ? 'text-zinc-300' : 'text-zinc-500'}`}>inkl. MwSt.</span></span>
+                      <span className={`font-mono text-sm sm:text-base font-bold ${formData.tier === 'standard' ? 'text-white' : 'text-black'}`}>14,99 € <span className={`text-xs font-normal ${formData.tier === 'standard' ? 'text-zinc-500' : 'text-zinc-500'}`}>inkl. MwSt.</span></span>
                     </div>
                     <p className={`mt-1 text-xs sm:text-sm leading-relaxed ${formData.tier === 'standard' ? 'text-zinc-300' : 'text-zinc-600'}`}>
                       30 Tage Laufzeit &middot; Über 75% günstiger als andere Portale &middot; Inkl. Stadtfilter.
@@ -1174,7 +1172,7 @@ export function SimplePostJobForm() {
               </div>
 
               {/* Trust Badge with Social Proof */}
-              <div className="rounded-2xl bg-zinc-100/70 p-5 flex items-start gap-3.5 text-xs sm:text-sm text-zinc-800 shadow-xs">
+              <div className="rounded-2xl bg-zinc-50 p-4 sm:p-5 flex items-start gap-3.5 text-xs sm:text-sm text-zinc-800">
                 <ShieldCheck className="size-5 text-black shrink-0 mt-0.5 stroke-[2]" />
                 <div>
                   <p className="font-bold text-black text-sm sm:text-base">
@@ -1187,7 +1185,7 @@ export function SimplePostJobForm() {
               </div>
 
               {/* Statutory Confirmation & Waiver Notice */}
-              <div className="rounded-2xl bg-zinc-100/50 p-4 text-xs text-zinc-600 leading-relaxed">
+              <div className="text-xs text-zinc-500 leading-relaxed py-1">
                 <p>
                   Mit Klick auf Veröffentlichen stimmst du den{' '}
                   <Link href="/agb" className="underline underline-offset-2 text-black font-medium hover:text-zinc-700">
@@ -1240,7 +1238,7 @@ export function SimplePostJobForm() {
         </form>
 
         {/* Support & Enquiry Channel */}
-        <div className="mt-8 p-5 rounded-2xl bg-white shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-zinc-800">
+        <div className="mt-12 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-zinc-600">
           <div className="flex items-center gap-2.5">
             <span className="size-2 rounded-full bg-emerald-600 shrink-0" />
             <span className="font-medium text-sm">
