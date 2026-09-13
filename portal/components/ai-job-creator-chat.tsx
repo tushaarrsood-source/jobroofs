@@ -176,18 +176,18 @@ export function AiJobCreatorChat({
   const isReady = extractedJob.isReady || false;
 
   return (
-    <div className="space-y-5">
-      {/* Top Banner: Minimalist, Executive Header */}
-      <div className="rounded-2xl border border-zinc-200/90 bg-white p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="space-y-6">
+      {/* Top Banner: Minimalist, Open Executive Header - ZERO BOX BOUNDARIES */}
+      <div className="py-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="size-11 rounded-2xl bg-black text-white flex items-center justify-center shrink-0 shadow-xs">
-            <MessageSquare className="size-5.5 stroke-[2.2]" />
+          <div className="size-12 rounded-2xl bg-black text-white flex items-center justify-center shrink-0">
+            <MessageSquare className="size-6 stroke-[2.2]" />
           </div>
           <div>
-            <h2 className="text-lg sm:text-xl font-bold tracking-tight text-black">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-black">
               {isDe ? 'Jobroofs Inserat-Assistent' : 'Jobroofs Job Assistant'}
             </h2>
-            <p className="text-sm sm:text-base text-zinc-600 font-normal mt-0.5 leading-normal">
+            <p className="text-base text-zinc-600 font-normal mt-0.5 leading-normal">
               {isDe
                 ? 'Erstelle dein Inserat im direkten Dialog oder füge einfach deine Notizen ein.'
                 : 'Draft your listing through quick conversation or paste your raw notes.'}
@@ -199,7 +199,7 @@ export function AiJobCreatorChat({
           <button
             type="button"
             onClick={handleReset}
-            className="apple-press inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-zinc-200 bg-white text-sm font-medium text-zinc-700 hover:text-black hover:bg-zinc-50 transition cursor-pointer"
+            className="apple-press inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-zinc-100 hover:bg-zinc-200 text-sm font-medium text-zinc-700 hover:text-black transition cursor-pointer"
             title={isDe ? 'Neu starten' : 'Start over'}
           >
             <RefreshCw className="size-3.5" />
@@ -208,7 +208,7 @@ export function AiJobCreatorChat({
           <button
             type="button"
             onClick={onSwitchToClassic}
-            className="apple-press inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-sm font-semibold text-black transition cursor-pointer"
+            className="apple-press inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-zinc-100 hover:bg-zinc-200 text-sm font-semibold text-black transition cursor-pointer"
           >
             <FileText className="size-4" />
             <span>{isDe ? 'Klassisches Formular' : 'Standard Form'}</span>
@@ -217,11 +217,11 @@ export function AiJobCreatorChat({
       </div>
 
       {/* Grid: Left Chat Column | Right Live Preview Card Column */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        {/* Chat Pane (7 cols on desktop) */}
-        <div className="lg:col-span-7 flex flex-col rounded-2xl border border-zinc-200 bg-white shadow-xs overflow-hidden h-[620px] sm:h-[660px]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Chat Pane (7 cols on desktop) - BORDERLESS */}
+        <div className="lg:col-span-7 flex flex-col rounded-3xl bg-white shadow-sm overflow-hidden h-[620px] sm:h-[660px]">
           {/* Chat Messages Scroll Area */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-5">
+          <div className="flex-1 overflow-y-auto p-5 sm:p-7 space-y-4 sm:space-y-5">
             {messages.map((msg) => (
               <div
                 key={msg.id}
@@ -233,7 +233,7 @@ export function AiJobCreatorChat({
                   className={`size-9 rounded-2xl flex items-center justify-center shrink-0 text-sm font-bold ${
                     msg.role === 'user'
                       ? 'bg-zinc-800 text-white'
-                      : 'bg-black text-white shadow-xs'
+                      : 'bg-black text-white'
                   }`}
                 >
                   {msg.role === 'user' ? (
@@ -244,10 +244,10 @@ export function AiJobCreatorChat({
                 </div>
 
                 <div
-                  className={`max-w-[85%] sm:max-w-[82%] rounded-2xl px-4.5 py-3.5 sm:px-5 sm:py-4 text-[15px] sm:text-base leading-relaxed ${
+                  className={`max-w-[85%] sm:max-w-[82%] rounded-2xl px-5 py-4 text-[15px] sm:text-base leading-relaxed ${
                     msg.role === 'user'
                       ? 'bg-black text-white rounded-tr-xs'
-                      : 'bg-[#f7f7f6] text-zinc-900 rounded-tl-xs border border-zinc-200/80 font-normal'
+                      : 'bg-[#f4f4f3] text-zinc-900 rounded-tl-xs font-normal'
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{msg.content}</p>
@@ -264,10 +264,10 @@ export function AiJobCreatorChat({
 
             {loading && (
               <div className="flex items-start gap-3 sm:gap-3.5">
-                <div className="size-9 rounded-2xl bg-black text-white flex items-center justify-center shrink-0 shadow-xs">
+                <div className="size-9 rounded-2xl bg-black text-white flex items-center justify-center shrink-0">
                   <span className="font-bold text-xs tracking-wider">JR</span>
                 </div>
-                <div className="bg-[#f7f7f6] border border-zinc-200 rounded-2xl rounded-tl-xs px-5 py-4 flex items-center gap-2.5 text-zinc-700 text-sm sm:text-base font-medium">
+                <div className="bg-[#f4f4f3] rounded-2xl rounded-tl-xs px-5 py-4 flex items-center gap-2.5 text-zinc-700 text-sm sm:text-base font-medium">
                   <Loader2 className="size-4.5 animate-spin text-zinc-800" />
                   <span>{isDe ? 'Inserat wird formuliert...' : 'Drafting listing...'}</span>
                 </div>
@@ -277,15 +277,15 @@ export function AiJobCreatorChat({
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Suggestion Chips (Airbnb filter pill aesthetic) */}
+          {/* Quick Suggestion Chips - Borderless Soft Pills */}
           {quickReplies.length > 0 && !loading && (
-            <div className="px-4 sm:px-6 py-2.5 border-t border-zinc-100 bg-[#fafaf9] flex flex-wrap gap-2">
+            <div className="px-5 sm:px-7 py-3 bg-[#fafaf9] flex flex-wrap gap-2">
               {quickReplies.map((qr, i) => (
                 <button
                   key={i}
                   type="button"
                   onClick={() => handleSendMessage(qr)}
-                  className="apple-press text-xs sm:text-sm font-medium bg-white hover:bg-zinc-100 hover:border-black text-zinc-800 border border-zinc-200 rounded-full px-3.5 sm:px-4 py-1.5 transition-all cursor-pointer shadow-2xs active:scale-[0.97]"
+                  className="apple-press text-xs sm:text-sm font-medium bg-zinc-100 hover:bg-zinc-200 text-zinc-800 rounded-full px-4 py-2 transition-all cursor-pointer active:scale-[0.97]"
                 >
                   {qr}
                 </button>
@@ -295,14 +295,14 @@ export function AiJobCreatorChat({
 
           {/* Error notice */}
           {error && (
-            <div className="px-5 py-2.5 bg-red-50 border-t border-red-200 text-red-800 text-sm flex items-center gap-2">
+            <div className="px-5 py-3 bg-red-50 text-red-800 text-sm flex items-center gap-2">
               <AlertCircle className="size-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
-          {/* Input Form with 16px font for Airbnb clarity and zero iOS auto-zoom */}
-          <div className="p-3 sm:p-4 border-t border-zinc-200 bg-white">
+          {/* Input Form with Borderless Soft Input */}
+          <div className="p-4 sm:p-5 bg-white">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -326,12 +326,12 @@ export function AiJobCreatorChat({
                     : 'Describe the job or reply here... (Enter to send)'
                 }
                 rows={1}
-                className="flex-1 max-h-28 min-h-[50px] sm:min-h-[54px] px-4 py-3 text-base text-black placeholder:text-zinc-400 border border-zinc-300 rounded-2xl bg-[#fafaf9] focus:bg-white focus:border-black focus:ring-1 focus:ring-black outline-none resize-none transition-colors shadow-2xs"
+                className="flex-1 max-h-28 min-h-[50px] sm:min-h-[54px] px-4.5 py-3.5 text-base text-black placeholder:text-zinc-400 rounded-2xl bg-[#f4f4f3] focus:bg-white focus:ring-2 focus:ring-black outline-none resize-none transition-colors"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || loading}
-                className="apple-press size-12 sm:size-13 rounded-2xl bg-black hover:bg-zinc-800 text-white flex items-center justify-center shrink-0 disabled:opacity-40 transition cursor-pointer shadow-xs active:scale-[0.96]"
+                className="apple-press size-12 sm:size-13 rounded-2xl bg-black hover:bg-zinc-800 text-white flex items-center justify-center shrink-0 disabled:opacity-40 transition cursor-pointer active:scale-[0.96]"
                 title={isDe ? 'Nachricht senden' : 'Send message'}
               >
                 <Send className="size-5" />
@@ -344,11 +344,11 @@ export function AiJobCreatorChat({
           </div>
         </div>
 
-        {/* Live Ad Preview & Review Card (5 cols on desktop) */}
+        {/* Live Ad Preview & Review Card (5 cols on desktop) - BORDERLESS */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6 shadow-xs">
-            {/* Header with Completeness Progress */}
-            <div className="flex items-center justify-between border-b border-zinc-200 pb-3.5">
+          <div className="rounded-3xl bg-white p-6 sm:p-7 shadow-sm">
+            {/* Header with Completeness Progress - NO BORDER */}
+            <div className="flex items-center justify-between pb-3">
               <div className="flex items-center gap-2.5">
                 <span className="size-2.5 rounded-full bg-emerald-500" />
                 <h3 className="text-xs sm:text-sm font-bold uppercase tracking-[0.16em] text-zinc-800">
@@ -361,24 +361,24 @@ export function AiJobCreatorChat({
             </div>
 
             {/* Progress bar */}
-            <div className="mt-3.5 w-full h-2 bg-zinc-100 rounded-full overflow-hidden">
+            <div className="mt-2 w-full h-2 bg-zinc-100 rounded-full overflow-hidden">
               <div
                 className="h-full bg-emerald-600 transition-all duration-500 rounded-full"
                 style={{ width: `${completeness}%` }}
               />
             </div>
 
-            {/* Simulated Job Card: Airbnb-standard listing typography */}
-            <div className="mt-5 rounded-2xl border border-zinc-200 bg-[#fafaf9] p-5 space-y-4 shadow-2xs">
+            {/* Simulated Job Card - NO NESTED BOX BOUNDARIES */}
+            <div className="mt-5 rounded-2xl bg-[#f7f7f6] p-5 sm:p-6 space-y-4">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-lg bg-black text-white px-2.5 py-1 text-xs font-mono font-bold uppercase tracking-wider">
+                <span className="rounded-lg bg-black text-white px-3 py-1 text-xs font-mono font-bold uppercase tracking-wider">
                   Job
                 </span>
-                <span className="rounded-lg bg-white border border-zinc-200 px-2.5 py-1 text-xs font-mono font-semibold text-zinc-800">
+                <span className="rounded-lg bg-white px-3 py-1 text-xs font-mono font-semibold text-zinc-800 shadow-xs">
                   {extractedJob.employmentType || (isDe ? 'Minijob (bis 603 €)' : 'Minijob / Part-Time')}
                 </span>
                 {extractedJob.wage && (
-                  <span className="rounded-lg bg-emerald-100 text-emerald-900 border border-emerald-300/80 px-2.5 py-1 text-xs font-mono font-bold">
+                  <span className="rounded-lg bg-emerald-100 text-emerald-950 px-3 py-1 text-xs font-mono font-bold">
                     {extractedJob.wage}
                   </span>
                 )}
@@ -407,8 +407,8 @@ export function AiJobCreatorChat({
                 </div>
               </div>
 
-              {/* Description preview */}
-              <div className="text-[14.5px] sm:text-[15px] text-zinc-800 bg-white p-4 sm:p-5 rounded-xl border border-zinc-200 leading-relaxed font-normal min-h-[90px] shadow-2xs">
+              {/* Description preview - NO BORDER BOX */}
+              <div className="text-[14.5px] sm:text-[15px] text-zinc-800 bg-white p-4 sm:p-5 rounded-2xl leading-relaxed font-normal min-h-[90px] shadow-xs">
                 {extractedJob.description ? (
                   <p className="whitespace-pre-wrap">{extractedJob.description}</p>
                 ) : (
@@ -420,16 +420,16 @@ export function AiJobCreatorChat({
                 )}
               </div>
 
-              {/* Contact Channels Badge */}
+              {/* Contact Channels Badge - BORDERLESS */}
               <div className="pt-1 flex flex-wrap gap-2 text-xs sm:text-sm font-medium text-zinc-800">
                 {extractedJob.whatsapp && (
-                  <span className="inline-flex items-center gap-1.5 text-emerald-900 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg">
-                    <Phone className="size-3.5 text-emerald-700" />
+                  <span className="inline-flex items-center gap-1.5 text-emerald-950 bg-emerald-100/70 px-3 py-1.5 rounded-xl font-medium">
+                    <Phone className="size-3.5 text-emerald-800" />
                     WhatsApp: {extractedJob.whatsapp}
                   </span>
                 )}
                 {extractedJob.contactEmail && (
-                  <span className="inline-flex items-center gap-1.5 text-zinc-900 bg-white border border-zinc-200 px-3 py-1.5 rounded-lg">
+                  <span className="inline-flex items-center gap-1.5 text-zinc-900 bg-white px-3 py-1.5 rounded-xl font-medium shadow-xs">
                     <Mail className="size-3.5 text-zinc-500" />
                     {extractedJob.contactEmail}
                   </span>
@@ -444,11 +444,11 @@ export function AiJobCreatorChat({
               </div>
             </div>
 
-            {/* Action Card when Ready */}
+            {/* Action Card when Ready - BORDERLESS */}
             <div className="mt-5 pt-1">
               {isReady ? (
                 <div className="space-y-3">
-                  <div className="rounded-2xl bg-emerald-50 border border-emerald-300/80 p-3.5 sm:p-4 flex items-start gap-3 text-emerald-950">
+                  <div className="rounded-2xl bg-emerald-50 p-4 flex items-start gap-3 text-emerald-950">
                     <CheckCircle2 className="size-5 text-emerald-700 shrink-0 mt-0.5" />
                     <div>
                       <p className="font-bold text-sm sm:text-base">
@@ -465,7 +465,7 @@ export function AiJobCreatorChat({
                   <button
                     type="button"
                     onClick={() => onApplyToForm(extractedJob, 3)}
-                    className="apple-press w-full py-3.5 px-5 rounded-2xl bg-black hover:bg-zinc-800 text-white text-base font-bold tracking-[0.02em] transition cursor-pointer flex items-center justify-center gap-2 shadow-xs active:scale-[0.98]"
+                    className="apple-press w-full py-4 px-6 rounded-2xl bg-black hover:bg-zinc-800 text-white text-base font-bold tracking-[0.02em] transition cursor-pointer flex items-center justify-center gap-2 shadow-xs active:scale-[0.98]"
                   >
                     <span>{isDe ? 'Inserat prüfen & live schalten' : 'Review & Publish Listing'}</span>
                     <ArrowRight className="size-4.5" />
@@ -474,7 +474,7 @@ export function AiJobCreatorChat({
                   <button
                     type="button"
                     onClick={() => onApplyToForm(extractedJob, 1)}
-                    className="apple-press w-full py-2.5 px-4 rounded-xl border border-zinc-200 bg-white hover:bg-zinc-50 text-sm font-semibold text-zinc-800 transition cursor-pointer text-center"
+                    className="apple-press w-full py-3 px-4 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-sm font-semibold text-zinc-800 transition cursor-pointer text-center"
                   >
                     {isDe ? 'Im Formular anpassen (Schritt 1)' : 'Customize in standard form (Step 1)'}
                   </button>
@@ -485,7 +485,7 @@ export function AiJobCreatorChat({
                     type="button"
                     disabled={!extractedJob.title}
                     onClick={() => onApplyToForm(extractedJob, 1)}
-                    className="apple-press w-full py-3 px-4 rounded-xl border border-zinc-200 bg-white hover:bg-zinc-50 disabled:opacity-40 text-sm font-semibold text-black transition cursor-pointer flex items-center justify-center gap-2"
+                    className="apple-press w-full py-3 px-4 rounded-xl bg-zinc-100 hover:bg-zinc-200 disabled:opacity-40 text-sm font-semibold text-black transition cursor-pointer flex items-center justify-center gap-2"
                   >
                     <span>{isDe ? 'Bisherige Daten ins Formular übernehmen' : 'Apply current data to standard form'}</span>
                     <ArrowRight className="size-3.5" />
