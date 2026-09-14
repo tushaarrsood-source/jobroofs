@@ -56,20 +56,12 @@ export function CompetitorComparison() {
     <section className="my-12 sm:my-16">
       {/* Header */}
       <div className="max-w-3xl mb-8">
-        <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.16em] text-zinc-500 mb-2">
-          {isDe ? 'JOBROOFS IM VERGLEICH' : 'JOBROOFS IN COMPARISON'}
-        </p>
         <h2
           className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black tracking-tight leading-tight"
           style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
         >
-          {isDe ? 'Der Unterschied im Detail.' : 'The difference in detail.'}
+          {isDe ? 'JOBROOFS vs. andere Plattformen' : 'JOBROOFS vs. other platforms'}
         </h2>
-        <p className="mt-3 text-base sm:text-lg text-zinc-600 font-normal leading-relaxed">
-          {isDe
-            ? 'Ein transparenter, faktenbasierter Vergleich der Konditionen, Vermittlungsmodelle und Bewerbungswege in Deutschland.'
-            : 'A transparent, fact-based comparison of pricing, hiring models, and applicant communication in Germany.'}
-        </p>
       </div>
 
       {/* Open, Borderless Table on White Canvas */}

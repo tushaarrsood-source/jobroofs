@@ -12,7 +12,6 @@ import {
   Building2,
   ExternalLink,
   Mail,
-  ShieldCheck,
   Bookmark,
   CheckCircle2,
   Share2,
@@ -20,9 +19,7 @@ import {
   Check,
   MessageCircle,
   Phone,
-  Store,
   Lock,
-  User as UserIcon,
 } from 'lucide-react';
 import { useAuth } from '@/lib/firebase/auth-context';
 import { useTranslation } from '@/lib/i18n/language-context';
@@ -260,179 +257,6 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
           </div>
         </div>
 
-        {/* Independent Lister Direct Contact Hub */}
-        <section className="mt-8 rounded-3xl bg-zinc-50 p-6 sm:p-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-200 pb-4">
-            <div>
-              <h2 className="text-lg sm:text-xl font-bold text-black flex items-center gap-2.5">
-                <span>{isDe ? '100% Direkter Arbeitgeberkontakt' : '100% Direct Employer Contact'}</span>
-                <span className="inline-flex items-center text-xs font-semibold text-emerald-950 bg-emerald-100/80 px-2.5 py-0.5 rounded-full">
-                  Keine Zeitarbeit
-                </span>
-              </h2>
-              <p className="mt-1 text-sm sm:text-base text-zinc-600 font-normal leading-relaxed">
-                {isDe
-                  ? `Bewirb dich ohne Vermittler direkt beim Team von ${job.company}. Schnelle Rückmeldung garantiert:`
-                  : `Apply directly with the team at ${job.company} without agencies or middlemen:`}
-              </p>
-            </div>
-          </div>
-
-          {/* Contact Action Cards / Auth Gate */}
-          {!user ? (
-            <div className="mt-6 text-center space-y-4 max-w-lg mx-auto py-2">
-              <div className="mx-auto size-12 rounded-full bg-black text-white flex items-center justify-center">
-                <Lock className="size-5 stroke-[2]" />
-              </div>
-              <div className="space-y-2">
-                <h3
-                  className="text-xl sm:text-2xl font-bold text-black tracking-tight"
-                  style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
-                >
-                  {isDe ? 'Kontaktdaten & Direktbewerbung geschützt' : 'Contact Details & Direct Application Gated'}
-                </h3>
-                <p className="text-base text-zinc-600 font-normal leading-relaxed">
-                  {isDe
-                    ? `Melde dich kostenlos an, um die direkte WhatsApp-Nummer, Telefonnummer und E-Mail-Adresse von ${job.company} freizuschalten und dich direkt zu bewerben.`
-                    : `Sign in for free to reveal the direct WhatsApp, phone number, and email of ${job.company} and apply instantly.`}
-                </p>
-              </div>
-
-              <div className="pt-2">
-                <button
-                  type="button"
-                  onClick={() => setAuthModalOpen(true)}
-                  className="apple-press inline-flex items-center justify-center gap-2.5 rounded-2xl bg-black hover:bg-zinc-800 text-white px-7 py-4 text-base font-semibold tracking-[0.01em] transition-all cursor-pointer shadow-xs active:scale-[0.98]"
-                >
-                  <UserIcon className="size-5 stroke-[2]" />
-                  <span>{isDe ? 'Kostenlos anmelden & bewerben' : 'Sign in for free & apply'}</span>
-                  <ArrowRight className="size-4 stroke-[2]" />
-                </button>
-                <p className="mt-3 text-sm text-zinc-500 font-medium">
-                  {isDe ? '100% kostenlos für Bewerber:innen · In 10 Sekunden registriert' : '100% free for applicants · Instant access'}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {waUrl && (
-                <button
-                  type="button"
-                  onClick={(e) => handleActionClick(waUrl, e)}
-                  className="apple-press flex items-center justify-between gap-3 p-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white transition-colors text-left cursor-pointer"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="p-2.5 rounded-xl bg-white/20 text-white shrink-0">
-                      <MessageCircle className="size-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-base font-semibold text-white">
-                        {isDe ? 'Per WhatsApp schreiben' : 'Chat via WhatsApp'}
-                      </div>
-                      <div className="text-sm text-emerald-100 truncate font-mono">
-                        {job.whatsapp || cleanWa}
-                      </div>
-                    </div>
-                  </div>
-                  <span className="text-xs font-bold text-white bg-white/20 px-3 py-1 rounded-full shrink-0">
-                    1-Klick &rarr;
-                  </span>
-                </button>
-              )}
-
-              {emailUrl && (
-                <button
-                  type="button"
-                  onClick={(e) => handleActionClick(emailUrl, e)}
-                  className="apple-press flex items-center justify-between gap-3 p-4 rounded-2xl bg-white hover:bg-zinc-100 text-black transition-colors text-left cursor-pointer shadow-xs"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="p-2.5 rounded-xl bg-black text-white shrink-0">
-                      <Mail className="size-5 stroke-[1.5]" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-base font-semibold text-black">
-                        {isDe ? 'E-Mail schreiben' : 'Send Email'}
-                      </div>
-                      <div className="text-sm text-zinc-500 truncate font-mono">
-                        {emailContact}
-                      </div>
-                    </div>
-                  </div>
-                  <span className="text-xs font-semibold text-black bg-zinc-100 px-3 py-1 rounded-full shrink-0">
-                    E-Mail &rarr;
-                  </span>
-                </button>
-              )}
-
-              {phoneUrl && (
-                <button
-                  type="button"
-                  onClick={(e) => handleActionClick(phoneUrl, e)}
-                  className="apple-press flex items-center justify-between gap-3 p-4 rounded-2xl bg-white hover:bg-zinc-100 text-black transition-colors text-left cursor-pointer shadow-xs"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="p-2.5 rounded-xl bg-black text-white shrink-0">
-                      <Phone className="size-5 stroke-[1.5]" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-base font-semibold text-black">
-                        {isDe ? 'Direkt anrufen' : 'Call Employer'}
-                      </div>
-                      <div className="text-sm text-zinc-500 truncate font-mono">
-                        {job.phone}
-                      </div>
-                    </div>
-                  </div>
-                  <span className="text-xs font-semibold text-black bg-zinc-100 px-3 py-1 rounded-full shrink-0">
-                    Anrufen &rarr;
-                  </span>
-                </button>
-              )}
-
-              {job.address && (
-                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white text-black shadow-xs">
-                  <div className="p-2.5 rounded-xl bg-zinc-100 text-black shrink-0">
-                    <Store className="size-5 stroke-[1.5]" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-base font-semibold text-black">
-                      {isDe ? 'Vor Ort vorbeikommen' : 'Walk-in / Address'}
-                    </div>
-                    <div className="text-sm text-zinc-500 truncate">
-                      {job.address}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {websiteUrl && (
-                <button
-                  type="button"
-                  onClick={(e) => handleActionClick(websiteUrl, e)}
-                  className="apple-press flex items-center justify-between gap-3 p-4 rounded-2xl bg-white hover:bg-zinc-100 text-black transition-colors text-left cursor-pointer shadow-xs"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="p-2.5 rounded-xl bg-zinc-100 text-black shrink-0">
-                      <ExternalLink className="size-5 stroke-[1.5]" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-base font-semibold text-black">
-                        {isDe ? 'Offizielle Website' : 'Official Website'}
-                      </div>
-                      <div className="text-sm text-zinc-500 truncate">
-                        {job.company}
-                      </div>
-                    </div>
-                  </div>
-                  <span className="text-xs font-semibold text-black bg-zinc-100 px-3 py-1 rounded-full shrink-0">
-                    Öffnen &rarr;
-                  </span>
-                </button>
-              )}
-            </div>
-          )}
-        </section>
 
         {/* Responsibilities */}
         {responsibilities.length > 0 && (
@@ -600,15 +424,6 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
             </button>
           </div>
         </section>
-
-        <div className="mt-6 flex items-center justify-center gap-2 text-center text-sm text-zinc-500">
-          <ShieldCheck className="size-4 text-emerald-600" />
-          <span>
-            {isDe
-              ? `Unabhängiges Inserat in ${job.city || 'Deutschland'} · 100% Direktkontakt ohne Zeitarbeit`
-              : `Independent listing in ${job.city || 'Germany'} · 100% direct contact, no temp agencies`}
-          </span>
-        </div>
       </article>
 
       {/* Sticky Mobile Application Bar */}

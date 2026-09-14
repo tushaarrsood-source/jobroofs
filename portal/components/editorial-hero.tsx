@@ -52,7 +52,7 @@ export function EditorialHero() {
 
           <Link
             href="/pricing"
-            className="apple-press inline-flex items-center justify-center gap-2 rounded-2xl bg-zinc-100 hover:bg-zinc-200 text-black px-6 py-4 text-base font-semibold transition-all cursor-pointer active:scale-[0.98]"
+            className="apple-press hidden sm:inline-flex items-center justify-center gap-2 rounded-2xl bg-zinc-100 hover:bg-zinc-200 text-black px-6 py-4 text-base font-semibold transition-all cursor-pointer active:scale-[0.98]"
           >
             <span>{isDe ? 'Preise & Tarife' : 'Pricing'}</span>
           </Link>
