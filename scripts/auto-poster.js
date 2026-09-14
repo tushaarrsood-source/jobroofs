@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { renderPostSvg, renderSvgToPng } = require('./generate-100-campaign');
+const { generateHashtagsForPost, formatCaptionWithHashtags } = require('./hashtag-matrix');
 
 function getComposioClient() {
   const scratchSdk = path.join(
@@ -121,13 +122,19 @@ async function publishScheduledPost(options = {}) {
   });
   console.log('✅ Upload successful! S3 Key:', uploadResult.s3key);
 
+  // Format caption with high-intent ranking hashtags
+  const hashtags = post.hashtags || generateHashtagsForPost(post);
+  const captionToPublish = formatCaptionWithHashtags(post.germanCaption, hashtags);
+
   if (options.dryRun) {
     console.log('\n🔍 [DRY RUN ACTIVE] - Post prepared & S3 upload verified. Skipping live publish.');
-    console.log('\n📝 Caption preview:\n' + post.germanCaption.slice(0, 250) + '...\n');
+    console.log('\n📝 Caption with High-Intent Hashtags:\n' + captionToPublish + '\n');
     return {
       success: true,
       dryRun: true,
       post,
+      caption: captionToPublish,
+      hashtags,
       uploadResult,
     };
   }
@@ -139,7 +146,7 @@ async function publishScheduledPost(options = {}) {
     arguments: {
       ig_user_id: IG_USER_ID,
       image_file: uploadResult,
-      caption: post.germanCaption,
+      caption: captionToPublish,
     },
     dangerouslySkipVersionCheck: true,
   });

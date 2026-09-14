@@ -1,5 +1,6 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
+const { generateHashtagsForPost, formatCaptionWithHashtags } = require('./hashtag-matrix');
 
 const dataDir = path.join(__dirname, '../data');
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
@@ -565,7 +566,9 @@ let globalId = 1;
 for (let day = 1; day <= 30; day++) {
   for (let sIdx = 0; sIdx < SLOTS.length; sIdx++) {
     const slotConfig = SLOTS[sIdx];
-    const itemIndex = ((day - 1) * 2 + sIdx) % slotConfig.pool.length;
+    // Use multiplier 3 (coprime with 10) so all 10 items in each pool cycle across 30 days
+    // Day 1 (day=1) remains 100% identical to preserve existing published history
+    const itemIndex = ((day - 1) * 3 + sIdx) % slotConfig.pool.length;
     const item = slotConfig.pool[itemIndex];
 
     // Color rhythm: 10 distinct matte palettes cycled harmoniously
@@ -573,20 +576,20 @@ for (let day = 1; day <= 30; day++) {
     const colorKey = paletteKeys[paletteIndex];
     const palette = PALETTES[colorKey];
 
-    let caption = '';
+    let baseCaption = '';
     if (slotConfig.pillar === 'employer') {
-      caption = `${item.r1} ${item.r2} 🏢⚡ Inseriere auf JOBROOFS.\n\n${item.hook}\n\n${item.pain}\n\n${item.math}\n\n${item.offer}\n\n👉 In 2 Minuten kostenlos online gehen: jobroofs.com/post-a-job (Link in Bio)\n\n#recruiting #mitarbeitersuche #stellenanzeige #unternehmer #arbeitgeber #mittelstand #handwerk #gastronomie #jobroofs #hiring #deutschland`;
+      baseCaption = `${item.r1} ${item.r2} 🏢⚡ Inseriere auf JOBROOFS.\n\n${item.hook}\n\n${item.pain}\n\n${item.math}\n\n${item.offer}\n\n👉 In 2 Minuten kostenlos online gehen: jobroofs.com/post-a-job (Link in Bio)`;
     } else if (slotConfig.pillar === 'seeker') {
-      caption = `${item.r1} ${item.r2} ⚡ Finde deinen nächsten Gig.\n\n${item.hook}\n\n${item.body}\n\n${item.cta}\n\n✓ 1-Klick WhatsApp Direktkontakt\n✓ Transparent kalkulierter Stundenlohn ab Minute 1\n✓ 0% Zeitarbeit, 100% faire Inhaber\n\n👉 Alle offenen Jobs in deinem Kiez: jobroofs.com (Link in Bio)\n\n#minijob #nebenjob #studentenjob #gastrojobs #kiezjobs #jobroofs #geldverdienen #berlinjobs`;
+      baseCaption = `${item.r1} ${item.r2} ⚡ Finde deinen nächsten Gig.\n\n${item.hook}\n\n${item.body}\n\n${item.cta}\n\n✓ 1-Klick WhatsApp Direktkontakt\n✓ Transparent kalkulierter Stundenlohn ab Minute 1\n✓ 0% Zeitarbeit, 100% faire Inhaber\n\n👉 Alle offenen Jobs in deinem Kiez: jobroofs.com (Link in Bio)`;
     } else if (slotConfig.pillar === 'contrarian') {
-      caption = `${item.r1} ${item.r2} 🛑\n\n${item.hook}\n\n${item.body}\n\n${item.offer}\n\n👉 Der moderne Standard: jobroofs.com (Link in Bio)\n\n#recruitingtipps #stepstone #indeed #jobportal #unternehmer #wirtschaft #fachkräftemangel #jobroofs #hormozi`;
+      baseCaption = `${item.r1} ${item.r2} 🛑\n\n${item.hook}\n\n${item.body}\n\n${item.offer}\n\n👉 Der moderne Standard: jobroofs.com (Link in Bio)`;
     } else if (slotConfig.pillar === 'kiez') {
-      caption = `${item.r1} ${item.r2} 📍 Hyper-Lokal im Kiez.\n\n${item.hook}\n\n${item.body}\n\n${item.offer}\n\n👉 Finde Jobs vor deiner Haustür: jobroofs.com (Link in Bio)\n\n#kiezliebe #berlin #hamburg #münchen #köln #frankfurt #jobroofs #lokalearbeit`;
+      baseCaption = `${item.r1} ${item.r2} 📍 Hyper-Lokal im Kiez.\n\n${item.hook}\n\n${item.body}\n\n${item.offer}\n\n👉 Finde Jobs vor deiner Haustür: jobroofs.com (Link in Bio)`;
     } else {
-      caption = `${item.r1} ${item.r2} 📜 Das JOBROOFS Manifest.\n\n${item.hook}\n\n${item.body}\n\n${item.offer}\n\n👉 Werde Teil der neuen Bewegung: jobroofs.com (Link in Bio)\n\n#unternehmertum #businessrules #hormozi #jobroofs #recruitingwahrheit #arbeitgeber #mittelstand`;
+      baseCaption = `${item.r1} ${item.r2} 📜 Das JOBROOFS Manifest.\n\n${item.hook}\n\n${item.body}\n\n${item.offer}\n\n👉 Werde Teil der neuen Bewegung: jobroofs.com (Link in Bio)`;
     }
 
-    all150Posts.push({
+    const postObj = {
       id: globalId++,
       day,
       slot: slotConfig.name,
@@ -600,8 +603,13 @@ for (let day = 1; day <= 30; day++) {
       buttonText: item.btn || 'JOBROOFS.COM',
       colorway: colorKey,
       palette,
-      germanCaption: caption,
-    });
+    };
+
+    const highIntentHashtags = generateHashtagsForPost(postObj);
+    postObj.germanCaption = formatCaptionWithHashtags(baseCaption, highIntentHashtags);
+    postObj.hashtags = highIntentHashtags;
+
+    all150Posts.push(postObj);
   }
 }
 
