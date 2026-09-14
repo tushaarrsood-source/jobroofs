@@ -2,6 +2,28 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  async rewrites() {
+    return [
+      {
+        source: '/__/auth/:path*',
+        destination: 'https://jobroofs-321c7.firebaseapp.com/__/auth/:path*',
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      {
+        source: '/privacy',
+        destination: '/datenschutz',
+        permanent: true,
+      },
+      {
+        source: '/terms',
+        destination: '/agb',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

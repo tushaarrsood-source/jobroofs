@@ -15,7 +15,7 @@ export interface FirebaseConfig {
 
 export const DEFAULT_FIREBASE_CONFIG: FirebaseConfig = {
   apiKey: 'AIzaSyBN68Y6_n-xxFIB74OuvEtp0lFhPhY9gGI',
-  authDomain: 'jobroofs-321c7.firebaseapp.com',
+  authDomain: 'jobroofs.com',
   projectId: 'jobroofs-321c7',
   storageBucket: 'jobroofs-321c7.firebasestorage.app',
   messagingSenderId: '960773392367',
