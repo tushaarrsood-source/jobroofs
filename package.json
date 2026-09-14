@@ -6,5 +6,9 @@
     "postinstall": "npm --prefix portal install",
     "build": "npm --prefix portal install && npm --prefix portal run build",
     "start": "npm --prefix portal run start"
+  },
+  "dependencies": {
+    "@composio/core": "^0.18.1",
+    "@resvg/resvg-js": "^2.6.2"
   }
 }

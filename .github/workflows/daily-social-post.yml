@@ -1,0 +1,41 @@
+name: Daily Social Media Auto-Poster
+
+on:
+  schedule:
+    # Runs everyday at 10:30 UTC (12:30 Berlin time)
+    - cron: '30 10 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish_post:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install root dependencies
+        run: npm install --ignore-scripts
+
+      - name: Publish Next Scheduled Campaign Post
+        env:
+          COMPOSIO_API_KEY: ${{ secrets.COMPOSIO_API_KEY || 'ak_wwv5ypPbzYy5XaHt2An3' }}
+        run: node scripts/auto-poster.js
+
+      - name: Commit and push updated publish history
+        run: |
+          git config --global user.name "Jobroofs Automation Bot"
+          git config --global user.email "bot@jobroofs.com"
+          git add data/publish-history.json reports/campaign-100/
+          git commit -m "chore(social): record published instagram post [skip ci]" || echo "No changes to commit"
+          git push origin main || echo "Push skipped"

@@ -81,6 +81,18 @@ function recordPublishedPost(post, publishedMediaId, creationId) {
 }
 
 async function publishScheduledPost(options = {}) {
+  const today = new Date().toISOString().slice(0, 10);
+  const historyPath = path.join(__dirname, '../data/publish-history.json');
+  if (fs.existsSync(historyPath) && !options.force && !options.id) {
+    const history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+    const publishedToday = history.find((h) => h.timestamp && h.timestamp.startsWith(today));
+    if (publishedToday) {
+      console.log(`\nℹ️ Today's post (#${publishedToday.id}: "${publishedToday.role}") was already published at ${publishedToday.timestamp}.`);
+      console.log(`To publish another post today, run with: node scripts/auto-poster.js --force\n`);
+      return { skipped: true, post: publishedToday };
+    }
+  }
+
   const post = getNextPostToPublish(options.id);
   console.log(`\n======================================================`);
   console.log(`🚀 [JOBROOFS CAMPAIGN] Publishing Post #${post.id} (${post.slot.toUpperCase()} / Day ${post.day})`);
@@ -183,10 +195,11 @@ module.exports = {
 if (require.main === module) {
   const args = process.argv.slice(2);
   const isDryRun = args.includes('--dry-run');
+  const isForce = args.includes('--force');
   const idIdx = args.indexOf('--id');
   const specificId = idIdx !== -1 ? args[idIdx + 1] : null;
 
-  publishScheduledPost({ dryRun: isDryRun, id: specificId })
+  publishScheduledPost({ dryRun: isDryRun, id: specificId, force: isForce })
     .then((res) => {
       console.log('\n🏁 Done:', res);
       process.exit(0);
