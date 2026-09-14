@@ -113,43 +113,50 @@ export function ProgrammaticLandingPage({
           </div>
 
           {jobs.length > 0 ? (
-            <div className="divide-y divide-zinc-200 border-y border-zinc-200">
+            <div className="space-y-3 sm:space-y-3.5">
               {jobs.map((job: any) => (
                 <Link
                   key={job.id}
                   href={`/jobs/${job.slug || job.id}`}
-                  className="group block py-5 px-2 hover:bg-zinc-50 transition-colors cursor-pointer"
+                  className="apple-press group block p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-zinc-200/80 bg-white hover:border-zinc-300 hover:shadow-md transition-all duration-200 cursor-pointer relative overflow-hidden"
                 >
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-semibold text-zinc-800">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="min-w-0 flex-1 space-y-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="shrink-0 text-[11px] uppercase bg-black text-white px-2.5 py-0.5 rounded-full font-bold tracking-wider leading-none shadow-2xs">
                           {job.listingOrigin === 'employer_posted'
-                            ? 'Direktkontakt'
-                            : 'Verifiziert'}
+                            ? '★ DIREKTKONTAKT'
+                            : '★ VERIFIZIERT'}
                         </span>
-                        <h3 className="text-lg font-bold text-black group-hover:text-zinc-800">
-                          {job.title}
-                        </h3>
+                        {job.whatsapp && (
+                          <span className="shrink-0 text-[11px] font-semibold text-emerald-900 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                            💬 WhatsApp
+                          </span>
+                        )}
                       </div>
-                      <p className="mt-1 text-sm sm:text-base text-zinc-600 font-medium">
-                        {job.company}
-                      </p>
+                      <h3 className="text-lg sm:text-xl font-bold text-zinc-950 group-hover:text-black transition-colors tracking-tight line-clamp-1 leading-snug">
+                        {job.title}
+                      </h3>
+                      <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-zinc-600 font-normal pt-0.5">
+                        <span className="font-bold text-zinc-900">{job.company}</span>
+                        <span className="text-zinc-300">&middot;</span>
+                        <span className="inline-flex items-center gap-1.5 bg-zinc-100/80 text-zinc-700 px-2.5 py-1 rounded-lg">
+                          <MapPin className="size-3.5 text-zinc-500 shrink-0" />
+                          <span>{job.district ? `${job.district}, ${city.name}` : city.name}</span>
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 bg-zinc-100/80 text-zinc-700 px-2.5 py-1 rounded-lg">
+                          <Clock3 className="size-3.5 text-zinc-500 shrink-0" />
+                          <span>{job.hours?.label || job.hoursLabel || 'Flexibel'}</span>
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex flex-wrap items-center gap-4 text-sm sm:text-base text-zinc-600">
-                      <span className="flex items-center gap-1.5 font-semibold text-black font-mono">
-                        <Euro className="size-4 shrink-0 text-zinc-500" />
+                    <div className="shrink-0 flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pt-2 sm:pt-0 border-t border-zinc-100 sm:border-t-0">
+                      <div className="inline-flex items-baseline px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl bg-zinc-950 text-white shadow-2xs font-mono text-sm sm:text-base font-extrabold tracking-tight">
                         {job.compensation?.label || job.payText || 'Tarif / VB'}
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <Clock3 className="size-4 shrink-0 text-zinc-500" />
-                        {job.hours?.label || job.hoursLabel || 'Flexibel'}
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <MapPin className="size-4 shrink-0 text-zinc-500" />
-                        {job.district ? `${job.district}, ${city.name}` : city.name}
-                      </span>
-                      <ArrowRight className="size-4 text-zinc-400 transition group-hover:translate-x-1 group-hover:text-black" />
+                      </div>
+                      <div className="size-9 sm:size-10 rounded-full bg-zinc-100 items-center justify-center text-zinc-400 group-hover:bg-black group-hover:text-white group-hover:translate-x-0.5 transition-all duration-200 shadow-2xs shrink-0 flex">
+                        <ArrowRight className="size-4 sm:size-4.5 stroke-[2.5]" />
+                      </div>
                     </div>
                   </div>
                 </Link>

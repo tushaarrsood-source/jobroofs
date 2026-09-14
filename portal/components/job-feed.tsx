@@ -510,8 +510,8 @@ export function JobFeed({
         )}
       </div>
 
-      {/* Open, Borderless Job Stream on White Canvas */}
-      <div className="divide-y divide-zinc-200 border-y border-zinc-200">
+      {/* Spacious, Elevated Job Listing Cards */}
+      <div className="space-y-3 sm:space-y-3.5">
         {displayedJobs.map((job, idx) => {
           const wage = formatWage(job, isDe);
           const jobType = formatJobType(job, isDe);
@@ -531,71 +531,76 @@ export function JobFeed({
             <Link
               key={slug || idx}
               href={`/jobs/${slug}`}
-              className="group block py-4 sm:py-5 px-1 sm:px-2 hover:bg-zinc-50 transition-colors cursor-pointer"
+              className="apple-press group block p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-zinc-200/80 bg-white hover:border-zinc-300 hover:shadow-md transition-all duration-200 cursor-pointer relative overflow-hidden"
             >
-              <div className="flex items-center justify-between gap-4">
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3
-                      className="text-base sm:text-lg font-bold text-black group-hover:text-zinc-800 transition-colors line-clamp-1 tracking-tight"
-                      style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
-                    >
-                      {job.title}
-                    </h3>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="min-w-0 flex-1 space-y-2">
+                  {/* Badges Row */}
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                     {job.isIndependentLister && (
-                      <span className="shrink-0 text-xs uppercase bg-black text-white px-2 py-0.5 rounded-full font-bold leading-none">
+                      <span className="shrink-0 text-[11px] uppercase bg-black text-white px-2.5 py-0.5 rounded-full font-bold tracking-wider leading-none shadow-2xs">
                         ★ UNABHÄNGIG
                       </span>
                     )}
                     {job.isUserListing && (
-                      <span className="shrink-0 text-xs uppercase bg-zinc-800 text-white px-2 py-0.5 rounded-full font-bold leading-none">
+                      <span className="shrink-0 text-[11px] uppercase bg-zinc-800 text-white px-2.5 py-0.5 rounded-full font-bold leading-none shadow-2xs">
                         {isDe ? 'DEIN INSERAT' : 'YOUR LISTING'}
                       </span>
                     )}
                     {urgent && (
-                      <span className="shrink-0 text-xs uppercase bg-amber-100 text-amber-950 px-2 py-0.5 rounded-full font-bold leading-none">
+                      <span className="shrink-0 text-[11px] uppercase bg-amber-50 text-amber-900 border border-amber-200/80 px-2.5 py-0.5 rounded-full font-bold leading-none">
                         {isDe ? '⚡ DRINGEND' : '⚡ URGENT'}
                       </span>
                     )}
                     {job.whatsapp && (
-                      <span className="shrink-0 text-xs font-semibold text-emerald-950 bg-emerald-100/80 px-2 py-0.5 rounded-full">
+                      <span className="shrink-0 text-[11px] font-semibold text-emerald-900 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full flex items-center gap-1">
                         💬 WhatsApp
                       </span>
                     )}
                   </div>
 
-                  <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm sm:text-base text-zinc-600 font-normal">
-                    <span className="font-semibold text-black">{job.company}</span>
+                  {/* Title */}
+                  <h3
+                    className="text-lg sm:text-xl font-bold text-zinc-950 group-hover:text-black transition-colors tracking-tight line-clamp-1 leading-snug"
+                    style={{ fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif" }}
+                  >
+                    {job.title}
+                  </h3>
+
+                  {/* Company & Details Chips */}
+                  <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-zinc-600 font-normal pt-0.5">
+                    <span className="font-bold text-zinc-900">{job.company}</span>
                     <span className="text-zinc-300">&middot;</span>
-                    <span className="inline-flex items-center gap-1 text-zinc-700">
-                      <MapPin className="size-3.5 text-zinc-400 shrink-0" />
-                      {locationDisplay}
+                    <span className="inline-flex items-center gap-1.5 bg-zinc-100/80 text-zinc-700 px-2.5 py-1 rounded-lg">
+                      <MapPin className="size-3.5 text-zinc-500 shrink-0" />
+                      <span>{locationDisplay}</span>
                     </span>
-                    <span className="text-zinc-300">&middot;</span>
-                    <span className="inline-flex items-center gap-1 text-zinc-700">
-                      <Clock className="size-3.5 text-zinc-400 shrink-0" />
-                      {jobType}
+                    <span className="inline-flex items-center gap-1.5 bg-zinc-100/80 text-zinc-700 px-2.5 py-1 rounded-lg">
+                      <Clock className="size-3.5 text-zinc-500 shrink-0" />
+                      <span>{jobType}</span>
                     </span>
                   </div>
                 </div>
 
-                <div className="shrink-0 text-right flex items-center gap-4">
-                  <div>
-                    <div className="text-base sm:text-lg font-bold font-mono text-black">
+                {/* Right Side: High-Contrast Wage Pill + Hover Arrow */}
+                <div className="shrink-0 flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pt-2 sm:pt-0 border-t border-zinc-100 sm:border-t-0">
+                  <div className="sm:text-right">
+                    <div className="inline-flex items-baseline px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl bg-zinc-950 text-white shadow-2xs font-mono text-sm sm:text-base font-extrabold tracking-tight">
                       {wage}
                     </div>
-                    <div className="text-xs sm:text-sm font-mono text-zinc-500 font-medium mt-0.5">
+                    <div className="text-[11px] sm:text-xs font-mono text-zinc-500 font-medium mt-1">
                       {relTime}
                     </div>
                   </div>
-                  <div className="hidden sm:flex size-8 rounded-full bg-zinc-100 items-center justify-center text-zinc-400 group-hover:text-black group-hover:bg-zinc-200 group-hover:translate-x-0.5 transition-all">
-                    <ArrowRight className="size-4 stroke-[2]" />
+                  <div className="size-9 sm:size-10 rounded-full bg-zinc-100 items-center justify-center text-zinc-400 group-hover:bg-black group-hover:text-white group-hover:translate-x-0.5 transition-all duration-200 shadow-2xs shrink-0 flex">
+                    <ArrowRight className="size-4 sm:size-4.5 stroke-[2.5]" />
                   </div>
                 </div>
               </div>
             </Link>
           );
         })}
+      </div>
 
         {displayedJobs.length === 0 && (
           <div className="py-12 sm:py-16 text-center">
@@ -659,7 +664,6 @@ export function JobFeed({
             )}
           </div>
         )}
-      </div>
 
       {/* Editorial Pagination Controls */}
       {totalPages > 1 && (

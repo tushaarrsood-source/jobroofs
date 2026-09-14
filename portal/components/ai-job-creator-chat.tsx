@@ -80,16 +80,7 @@ export function AiJobCreatorChat({
   const [quickReplies, setQuickReplies] = useState<string[]>(starterPrompts);
   const [error, setError] = useState<string | null>(null);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, loading]);
 
   const handleSendMessage = async (textToSend?: string) => {
     const messageContent = (textToSend || input).trim();
@@ -156,7 +147,7 @@ export function AiJobCreatorChat({
       );
     } finally {
       setLoading(false);
-      setTimeout(() => inputRef.current?.focus(), 100);
+      setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 100);
     }
   };
 
@@ -284,8 +275,6 @@ export function AiJobCreatorChat({
             </button>
           </div>
         )}
-
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Error Notice */}
