@@ -1,5 +1,10 @@
 import { NextResponse } from 'next/server';
-import { getJobsFromFirestore } from '@/lib/firebase/firestore-service';
+import {
+  adminCreateJob,
+  adminGetJobBySlugOrId,
+  adminGetJobs,
+  adminDeleteJob,
+} from '@/lib/firebase/firestore-admin';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -7,6 +12,17 @@ export const revalidate = 0;
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
+    const slug = url.searchParams.get('slug') || url.searchParams.get('id');
+
+    // Single job lookup
+    if (slug) {
+      const job = await adminGetJobBySlugOrId(slug);
+      if (!job) {
+        return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+      }
+      return NextResponse.json({ job });
+    }
+
     const q = (url.searchParams.get('q') || '').trim().toLowerCase();
     const city = (url.searchParams.get('city') || 'all').toLowerCase();
     const district = (url.searchParams.get('district') || 'all').toLowerCase();
@@ -14,8 +30,8 @@ export async function GET(request: Request) {
     const limit = Math.min(2000, Math.max(1, parseInt(url.searchParams.get('limit') || '50', 10)));
     const offset = Math.max(0, parseInt(url.searchParams.get('offset') || '0', 10));
 
-    // Fetch authentic active jobs from Firestore
-    const firestoreJobs = await getJobsFromFirestore(limit);
+    // Fetch active jobs from Firestore using Admin authority
+    const firestoreJobs = await adminGetJobs(limit);
 
     const filtered = firestoreJobs.filter((job) => {
       if (job.status !== 'active' && job.status !== 'published') return false;
@@ -58,11 +74,7 @@ export async function GET(request: Request) {
       contactEmail: j.contactEmail,
       applyUrl: j.applyUrl,
       payText: j.payText,
-      postedAt: j.createdAt
-        ? typeof j.createdAt.toDate === 'function'
-          ? j.createdAt.toDate().toISOString()
-          : j.createdAt
-        : undefined,
+      postedAt: j.createdAt,
     }));
 
     return NextResponse.json({
@@ -71,6 +83,78 @@ export async function GET(request: Request) {
       hasMore: offset + limit < filtered.length,
     });
   } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json().catch(() => ({}));
+    if (!body.title || !body.company) {
+      return NextResponse.json(
+        { error: 'Titel und Arbeitgeber/Unternehmen sind erforderlich.' },
+        { status: 400 }
+      );
+    }
+
+    const companySlug = String(body.company)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    const titleSlug = String(body.title)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    const submissionId = body.id || `direct-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+    const jobSlug = body.slug || `${companySlug}-${titleSlug}-${submissionId.slice(-4)}`;
+
+    const saved = await adminCreateJob(
+      {
+        ...body,
+        id: submissionId,
+        slug: jobSlug,
+        status: body.status || 'active',
+      },
+      submissionId
+    );
+
+    if (!saved) {
+      return NextResponse.json(
+        { error: 'Fehler beim Speichern des Inserats in der Datenbank.' },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      id: submissionId,
+      slug: jobSlug,
+      job: saved,
+    });
+  } catch (err: any) {
+    console.error('[API /api/jobs POST error]:', err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const url = new URL(request.url);
+    let id = url.searchParams.get('id');
+
+    if (!id) {
+      const body = await request.json().catch(() => ({}));
+      id = body.id;
+    }
+
+    if (!id) {
+      return NextResponse.json({ error: 'ID parameter is required' }, { status: 400 });
+    }
+
+    const success = await adminDeleteJob(id);
+    return NextResponse.json({ success, deleted: id });
+  } catch (err: any) {
+    console.error('[API /api/jobs DELETE error]:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

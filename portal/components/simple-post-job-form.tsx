@@ -273,9 +273,9 @@ export function SimplePostJobForm() {
 
       setLastCreatedJob({ id: submissionId, slug: jobSlug, title: formData.title });
 
-      // 2. Save to Firestore if configured
+      // 2. Save to Firestore via API
       const assignedUserId = user?.uid || 'employer-' + Date.now();
-      createJobInFirestore(
+      await createJobInFirestore(
         {
           userId: assignedUserId,
           title: formData.title,
@@ -294,11 +294,11 @@ export function SimplePostJobForm() {
           slug: jobSlug,
         },
         submissionId
-      ).catch(console.error);
+      );
 
       // 3. If user used free tier, record in Firestore
       if (formData.tier === 'free' && user?.uid) {
-        markFreeJobUsed(user.uid, submissionId).catch(console.error);
+        markFreeJobUsed(user.uid).catch(console.error);
         setIsFreeEligible(false);
       }
 
@@ -659,27 +659,17 @@ export function SimplePostJobForm() {
 
               {/* Title Input */}
               <div className="space-y-2">
-                <div className="flex items-baseline justify-between">
-                  <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-zinc-700">
-                    Stellenbezeichnung *
-                  </label>
-                  <span className="text-xs text-zinc-500 font-medium">
-                    AGG-konform (m/w/d)
-                  </span>
-                </div>
+                <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-zinc-700">
+                  Stellenbezeichnung *
+                </label>
                 <input
                   type="text"
                   required
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="z. B. Specialty Barista (m/w/d), Servicekraft (m/w/d)"
+                  placeholder="z. B. Specialty Barista, Servicekraft, Küchenhilfe"
                   className="w-full h-12 px-4 text-base text-black placeholder:text-zinc-400 rounded-2xl bg-[#f4f4f3] focus:bg-white focus:ring-2 focus:ring-black outline-none transition-all shadow-xs"
                 />
-                <p className="text-xs sm:text-sm text-zinc-500 font-normal">
-                  {isDe
-                    ? 'Hinweis nach AGG: Bitte diskriminierungsfreie Bezeichnungen wählen oder den Zusatz (m/w/d) ergänzen.'
-                    : 'Equal treatment notice: Please use gender-neutral job titles or include (m/w/d).'}
-                </p>
               </div>
 
               {/* Company Input */}

@@ -10,6 +10,7 @@ import { JobDetailView } from '@/components/job-detail-view';
 import { isJobSuppressed } from '@/lib/sources/suppression-store';
 import { getSourcedJobBySlug, ALL_SOURCED_JOBS } from '@/lib/sources/sourced-jobs';
 import { getJobBySlugFromFirestore } from '@/lib/firebase/firestore-service';
+import { adminGetJobBySlugOrId } from '@/lib/firebase/firestore-admin';
 
 // Dynamic SEO metadata for each job listing
 export async function generateMetadata({
@@ -73,7 +74,11 @@ export async function generateMetadata({
     };
   }
 
-  const fsJob = (await getJobBySlugFromFirestore(slug)) || (await getJobBySlugFromFirestore(decodedSlug));
+  const fsJob =
+    (await adminGetJobBySlugOrId(slug)) ||
+    (await adminGetJobBySlugOrId(decodedSlug)) ||
+    (await getJobBySlugFromFirestore(slug)) ||
+    (await getJobBySlugFromFirestore(decodedSlug));
   if (fsJob) {
     const district = fsJob.district || 'Berlin';
     return {
@@ -173,7 +178,11 @@ export default async function JobDetailPage({
   }
 
   if (!job) {
-    const fsJob = (await getJobBySlugFromFirestore(slug)) || (await getJobBySlugFromFirestore(decodedSlug));
+    const fsJob =
+      (await adminGetJobBySlugOrId(slug)) ||
+      (await adminGetJobBySlugOrId(decodedSlug)) ||
+      (await getJobBySlugFromFirestore(slug)) ||
+      (await getJobBySlugFromFirestore(decodedSlug));
     if (fsJob) {
       job = {
         id: fsJob.id,

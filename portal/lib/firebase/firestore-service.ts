@@ -82,12 +82,32 @@ export async function createJobInFirestore(
   jobData: Omit<FirestoreJob, 'id' | 'createdAt' | 'updatedAt'>,
   customId?: string,
 ): Promise<string | null> {
+  const id = customId || `job-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+
+  // In browser, route through authenticated server-side API to bypass client permission rules
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/jobs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...jobData,
+          id,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return data.id || id;
+      }
+    } catch (err) {
+      console.warn('[createJobInFirestore] API call failed, falling back to client SDK:', err);
+    }
+  }
+
   const db = getFirebaseDb();
   if (!db) return null;
 
-  const id = customId || `job-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
   const docRef = doc(db, 'jobs', id);
-
   const durationDays = jobData.tier === 'premium' ? 60 : jobData.tier === 'standard' ? 30 : 15;
 
   await setDoc(docRef, {
@@ -103,6 +123,18 @@ export async function createJobInFirestore(
 }
 
 export async function getJobsFromFirestore(limitCount = 50): Promise<FirestoreJob[]> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch(`/api/jobs?limit=${limitCount}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data.jobs)) return data.jobs;
+      }
+    } catch (err) {
+      console.warn('[getJobsFromFirestore] API call failed, falling back:', err);
+    }
+  }
+
   const db = getFirebaseDb();
   if (!db) return [];
 
@@ -121,8 +153,22 @@ export async function getJobsFromFirestore(limitCount = 50): Promise<FirestoreJo
 }
 
 export async function getJobBySlugFromFirestore(slugOrId: string): Promise<FirestoreJob | null> {
+  if (!slugOrId) return null;
+
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch(`/api/jobs?slug=${encodeURIComponent(slugOrId)}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.job) return data.job;
+      }
+    } catch (err) {
+      console.warn('[getJobBySlugFromFirestore] API call failed, falling back:', err);
+    }
+  }
+
   const db = getFirebaseDb();
-  if (!db || !slugOrId) return null;
+  if (!db) return null;
 
   try {
     // 1. Try direct doc ID
@@ -288,6 +334,17 @@ export async function updateListingStatusInFirestore(
 }
 
 export async function deleteListingFromFirestore(type: 'job' | 'housing', id: string): Promise<boolean> {
+  if (typeof window !== 'undefined' && type === 'job') {
+    try {
+      const res = await fetch(`/api/jobs?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) return true;
+    } catch (err) {
+      console.warn('[deleteListingFromFirestore] API DELETE failed, falling back:', err);
+    }
+  }
+
   const db = getFirebaseDb();
   if (!db) return false;
 

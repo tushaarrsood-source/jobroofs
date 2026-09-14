@@ -180,19 +180,19 @@ export function AiJobCreatorChat({
   const hasExtractedInfo = Boolean(extractedJob.title || extractedJob.company);
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-5">
       {/* Subtle Status & Action Bar */}
       <div className="flex items-center justify-between px-1 text-xs text-zinc-500">
         <div className="flex items-center gap-2">
           <span className="size-2 rounded-full bg-emerald-500" />
-          <span className="font-medium text-zinc-700">
-            {isDe ? 'Direkt-Assistent aktiv' : 'Direct Assistant Active'}
+          <span className="font-semibold text-zinc-800">
+            {isDe ? 'JOBROOFS Inserate-Assistent' : 'JOBROOFS Assistant'}
           </span>
         </div>
         <button
           type="button"
           onClick={handleReset}
-          className="apple-press inline-flex items-center gap-1.5 text-zinc-500 hover:text-black transition-colors cursor-pointer py-1"
+          className="apple-press inline-flex items-center gap-1.5 text-zinc-500 hover:text-black transition-colors cursor-pointer py-1 font-medium"
           title={isDe ? 'Neu starten' : 'Start over'}
         >
           <RefreshCw className="size-3" />
@@ -201,7 +201,7 @@ export function AiJobCreatorChat({
       </div>
 
       {/* Main Chat Stream - Open Canvas, Zero Enclosing Box */}
-      <div className="space-y-4 sm:space-y-5 min-h-[300px]">
+      <div className="space-y-4 sm:space-y-5 min-h-[260px]">
         {messages.map((msg) => (
           <div
             key={msg.id}
@@ -211,31 +211,31 @@ export function AiJobCreatorChat({
           >
             {/* Avatar / Role Indicator */}
             <div
-              className={`size-8 rounded-full flex items-center justify-center shrink-0 text-xs font-semibold ${
+              className={`size-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold font-mono ${
                 msg.role === 'user'
-                  ? 'bg-zinc-900 text-white'
-                  : 'bg-zinc-200 text-zinc-800'
+                  ? 'bg-black text-white shadow-xs'
+                  : 'bg-zinc-900 text-white shadow-xs'
               }`}
             >
               {msg.role === 'user' ? (
                 <User className="size-4" />
               ) : (
-                <span className="font-bold tracking-tighter">JR</span>
+                <span className="tracking-tighter">JR</span>
               )}
             </div>
 
             {/* Bubble */}
             <div
-              className={`max-w-[85%] sm:max-w-[80%] rounded-2xl px-4.5 py-3 text-[15px] sm:text-[16px] leading-relaxed ${
+              className={`max-w-[88%] sm:max-w-[80%] rounded-2xl px-5 py-3.5 text-[15px] sm:text-base leading-relaxed ${
                 msg.role === 'user'
-                  ? 'bg-black text-white rounded-tr-xs shadow-xs'
-                  : 'bg-zinc-100/80 text-zinc-900 rounded-tl-xs'
+                  ? 'bg-black text-white rounded-tr-xs shadow-xs font-normal'
+                  : 'bg-[#f4f4f3] text-black rounded-tl-xs border border-zinc-200/60 font-normal'
               }`}
             >
               <p className="whitespace-pre-wrap">{msg.content}</p>
               <div
-                className={`mt-1 text-[11px] ${
-                  msg.role === 'user' ? 'text-zinc-400 text-right' : 'text-zinc-400'
+                className={`mt-1 text-[11px] font-mono ${
+                  msg.role === 'user' ? 'text-zinc-400 text-right' : 'text-zinc-500'
                 }`}
               >
                 {msg.timestamp}
@@ -247,83 +247,41 @@ export function AiJobCreatorChat({
         {/* Loading Indicator */}
         {loading && (
           <div className="flex items-start gap-3">
-            <div className="size-8 rounded-full bg-zinc-200 text-zinc-800 flex items-center justify-center shrink-0 text-xs font-bold">
+            <div className="size-8 rounded-full bg-zinc-900 text-white flex items-center justify-center shrink-0 text-xs font-bold font-mono shadow-xs">
               <span className="tracking-tighter">JR</span>
             </div>
-            <div className="bg-zinc-100/80 rounded-2xl rounded-tl-xs px-4 py-3 flex items-center gap-2 text-zinc-600 text-sm">
-              <Loader2 className="size-4 animate-spin text-zinc-800" />
-              <span>{isDe ? 'Formuliert...' : 'Composing...'}</span>
+            <div className="bg-[#f4f4f3] border border-zinc-200/60 rounded-2xl rounded-tl-xs px-5 py-3.5 flex items-center gap-2.5 text-zinc-700 text-sm font-medium">
+              <Loader2 className="size-4 animate-spin text-black" />
+              <span>{isDe ? 'Formuliere Inserat...' : 'Composing listing...'}</span>
             </div>
           </div>
         )}
 
-        {/* Ready Action Banner - Appears Naturally in Flow When Listing is Formed */}
-        {(isReady || hasExtractedInfo) && (
-          <div className="rounded-2xl border border-zinc-200 bg-white p-4 sm:p-5 shadow-xs space-y-3 mt-4 transition-all">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-700">
-                  <CheckCircle2 className="size-4" />
-                  <span>
-                    {isReady
-                      ? isDe
-                        ? 'Inserat ist startklar'
-                        : 'Listing is ready'
-                      : isDe
-                        ? 'Erfasste Angaben'
-                        : 'Captured details'}
-                  </span>
-                </div>
-                <h4 className="text-base sm:text-lg font-bold text-black mt-1">
-                  {extractedJob.title || (isDe ? 'Stelle in Bearbeitung' : 'Job in progress')}
-                </h4>
-                <p className="text-xs sm:text-sm text-zinc-600 mt-0.5">
-                  {[
-                    extractedJob.company,
-                    extractedJob.district || extractedJob.city,
-                    extractedJob.wage,
-                    extractedJob.employmentType,
-                  ]
-                    .filter(Boolean)
-                    .join(' • ')}
-                </p>
-              </div>
+        {/* Direct Review & Publish Button - Appears naturally when ready (ZERO PREVIEW CARD) */}
+        {isReady && !loading && (
+          <div className="pt-3 pb-1">
+            <button
+              type="button"
+              onClick={() => onApplyToForm(extractedJob, 3)}
+              className="apple-press w-full py-4 px-6 rounded-2xl bg-black hover:bg-zinc-800 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-md transition-all active:scale-[0.98] cursor-pointer"
+            >
+              <CheckCircle2 className="size-5 text-emerald-400" />
+              <span>{isDe ? 'Inserat prüfen & live schalten' : 'Review & Publish Listing'}</span>
+              <ArrowRight className="size-4.5 stroke-[2.5]" />
+            </button>
+          </div>
+        )}
 
-              {extractedJob.completeness && (
-                <span className="text-xs font-mono font-bold text-zinc-700 bg-zinc-100 px-2.5 py-1 rounded-full shrink-0">
-                  {extractedJob.completeness}%
-                </span>
-              )}
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 pt-1">
-              <button
-                type="button"
-                onClick={() => onApplyToForm(extractedJob, isReady ? 3 : 1)}
-                className="apple-press flex-1 py-3 px-5 rounded-xl bg-black hover:bg-zinc-800 text-white text-sm font-semibold flex items-center justify-center gap-2 shadow-xs transition active:scale-[0.98] cursor-pointer"
-              >
-                <span>
-                  {isReady
-                    ? isDe
-                      ? 'Inserat prüfen & live schalten'
-                      : 'Review & Publish Listing'
-                    : isDe
-                      ? 'Daten ins Formular übernehmen'
-                      : 'Apply data to standard form'}
-                </span>
-                <ArrowRight className="size-4" />
-              </button>
-
-              {isReady && (
-                <button
-                  type="button"
-                  onClick={() => onApplyToForm(extractedJob, 1)}
-                  className="apple-press py-3 px-4 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-xs sm:text-sm font-semibold text-zinc-800 transition cursor-pointer text-center"
-                >
-                  {isDe ? 'Im Formular bearbeiten' : 'Edit in standard form'}
-                </button>
-              )}
-            </div>
+        {/* Subtle fallback link if partially filled */}
+        {hasExtractedInfo && !isReady && !loading && (
+          <div className="flex justify-end pt-1">
+            <button
+              type="button"
+              onClick={() => onApplyToForm(extractedJob, 1)}
+              className="text-xs text-zinc-500 hover:text-black font-medium transition cursor-pointer underline underline-offset-2"
+            >
+              {isDe ? 'Im klassischen Formular bearbeiten →' : 'Edit in standard form →'}
+            </button>
           </div>
         )}
 
@@ -338,8 +296,8 @@ export function AiJobCreatorChat({
         </div>
       )}
 
-      {/* Interactive Bottom Area: Starter Prompts + Input Bar */}
-      <div className="space-y-3 pt-1">
+      {/* Interactive Bottom Area: Starter Prompts + Improved Input Bar */}
+      <div className="space-y-3 pt-2">
         {/* Quick Suggestion Chips */}
         {quickReplies.length > 0 && !loading && (
           <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -348,7 +306,7 @@ export function AiJobCreatorChat({
                 key={i}
                 type="button"
                 onClick={() => handleSendMessage(qr)}
-                className="apple-press text-xs sm:text-[13px] font-medium bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-700 rounded-full px-3.5 py-1.5 transition-all shadow-2xs hover:border-zinc-300 active:scale-[0.97] cursor-pointer"
+                className="apple-press text-xs sm:text-[13px] font-medium bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 rounded-full px-3.5 py-1.5 transition-all shadow-2xs hover:border-zinc-300 active:scale-[0.97] cursor-pointer"
               >
                 {qr}
               </button>
@@ -356,13 +314,13 @@ export function AiJobCreatorChat({
           </div>
         )}
 
-        {/* Text Input Bar - High-Craft Rounded Pill */}
+        {/* Improved Text Input Bar */}
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSendMessage();
           }}
-          className="relative rounded-2xl sm:rounded-3xl border border-zinc-200 bg-white shadow-xs hover:border-zinc-300 focus-within:border-zinc-400 focus-within:shadow-md transition-all p-2 sm:p-2.5 flex items-end gap-2"
+          className="relative rounded-2xl sm:rounded-3xl border border-zinc-300 bg-white shadow-xs hover:border-zinc-400 focus-within:border-black focus-within:ring-2 focus-within:ring-black/10 transition-all p-2 sm:p-2.5 flex items-end gap-2"
         >
           <textarea
             ref={inputRef}
@@ -376,22 +334,22 @@ export function AiJobCreatorChat({
             }}
             placeholder={
               isDe
-                ? 'Beschreibe deine Stelle oder füge Notizen ein...'
+                ? 'Beschreibe deine Stelle oder füge WhatsApp-Notizen ein...'
                 : 'Describe the position or paste your notes...'
             }
             rows={1}
-            className="flex-1 max-h-32 min-h-[44px] py-2.5 px-3 text-[15px] sm:text-base text-zinc-900 placeholder:text-zinc-400 bg-transparent outline-none resize-none leading-relaxed"
+            className="flex-1 max-h-36 min-h-[46px] py-2.5 px-3.5 text-[15px] sm:text-base text-black placeholder:text-zinc-400 bg-transparent outline-none resize-none leading-relaxed font-normal"
           />
           <button
             type="submit"
             disabled={!input.trim() || loading}
-            className="apple-press size-10 sm:size-11 rounded-full bg-black hover:bg-zinc-800 disabled:bg-zinc-100 text-white disabled:text-zinc-400 flex items-center justify-center shrink-0 transition-all cursor-pointer disabled:cursor-not-allowed active:scale-95 mb-0.5"
+            className="apple-press size-11 rounded-full bg-black hover:bg-zinc-800 disabled:bg-zinc-100 text-white disabled:text-zinc-400 flex items-center justify-center shrink-0 transition-all cursor-pointer disabled:cursor-not-allowed active:scale-95 mb-0.5 shadow-xs"
             title={isDe ? 'Nachricht senden' : 'Send'}
           >
             {loading ? (
-              <Loader2 className="size-4 animate-spin" />
+              <Loader2 className="size-4.5 animate-spin" />
             ) : (
-              <Send className="size-4 sm:size-4.5" />
+              <Send className="size-4.5" />
             )}
           </button>
         </form>
