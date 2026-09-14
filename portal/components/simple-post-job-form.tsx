@@ -124,17 +124,27 @@ export function SimplePostJobForm() {
     }
   }, [authLoading, user]);
 
-  // Check 1st free job eligibility
+  // Check 1st free job eligibility via authoritative backend endpoint
   useEffect(() => {
     async function checkEligibility() {
       if (user?.uid) {
-        const eligible = await isUserEligibleForFreeJob(user.uid);
-        setIsFreeEligible(eligible);
-        if (!eligible && formData.tier === 'free') {
-          setFormData((prev) => ({ ...prev, tier: 'starter' }));
-        } else if (eligible && formData.tier === 'starter') {
-          setFormData((prev) => ({ ...prev, tier: 'free' }));
+        try {
+          const res = await fetch(`/api/entitlements/status?userId=${encodeURIComponent(user.uid)}`);
+          if (res.ok) {
+            const data = await res.json();
+            const eligible = Boolean(data.isEligibleForFree);
+            setIsFreeEligible(eligible);
+            if (!eligible && formData.tier === 'free') {
+              setFormData((prev) => ({ ...prev, tier: 'standard' }));
+            } else if (eligible && formData.tier !== 'free' && formData.tier === 'starter') {
+              setFormData((prev) => ({ ...prev, tier: 'free' }));
+            }
+          }
+        } catch (err) {
+          console.warn('Could not verify entitlement status:', err);
         }
+      } else {
+        setIsFreeEligible(true);
       }
     }
     checkEligibility();
@@ -237,7 +247,14 @@ export function SimplePostJobForm() {
       const submissionId = `direct-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
       const jobSlug = `${companySlug}-${titleSlug}-${submissionId.slice(-4)}`;
 
-      const tierDurationDays = formData.tier === 'premium' ? 60 : formData.tier === 'standard' ? 30 : 15;
+      const tierDurationDays =
+        formData.tier === 'premium'
+          ? 60
+          : formData.tier === 'standard'
+          ? 30
+          : formData.tier === 'free'
+          ? 30
+          : 15;
       const tierPricePaid =
         formData.tier === 'premium'
           ? 24.99
@@ -250,90 +267,108 @@ export function SimplePostJobForm() {
         formData.tier === 'premium'
           ? 'Extended Inserat (60 Tage)'
           : formData.tier === 'free'
-          ? '🎁 Erstinserat (Gratis)'
+          ? '🎁 Erstinserat (30 Tage Gratis)'
           : formData.tier === 'standard'
           ? 'Standard Inserat (30 Tage)'
           : 'Quick Inserat (15 Tage)';
 
-      // 1. Save locally so it's safely stored for this employer
-      saveMyListing({
-        id: submissionId,
-        type: 'job',
-        title: formData.title,
-        subtitle: `${formData.company} · ${formData.district}, ${formData.city}`,
-        badgeLabel: formData.wage,
-        tier: formData.tier,
-        tierLabel: tierLabel,
-        status: 'active',
-        postedAt: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + tierDurationDays * 86400000).toISOString(),
-        linkUrl: `/jobs/${jobSlug}`,
-        pricePaidEur: tierPricePaid,
-      });
-
-      setLastCreatedJob({ id: submissionId, slug: jobSlug, title: formData.title });
-
-      // 2. Save to Firestore via API
       const assignedUserId = user?.uid || 'employer-' + Date.now();
-      await createJobInFirestore(
-        {
-          userId: assignedUserId,
+
+      // FREE TIER FLOW
+      if (formData.tier === 'free') {
+        const createRes = await fetch('/api/jobs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: submissionId,
+            slug: jobSlug,
+            userId: assignedUserId,
+            title: formData.title,
+            company: formData.company,
+            city: formData.city,
+            district: formData.district,
+            description: formData.description,
+            payText: formData.wage,
+            employmentType: formData.employmentType,
+            contactEmail: formData.contactEmail || undefined,
+            contactPhone: formData.phone || undefined,
+            whatsapp: formData.whatsapp || undefined,
+            applyUrl: formData.applyUrl || undefined,
+            tier: 'free',
+            status: 'active',
+          }),
+        });
+
+        const createData = await createRes.json();
+        if (!createRes.ok || createData.error) {
+          if (createData.requiresPayment || createData.code === 'FREE_LIMIT_REACHED') {
+            setIsFreeEligible(false);
+            setFormData((prev) => ({ ...prev, tier: 'standard' }));
+            setError(
+              isDe
+                ? 'Dein kostenloses 30-Tage Erstinserat wurde bereits genutzt. Bitte wähle eines unserer günstigen Inserate (Quick, Standard oder Extended).'
+                : 'Your free 30-day listing was already used. Please choose a package to continue.'
+            );
+          } else {
+            setError(createData.error || 'Fehler beim Erstellen des Inserats.');
+          }
+          setLoading(false);
+          return;
+        }
+
+        // 1. Save locally for employer dashboard
+        saveMyListing({
+          id: submissionId,
+          type: 'job',
           title: formData.title,
-          company: formData.company,
-          city: formData.city,
-          district: formData.district,
-          description: formData.description,
-          payText: formData.wage,
-          employmentType: formData.employmentType,
-          contactEmail: formData.contactEmail || undefined,
-          contactPhone: formData.phone || undefined,
-          whatsapp: formData.whatsapp || undefined,
-          applyUrl: formData.applyUrl || undefined,
-          tier: formData.tier,
+          subtitle: `${formData.company} · ${formData.district}, ${formData.city}`,
+          badgeLabel: formData.wage,
+          tier: 'free',
+          tierLabel,
           status: 'active',
-          slug: jobSlug,
-        },
-        submissionId
-      );
+          postedAt: new Date().toISOString(),
+          expiresAt: new Date(Date.now() + 30 * 86400000).toISOString(),
+          linkUrl: `/jobs/${jobSlug}`,
+          pricePaidEur: 0,
+        });
 
-      // 3. If user used free tier, record in Firestore
-      if (formData.tier === 'free' && user?.uid) {
-        markFreeJobUsed(user.uid).catch(console.error);
+        setLastCreatedJob({ id: submissionId, slug: jobSlug, title: formData.title });
         setIsFreeEligible(false);
-      }
 
-      // 4. Automatically notify Googlebot Instant Indexing API in real-time
-      fetch('/api/jobs/notify-index', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobSlug }),
-      }).catch((err) => console.warn('[Google Indexing] Notify error:', err));
+        // 2. Automatically notify Googlebot Instant Indexing API in real-time
+        fetch('/api/jobs/notify-index', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ jobSlug }),
+        }).catch((err) => console.warn('[Google Indexing] Notify error:', err));
 
-      // 5. Dispatch update event
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new Event('jobroofs_listings_updated'));
-      }
+        // 3. Dispatch update event
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('jobroofs_listings_updated'));
+        }
 
-      // If free tier or master account, no checkout needed (instant activation)
-      if (formData.tier === 'free' || isMaster) {
         setSuccess(true);
         setLoading(false);
         return;
       }
 
-      // 4. Create Stripe checkout session
+      // PAID TIER FLOW — Stripe Checkout Required (No premature publishing)
       const checkoutRes = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           tier: formData.tier,
           jobData: {
+            id: submissionId,
             slug: jobSlug,
             userId: assignedUserId,
             title: formData.title,
             company: formData.company,
+            city: formData.city,
             district: formData.district,
-            wage: formData.wage,
+            description: formData.description,
+            payText: formData.wage,
+            employmentType: formData.employmentType,
             contactEmail: formData.contactEmail || undefined,
             contactPhone: formData.phone || undefined,
             whatsapp: formData.whatsapp || undefined,
@@ -345,19 +380,33 @@ export function SimplePostJobForm() {
       const checkoutData = await checkoutRes.json();
 
       if (checkoutData.checkoutUrl) {
+        saveMyListing({
+          id: submissionId,
+          type: 'job',
+          title: formData.title,
+          subtitle: `${formData.company} · ${formData.district}, ${formData.city}`,
+          badgeLabel: formData.wage,
+          tier: formData.tier,
+          tierLabel,
+          status: 'pending_payment',
+          postedAt: new Date().toISOString(),
+          expiresAt: new Date(Date.now() + tierDurationDays * 86400000).toISOString(),
+          linkUrl: `/jobs/${jobSlug}`,
+          pricePaidEur: tierPricePaid,
+        });
+
         // Direct seamless redirect to Stripe Checkout
         window.location.href = checkoutData.checkoutUrl;
         return;
       }
 
-      if (checkoutData.error && !checkoutData.mock) {
+      if (checkoutData.error) {
         setError(checkoutData.error);
         setLoading(false);
         return;
       }
 
-      // If mock/preview mode or Stripe keys not present, show instant success
-      setSuccess(true);
+      setError('Die Zahlungsabwicklung konnte nicht gestartet werden.');
     } catch (err: any) {
       setError(err.message || 'Ein unerwarteter Fehler ist aufgetreten.');
     } finally {
@@ -981,33 +1030,33 @@ export function SimplePostJobForm() {
 
               {/* Placement / Tier Selector */}
               <div className="space-y-2.5 pt-1">
-                {isMaster && (
-                  <div className="mb-4 rounded-2xl bg-amber-50/90 p-4 flex items-center justify-between text-xs sm:text-sm text-amber-950 shadow-xs">
+                {!isFreeEligible && (
+                  <div className="mb-4 rounded-2xl bg-zinc-100/90 p-4 flex items-center justify-between text-xs sm:text-sm text-zinc-900 border border-zinc-200">
                     <div className="flex items-center gap-3">
-                      <ShieldCheck className="size-5 text-amber-700 shrink-0" />
+                      <Gift className="size-5 text-zinc-600 shrink-0" />
                       <div>
-                        <p className="font-bold">👑 Master-Zugang aktiv ({user?.email})</p>
-                        <p className="text-xs sm:text-sm text-amber-800 mt-0.5">
-                          Voller Testmodus aktiv. Jedes Inserat-Modell (Quick, Standard, Extended) kann ohne Kreditkartenzahlung getestet und sofort scharf geschaltet werden.
+                        <p className="font-bold">🎁 Kostenloses Erstinserat bereits genutzt (1/1 Kontingent)</p>
+                        <p className="text-xs text-zinc-600 mt-0.5">
+                          Für jedes weitere Inserat stehen dir unsere flexiblen, provisionsfreien Pakete zur Verfügung.
                         </p>
                       </div>
                     </div>
-                    <span className="font-mono text-xs font-bold bg-amber-200/90 text-amber-900 px-3 py-1 rounded-lg shrink-0 ml-3">
-                      0 € TESTMODUS
+                    <span className="font-mono text-xs font-semibold bg-zinc-200 text-zinc-800 px-2.5 py-1 rounded-lg shrink-0 ml-3">
+                      REGULÄR
                     </span>
                   </div>
                 )}
                 <div className="flex items-center justify-between">
                   <label className="block text-xs sm:text-sm font-semibold uppercase tracking-wider text-zinc-700">
-                    Laufzeit & Modell wählen
+                    Laufzeit & Paket wählen
                   </label>
                   <span className="text-xs sm:text-sm text-zinc-500 font-medium">
-                    Über 75% günstiger als herkömmliche Portale
+                    100% provisionsfrei · Keine Agenturgebühren
                   </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {isFreeEligible ? (
-                    /* Free 1st Job Tier */
+                    /* Free 1st Job Tier (30 Days) */
                     <button
                       type="button"
                       onClick={() => setFormData({ ...formData, tier: 'free' })}
@@ -1020,16 +1069,16 @@ export function SimplePostJobForm() {
                       <div className="flex items-center justify-between">
                         <span className="text-sm sm:text-base font-bold text-black flex items-center gap-1.5">
                           <Gift className="size-4 text-emerald-600" />
-                          <span>1. Inserat Gratis</span>
+                          <span>1. Inserat Gratis (30 Tage)</span>
                         </span>
                         <span className="font-mono text-sm sm:text-base font-bold text-emerald-700">0 €</span>
                       </div>
                       <p className="mt-1 text-xs sm:text-sm text-zinc-700 leading-relaxed">
-                        15 Tage Laufzeit &middot; 100% Direktkontakt &middot; Sofort live ohne Zahlungsdaten.
+                        Volle 30 Tage Laufzeit &middot; 100% Direktkontakt &middot; Sofort live ohne Zahlungsdaten.
                       </p>
                     </button>
                   ) : (
-                    /* Starter Tier */
+                    /* Starter Tier (15 Days) */
                     <button
                       type="button"
                       onClick={() => setFormData({ ...formData, tier: 'starter' })}
@@ -1049,16 +1098,21 @@ export function SimplePostJobForm() {
                     </button>
                   )}
 
-                  {/* Standard Tier */}
+                  {/* Standard Tier (30 Days) */}
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, tier: 'standard' })}
-                    className={`p-4 rounded-2xl text-left transition-all cursor-pointer ${
+                    className={`p-4 rounded-2xl text-left transition-all cursor-pointer relative ${
                       formData.tier === 'standard'
                         ? 'bg-zinc-900 text-white shadow-sm font-semibold'
                         : 'bg-[#f4f4f3] hover:bg-zinc-200 text-black'
                     }`}
                   >
+                    {!isFreeEligible && (
+                      <span className="absolute -top-2.5 right-3 text-[10px] font-bold bg-black text-white px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        Empfohlen
+                      </span>
+                    )}
                     <div className="flex items-center justify-between">
                       <span className={`text-sm sm:text-base font-bold ${formData.tier === 'standard' ? 'text-white' : 'text-black'}`}>Standard (30 Tage)</span>
                       <span className={`font-mono text-sm sm:text-base font-bold ${formData.tier === 'standard' ? 'text-white' : 'text-black'}`}>14,99 € <span className={`text-xs font-normal ${formData.tier === 'standard' ? 'text-zinc-500' : 'text-zinc-500'}`}>inkl. MwSt.</span></span>
@@ -1136,15 +1190,13 @@ export function SimplePostJobForm() {
                   ) : (
                     <>
                       <span>
-                        {isMaster
-                          ? `Als Master sofort live schalten (${formData.tier === 'premium' ? 'Extended 60 Tage' : formData.tier === 'standard' ? 'Standard 30 Tage' : formData.tier === 'starter' ? 'Quick 15 Tage' : 'Gratis 15 Tage'} · 0 € Testmodus)`
-                          : formData.tier === 'free'
-                          ? 'Jetzt kostenlos live schalten (0 €)'
+                        {formData.tier === 'free'
+                          ? 'Jetzt kostenlos live schalten (0 € · 30 Tage)'
                           : formData.tier === 'premium'
-                          ? 'Zahlungspflichtig bestellen (24,99 €)'
+                          ? 'Weiter zur sicheren Zahlung (24,99 € inkl. MwSt.)'
                           : formData.tier === 'standard'
-                          ? 'Zahlungspflichtig bestellen (14,99 €)'
-                          : 'Zahlungspflichtig bestellen (9,99 €)'}
+                          ? 'Weiter zur sicheren Zahlung (14,99 € inkl. MwSt.)'
+                          : 'Weiter zur sicheren Zahlung (9,99 € inkl. MwSt.)'}
                       </span>
                       <ArrowRight className="size-4 stroke-[2]" />
                     </>

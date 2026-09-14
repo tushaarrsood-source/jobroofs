@@ -48,6 +48,17 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
       const params = new URLSearchParams(window.location.search);
       if (params.get('payment_success') === 'true') {
         setShowSuccessBanner(true);
+        const sessionId = params.get('session_id');
+        if (sessionId) {
+          fetch(`/api/checkout/verify?session_id=${encodeURIComponent(sessionId)}`)
+            .then((r) => r.json())
+            .then((data) => {
+              if (data.verified) {
+                window.dispatchEvent(new Event('jobroofs_listings_updated'));
+              }
+            })
+            .catch((err) => console.warn('Verify session error:', err));
+        }
       }
     }
   }, [job.id, job.slug]);

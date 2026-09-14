@@ -299,3 +299,172 @@ export async function adminDeleteJob(id: string): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Check whether an account is eligible for the 1st free 30-day job.
+ * Enforces:
+ * 1. User document hasUsedFreeListing !== true
+ * 2. User has 0 existing jobs in the database
+ */
+export async function adminCheckUserFreeEligibility(userId: string): Promise<{
+  isEligibleForFree: boolean;
+  existingJobsCount: number;
+  reason?: string;
+}> {
+  if (!userId) {
+    return { isEligibleForFree: false, existingJobsCount: 0, reason: 'unauthenticated' };
+  }
+
+  const token = await getAccessToken();
+  if (!token) {
+    // If admin token fails, default to strict false for safety
+    return { isEligibleForFree: false, existingJobsCount: 0, reason: 'auth_unavailable' };
+  }
+
+  try {
+    // 1. Check user profile flag
+    const userRes = await fetch(`${BASE_URL}/users/${userId}`, {
+      headers: { Authorization: 'Bearer ' + token },
+      cache: 'no-store',
+    });
+
+    if (userRes.ok) {
+      const userDoc = await userRes.json();
+      const fields = userDoc.fields || {};
+      const hasUsed =
+        fields.hasUsedFreeListing?.booleanValue === true ||
+        fields.firstJobUsed?.booleanValue === true;
+      if (hasUsed) {
+        return { isEligibleForFree: false, existingJobsCount: 1, reason: 'free_already_used' };
+      }
+    }
+
+    // 2. Query jobs collection for any existing jobs posted by this userId
+    const queryUrl = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents:runQuery`;
+    const qRes = await fetch(queryUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        structuredQuery: {
+          from: [{ collectionId: 'jobs' }],
+          where: {
+            fieldFilter: {
+              field: { fieldPath: 'userId' },
+              op: 'EQUAL',
+              value: { stringValue: userId },
+            },
+          },
+          limit: 10,
+        },
+      }),
+    });
+
+    if (qRes.ok) {
+      const items = await qRes.json();
+      const validJobs = Array.isArray(items) ? items.filter((i) => i.document) : [];
+      if (validJobs.length > 0) {
+        return {
+          isEligibleForFree: false,
+          existingJobsCount: validJobs.length,
+          reason: 'existing_jobs_found',
+        };
+      }
+    }
+
+    return { isEligibleForFree: true, existingJobsCount: 0 };
+  } catch (err) {
+    console.error('[Firestore Admin] Check eligibility error:', err);
+    return { isEligibleForFree: false, existingJobsCount: 0, reason: 'error_checking' };
+  }
+}
+
+/**
+ * Permanently mark that a user has used their 1st free listing
+ */
+export async function adminMarkUserFreeJobUsed(userId: string, jobId?: string): Promise<boolean> {
+  if (!userId) return false;
+  const token = await getAccessToken();
+  if (!token) return false;
+
+  const url = `${BASE_URL}/users/${userId}?updateMask.fieldPaths=hasUsedFreeListing&updateMask.fieldPaths=freeListingJobId&updateMask.fieldPaths=freeListingUsedAt&updateMask.fieldPaths=updatedAt`;
+
+  try {
+    const res = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fields: {
+          hasUsedFreeListing: { booleanValue: true },
+          freeListingJobId: { stringValue: jobId || '' },
+          freeListingUsedAt: { timestampValue: new Date().toISOString() },
+          updatedAt: { timestampValue: new Date().toISOString() },
+        },
+      }),
+    });
+    return res.ok;
+  } catch (err) {
+    console.error('[Firestore Admin] Mark free job used error:', err);
+    return false;
+  }
+}
+
+/**
+ * Activate a pending job upon verified Stripe payment
+ */
+export async function adminActivatePaidJob(
+  submissionIdOrSlug: string,
+  stripeSessionId: string,
+  durationDays = 30,
+  tier = 'standard'
+): Promise<any | null> {
+  const token = await getAccessToken();
+  if (!token) return null;
+
+  // First find the existing job
+  const existingJob = await adminGetJobBySlugOrId(submissionIdOrSlug);
+  if (!existingJob) {
+    console.error('[Firestore Admin] Job not found to activate:', submissionIdOrSlug);
+    return null;
+  }
+
+  const docId = existingJob.id;
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + durationDays * 86400000).toISOString();
+
+  const url = `${BASE_URL}/jobs/${docId}?updateMask.fieldPaths=status&updateMask.fieldPaths=stripeSessionId&updateMask.fieldPaths=paidAt&updateMask.fieldPaths=expiresAt&updateMask.fieldPaths=tier&updateMask.fieldPaths=updatedAt`;
+
+  try {
+    const res = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fields: {
+          status: { stringValue: 'active' },
+          stripeSessionId: { stringValue: stripeSessionId },
+          paidAt: { timestampValue: now.toISOString() },
+          expiresAt: { timestampValue: expiresAt },
+          tier: { stringValue: tier },
+          updatedAt: { timestampValue: now.toISOString() },
+        },
+      }),
+    });
+
+    if (res.ok) {
+      const updatedDoc = await res.json();
+      return fromFirestoreDoc(updatedDoc);
+    }
+    return null;
+  } catch (err) {
+    console.error('[Firestore Admin] Activate paid job error:', err);
+    return null;
+  }
+}

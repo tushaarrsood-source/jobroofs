@@ -4,6 +4,8 @@ import {
   adminGetJobBySlugOrId,
   adminGetJobs,
   adminDeleteJob,
+  adminCheckUserFreeEligibility,
+  adminMarkUserFreeJobUsed,
 } from '@/lib/firebase/firestore-admin';
 
 export const dynamic = 'force-dynamic';
@@ -97,6 +99,35 @@ export async function POST(request: Request) {
       );
     }
 
+    const tier = body.tier || 'free';
+    const userId = body.userId;
+
+    // Strict Free Tier Entitlement Check
+    if (tier === 'free') {
+      if (!userId) {
+        return NextResponse.json(
+          {
+            error: 'Bitte melde dich an, um dein kostenloses 30-Tage Erstinserat zu aktivieren.',
+            requiresAuth: true,
+          },
+          { status: 401 }
+        );
+      }
+
+      const eligibility = await adminCheckUserFreeEligibility(userId);
+      if (!eligibility.isEligibleForFree) {
+        return NextResponse.json(
+          {
+            error:
+              'Das kostenlose 30-Tage Erstinserat wurde für dieses Konto bereits genutzt. Bitte wähle ein reguläres Paket (Quick 9,99 €, Standard 14,99 € oder Extended 24,99 €).',
+            requiresPayment: true,
+            code: 'FREE_LIMIT_REACHED',
+          },
+          { status: 403 }
+        );
+      }
+    }
+
     const companySlug = String(body.company)
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
@@ -108,12 +139,36 @@ export async function POST(request: Request) {
     const submissionId = body.id || `direct-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
     const jobSlug = body.slug || `${companySlug}-${titleSlug}-${submissionId.slice(-4)}`;
 
+    // Calculate duration & initial status
+    const now = new Date();
+    let durationDays = 30; // Free default is 30 days
+    let finalStatus = 'active';
+
+    if (tier === 'free') {
+      durationDays = 30;
+      finalStatus = 'active';
+    } else {
+      durationDays = tier === 'premium' ? 60 : tier === 'standard' ? 30 : 15;
+      // If paid tier and not verified by Stripe yet, mark as pending_payment
+      if (!body.stripeSessionId) {
+        finalStatus = body.status === 'pending_payment' ? 'pending_payment' : 'pending_payment';
+      } else {
+        finalStatus = 'active';
+      }
+    }
+
+    const expiresAt = new Date(now.getTime() + durationDays * 86400000).toISOString();
+
     const saved = await adminCreateJob(
       {
         ...body,
         id: submissionId,
         slug: jobSlug,
-        status: body.status || 'active',
+        tier,
+        durationDays,
+        status: finalStatus,
+        expiresAt,
+        updatedAt: now.toISOString(),
       },
       submissionId
     );
@@ -125,10 +180,16 @@ export async function POST(request: Request) {
       );
     }
 
+    // If free tier succeeded, permanently mark in user record
+    if (tier === 'free' && userId) {
+      await adminMarkUserFreeJobUsed(userId, submissionId);
+    }
+
     return NextResponse.json({
       success: true,
       id: submissionId,
       slug: jobSlug,
+      status: finalStatus,
       job: saved,
     });
   } catch (err: any) {
@@ -136,6 +197,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
+
 
 export async function DELETE(request: Request) {
   try {
