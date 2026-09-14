@@ -10,38 +10,38 @@ export function SiteFooter() {
   const { isDe } = useTranslation();
 
   return (
-    <footer className="bg-black text-zinc-400 border-t border-zinc-800 mt-24">
-      <div className="mx-auto max-w-5xl px-3.5 sm:px-4 md:px-5 py-14">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="bg-black text-zinc-400 border-t border-zinc-800 mt-12 sm:mt-16">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 py-8 sm:py-10">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
           {/* Brand Col */}
-          <div className="sm:col-span-2 lg:col-span-1">
-            <BrandLogo variant="dark" size="md" />
-            <p className="mt-4 text-[13px] leading-relaxed text-zinc-300 font-normal">
+          <div className="col-span-2 sm:col-span-1">
+            <BrandLogo variant="dark" size="sm" />
+            <p className="mt-2.5 text-xs text-zinc-300 leading-relaxed max-w-xs font-normal">
               {isDe
-                ? 'Das Portal für unabhängige Betriebe, Macher und Minijobs in ganz Deutschland. 100% Direktkontakt ohne Vermittler.'
-                : 'The platform for independent businesses, creators, and temp jobs across Germany. 100% direct contact with zero middlemen.'}
+                ? 'Flexible Jobs, Minijobs & Teilzeit in ganz Deutschland.'
+                : 'Flexible jobs, minijobs & part-time opportunities in Germany.'}
             </p>
           </div>
 
           {/* Navigation Col */}
           <div>
-            <h4 className="text-[10.5px] font-bold text-white uppercase tracking-[0.2em] mb-4">
-              Navigation
-            </h4>
-            <ul className="space-y-2.5 text-[13px] font-medium">
+            <div className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider mb-2.5">
+              Jobs
+            </div>
+            <ul className="space-y-1.5 text-xs">
               <li>
                 <Link href="/" className="hover:text-white transition-colors">
-                  {isDe ? 'Alle Jobs in Deutschland' : 'All Jobs in Germany'}
+                  {isDe ? 'Alle Jobs' : 'All Jobs'}
                 </Link>
               </li>
               <li>
-                <Link href="/post-a-job" className="text-white hover:underline underline-offset-4 font-semibold">
+                <Link href="/post-a-job" className="text-white hover:underline underline-offset-2 font-medium">
                   {isDe ? 'Job inserieren (1. Job 0 €)' : 'Post a Job (1st free)'}
                 </Link>
               </li>
               <li>
                 <Link href="/pricing" className="hover:text-white transition-colors">
-                  {isDe ? 'Preise & Tarife' : 'Pricing & Plans'}
+                  {isDe ? 'Preise & Tarife' : 'Pricing'}
                 </Link>
               </li>
               <li>
@@ -56,39 +56,12 @@ export function SiteFooter() {
             </ul>
           </div>
 
-          {/* Contact & Support Col */}
-          <div>
-            <h4 className="text-[10.5px] font-bold text-white uppercase tracking-[0.2em] mb-4">
-              {isDe ? 'Kontakt & Support' : 'Contact & Support'}
-            </h4>
-            <ul className="space-y-2.5 text-[13px] font-medium">
-              <li>
-                <a
-                  href="mailto:jobroofs@gmail.com"
-                  className="text-white hover:underline font-mono text-[12.5px] font-semibold"
-                >
-                  jobroofs@gmail.com
-                </a>
-              </li>
-              <li className="text-[12px] text-zinc-400 font-normal">
-                {isDe
-                  ? 'Offizielle Anfragen, Inserate & Partnerbetreuung'
-                  : 'Official inquiries, listings & employer support'}
-              </li>
-              <li className="pt-1">
-                <Link href="/impressum" className="hover:text-white transition-colors">
-                  {isDe ? 'Kontakt & Impressum' : 'Contact & Legal Notice'}
-                </Link>
-              </li>
-            </ul>
-          </div>
-
           {/* Legal Col */}
           <div>
-            <h4 className="text-[10.5px] font-bold text-white uppercase tracking-[0.2em] mb-4">
-              Rechtliches
-            </h4>
-            <ul className="space-y-2.5 text-[13px] font-medium">
+            <div className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider mb-2.5">
+              {isDe ? 'Rechtliches' : 'Legal'}
+            </div>
+            <ul className="space-y-1.5 text-xs">
               <li>
                 <Link href="/impressum" className="hover:text-white transition-colors">
                   Impressum (§ 5 DDG)
@@ -96,12 +69,12 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link href="/datenschutz" className="hover:text-white transition-colors">
-                  Datenschutzerklärung
+                  Datenschutz
                 </Link>
               </li>
               <li>
                 <Link href="/agb" className="hover:text-white transition-colors">
-                  Allgemeine Geschäftsbedingungen
+                  AGB
                 </Link>
               </li>
               <li>
@@ -113,21 +86,39 @@ export function SiteFooter() {
                 <button
                   type="button"
                   onClick={openCookieSettings}
-                  className="hover:text-white transition-colors text-left cursor-pointer text-zinc-400"
+                  className="hover:text-white transition-colors text-left cursor-pointer"
                 >
                   {isDe ? 'Cookie-Einstellungen' : 'Cookie Preferences'}
                 </button>
               </li>
             </ul>
           </div>
+
+          {/* Contact Col */}
+          <div>
+            <div className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider mb-2.5">
+              Kontakt
+            </div>
+            <ul className="space-y-1.5 text-xs">
+              <li>
+                <a
+                  href="mailto:jobroofs@gmail.com"
+                  className="text-white hover:underline font-mono font-medium"
+                >
+                  jobroofs@gmail.com
+                </a>
+              </li>
+              <li className="text-zinc-300">
+                {isDe ? 'Direkter Support' : 'Direct Support'}
+              </li>
+            </ul>
+          </div>
         </div>
 
-        <div className="mt-14 border-t border-zinc-800 pt-6 flex flex-col sm:flex-row items-center justify-between text-[11.5px] text-zinc-400 font-medium gap-2">
-          <p>© {new Date().getFullYear()} JOBROOFS Deutschland &middot; The Independent Job Portal.</p>
-          <div className="flex items-center gap-2">
-            <span className="size-1.5 rounded-full bg-emerald-500" />
-            <span className="text-zinc-300">100% Unabhängige Betriebe · Bundesweit</span>
-          </div>
+        {/* Minimal Bottom Bar */}
+        <div className="mt-8 pt-4 border-t border-zinc-900 flex flex-col sm:flex-row items-center justify-between text-[11px] text-zinc-300 gap-2">
+          <p>© {new Date().getFullYear()} JOBROOFS Deutschland</p>
+          <p className="text-zinc-400 font-mono">jobroofs.com</p>
         </div>
       </div>
     </footer>

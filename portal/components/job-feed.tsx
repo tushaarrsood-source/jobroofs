@@ -536,28 +536,25 @@ export function JobFeed({
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="min-w-0 flex-1 space-y-2">
                   {/* Badges Row */}
-                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                    {job.isIndependentLister && (
-                      <span className="shrink-0 text-[11px] uppercase bg-black text-white px-2.5 py-0.5 rounded-full font-bold tracking-wider leading-none shadow-2xs">
-                        ★ UNABHÄNGIG
-                      </span>
-                    )}
-                    {job.isUserListing && (
-                      <span className="shrink-0 text-[11px] uppercase bg-zinc-800 text-white px-2.5 py-0.5 rounded-full font-bold leading-none shadow-2xs">
-                        {isDe ? 'DEIN INSERAT' : 'YOUR LISTING'}
-                      </span>
-                    )}
-                    {urgent && (
-                      <span className="shrink-0 text-[11px] uppercase bg-amber-50 text-amber-900 border border-amber-200/80 px-2.5 py-0.5 rounded-full font-bold leading-none">
-                        {isDe ? '⚡ DRINGEND' : '⚡ URGENT'}
-                      </span>
-                    )}
-                    {job.whatsapp && (
-                      <span className="shrink-0 text-[11px] font-semibold text-emerald-900 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                        💬 WhatsApp
-                      </span>
-                    )}
-                  </div>
+                  {(job.isUserListing || urgent || job.whatsapp) && (
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                      {job.isUserListing && (
+                        <span className="shrink-0 text-[11px] uppercase bg-zinc-800 text-white px-2.5 py-0.5 rounded-full font-bold leading-none shadow-2xs">
+                          {isDe ? 'DEIN INSERAT' : 'YOUR LISTING'}
+                        </span>
+                      )}
+                      {urgent && (
+                        <span className="shrink-0 text-[11px] uppercase bg-amber-50 text-amber-900 border border-amber-200/80 px-2.5 py-0.5 rounded-full font-bold leading-none">
+                          {isDe ? '⚡ DRINGEND' : '⚡ URGENT'}
+                        </span>
+                      )}
+                      {job.whatsapp && (
+                        <span className="shrink-0 text-[11px] font-semibold text-emerald-900 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                          💬 WhatsApp
+                        </span>
+                      )}
+                    </div>
+                  )}
 
                   {/* Title */}
                   <h3

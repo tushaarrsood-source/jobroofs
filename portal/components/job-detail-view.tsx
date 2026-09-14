@@ -213,22 +213,11 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
       {/* Main Job Article - Open Canvas */}
       <article className="py-2 sm:py-4">
         {/* Company Subtitle */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5 text-base text-zinc-700">
-            <JobroofsMark size={22} />
-            <span className="text-black font-bold">{job.company}</span>
-            <span className="text-zinc-300">&middot;</span>
-            <span className="text-zinc-600 font-medium">{job.district ? `${job.district}, ` : ''}{job.city || 'Deutschland'}</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-full bg-black px-3 py-1 text-xs font-bold tracking-[0.06em] text-white">
-              <span>{isDe ? 'UNABHÄNGIG' : 'INDEPENDENT'}</span>
-            </span>
-            <span className="text-xs uppercase tracking-[0.14em] text-emerald-950 font-bold bg-emerald-100/80 px-3 py-1 rounded-full">
-              DIREKTKONTAKT
-            </span>
-          </div>
+        <div className="flex items-center gap-2.5 text-base text-zinc-700">
+          <JobroofsMark size={22} />
+          <span className="text-black font-bold">{job.company}</span>
+          <span className="text-zinc-300">&middot;</span>
+          <span className="text-zinc-600 font-medium">{job.district ? `${job.district}, ` : ''}{job.city || 'Deutschland'}</span>
         </div>
 
         {/* Highlighted Job Title Box */}
