@@ -2,8 +2,11 @@ name: Daily Social Media Auto-Poster
 
 on:
   schedule:
-    # Runs everyday at 10:30 UTC (12:30 Berlin time)
-    - cron: '30 10 * * *'
+    # Multiple daily triggers with off-peak minutes to avoid GitHub Actions runner queues
+    # auto-poster.js automatically skips if today's post is already published
+    - cron: '17 9 * * *'   # 11:17 Berlin (Morning primary)
+    - cron: '23 13 * * *'  # 15:23 Berlin (Afternoon fallback)
+    - cron: '7 17 * * *'   # 19:07 Berlin (Evening fallback)
   workflow_dispatch:
 
 permissions:
