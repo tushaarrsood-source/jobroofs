@@ -175,7 +175,11 @@ export async function getJobBySlugFromFirestore(slugOrId: string): Promise<Fires
     const directRef = doc(db, 'jobs', slugOrId);
     const directSnap = await getDoc(directRef);
     if (directSnap.exists()) {
-      return directSnap.data() as FirestoreJob;
+      const data = directSnap.data() as FirestoreJob;
+      if (data.status === 'active' || data.status === 'published') {
+        return data;
+      }
+      return null;
     }
 
     // 2. Query by slug field
@@ -186,7 +190,11 @@ export async function getJobBySlugFromFirestore(slugOrId: string): Promise<Fires
     );
     const snap = await getDocs(q);
     if (!snap.empty) {
-      return snap.docs[0].data() as FirestoreJob;
+      const data = snap.docs[0].data() as FirestoreJob;
+      if (data.status === 'active' || data.status === 'published') {
+        return data;
+      }
+      return null;
     }
   } catch (err) {
     console.error('Error fetching job by slug from Firestore:', err);

@@ -41,6 +41,7 @@ interface JobPostingJsonLdProps {
     slug?: string;
     title: string;
     company: string;
+    city?: string;
     district?: string;
     postcode?: string;
     responsibilities?: string[] | string;
@@ -77,14 +78,21 @@ interface JobPostingJsonLdProps {
 function mapEmploymentType(forms?: string[]): string[] {
   if (!forms || forms.length === 0) return ['PART_TIME'];
   const map: Record<string, string> = {
-    Minijob: 'OTHER',
+    Minijob: 'PART_TIME',
+    'Minijob (bis 603 €)': 'PART_TIME',
+    Teilzeit: 'PART_TIME',
     'Part-time': 'PART_TIME',
-    'Short-term employment': 'TEMPORARY',
-    'Working student': 'INTERN',
-    'Seasonal work': 'TEMPORARY',
+    Vollzeit: 'FULL_TIME',
     'Full-time': 'FULL_TIME',
+    Studentenjob: 'PART_TIME',
+    Werkstudent: 'INTERN',
+    'Working student': 'INTERN',
+    Aushilfe: 'TEMPORARY',
+    'Short-term employment': 'TEMPORARY',
+    'Seasonal work': 'TEMPORARY',
+    Kurzfristig: 'TEMPORARY',
   };
-  return forms.map((f) => map[f] || 'OTHER');
+  return forms.map((f) => map[f] || 'PART_TIME');
 }
 
 function mapRateUnit(interval?: string): string {
@@ -140,9 +148,8 @@ export function JobPostingJsonLd({ job }: JobPostingJsonLdProps) {
       '@type': 'Place',
       address: {
         '@type': 'PostalAddress',
-        streetAddress: job.workplace?.address || '',
-        addressLocality: 'Berlin',
-        addressRegion: 'Berlin',
+        addressLocality: job.city || job.district || 'Berlin',
+        addressRegion: job.city || 'Berlin',
         postalCode: job.postcode || '',
         addressCountry: 'DE',
       },
@@ -251,6 +258,44 @@ export function LocalBusinessJsonLd() {
       'https://www.linkedin.com/company/jobroofs',
       'https://www.instagram.com/jobroofs.berlin',
     ],
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
+/* ── ItemList (Hub / Programmatic Listing Pages) ─────────────────── */
+
+interface ItemListItem {
+  name: string;
+  url: string;
+  position: number;
+}
+
+export function ItemListJsonLd({
+  name,
+  description,
+  items,
+}: {
+  name: string;
+  description?: string;
+  items: ItemListItem[];
+}) {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name,
+    description: description || name,
+    itemListElement: items.map((item) => ({
+      '@type': 'ListItem',
+      position: item.position,
+      name: item.name,
+      url: item.url.startsWith('http') ? item.url : `https://jobroofs.com${item.url}`,
+    })),
   };
 
   return (

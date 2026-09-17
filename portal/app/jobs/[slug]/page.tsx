@@ -80,6 +80,12 @@ export async function generateMetadata({
     (await getJobBySlugFromFirestore(slug)) ||
     (await getJobBySlugFromFirestore(decodedSlug));
   if (fsJob) {
+    if (fsJob.status === 'pending_payment' || (fsJob.status !== 'active' && fsJob.status !== 'published')) {
+      return {
+        title: 'Zahlung ausstehend | JOBROOFS',
+        robots: { index: false, follow: false },
+      };
+    }
     const district = fsJob.district || 'Berlin';
     return {
       title: `${fsJob.title} — ${fsJob.company} (${district}) | JOBROOFS — The portal for Temp Jobs`,
@@ -100,10 +106,14 @@ export async function generateMetadata({
 
 export default async function JobDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { slug } = await params;
+  const sParams = searchParams ? await searchParams : {};
+  const isPaymentRedirect = sParams.payment_success === 'true' && Boolean(sParams.session_id);
   let decodedSlug = slug;
   try {
     decodedSlug = decodeURIComponent(slug);
@@ -183,7 +193,48 @@ export default async function JobDetailPage({
       (await adminGetJobBySlugOrId(decodedSlug)) ||
       (await getJobBySlugFromFirestore(slug)) ||
       (await getJobBySlugFromFirestore(decodedSlug));
+
     if (fsJob) {
+      // STRICT PAYWALL CHECK:
+      // If the job is pending payment and the user is NOT returning with a Stripe session verification:
+      if (fsJob.status === 'pending_payment' && !isPaymentRedirect) {
+        return (
+          <div className="min-h-screen text-[#222222] flex flex-col justify-between relative z-10 bg-white">
+            <SiteHeader />
+            <main className="max-w-xl mx-auto px-4 py-20 text-center">
+              <div className="size-14 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center mx-auto mb-4 font-mono font-bold text-xl">
+                💳
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">
+                Zahlung noch ausstehend
+              </h1>
+              <p className="mt-3 text-sm text-zinc-600 leading-relaxed">
+                Dieses Inserat (<span className="font-semibold text-black">{fsJob.title}</span> bei {fsJob.company}) ist aktuell noch nicht öffentlich freigeschaltet.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a
+                  href={`/post-a-job?resume=${encodeURIComponent(fsJob.id)}`}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-black hover:bg-zinc-800 px-6 py-3 text-sm font-semibold text-white transition-all shadow-sm"
+                >
+                  <span>Jetzt Inserat freischalten</span>
+                </a>
+                <a
+                  href="/"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 px-6 py-3 text-sm font-semibold text-black transition-all"
+                >
+                  <span>Zur Startseite</span>
+                </a>
+              </div>
+            </main>
+            <SiteFooter />
+          </div>
+        );
+      }
+
+      if (fsJob.status !== 'active' && fsJob.status !== 'published' && !isPaymentRedirect) {
+        redirect('/?expired=true');
+      }
+
       job = {
         id: fsJob.id,
         slug: fsJob.slug || fsJob.id,

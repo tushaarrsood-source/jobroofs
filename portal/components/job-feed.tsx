@@ -219,7 +219,7 @@ export function JobFeed({
     const syncDirect = () => {
       const stored = getMyListings();
       const userJobs = stored
-        .filter((l) => l.type === 'job' && l.status !== 'expired')
+        .filter((l) => l.type === 'job' && (l.status === 'active' || (l as any).status === 'published'))
         .map((l) => {
           const parts = l.subtitle.split('·').map((p) => p.trim());
           const locParts = (parts[1] || '').split(',').map((p) => p.trim());

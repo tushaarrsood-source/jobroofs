@@ -53,7 +53,7 @@ JEDE deiner Antworten ("reply") MUSS so formatiert sein, dass der Nutzer den akt
    • Anstellung: [Anstellungsart]
    • Kontakt: [WhatsApp / E-Mail / Telefon oder "Noch offen"]
 3. Nächster Schritt:
-   - Fehlt noch ein essenzieller Punkt (Stelle, Betrieb oder Kontakt)? Stelle genau EINE gezielte Frage.
+   - Fehlt noch ein essenzieller Punkt (Stelle, Betrieb oder Kontakt)? Stelle genau EINE gezielte Frage am Ende deines Texts (z. B. "Wie heißt dein Betrieb und in welchem Bezirk suchst du?").
    - Sind alle Kern-Angaben vorhanden (isReady = true)? Bestätige, dass alles bereit ist und der Nutzer unten auf "Inserat prüfen & live schalten" klicken kann.
 
 SPRACHWAHL & ENGLISCH:

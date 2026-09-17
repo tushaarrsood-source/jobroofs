@@ -91,14 +91,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  const cityPages: MetadataRoute.Sitemap = GERMAN_CITIES.map((city) => ({
-    url: `${baseUrl}/?city=${city}`,
-    lastModified: now,
-    changeFrequency: 'daily' as const,
-    priority: 0.85,
-    alternates: makeAlternates(`/?city=${city}`),
-  }));
-
   // All category pages
   const categoryPages: MetadataRoute.Sitemap = industryNiches.map((niche) => ({
     url: `${baseUrl}/categories/${niche.id}`,
@@ -108,7 +100,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     alternates: makeAlternates(`/categories/${niche.id}`),
   }));
 
-  // Live active job pages from Firestore
+  // Live active job pages from Firestore & verified sourced jobs
   const jobMap = new Map<string, Date>();
 
   try {
@@ -129,6 +121,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching jobs for sitemap:', e);
   }
 
+  // Include static verified sourced jobs
+  try {
+    const { ALL_SOURCED_JOBS } = await import('@/lib/sources/sourced-jobs');
+    ALL_SOURCED_JOBS.forEach((job: any) => {
+      const key = job.slug || job.id;
+      if (key && !jobMap.has(key)) {
+        const date = job.sourceVerifiedAt ? new Date(job.sourceVerifiedAt) : now;
+        jobMap.set(key, date);
+      }
+    });
+  } catch (e) {
+    console.error('Error fetching sourced jobs for sitemap:', e);
+  }
+
   const jobPages: MetadataRoute.Sitemap = Array.from(jobMap.entries()).map(
     ([id, date]) => ({
       url: `${baseUrl}/jobs/${id}`,
@@ -143,7 +149,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticPages,
     ...programmaticHubPages,
     ...programmaticCityPages,
-    ...cityPages,
     ...categoryPages,
     ...jobPages,
   ];

@@ -1,9 +1,16 @@
+import type { Metadata } from 'next';
 import { EditorialHero } from '@/components/editorial-hero';
 import { JobFeed } from '@/components/job-feed';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { WebSiteJsonLd, LocalBusinessJsonLd } from '@/components/json-ld';
 import { getJobsFromFirestore } from '@/lib/firebase/firestore-service';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/',
+  },
+};
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;

@@ -92,7 +92,6 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: '/',
     languages: {
       'de-DE': 'https://jobroofs.com',
       'en-US': 'https://jobroofs.com',

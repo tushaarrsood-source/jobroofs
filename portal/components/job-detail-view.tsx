@@ -25,6 +25,7 @@ import { useAuth } from '@/lib/firebase/auth-context';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { AuthModal } from '@/components/auth-modal';
 import { JobroofsMark } from '@/components/brand-logo';
+import { updateMyListingStatusLocally } from '@/lib/storage/my-listings';
 
 interface JobDetailViewProps {
   job: any;
@@ -51,6 +52,8 @@ export function JobDetailView({ job, prevSlug, nextSlug }: JobDetailViewProps) {
             .then((r) => r.json())
             .then((data) => {
               if (data.verified) {
+                updateMyListingStatusLocally(job.id, 'active');
+                if (job.slug) updateMyListingStatusLocally(job.slug, 'active');
                 window.dispatchEvent(new Event('jobroofs_listings_updated'));
               }
             })

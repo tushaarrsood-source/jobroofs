@@ -55,6 +55,57 @@ const STARTER_PROMPTS_EN = [
   '🧹 Office Cleaner, 17€/h',
 ];
 
+// Format message content so questions ending in '?' are rendered in bold letter (~20% bolder than normal text: font-weight 550)
+function renderFormattedMessage(content: string, isUser: boolean) {
+  const lines = content.split('\n');
+
+  return lines.map((line, lineIdx) => {
+    if (!line.trim()) {
+      return <span key={lineIdx} className="block h-2" />;
+    }
+
+    const segments: { text: string; isQuestion: boolean }[] = [];
+    const sentenceRegex = /([^.!?:]*\?)/g;
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = sentenceRegex.exec(line)) !== null) {
+      if (match.index > lastIndex) {
+        segments.push({ text: line.slice(lastIndex, match.index), isQuestion: false });
+      }
+      segments.push({ text: match[0], isQuestion: true });
+      lastIndex = sentenceRegex.lastIndex;
+    }
+
+    if (lastIndex < line.length) {
+      segments.push({ text: line.slice(lastIndex), isQuestion: false });
+    }
+
+    return (
+      <span key={lineIdx} className="block">
+        {segments.map((seg, segIdx) => {
+          if (seg.isQuestion) {
+            return (
+              <span
+                key={segIdx}
+                style={{ fontWeight: 550 }}
+                className={isUser ? 'text-white' : 'text-black'}
+              >
+                {seg.text}
+              </span>
+            );
+          }
+          return (
+            <span key={segIdx} className={isUser ? 'font-normal text-zinc-100' : 'font-normal text-zinc-800'}>
+              {seg.text}
+            </span>
+          );
+        })}
+      </span>
+    );
+  });
+}
+
 export function AiJobCreatorChat({
   onApplyToForm,
   onSwitchToClassic,
@@ -219,13 +270,13 @@ export function AiJobCreatorChat({
             <div
               className={`max-w-[88%] sm:max-w-[80%] rounded-2xl px-5 py-3.5 text-[15px] sm:text-base leading-relaxed ${
                 msg.role === 'user'
-                  ? 'bg-black text-white rounded-tr-xs shadow-xs font-normal'
-                  : 'bg-[#f4f4f3] text-black rounded-tl-xs border border-zinc-200/60 font-normal'
+                  ? 'bg-black text-white rounded-tr-xs shadow-xs'
+                  : 'bg-[#f4f4f3] text-black rounded-tl-xs border border-zinc-200/60'
               }`}
             >
-              <p className="whitespace-pre-wrap">{msg.content}</p>
+              <div className="space-y-0.5">{renderFormattedMessage(msg.content, msg.role === 'user')}</div>
               <div
-                className={`mt-1 text-[11px] font-mono ${
+                className={`mt-1.5 text-[11px] font-mono ${
                   msg.role === 'user' ? 'text-zinc-400 text-right' : 'text-zinc-500'
                 }`}
               >

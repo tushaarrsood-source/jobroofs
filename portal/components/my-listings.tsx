@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from '@/components/ui/link';
-import { Briefcase, Home, Plus, ExternalLink, Trash2, CheckCircle2, Clock } from 'lucide-react';
+import { Briefcase, Home, Plus, ExternalLink, Trash2, CheckCircle2, Clock, CreditCard, AlertCircle } from 'lucide-react';
 import { getMyListings, removeMyListing, seedDemoListingsIfEmpty, syncUserListingsWithCloud, UserListing } from '@/lib/storage/my-listings';
 import { useTranslation } from '@/lib/i18n/language-context';
 import { useAuth } from '@/lib/firebase/auth-context';
@@ -15,6 +15,36 @@ export function MyListings() {
   const [filter, setFilter] = useState<'all' | 'job' | 'housing'>('all');
   const [mounted, setMounted] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const [payingId, setPayingId] = useState<string | null>(null);
+
+  const handleResumePayment = async (listing: UserListing) => {
+    setPayingId(listing.id);
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tier: listing.tier || 'standard',
+          jobData: {
+            id: listing.id,
+            slug: listing.linkUrl.replace('/jobs/', ''),
+            title: listing.title,
+            userId: user?.uid,
+          },
+        }),
+      });
+      const data = await res.json();
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+        return;
+      }
+      alert(data.error || (isDe ? 'Zahlung konnte nicht gestartet werden.' : 'Could not initiate checkout.'));
+    } catch (err: any) {
+      alert(err.message || 'Error');
+    } finally {
+      setPayingId(null);
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -152,21 +182,46 @@ export function MyListings() {
                           {listing.title}
                         </h3>
 
-                        <p className="text-sm text-zinc-600 mt-1 font-normal">
+                         <p className="text-sm text-zinc-600 mt-1 font-normal">
                           {listing.subtitle}
                         </p>
+
+                        {listing.status === 'pending_payment' && (
+                          <div className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-amber-50 border border-amber-200/80 px-2.5 py-1 text-xs text-amber-900 font-medium">
+                            <AlertCircle className="size-3.5 text-amber-700 shrink-0" />
+                            <span>
+                              {isDe
+                                ? 'Noch nicht live — wird sofort nach Zahlungseingang freigeschaltet.'
+                                : 'Not live yet — will be published immediately upon payment.'}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
 
                     {/* Actions & Status */}
                     <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-2 shrink-0">
-                      <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-900 bg-emerald-100 px-3 py-1 rounded-full">
-                        <CheckCircle2 className="size-3.5 text-emerald-700" />
-                        <span>{isDe ? 'Aktiv' : 'Active'}</span>
-                      </div>
+                      {listing.status === 'pending_payment' ? (
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-900 bg-amber-100 px-3 py-1 rounded-full">
+                          <Clock className="size-3.5 text-amber-700" />
+                          <span>{isDe ? 'Zahlung ausstehend' : 'Pending Payment'}</span>
+                        </div>
+                      ) : listing.status === 'expired' || daysRemaining <= 0 ? (
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-zinc-700 bg-zinc-100 px-3 py-1 rounded-full">
+                          <span>{isDe ? 'Abgelaufen' : 'Expired'}</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-900 bg-emerald-100 px-3 py-1 rounded-full">
+                          <CheckCircle2 className="size-3.5 text-emerald-700" />
+                          <span>{isDe ? 'Aktiv' : 'Active'}</span>
+                        </div>
+                      )}
+
                       <span className="flex items-center gap-1.5 text-xs sm:text-sm text-zinc-600 font-mono font-medium">
                         <Clock className="size-3.5 text-zinc-500" />
-                        {daysRemaining > 0
+                        {listing.status === 'pending_payment'
+                          ? isDe ? 'Wartet auf Zahlung' : 'Waiting for payment'
+                          : daysRemaining > 0
                           ? isDe ? `Noch ${daysRemaining} Tage` : `${daysRemaining}d left`
                           : isDe ? 'Abgelaufen' : 'Expired'}
                       </span>
@@ -177,6 +232,8 @@ export function MyListings() {
                     <div className="text-sm text-zinc-600 font-mono font-medium">
                       {listing.pricePaidEur === 0
                         ? isDe ? 'Kostenloses Erstinserat (0 €)' : 'Free 1st Job (0 €)'
+                        : listing.status === 'pending_payment'
+                        ? `${isDe ? 'Zu zahlen:' : 'To pay:'} ${listing.pricePaidEur} €`
                         : `${isDe ? 'Gebucht für' : 'Booked for'} ${listing.pricePaidEur} €`}
                     </div>
 
@@ -196,13 +253,29 @@ export function MyListings() {
                         <span>{isDe ? 'Löschen' : 'Delete'}</span>
                       </button>
 
-                      <Link
-                        href={listing.linkUrl}
-                        className="apple-press inline-flex items-center gap-2 rounded-xl bg-black hover:bg-zinc-800 px-4 py-2.5 text-sm font-semibold text-white transition-all active:scale-[0.98]"
-                      >
-                        <span>{isDe ? 'Inserat ansehen' : 'View Listing'}</span>
-                        <ExternalLink className="size-3.5" />
-                      </Link>
+                      {listing.status === 'pending_payment' ? (
+                        <button
+                          type="button"
+                          onClick={() => handleResumePayment(listing)}
+                          disabled={payingId === listing.id}
+                          className="apple-press inline-flex items-center gap-2 rounded-xl bg-black hover:bg-zinc-800 disabled:opacity-50 px-4 py-2.5 text-sm font-semibold text-white transition-all cursor-pointer"
+                        >
+                          <CreditCard className="size-3.5 text-white" />
+                          <span>
+                            {payingId === listing.id
+                              ? isDe ? 'Weiterleitung...' : 'Redirecting...'
+                              : isDe ? 'Jetzt freischalten' : 'Pay & Publish'}
+                          </span>
+                        </button>
+                      ) : (
+                        <Link
+                          href={listing.linkUrl}
+                          className="apple-press inline-flex items-center gap-2 rounded-xl bg-black hover:bg-zinc-800 px-4 py-2.5 text-sm font-semibold text-white transition-all active:scale-[0.98]"
+                        >
+                          <span>{isDe ? 'Inserat ansehen' : 'View Listing'}</span>
+                          <ExternalLink className="size-3.5" />
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>

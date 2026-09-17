@@ -19,14 +19,35 @@ export async function getProgrammaticJobs(typeKey: string, cityId: string) {
   const all = [...fsJobs, ...validSourced];
 
   const cityNorm = (cityId || '').toLowerCase().trim();
+  let cityNamesToMatch = [cityNorm];
+  if (cityNorm && cityNorm !== 'all' && cityNorm !== 'alle') {
+    const { getCityById } = await import('@/lib/domain/cities');
+    const cityDef = getCityById(cityNorm);
+    if (cityDef) {
+      const cName = cityDef.name.toLowerCase();
+      const cAscii = cName
+        .replace(/ä/g, 'ae')
+        .replace(/ö/g, 'oe')
+        .replace(/ü/g, 'ue')
+        .replace(/ß/g, 'ss');
+      cityNamesToMatch.push(cName, cAscii, cityDef.id);
+    }
+  }
 
   // Filter by city
   const cityFiltered = all.filter((job) => {
     if (!cityNorm || cityNorm === 'all' || cityNorm === 'alle') return true;
-    const jCity = (job.city || '').toLowerCase();
-    const jDistrict = (job.district || '').toLowerCase();
-    if (jCity.includes(cityNorm) || cityNorm.includes(jCity)) return true;
-    // Berlin fallback for legacy listings
+    const jCity = (job.city || '').toLowerCase().trim();
+    const jDistrict = (job.district || '').toLowerCase().trim();
+    const jAddress = (job.workplace?.address || '').toLowerCase();
+    
+    // Match against any variant of the city name
+    const matchesCity = cityNamesToMatch.some(
+      (cn) => jCity.includes(cn) || cn.includes(jCity) || jDistrict.includes(cn) || jAddress.includes(cn),
+    );
+    if (matchesCity) return true;
+
+    // Berlin fallback for legacy listings with no city explicitly set
     if (cityNorm === 'berlin' && (!jCity || jCity === 'berlin')) return true;
     return false;
   });

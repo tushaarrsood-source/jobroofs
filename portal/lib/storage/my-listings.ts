@@ -10,7 +10,7 @@ export interface UserListing {
   badgeLabel: string;
   tier: 'free' | 'starter' | 'standard' | 'premium';
   tierLabel: string;
-  status: 'active' | 'pending' | 'expired';
+  status: 'active' | 'pending' | 'pending_payment' | 'expired';
   postedAt: string;
   expiresAt: string;
   linkUrl: string;
@@ -59,6 +59,29 @@ export function saveMyListing(listing: UserListing): void {
   }
 }
 
+export function updateMyListingStatusLocally(
+  id: string,
+  status: 'active' | 'pending' | 'pending_payment' | 'expired'
+): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const current = getMyListings();
+    const updated = current.map((listing) => {
+      if (listing.id === id || listing.linkUrl.includes(id)) {
+        return {
+          ...listing,
+          status,
+        };
+      }
+      return listing;
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    window.dispatchEvent(new Event('jobroofs_listings_updated'));
+  } catch (err) {
+    console.error('Failed to update listing status locally', err);
+  }
+}
+
 export async function removeMyListing(id: string, type?: 'job' | 'housing'): Promise<void> {
   if (typeof window === 'undefined') return;
   try {
@@ -92,6 +115,7 @@ export function upgradeMyListingLocally(id: string): void {
       if (listing.id === id) {
         return {
           ...listing,
+          status: 'active' as const,
           tier: 'premium' as const,
           tierLabel: 'Extended (60 Tage)',
           pricePaidEur: 24.99,

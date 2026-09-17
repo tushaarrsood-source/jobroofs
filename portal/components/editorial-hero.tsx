@@ -57,6 +57,26 @@ export function EditorialHero() {
             <span>{isDe ? 'Preise & Tarife' : 'Pricing'}</span>
           </Link>
         </div>
+
+        {/* Quick Hub Links for Googlebot & Users */}
+        <div className="pt-3 flex flex-wrap items-center gap-2 text-xs">
+          <span className="text-zinc-500 font-medium">{isDe ? 'Direkt zu:' : 'Browse:'}</span>
+          <Link href="/minijob" className="rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-900 px-3 py-1 font-semibold transition-colors">
+            Minijobs (bis 603 €)
+          </Link>
+          <Link href="/studentenjob" className="rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-900 px-3 py-1 font-semibold transition-colors">
+            Studentenjobs
+          </Link>
+          <Link href="/teilzeit" className="rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-900 px-3 py-1 font-semibold transition-colors">
+            Teilzeit
+          </Link>
+          <Link href="/werkstudent" className="rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-900 px-3 py-1 font-semibold transition-colors">
+            Werkstudent
+          </Link>
+          <Link href="/aushilfe" className="rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-900 px-3 py-1 font-semibold transition-colors">
+            Aushilfen
+          </Link>
+        </div>
       </div>
 
       <AuthModal

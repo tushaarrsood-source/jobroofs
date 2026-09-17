@@ -1,7 +1,7 @@
 import Link from '@/components/ui/link';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
-import { BreadcrumbJsonLd } from '@/components/json-ld';
+import { BreadcrumbJsonLd, ItemListJsonLd } from '@/components/json-ld';
 import { SUPPORTED_CITIES, type CityDefinition } from '@/lib/domain/cities';
 import { PROGRAMMATIC_JOB_TYPES, type JobTypeDefinition } from '@/lib/seo/programmatic-content';
 import { ArrowRight, MapPin, Euro, Clock3, HelpCircle, CheckCircle2 } from 'lucide-react';
@@ -52,6 +52,15 @@ export function ProgrammaticLandingPage({
           { name: `${jobType.namePlural} in ${city.name}`, href: `/${jobType.slug}/${city.id}` },
         ]}
       />
+      <ItemListJsonLd
+        name={`${jobType.namePlural} in ${city.name}`}
+        description={jobType.descriptionTemplate(city.name)}
+        items={jobs.map((j, idx) => ({
+          name: `${j.title} bei ${j.company}`,
+          url: `/jobs/${j.slug || j.id}`,
+          position: idx + 1,
+        }))}
+      />
       <Script
         id={`faq-schema-${jobType.slug}-${city.id}`}
         type="application/ld+json"
@@ -68,7 +77,7 @@ export function ProgrammaticLandingPage({
               {jobType.namePlural} in {city.name}
             </h1>
             <p className="mt-4 text-base sm:text-lg leading-relaxed text-zinc-600">
-              {jobType.description} Finde geprüfte, aktuelle Stellen von lokalen Betrieben in {city.name} – mit direktem WhatsApp-Kontakt und garantiert ohne Zeitarbeit.
+              {jobType.descriptionTemplate(city.name)} Finde geprüfte, aktuelle Stellen von lokalen Betrieben in {city.name} – mit direktem Kontakt und garantiert ohne Zeitarbeit.
             </p>
 
             {/* District Quick Tags */}
