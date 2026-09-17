@@ -4,11 +4,8 @@ import { ArrowLeft, ArrowRight, Clock3, Euro, MapPin } from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { BreadcrumbJsonLd } from '@/components/json-ld';
-import { previewJobs } from '@/lib/domain/preview-data';
 import { getIndustry, industryNiches } from '@/lib/domain/taxonomy';
-import { getCategoryJobs } from '@/lib/jobs/feeds';
-import { isJobSuppressed } from '@/lib/sources/suppression-store';
-import { getSourcedJobsByNiche } from '@/lib/sources/sourced-jobs';
+import { getJobsFromFirestore } from '@/lib/firebase/firestore-service';
 
 export function generateStaticParams() {
   return industryNiches.map((niche) => ({ id: niche.id }));
@@ -45,13 +42,17 @@ export default async function CategoryPage({
   const { id } = await params;
   const niche = getIndustry(id);
 
-  const feedsJobs = await getCategoryJobs(id);
-  const sourcedJobs = getSourcedJobsByNiche(id).filter(
-    (job) =>
-      !isJobSuppressed(job.id) &&
-      (!job.slug || !isJobSuppressed(job.slug)),
-  );
-  const categoryJobs = feedsJobs.length > 0 ? feedsJobs : sourcedJobs;
+  let categoryJobs: any[] = [];
+  try {
+    const allJobs = await getJobsFromFirestore(100);
+    categoryJobs = allJobs.filter(
+      (job: any) =>
+        (job.industryId === id || (job.tags && job.tags.includes(id))) &&
+        (job.status === 'active' || job.status === 'published')
+    );
+  } catch (e) {
+    console.error('Error fetching category jobs:', e);
+  }
 
   if (!niche)
     return (

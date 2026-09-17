@@ -121,19 +121,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching jobs for sitemap:', e);
   }
 
-  // Include static verified sourced jobs
-  try {
-    const { ALL_SOURCED_JOBS } = await import('@/lib/sources/sourced-jobs');
-    ALL_SOURCED_JOBS.forEach((job: any) => {
-      const key = job.slug || job.id;
-      if (key && !jobMap.has(key)) {
-        const date = job.sourceVerifiedAt ? new Date(job.sourceVerifiedAt) : now;
-        jobMap.set(key, date);
-      }
-    });
-  } catch (e) {
-    console.error('Error fetching sourced jobs for sitemap:', e);
-  }
+
 
   const jobPages: MetadataRoute.Sitemap = Array.from(jobMap.entries()).map(
     ([id, date]) => ({
