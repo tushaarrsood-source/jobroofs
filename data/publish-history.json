@@ -106,5 +106,14 @@
     "publishedMediaId": "17989716849052776",
     "creationId": "18119451712817854",
     "timestamp": "2026-09-24T14:13:55.461Z"
+  },
+  {
+    "id": 13,
+    "day": 3,
+    "slot": "afternoon",
+    "role": "WER BILLIG ZAHLT, ZAHLT DREIFACH.",
+    "publishedMediaId": "18093355757646417",
+    "creationId": "18119757961817854",
+    "timestamp": "2026-09-25T14:37:36.366Z"
   }
 ]
