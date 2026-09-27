@@ -124,5 +124,14 @@
     "publishedMediaId": "18184894219417976",
     "creationId": "18120097648817854",
     "timestamp": "2026-09-26T13:45:47.665Z"
+  },
+  {
+    "id": 15,
+    "day": 3,
+    "slot": "late_night",
+    "role": "RULE #1: ZERO BULLSHIT.",
+    "publishedMediaId": "18015962627959828",
+    "creationId": "18120459190817854",
+    "timestamp": "2026-09-27T14:42:41.549Z"
   }
 ]
