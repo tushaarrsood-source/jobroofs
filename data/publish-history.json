@@ -151,5 +151,14 @@
     "publishedMediaId": "18122590219903451",
     "creationId": "18121119682817854",
     "timestamp": "2026-09-29T15:55:04.505Z"
+  },
+  {
+    "id": 18,
+    "day": 4,
+    "slot": "afternoon",
+    "role": "NIEMAND UNTER 30 SCHICKT EIN PDF.",
+    "publishedMediaId": "18027700121856340",
+    "creationId": "18121430200817854",
+    "timestamp": "2026-09-30T15:56:38.355Z"
   }
 ]
