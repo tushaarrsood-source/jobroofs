@@ -160,5 +160,14 @@
     "publishedMediaId": "18027700121856340",
     "creationId": "18121430200817854",
     "timestamp": "2026-09-30T15:56:38.355Z"
+  },
+  {
+    "id": 19,
+    "day": 4,
+    "slot": "evening",
+    "role": "NEUKÖLLN PULSIERT. HIRE HEUTE ABEND.",
+    "publishedMediaId": "17884214262623895",
+    "creationId": "18121752985817854",
+    "timestamp": "2026-10-01T16:28:24.970Z"
   }
 ]
