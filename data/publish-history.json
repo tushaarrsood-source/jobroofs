@@ -169,5 +169,14 @@
     "publishedMediaId": "17884214262623895",
     "creationId": "18121752985817854",
     "timestamp": "2026-10-01T16:28:24.970Z"
+  },
+  {
+    "id": 20,
+    "day": 4,
+    "slot": "late_night",
+    "role": "RULE #4: DAS GRAND SLAM OFFER.",
+    "publishedMediaId": "18104887898356916",
+    "creationId": "18122064646817854",
+    "timestamp": "2026-10-02T15:51:14.863Z"
   }
 ]
