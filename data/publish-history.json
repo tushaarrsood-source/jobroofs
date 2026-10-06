@@ -205,5 +205,14 @@
     "publishedMediaId": "18443524942135820",
     "creationId": "18123118873817854",
     "timestamp": "2026-10-05T18:30:04.324Z"
+  },
+  {
+    "id": 24,
+    "day": 5,
+    "slot": "evening",
+    "role": "HAMBURG SCHANZE. NORDISCH DIREKT.",
+    "publishedMediaId": "18098866895635001",
+    "creationId": "18123427783817854",
+    "timestamp": "2026-10-06T15:58:44.995Z"
   }
 ]
