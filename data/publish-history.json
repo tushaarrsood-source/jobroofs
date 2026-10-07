@@ -214,5 +214,14 @@
     "publishedMediaId": "18098866895635001",
     "creationId": "18123427783817854",
     "timestamp": "2026-10-06T15:58:44.995Z"
+  },
+  {
+    "id": 25,
+    "day": 5,
+    "slot": "late_night",
+    "role": "RULE #7: DIE 150-POST CHALLENGE.",
+    "publishedMediaId": "17882152191691586",
+    "creationId": "18123768313817854",
+    "timestamp": "2026-10-07T16:31:56.498Z"
   }
 ]
