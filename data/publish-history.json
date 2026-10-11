@@ -250,5 +250,14 @@
     "publishedMediaId": "18156256675506655",
     "creationId": "18124776025817854",
     "timestamp": "2026-10-10T15:24:09.263Z"
+  },
+  {
+    "id": 29,
+    "day": 6,
+    "slot": "evening",
+    "role": "CHARLOTTENBURG. KU’DAMM BIS KANTSTRASSE.",
+    "publishedMediaId": "18103093988618582",
+    "creationId": "18125183056817854",
+    "timestamp": "2026-10-11T15:43:52.573Z"
   }
 ]
