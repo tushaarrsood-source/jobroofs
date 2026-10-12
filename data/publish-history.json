@@ -259,5 +259,14 @@
     "publishedMediaId": "18103093988618582",
     "creationId": "18125183056817854",
     "timestamp": "2026-10-11T15:43:52.573Z"
+  },
+  {
+    "id": 30,
+    "day": 6,
+    "slot": "late_night",
+    "role": "RULE #10: MORGEN GEHT ES WEITER.",
+    "publishedMediaId": "18116305567834856",
+    "creationId": "18125588887817854",
+    "timestamp": "2026-10-12T19:05:20.281Z"
   }
 ]
