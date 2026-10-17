@@ -304,5 +304,14 @@
     "publishedMediaId": "18080867966437036",
     "creationId": "18126714637817854",
     "timestamp": "2026-10-16T13:59:08.265Z"
+  },
+  {
+    "id": 35,
+    "day": 7,
+    "slot": "late_night",
+    "role": "RULE #3: LOOT AT FIRST SIGHT.",
+    "publishedMediaId": "17902283241602265",
+    "creationId": "18126999145817854",
+    "timestamp": "2026-10-17T12:59:32.820Z"
   }
 ]
