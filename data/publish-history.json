@@ -394,5 +394,14 @@
     "publishedMediaId": "17908586652330127",
     "creationId": "18129558070817854",
     "timestamp": "2026-10-26T16:09:10.696Z"
+  },
+  {
+    "id": 45,
+    "day": 9,
+    "slot": "late_night",
+    "role": "RULE #9: MUT ZUM KLARTEXT.",
+    "publishedMediaId": "18109213277186571",
+    "creationId": "18129811360817854",
+    "timestamp": "2026-10-27T15:23:10.293Z"
   }
 ]
