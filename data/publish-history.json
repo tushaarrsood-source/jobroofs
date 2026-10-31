@@ -430,5 +430,14 @@
     "publishedMediaId": "18099909869106866",
     "creationId": "18130615885817854",
     "timestamp": "2026-10-30T15:57:27.688Z"
+  },
+  {
+    "id": 49,
+    "day": 10,
+    "slot": "evening",
+    "role": "MITTE, BERLIN. DEINE SCHICHT WARTET.",
+    "publishedMediaId": "18119109283821777",
+    "creationId": "18130863739817854",
+    "timestamp": "2026-10-31T15:21:27.571Z"
   }
 ]
